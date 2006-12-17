@@ -328,14 +328,18 @@ class HeaderObject:
 
 
 class EmptyDir:
-	def __init__(self, dir):
-		self.dir = dir
+    """
+    Represent a group of merged empty directories.
+    """
+    def __init__(self, name, depth):
+        self.name = name
+        self.depth = depth
 
-	def get(self, id):
-		if id in "nNmdPD":
-			return self.dir.get(id)
-		else:
-			return ""
+    def get(self, id):
+        if id == "n":
+            return ' ' * conf.conf.Indent * self.depth + self.name
+        else:
+            return ""
 
 def grab(dir):
 	debug("enter grab %s %s" % (dir.depth, dir.name()))
@@ -438,7 +442,7 @@ def smash(pathlist, depth):
 
 	# create an EmptyDir for the Dir and delay its output
 	if not conf.conf.Stripped and not displayed and not conf.conf.OutputDb:
-		globals.PathStack.append((EmptyDir(dir), depth))
+		globals.PathStack.append((EmptyDir(dir.name(), dir.depth), depth))
 
 	# create a common dictionary over the subdirectories of all Dirs
 	subdir_dict = subdirectories(dirs)
