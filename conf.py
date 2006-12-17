@@ -164,7 +164,7 @@ class Settings:
 			return 0
 
 		# options overriding eachother
-		if self.Debug or self.OutStream.isatty():
+		if self.Debug or not self.OutStream.isatty():
 			self.Quiet = 1
 		if self.Debug:
 			self.ListBad = 1
