@@ -392,6 +392,31 @@ def grab(dir):
 	debug("exit  grab %s %s" % (dir.depth, dir.name()))
 	return len(dir.streams()) != 0
 
+
+oldpath = []
+def outputplain(dir):
+	"""Render a directory to stdout.
+
+	Directories are rendered according to the -o settings. Ancestral
+	directories are rendered as empty unless they were previously
+	rendered. Pre-order directory tree traversal is assumed.
+	"""
+	global oldpath
+
+	# delayed output
+	path = dir.path.split(os.path.sep)[-dir.depth-1:]
+	i = 0
+	while i < min(len(path) - 1, len(oldpath)) and path[i] == oldpath[i]: i += 1
+	while i < len(path) - 1:
+		fields = eval_fields(conf.conf.Fields, EmptyDir(path[i], i))
+		print conf.conf.OutputString % fields
+		i += 1
+	oldpath = path
+
+	fields = eval_fields(conf.conf.Fields, dir)
+	print conf.conf.OutputString % fields
+
+
 def outputdb(dir):
 
 	skip = 0
