@@ -1,11 +1,19 @@
 # -*- coding: iso-8859-1 -*-
 #
-# Configuration module for Dnuos
-#
 # This program is under GPL license. See COPYING file for details.
 #
-# Copyright 2003  Sylvester Johansson  (sylvestor@telia.com)
-#                 Mattias Päivärinta   (mpa99001@student.mdh.se)
+# Copyright 2003,2006
+# Sylvester Johansson <sylvestor@telia.com>
+# Mattias Päivärinta <pejve@vasteras2.net>
+#
+# Authors
+# Sylvester Johansson <sylvestor@telia.com>
+# Mattias Päivärinta <pejve@vasteras2.net>
+
+
+"""
+Configuration module for Dnuos.
+"""
 
 
 # TODO: dir_test is duplicated in audiodir.py
