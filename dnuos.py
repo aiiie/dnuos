@@ -203,8 +203,7 @@ def main():
 		conf.conf.sort(keys)
 		for key in keys:
 			dirs = walk(conf.conf.Folders[key])
-			for dir in dirs:
-				grab(dir)
+			grab(dirs)
 
 	if globals.BadFiles and not conf.conf.OutputDb:
 		print ""
@@ -349,36 +348,35 @@ class EmptyDir:
         else:
             return ""
 
-def grab(dir):
-	debug("enter grab %s %s" % (dir.depth, dir.name()))
-	update_progress()
+def grab(dirs):
+    for dir in dirs:
+        debug("grab %s %s" % (dir.depth, dir.name()))
+        update_progress()
 
-	if len(dir.streams()):
-		if hasattr(dir, "type") and dir.type() == "MP3":
-			if conf.conf.NoCBR == 1 and (dir.brtype() == "~" or dir.brtype() == "C"):
-				return False
-			if conf.conf.NoNonProfile == 1 and dir.profile() == "":
-				return False
-			if dir.bitrate() < conf.conf.MP3MinBitRate:
-				return False
+        if len(dir.streams()):
+            if hasattr(dir, "type") and dir.type() == "MP3":
+                if conf.conf.NoCBR == 1 and (dir.brtype() == "~" or dir.brtype() == "C"):
+                    return False
+                if conf.conf.NoNonProfile == 1 and dir.profile() == "":
+                    return False
+                if dir.bitrate() < conf.conf.MP3MinBitRate:
+                    return False
 
-		for type in dir.types():
-			globals.Size[type] += dir.size(type)
-		globals.Size["Total"] += dir.size()
+            for type in dir.types():
+                globals.Size[type] += dir.size(type)
+            globals.Size["Total"] += dir.size()
 
-		if not conf.conf.OutputDb:
-			outputplain(dir)
-		else:
-			outputdb(dir)
+            if not conf.conf.OutputDb:
+                outputplain(dir)
+            else:
+                outputdb(dir)
 
-	# take care of bad files
-	if conf.conf.Debug:
-		for badfile in dir.bad_streams():
-			print >> sys.stderr, "Audiotype failed for:", badfile
-	elif conf.conf.ListBad:
-		globals.BadFiles += dir.bad_streams()
-
-	debug("exit  grab %s %s" % (dir.depth, dir.name()))
+        # take care of bad files
+        if conf.conf.Debug:
+            for badfile in dir.bad_streams():
+                print >> sys.stderr, "Audiotype failed for:", badfile
+        elif conf.conf.ListBad:
+            globals.BadFiles += dir.bad_streams()
 
 
 oldpath = []
