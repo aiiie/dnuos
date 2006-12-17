@@ -21,9 +21,10 @@ def _is_audio_file(file):
 
 
 def uniq(list):
-	"""make a list with all duplicate elements removed"""
-	list[0] = [ list[0] ]
-	return reduce(lambda A,x: x in A and A or A+[x], list)
+    """make a list with all duplicate elements removed"""
+    if not list: return []
+    list[0] = [ list[0] ]
+    return reduce(lambda A,x: x in A and A or A+[x], list)
 
 
 def map_dict(func, dict):
