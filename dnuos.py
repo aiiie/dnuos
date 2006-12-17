@@ -128,7 +128,6 @@ class Data:
 	def __init__(self):
 		self.BadFiles = []
 		self.Base = 0
-		self.PathStack = []
 		self.Start = 0
 		self.Size = {
 			"Total": 0.0,
@@ -358,27 +357,8 @@ def grab(dir):
 			globals.Size[type] += dir.size(type)
 		globals.Size["Total"] += dir.size()
 
-		# delayed output
-		for ddir, ddepth in globals.PathStack:
-			if hasattr(ddir, "type") and ddir.type() == "MP3":
-				if conf.conf.NoCBR == 1 and (ddir.brtype() == "~" or ddir.brtype() == "C"):
-					continue
-				if conf.conf.NoNonProfile == 1 and ddir.profile() == "":
-					continue
-				if dir.bitrate() < conf.conf.MP3MinBitRate:
-					continue
-
-			fields = eval_fields(conf.conf.Fields, ddir)
-			if not conf.conf.OutputDb:
-				print conf.conf.OutputString % fields
-			else:
-				outputdb(ddir)
-		globals.PathStack = []
-
-		# evaluate the fields and output string, and output
-		fields = eval_fields(conf.conf.Fields, dir)
 		if not conf.conf.OutputDb:
-			print conf.conf.OutputString % fields
+			outputplain(dir)
 		else:
 			outputdb(dir)
 
@@ -390,7 +370,6 @@ def grab(dir):
 		globals.BadFiles += dir.bad_streams()
 
 	debug("exit  grab %s %s" % (dir.depth, dir.name()))
-	return len(dir.streams()) != 0
 
 
 oldpath = []
@@ -457,17 +436,13 @@ def subdirectories(dirs):
 
 def smash(pathlist, depth):
 	debug("enter smash %s %s" % (depth, pathlist))
-	displayed = 0
 
 	# create Dir objects for all paths
 	dirs = map(lambda x: audiodir.Dir(x, depth), pathlist)
 
 	# grab all Dirs
-	for dir in dirs: displayed += grab(dir)
-
-	# create an EmptyDir for the Dir and delay its output
-	if not conf.conf.Stripped and not displayed and not conf.conf.OutputDb:
-		globals.PathStack.append((EmptyDir(dir.name(), dir.depth), depth))
+	for dir in dirs:
+		grab(dir)
 
 	# create a common dictionary over the subdirectories of all Dirs
 	subdir_dict = subdirectories(dirs)
@@ -481,9 +456,6 @@ def smash(pathlist, depth):
 
 		# anything left?
 		if dirs: smash(dirs, depth + 1)
-
-	# forget this directory unless its already printed
-	if globals.PathStack: globals.PathStack = globals.PathStack[:-1]
 
 	debug("exit  smash %s %s" % (depth, pathlist))
 
