@@ -156,13 +156,13 @@ def to_human(value, radix=1024.0):
 
 def update_progress():
 	"""indicate progress"""
-	if sys.stdout.isatty() or conf.conf.Quiet: return
-	print >> sys.stderr, "\r%sb processed" % to_human(globals.Size["Total"]), 
+	if not conf.conf.Quiet:
+		print >> sys.stderr, "%sb processed\r" % to_human(globals.Size["Total"]), 
 
 
 def clear_progress():
 	"""terminate progress indication"""
-	if not sys.stdout.isatty() and not conf.conf.Quiet:
+	if not conf.conf.Quiet:
 		print >> sys.stderr, "\r               \r",
 
 
