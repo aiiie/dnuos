@@ -196,7 +196,10 @@ def main():
 		keys = conf.conf.Folders.keys()
 		conf.conf.sort(keys)
 		for key in keys:
-			smash(conf.conf.Folders[key], 0)
+			dirs = walk(conf.conf.Folders[key])
+			for dir in dirs:
+				grab(dir)
+
 	if globals.BadFiles and not conf.conf.OutputDb:
 		print ""
 		print "Audiotype failed on the following files:"
@@ -434,15 +437,20 @@ def subdirectories(dirs):
 	return dirdict
 
 
-def smash(pathlist, depth):
-	debug("enter smash %s %s" % (depth, pathlist))
+def walk(pathlist, depth=0):
+	"""Traverse one or more merged directory trees in parallell in pre order.
 
+	The subdirectories of all pathlist directories are considered
+	together. They are traversed in lexicographical order by basename.
+	If subdirectories of two or more pathlist directories share the same
+	basename, those subdirectories are traversed together.
+	"""
 	# create Dir objects for all paths
 	dirs = map(lambda x: audiodir.Dir(x, depth), pathlist)
 
-	# grab all Dirs
+	# enumerate dirs
 	for dir in dirs:
-		grab(dir)
+		yield dir
 
 	# create a common dictionary over the subdirectories of all Dirs
 	subdir_dict = subdirectories(dirs)
@@ -454,10 +462,9 @@ def smash(pathlist, depth):
 		# weed out base and excluded directories
 		dirs = filter(lambda x: x not in conf.conf.ExcludePaths, subdir_dict[key])
 
-		# anything left?
-		if dirs: smash(dirs, depth + 1)
-
-	debug("exit  smash %s %s" % (depth, pathlist))
+		# recurse
+		for dir in walk(dirs, depth + 1):
+			yield dir
 
 
 if __name__ == "__main__":
