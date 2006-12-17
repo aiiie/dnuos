@@ -61,7 +61,7 @@ Options:
 			  b	bitrate with suffix (i.e. 192k)
 			  B	bitrate in bps
 			  C     album name as found in ID3 tags
-			  d	depth; distance from respective basedir
+			  D	depth; distance from respective basedir
 			  f	number of audio files (including spacers)
 			  l	length in minutes and seconds
 			  L	length in seconds
