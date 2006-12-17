@@ -283,10 +283,6 @@ def unescape_brackets(str):
 	return str.replace(r"\[", "[").replace(r"\]", "]")
 
 
-conf = Settings()
-
-
 def init():
-	pass
-	#global conf
-	#conf = Settings()
+	global conf
+	conf = Settings()
