@@ -123,6 +123,7 @@ Options:
 
 __version__ = "0.93"
 
+import itertools
 import os, re, string, sys, time
 
 # fix for some dumb version of python 2.3
@@ -189,13 +190,14 @@ def main():
 			headers("header")
 		keys = conf.conf.Folders.keys()
 		conf.conf.sort(keys)
-		for key in keys:
-			dirs = walk(conf.conf.Folders[key])
-			dirs = indicate_progress(dirs)
-			dirs = collect_bad(dirs)
-			dirs = filter_dirs(dirs)
-			dirs = total_sizes(dirs)
-			grab(dirs)
+		bases = [ conf.conf.Folders[k] for k in keys ]
+		trees = [ walk(base) for base in bases ]
+		dirs = itertools.chain(*trees)
+		dirs = indicate_progress(dirs)
+		dirs = collect_bad(dirs)
+		dirs = filter_dirs(dirs)
+		dirs = total_sizes(dirs)
+		grab(dirs)
 
 	if globals.BadFiles and not conf.conf.OutputDb:
 		print ""
