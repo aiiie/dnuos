@@ -192,6 +192,7 @@ def main():
 		for key in keys:
 			dirs = walk(conf.conf.Folders[key])
 			dirs = indicate_progress(dirs)
+			dirs = collect_bad(dirs)
 			grab(dirs)
 
 	if globals.BadFiles and not conf.conf.OutputDb:
@@ -390,13 +391,6 @@ def grab(dirs):
                 outputplain(dir)
             else:
                 outputdb(dir)
-
-        # take care of bad files
-        if conf.conf.Debug:
-            for badfile in dir.bad_streams():
-                print >> sys.stderr, "Audiotype failed for:", badfile
-        elif conf.conf.ListBad:
-            globals.BadFiles += dir.bad_streams()
 
 
 oldpath = []
