@@ -355,6 +355,25 @@ def collect_bad(dirs):
 			globals.BadFiles += dir.bad_streams()
 
 
+def filter_dirs(dirs):
+	"""Filter directories according to configuration.
+
+	Directories with no recognized files are always omitted.
+	Directories can also be omitted as per -bvL settings.
+	"""
+	for dir in dirs:
+		if not dir.streams():
+			continue
+		if hasattr(dir, "type") and dir.type() == "MP3":
+			if conf.conf.NoCBR == 1 and (dir.brtype() == "~" or dir.brtype() == "C"):
+				continue
+			if conf.conf.NoNonProfile == 1 and dir.profile() == "":
+				continue
+			if dir.bitrate() < conf.conf.MP3MinBitRate:
+				continue
+		yield dir
+
+
 class EmptyDir:
     """
     Represent a group of merged empty directories.
