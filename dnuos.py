@@ -159,18 +159,6 @@ def to_human(value, radix=1024.0):
 		return "%.1f%s" % (value, suffix)
 
 
-def update_progress():
-	"""indicate progress"""
-	if not conf.conf.Quiet:
-		print >> sys.stderr, "%sb processed\r" % to_human(globals.Size["Total"]), 
-
-
-def clear_progress():
-	"""terminate progress indication"""
-	if not conf.conf.Quiet:
-		print >> sys.stderr, "\r               \r",
-
-
 def eval_fields(fields, obj, suffixes=1):
 	"""project an object through a field list into a tuple of strings"""
 	list = []
@@ -203,6 +191,7 @@ def main():
 		conf.conf.sort(keys)
 		for key in keys:
 			dirs = walk(conf.conf.Folders[key])
+			dirs = indicate_progress(dirs)
 			grab(dirs)
 
 	if globals.BadFiles and not conf.conf.OutputDb:
@@ -365,7 +354,6 @@ class EmptyDir:
 def grab(dirs):
     for dir in dirs:
         debug("grab %s %s" % (dir.depth, dir.name()))
-        update_progress()
 
         if len(dir.streams()):
             if hasattr(dir, "type") and dir.type() == "MP3":
@@ -493,4 +481,3 @@ if __name__ == "__main__":
 	except KeyboardInterrupt:
 		print >> sys.stderr, "Aborted by user"
 		sys.exit(1)
-	clear_progress()
