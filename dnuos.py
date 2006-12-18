@@ -374,6 +374,20 @@ def filter_dirs(dirs):
 		yield dir
 
 
+def total_sizes(dirs):
+	"""Calculate audio file size totals.
+
+	Yields an unchanged iteration of dirs with an added side effect.
+	After each directory is yielded its filesize statistics are
+	added to globals.Size.
+	"""
+	for dir in dirs:
+		yield dir
+		for type in dir.types():
+			globals.Size[type] += dir.size(type)
+		globals.Size["Total"] += dir.size()
+
+
 class EmptyDir:
     """
     Represent a group of merged empty directories.
