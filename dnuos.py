@@ -194,6 +194,7 @@ def main():
 			dirs = indicate_progress(dirs)
 			dirs = collect_bad(dirs)
 			dirs = filter_dirs(dirs)
+			dirs = total_sizes(dirs)
 			grab(dirs)
 
 	if globals.BadFiles and not conf.conf.OutputDb:
@@ -407,10 +408,6 @@ class EmptyDir:
 def grab(dirs):
     for dir in dirs:
         debug("grab %s %s" % (dir.depth, dir.name()))
-
-        for type in dir.types():
-            globals.Size[type] += dir.size(type)
-        globals.Size["Total"] += dir.size()
 
         if not conf.conf.OutputDb:
             outputplain(dir)
