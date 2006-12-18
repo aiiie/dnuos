@@ -336,6 +336,24 @@ def indicate_progress(dirs, outs=sys.stderr):
 	print >> outs, "\r               \r",
 
 
+def collect_bad(dirs):
+	"""Collect bad files.
+
+	Yields an unchanged iteration of dirs with an added side effect.
+	After each directory is yielded its bad files are taken care of.
+	Bad files are appended to globals.Badfiles or output to stderr
+	depending on conf.conf.Debug.
+	"""
+	for dir in dirs:
+		yield dir
+
+		if conf.conf.Debug:
+			for badfile in dir.bad_streams():
+				print >> sys.stderr, "Audiotype failed for:", badfile
+		elif conf.conf.ListBad:
+			globals.BadFiles += dir.bad_streams()
+
+
 class EmptyDir:
     """
     Represent a group of merged empty directories.
