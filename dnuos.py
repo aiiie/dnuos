@@ -334,6 +334,19 @@ class HeaderObject:
 		return dict[id]
 
 
+def indicate_progress(dirs, outs=sys.stderr):
+	"""Indicate progress.
+
+	Yields an unchanged iteration of dirs with an added side effect.
+	Total size in globals.Size is updated to stderr every step
+	throughout the iteration.
+	"""
+	for dir in dirs:
+		print >> outs, "%sb processed\r" % to_human(globals.Size["Total"]),
+		yield dir
+	print >> outs, "\r               \r",
+
+
 class EmptyDir:
     """
     Represent a group of merged empty directories.
@@ -347,6 +360,7 @@ class EmptyDir:
             return ' ' * conf.conf.Indent * self.depth + self.name
         else:
             return ""
+
 
 def grab(dirs):
     for dir in dirs:
