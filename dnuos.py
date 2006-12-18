@@ -193,6 +193,7 @@ def main():
 			dirs = walk(conf.conf.Folders[key])
 			dirs = indicate_progress(dirs)
 			dirs = collect_bad(dirs)
+			dirs = filter_dirs(dirs)
 			grab(dirs)
 
 	if globals.BadFiles and not conf.conf.OutputDb:
@@ -407,23 +408,14 @@ def grab(dirs):
     for dir in dirs:
         debug("grab %s %s" % (dir.depth, dir.name()))
 
-        if len(dir.streams()):
-            if hasattr(dir, "type") and dir.type() == "MP3":
-                if conf.conf.NoCBR == 1 and (dir.brtype() == "~" or dir.brtype() == "C"):
-                    return False
-                if conf.conf.NoNonProfile == 1 and dir.profile() == "":
-                    return False
-                if dir.bitrate() < conf.conf.MP3MinBitRate:
-                    return False
+        for type in dir.types():
+            globals.Size[type] += dir.size(type)
+        globals.Size["Total"] += dir.size()
 
-            for type in dir.types():
-                globals.Size[type] += dir.size(type)
-            globals.Size["Total"] += dir.size()
-
-            if not conf.conf.OutputDb:
-                outputplain(dir)
-            else:
-                outputdb(dir)
+        if not conf.conf.OutputDb:
+            outputplain(dir)
+        else:
+            outputdb(dir)
 
 
 oldpath = []
