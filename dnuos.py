@@ -421,38 +421,40 @@ class EmptyDir:
 
 def grab(dirs):
     if not conf.conf.OutputDb:
-        for dir in dirs:
-            outputplain(dir)
+        outputplain(dirs)
     else:
         outputdb(dirs)
 
 
-oldpath = []
-def outputplain(dir):
-	"""Render a directory to stdout.
+def outputplain(dirs):
+    """Render directories to stdout.
 
-	Directories are rendered according to the -o settings. Ancestral
-	directories are rendered as empty unless they were previously
-	rendered. Pre-order directory tree traversal is assumed.
-	"""
-	global oldpath
-
+    Directories are rendered according to the -o settings. Ancestral
+    directories are rendered as empty unless they were previously
+    rendered. Pre-order directory tree traversal is assumed.
+    """
     if conf.conf.DispDate:
         headers("date")
     headers("header")
 
-	# delayed output
-	path = dir.path.split(os.path.sep)[-dir.depth-1:]
-	i = 0
-	while i < min(len(path) - 1, len(oldpath)) and path[i] == oldpath[i]: i += 1
-	while i < len(path) - 1:
-		fields = eval_fields(conf.conf.Fields, EmptyDir(path[i], i))
-		print conf.conf.OutputString % fields
-		i += 1
-	oldpath = path
+    oldpath = []
+    for dir in dirs:
+        # output empty ancestor directories
+        path = dir.path.split(os.path.sep)[-dir.depth-1:]
+        i = 0
+        while i < len(path) - 1 and \
+              i < len(oldpath) and \
+              path[i] == oldpath[i]:
+            i += 1
+        while i < len(path) - 1:
+            fields = eval_fields(conf.conf.Fields, EmptyDir(path[i], i))
+            print conf.conf.OutputString % fields
+            i += 1
+        oldpath = path
 
-	fields = eval_fields(conf.conf.Fields, dir)
-	print conf.conf.OutputString % fields
+        # output audiodir
+        fields = eval_fields(conf.conf.Fields, dir)
+        print conf.conf.OutputString % fields
 
 
 def outputhtml(dirs):
