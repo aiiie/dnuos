@@ -370,6 +370,12 @@ def filter_dirs(dirs):
 				continue
 			if dir.bitrate() < conf.conf.MP3MinBitRate:
 				continue
+			if conf.conf.OutputDb and \
+			   (dir.type() == "Mixed" or \
+			    dir.get('A') == None or \
+			    dir.get('C') == None):
+				continue
+
 		yield dir
 
 
@@ -453,11 +459,6 @@ def outputplain(dir):
 
 def outputdb(dirs):
     for dir in dirs:
-        if dir.type() == "Mixed" or \
-           dir.get('A') == None or \
-           dir.get('C') == None:
-            continue
-
         print "%d:'%s',%d:'%s',%d:'%s',%d:'%s',%d,%.d,%d" % (
             len(str(dir.get('A'))),
             str(dir.get('A')),
