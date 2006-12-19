@@ -184,7 +184,6 @@ def main():
 		htmlheader()
 	if conf.conf.DispDate:
 		headers("date")
-	globals.Start = time.clock()
 	if conf.conf.Folders:
 		if not conf.conf.OutputDb:
 			headers("header")
@@ -193,6 +192,7 @@ def main():
 		bases = [ conf.conf.Folders[k] for k in keys ]
 		trees = [ walk(base) for base in bases ]
 		dirs = itertools.chain(*trees)
+		dirs = timer_wrapper(dirs)
 		dirs = indicate_progress(dirs)
 		dirs = collect_bad(dirs)
 		dirs = filter_dirs(dirs)
@@ -204,7 +204,6 @@ def main():
 		print "Audiotype failed on the following files:"
 		print string.join(globals.BadFiles, "\n")
 
-	globals.ElapsedTime = time.clock() - globals.Start
 	if conf.conf.DispTime:
 		print ""
 		print "Generation time:     %8.2f s" % globals.ElapsedTime
