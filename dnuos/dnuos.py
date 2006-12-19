@@ -141,7 +141,6 @@ import conf
 class Data:
 	def __init__(self):
 		self.BadFiles = []
-		self.Base = 0
 		self.Start = 0
 		self.Size = {
 			"Total": 0.0,
