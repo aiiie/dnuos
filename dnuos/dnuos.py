@@ -167,7 +167,7 @@ def to_human(value, radix=1024.0):
 
 def eval_fields(fields, obj, suffixes=1):
     """project an object through a field list into a tuple of strings"""
-    list = []
+    result = []
     for field in fields:
         try:
             data, width, suffix = str(obj.get(field[0])), field[1], field[2]
@@ -175,11 +175,14 @@ def eval_fields(fields, obj, suffixes=1):
             msg = "Unknown field <%s> in format string" % field[0]
             print >> sys.stderr, msg
             sys.exit(1)
-        if not data: suffix = " " * len(suffix)
-        if suffixes: data += suffix
-        if width != None: data = "%*.*s" % (width, abs(width), data)
-        list.append(data)
-    return tuple(list)
+        if not data:
+            suffix = " " * len(suffix)
+        if suffixes:
+            data += suffix
+        if width != None:
+            data = "%*.*s" % (width, abs(width), data)
+        result.append(data)
+    return tuple(result)
 
 
 def main():
