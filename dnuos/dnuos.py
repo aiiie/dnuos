@@ -272,11 +272,11 @@ def indicate_progress(dirs, outs=sys.stderr):
     """Indicate progress.
 
     Yields an unchanged iteration of dirs with an added side effect.
-    Total size in globals.size is updated to stderr every step
+    Total size in GLOBALS.size is updated to stderr every step
     throughout the iteration.
     """
     for adir in dirs:
-        print >> outs, "%sb processed\r" % to_human(globals.size["Total"]),
+        print >> outs, "%sb processed\r" % to_human(GLOBALS.size["Total"]),
         yield adir
     print >> outs, "\r               \r",
 
@@ -286,7 +286,7 @@ def collect_bad(dirs):
 
     Yields an unchanged iteration of dirs with an added side effect.
     After each directory is yielded its bad files are taken care of.
-    Bad files are appended to globals.Badfiles or output to stderr
+    Bad files are appended to GLOBALS.Badfiles or output to stderr
     depending on conf.conf.Debug.
     """
     for adir in dirs:
@@ -296,7 +296,7 @@ def collect_bad(dirs):
             for badfile in adir.bad_streams():
                 print >> sys.stderr, "Audiotype failed for:", badfile
         elif conf.conf.ListBad:
-            globals.bad_files += adir.bad_streams()
+            GLOBALS.bad_files += adir.bad_streams()
 
 
 def filter_dirs(dirs):
@@ -329,13 +329,13 @@ def total_sizes(dirs):
 
     Yields an unchanged iteration of dirs with an added side effect.
     After each directory is yielded its filesize statistics are
-    added to globals.size.
+    added to GLOBALS.size.
     """
     for adir in dirs:
         yield adir
         for mediatype in adir.types():
-            globals.size[mediatype] += adir.size(mediatype)
-        globals.size["Total"] += adir.size()
+            GLOBALS.size[mediatype] += adir.size(mediatype)
+        GLOBALS.size["Total"] += adir.size()
 
 
 def timer_wrapper(dirs):
@@ -343,12 +343,12 @@ def timer_wrapper(dirs):
 
     Yields an unchanged iteration of dirs with an added side effect.
     Time in seconds elapsed over the iteration is stored in
-    globals.elapsed_time.
+    GLOBALS.elapsed_time.
     """
-    globals.start = time.clock()
+    GLOBALS.start = time.clock()
     for adir in dirs:
         yield adir
-    globals.elapsed_time = time.clock() - globals.start
+    GLOBALS.elapsed_time = time.clock() - GLOBALS.start
 
 
 class EmptyDir:
@@ -396,22 +396,22 @@ def outputplain(dirs):
         fields = eval_fields(conf.conf.Fields, adir)
         print conf.conf.OutputString % fields
 
-    if globals.bad_files:
+    if GLOBALS.bad_files:
         print ""
         print "Audiotype failed on the following files:"
-        print string.join(globals.bad_files, "\n")
+        print string.join(GLOBALS.bad_files, "\n")
 
     if conf.conf.DispTime:
         print ""
-        print "Generation time:     %8.2f s" % globals.elapsed_time
+        print "Generation time:     %8.2f s" % GLOBALS.elapsed_time
 
     if conf.conf.DispResult:
         statistics = [
-            ["Ogg", globals.size["Ogg"]],
-            ["MP3", globals.size["MP3"]],
-            ["MPC", globals.size["MPC"]],
-            ["AAC", globals.size["AAC"]],
-            ["FLAC", globals.size["FLAC"]]]
+            ["Ogg", GLOBALS.size["Ogg"]],
+            ["MP3", GLOBALS.size["MP3"]],
+            ["MPC", GLOBALS.size["MPC"]],
+            ["AAC", GLOBALS.size["AAC"]],
+            ["FLAC", GLOBALS.size["FLAC"]]]
         line = "+-----------------------+-----------+"
 
         print ""
@@ -423,11 +423,11 @@ def outputplain(dirs):
                 print "| %-8s %12.2f | %9.2f |" % (
                     x[0],
                     x[1] / (1024 * 1024),
-                    x[1] * 100 / globals.size["Total"])
+                    x[1] * 100 / GLOBALS.size["Total"])
         print line
-        total_megs = globals.size["Total"] / (1024 * 1024)
+        total_megs = GLOBALS.size["Total"] / (1024 * 1024)
         print "| Total %10.2f Mb   |" % total_megs
-        print "| Speed %10.2f Mb/s |" % (total_megs / globals.elapsed_time)
+        print "| Speed %10.2f Mb/s |" % (total_megs / GLOBALS.elapsed_time)
         print line[:25]
 
     if conf.conf.DispVersion:
@@ -525,7 +525,7 @@ def walk(pathlist, depth=0):
 
 
 if __name__ == "__main__":
-    globals = Data()
+    GLOBALS = Data()
     conf.init()
     try:
         main()
