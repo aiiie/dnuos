@@ -195,11 +195,15 @@ def main():
 		bases = [ conf.conf.Folders[k] for k in keys ]
 		trees = [ walk(base) for base in bases ]
 		dirs = itertools.chain(*trees)
+
 		dirs = timer_wrapper(dirs)
 		dirs = indicate_progress(dirs)
-		dirs = collect_bad(dirs)
+		if not conf.conf.OutputDb:
+			dirs = collect_bad(dirs)
 		dirs = filter_dirs(dirs)
-		dirs = total_sizes(dirs)
+		if not conf.conf.OutputDb:
+			dirs = total_sizes(dirs)
+
 		grab(dirs)
 
 	if globals.BadFiles and not conf.conf.OutputDb:
