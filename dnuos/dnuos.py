@@ -150,7 +150,7 @@ class Data:
 			"MP3": 0.0,
 			"MPC": 0.0,
 			"AAC": 0.0}
-		self.TimeTotal = 0.0
+		self.ElapsedTime = 0.0
 
 
 def to_human(value, radix=1024.0):
