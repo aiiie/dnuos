@@ -275,9 +275,9 @@ def indicate_progress(dirs, outs=sys.stderr):
     Total size in globals.size is updated to stderr every step
     throughout the iteration.
     """
-    for dir in dirs:
+    for adir in dirs:
         print >> outs, "%sb processed\r" % to_human(globals.size["Total"]),
-        yield dir
+        yield adir
     print >> outs, "\r               \r",
 
 
@@ -289,14 +289,14 @@ def collect_bad(dirs):
     Bad files are appended to globals.Badfiles or output to stderr
     depending on conf.conf.Debug.
     """
-    for dir in dirs:
-        yield dir
+    for adir in dirs:
+        yield adir
 
         if conf.conf.Debug:
-            for badfile in dir.bad_streams():
+            for badfile in adir.bad_streams():
                 print >> sys.stderr, "Audiotype failed for:", badfile
         elif conf.conf.ListBad:
-            globals.bad_files += dir.bad_streams()
+            globals.bad_files += adir.bad_streams()
 
 
 def filter_dirs(dirs):
@@ -305,23 +305,23 @@ def filter_dirs(dirs):
     Directories with no recognized files are always omitted.
     Directories can also be omitted as per -bvL settings.
     """
-    for dir in dirs:
-        if not dir.streams():
+    for adir in dirs:
+        if not adir.streams():
             continue
-        if hasattr(dir, "type") and dir.type() == "MP3":
-            if conf.conf.NoCBR == 1 and dir.brtype() in "C~":
+        if hasattr(adir, "type") and adir.type() == "MP3":
+            if conf.conf.NoCBR == 1 and adir.brtype() in "C~":
                 continue
-            if conf.conf.NoNonProfile == 1 and dir.profile() == "":
+            if conf.conf.NoNonProfile == 1 and adir.profile() == "":
                 continue
-            if dir.bitrate() < conf.conf.MP3MinBitRate:
+            if adir.bitrate() < conf.conf.MP3MinBitRate:
                 continue
             if conf.conf.OutputDb and \
-               (dir.type() == "Mixed" or \
-                dir.get('A') == None or \
-                dir.get('C') == None):
+               (adir.type() == "Mixed" or \
+                adir.get('A') == None or \
+                adir.get('C') == None):
                 continue
 
-        yield dir
+        yield adir
 
 
 def total_sizes(dirs):
@@ -331,11 +331,11 @@ def total_sizes(dirs):
     After each directory is yielded its filesize statistics are
     added to globals.size.
     """
-    for dir in dirs:
-        yield dir
-        for type in dir.types():
-            globals.size[type] += dir.size(type)
-        globals.size["Total"] += dir.size()
+    for adir in dirs:
+        yield adir
+        for mediatype in adir.types():
+            globals.size[mediatype] += adir.size(mediatype)
+        globals.size["Total"] += adir.size()
 
 
 def timer_wrapper(dirs):
@@ -346,8 +346,8 @@ def timer_wrapper(dirs):
     globals.elapsed_time.
     """
     globals.start = time.clock()
-    for dir in dirs:
-        yield dir
+    for adir in dirs:
+        yield adir
     globals.elapsed_time = time.clock() - globals.start
 
 
@@ -378,9 +378,9 @@ def outputplain(dirs):
     headers("header")
 
     oldpath = []
-    for dir in dirs:
+    for adir in dirs:
         # output empty ancestor directories
-        path = dir.path.split(os.path.sep)[-dir.depth-1:]
+        path = adir.path.split(os.path.sep)[-adir.depth-1:]
         i = 0
         while i < len(path) - 1 and \
               i < len(oldpath) and \
@@ -393,7 +393,7 @@ def outputplain(dirs):
         oldpath = path
 
         # output audiodir
-        fields = eval_fields(conf.conf.Fields, dir)
+        fields = eval_fields(conf.conf.Fields, adir)
         print conf.conf.OutputString % fields
 
     if globals.bad_files:
@@ -465,26 +465,26 @@ body { color: %s; background: %s; }
 
 
 def outputdb(dirs):
-    for dir in dirs:
+    for adir in dirs:
         print "%d:'%s',%d:'%s',%d:'%s',%d:'%s',%d,%.d,%d" % (
-            len(str(dir.get('A'))),
-            str(dir.get('A')),
-            len(str(dir.get('C'))),
-            str(dir.get('C')),
-            len(str(dir.get('t'))),
-            str(dir.get('t')),
-            len(str(dir.get('p'))),
-            str(dir.get('p')),
-            dir.get('f'),
-            dir.get('B') / 1000,
-            dir.get('L')
+            len(str(adir.get('A'))),
+            str(adir.get('A')),
+            len(str(adir.get('C'))),
+            str(adir.get('C')),
+            len(str(adir.get('t'))),
+            str(adir.get('t')),
+            len(str(adir.get('p'))),
+            str(adir.get('p')),
+            adir.get('f'),
+            adir.get('B') / 1000,
+            adir.get('L')
         )
 
 
 def subdirectories(dirs):
     dirdict = {}
-    for dir in dirs:
-        for path in dir.subdirs():
+    for adir in dirs:
+        for path in adir.subdirs():
             key = os.path.basename(path)
             if dirdict.has_key(key):
                 dirdict[key].append(path)
@@ -505,8 +505,8 @@ def walk(pathlist, depth=0):
     dirs = map(lambda x: audiodir.Dir(x, depth), pathlist)
 
     # enumerate dirs
-    for dir in dirs:
-        yield dir
+    for adir in dirs:
+        yield adir
 
     # create a common dictionary over the subdirectories of all Dirs
     subdir_dict = subdirectories(dirs)
@@ -520,8 +520,8 @@ def walk(pathlist, depth=0):
         dirs = filter(cond, subdir_dict[key])
 
         # recurse
-        for dir in walk(dirs, depth + 1):
-            yield dir
+        for adir in walk(dirs, depth + 1):
+            yield adir
 
 
 if __name__ == "__main__":
