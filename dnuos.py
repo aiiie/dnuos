@@ -392,6 +392,19 @@ def total_sizes(dirs):
 		globals.Size["Total"] += dir.size()
 
 
+def timer_wrapper(dirs):
+    """Time the iteration.
+
+    Yields an unchanged iteration of dirs with an added side effect.
+    Time in seconds elapsed over the iteration is stored in
+    globals.ElapsedTime.
+    """
+    globals.Start = time.clock()
+    for dir in dirs:
+        yield dir
+    globals.ElapsedTime = time.clock() - globals.Start
+
+
 class EmptyDir:
     """
     Represent a group of merged empty directories.
