@@ -262,14 +262,6 @@ def htmlfooter():
 	print"</body></html>"
 
 
-def set_toggle(set, element):
-	"""toggle occurance of element in set"""
-	if element in set:
-		set.remove(element)
-	else:
-		set.append(element)
-
-
 def headers(token):
 	if token == "header" and not conf.conf.Stripped:  #top header
 		line = conf.conf.OutputString % eval_fields(conf.conf.Fields, HeaderObject(), 0)
