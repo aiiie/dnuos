@@ -182,11 +182,7 @@ def main():
 		return 0
 	if conf.conf.OutputFormat == "HTML":
 		htmlheader()
-	if conf.conf.DispDate:
-		headers("date")
 	if conf.conf.Folders:
-		if not conf.conf.OutputDb:
-			headers("header")
 		keys = conf.conf.Folders.keys()
 		conf.conf.sort(keys)
 		bases = [ conf.conf.Folders[k] for k in keys ]
@@ -438,6 +434,10 @@ def outputplain(dir):
 	rendered. Pre-order directory tree traversal is assumed.
 	"""
 	global oldpath
+
+    if conf.conf.DispDate:
+        headers("date")
+    headers("header")
 
 	# delayed output
 	path = dir.path.split(os.path.sep)[-dir.depth-1:]
