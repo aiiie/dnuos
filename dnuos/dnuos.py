@@ -172,7 +172,8 @@ def eval_fields(fields, obj, suffixes=1):
         try:
             data, width, suffix = str(obj.get(field[0])), field[1], field[2]
         except KeyError:
-            print >> sys.stderr, "Unknown field <%s> in format string" % field[0]
+            msg = "Unknown field <%s> in format string" % field[0]
+            print >> sys.stderr, msg
             sys.exit(1)
         if not data: suffix = " " * len(suffix)
         if suffixes: data += suffix
@@ -216,7 +217,8 @@ def main():
 
 def headers(token):
     if token == "header" and not conf.conf.Stripped:  #top header
-        line = conf.conf.OutputString % eval_fields(conf.conf.Fields, HeaderObject(), 0)
+        fields = eval_fields(conf.conf.Fields, HeaderObject(), 0)
+        line = conf.conf.OutputString % fields
         print line
         print "=" * len(line)
     elif token == "date":  #date
@@ -303,7 +305,7 @@ def filter_dirs(dirs):
         if not dir.streams():
             continue
         if hasattr(dir, "type") and dir.type() == "MP3":
-            if conf.conf.NoCBR == 1 and (dir.brtype() == "~" or dir.brtype() == "C"):
+            if conf.conf.NoCBR == 1 and dir.brtype() in "C~":
                 continue
             if conf.conf.NoNonProfile == 1 and dir.profile() == "":
                 continue
@@ -455,8 +457,6 @@ body { color: %s; background: %s; }
     outputplain(dirs)
 
     print"</pre>"
-    #print "<p><a href=\"http://validator.w3.org/check/referer\">"
-    #print "<img src=\"http://www.w3.org/Icons/valid-html401\" alt=\"Valid HTML 4.01!\" height=\"31\" width=\"88\"></a></p>"
     print"</body></html>"
 
 
@@ -512,7 +512,8 @@ def walk(pathlist, depth=0):
     conf.conf.sort(keys)
     for key in keys:
         # weed out base and excluded directories
-        dirs = filter(lambda x: x not in conf.conf.ExcludePaths, subdir_dict[key])
+        cond = lambda path: path not in conf.conf.ExcludePaths
+        dirs = filter(cond, subdir_dict[key])
 
         # recurse
         for dir in walk(dirs, depth + 1):
