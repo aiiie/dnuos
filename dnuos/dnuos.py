@@ -125,7 +125,6 @@ __version__ = "0.93"
 
 import itertools
 import os
-import re
 import string
 import sys
 import time
