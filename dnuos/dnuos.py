@@ -230,7 +230,8 @@ def headers(token):
 
 def debug(msg):
     """print debug message"""
-    if conf.conf.Debug: print >> sys.stderr, "?? " + msg
+    if conf.conf.Debug:
+        print >> sys.stderr, "?? " + msg
 
 
 class HeaderObject:
