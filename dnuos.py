@@ -416,12 +416,11 @@ class EmptyDir:
 
 
 def grab(dirs):
-    for dir in dirs:
-        debug("grab %s %s" % (dir.depth, dir.name()))
-
-        if not conf.conf.OutputDb:
+    if not conf.conf.OutputDb:
+        for dir in dirs:
             outputplain(dir)
-        else:
+    else:
+        for dir in dirs:
             outputdb(dir)
 
 
