@@ -204,7 +204,10 @@ def main():
 		if not conf.conf.OutputDb:
 			dirs = total_sizes(dirs)
 
-		grab(dirs)
+		if conf.conf.OutputDb:
+			outputdb(dirs)
+		else:
+			outputplain(dirs)
 
 	if globals.BadFiles and not conf.conf.OutputDb:
 		print ""
@@ -417,13 +420,6 @@ class EmptyDir:
             return ' ' * conf.conf.Indent * self.depth + self.name
         else:
             return ""
-
-
-def grab(dirs):
-    if not conf.conf.OutputDb:
-        outputplain(dirs)
-    else:
-        outputdb(dirs)
 
 
 def outputplain(dirs):
