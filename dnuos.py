@@ -210,39 +210,7 @@ def main():
 		else:
 			outputplain(dirs)
 
-	if globals.BadFiles and not conf.conf.OutputDb:
-		print ""
-		print "Audiotype failed on the following files:"
-		print string.join(globals.BadFiles, "\n")
-
-	if conf.conf.DispTime:
-		print ""
-		print "Generation time:     %8.2f s" % globals.ElapsedTime
-	if conf.conf.DispResult and not conf.conf.OutputDb:
-		statistics = [
-			["Ogg", globals.Size["Ogg"]],
-			["MP3", globals.Size["MP3"]],
-			["MPC", globals.Size["MPC"]],
-			["AAC", globals.Size["AAC"]],
-			["FLAC", globals.Size["FLAC"]]]
-		line = "+-----------------------+-----------+"
-
-		print ""
-		print line
-   		print "| Format    Amount (Mb) | Ratio (%) |"
-		print line
-		for x in statistics:
-			if x[1]:
-				print "| %-8s %12.2f | %9.2f |" % (
-					x[0],
-					x[1] / (1024 * 1024),
-					x[1] * 100 / globals.Size["Total"])
-		print line
-		totalMegs = globals.Size["Total"] / (1024 * 1024)
-		print "| Total %10.2f Mb   |" % totalMegs
-		print "| Speed %10.2f Mb/s |" % (totalMegs / globals.ElapsedTime)
-		print line[:25]
-	if conf.conf.DispVersion:
+	elif conf.conf.DispVersion:
 		print ""
 		print "dnuos version:    ", __version__
 		print "audiotype version:", audiotype.__version__
@@ -423,6 +391,45 @@ def outputplain(dirs):
         # output audiodir
         fields = eval_fields(conf.conf.Fields, dir)
         print conf.conf.OutputString % fields
+
+    if globals.BadFiles:
+        print ""
+        print "Audiotype failed on the following files:"
+        print string.join(globals.BadFiles, "\n")
+
+    if conf.conf.DispTime:
+        print ""
+        print "Generation time:     %8.2f s" % globals.ElapsedTime
+
+    if conf.conf.DispResult:
+        statistics = [
+            ["Ogg", globals.Size["Ogg"]],
+            ["MP3", globals.Size["MP3"]],
+            ["MPC", globals.Size["MPC"]],
+            ["AAC", globals.Size["AAC"]],
+            ["FLAC", globals.Size["FLAC"]]]
+        line = "+-----------------------+-----------+"
+
+        print ""
+        print line
+        print "| Format    Amount (Mb) | Ratio (%) |"
+        print line
+        for x in statistics:
+            if x[1]:
+                print "| %-8s %12.2f | %9.2f |" % (
+                    x[0],
+                    x[1] / (1024 * 1024),
+                    x[1] * 100 / globals.Size["Total"])
+        print line
+        totalMegs = globals.Size["Total"] / (1024 * 1024)
+        print "| Total %10.2f Mb   |" % totalMegs
+        print "| Speed %10.2f Mb/s |" % (totalMegs / globals.ElapsedTime)
+        print line[:25]
+
+    if conf.conf.DispVersion:
+        print ""
+        print "dnuos version:    ", __version__
+        print "audiotype version:", audiotype.__version__
 
 
 def outputhtml(dirs):
