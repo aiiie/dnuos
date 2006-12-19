@@ -139,16 +139,16 @@ import conf
 
 class Data:
     def __init__(self):
-        self.BadFiles = []
-        self.Start = 0
-        self.Size = {
+        self.bad_files = []
+        self.start = 0
+        self.size = {
             "Total": 0.0,
             "FLAC": 0.0,
             "Ogg": 0.0,
             "MP3": 0.0,
             "MPC": 0.0,
             "AAC": 0.0}
-        self.ElapsedTime = 0.0
+        self.elapsed_time = 0.0
 
 
 def to_human(value, radix=1024.0):
@@ -268,11 +268,11 @@ def indicate_progress(dirs, outs=sys.stderr):
     """Indicate progress.
 
     Yields an unchanged iteration of dirs with an added side effect.
-    Total size in globals.Size is updated to stderr every step
+    Total size in globals.size is updated to stderr every step
     throughout the iteration.
     """
     for dir in dirs:
-        print >> outs, "%sb processed\r" % to_human(globals.Size["Total"]),
+        print >> outs, "%sb processed\r" % to_human(globals.size["Total"]),
         yield dir
     print >> outs, "\r               \r",
 
@@ -292,7 +292,7 @@ def collect_bad(dirs):
             for badfile in dir.bad_streams():
                 print >> sys.stderr, "Audiotype failed for:", badfile
         elif conf.conf.ListBad:
-            globals.BadFiles += dir.bad_streams()
+            globals.bad_files += dir.bad_streams()
 
 
 def filter_dirs(dirs):
@@ -325,13 +325,13 @@ def total_sizes(dirs):
 
     Yields an unchanged iteration of dirs with an added side effect.
     After each directory is yielded its filesize statistics are
-    added to globals.Size.
+    added to globals.size.
     """
     for dir in dirs:
         yield dir
         for type in dir.types():
-            globals.Size[type] += dir.size(type)
-        globals.Size["Total"] += dir.size()
+            globals.size[type] += dir.size(type)
+        globals.size["Total"] += dir.size()
 
 
 def timer_wrapper(dirs):
@@ -339,12 +339,12 @@ def timer_wrapper(dirs):
 
     Yields an unchanged iteration of dirs with an added side effect.
     Time in seconds elapsed over the iteration is stored in
-    globals.ElapsedTime.
+    globals.elapsed_time.
     """
-    globals.Start = time.clock()
+    globals.start = time.clock()
     for dir in dirs:
         yield dir
-    globals.ElapsedTime = time.clock() - globals.Start
+    globals.elapsed_time = time.clock() - globals.start
 
 
 class EmptyDir:
@@ -392,22 +392,22 @@ def outputplain(dirs):
         fields = eval_fields(conf.conf.Fields, dir)
         print conf.conf.OutputString % fields
 
-    if globals.BadFiles:
+    if globals.bad_files:
         print ""
         print "Audiotype failed on the following files:"
-        print string.join(globals.BadFiles, "\n")
+        print string.join(globals.bad_files, "\n")
 
     if conf.conf.DispTime:
         print ""
-        print "Generation time:     %8.2f s" % globals.ElapsedTime
+        print "Generation time:     %8.2f s" % globals.elapsed_time
 
     if conf.conf.DispResult:
         statistics = [
-            ["Ogg", globals.Size["Ogg"]],
-            ["MP3", globals.Size["MP3"]],
-            ["MPC", globals.Size["MPC"]],
-            ["AAC", globals.Size["AAC"]],
-            ["FLAC", globals.Size["FLAC"]]]
+            ["Ogg", globals.size["Ogg"]],
+            ["MP3", globals.size["MP3"]],
+            ["MPC", globals.size["MPC"]],
+            ["AAC", globals.size["AAC"]],
+            ["FLAC", globals.size["FLAC"]]]
         line = "+-----------------------+-----------+"
 
         print ""
@@ -419,11 +419,11 @@ def outputplain(dirs):
                 print "| %-8s %12.2f | %9.2f |" % (
                     x[0],
                     x[1] / (1024 * 1024),
-                    x[1] * 100 / globals.Size["Total"])
+                    x[1] * 100 / globals.size["Total"])
         print line
-        totalMegs = globals.Size["Total"] / (1024 * 1024)
+        totalMegs = globals.size["Total"] / (1024 * 1024)
         print "| Total %10.2f Mb   |" % totalMegs
-        print "| Speed %10.2f Mb/s |" % (totalMegs / globals.ElapsedTime)
+        print "| Speed %10.2f Mb/s |" % (totalMegs / globals.elapsed_time)
         print line[:25]
 
     if conf.conf.DispVersion:
