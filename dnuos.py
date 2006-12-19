@@ -420,8 +420,7 @@ def grab(dirs):
         for dir in dirs:
             outputplain(dir)
     else:
-        for dir in dirs:
-            outputdb(dir)
+        outputdb(dirs)
 
 
 oldpath = []
@@ -452,31 +451,27 @@ def outputplain(dir):
 	print conf.conf.OutputString % fields
 
 
-def outputdb(dir):
+def outputdb(dirs):
+    for dir in dirs:
+        if dir.type() == "Mixed" or \
+           dir.get('A') == None or \
+           dir.get('C') == None:
+            continue
 
-	skip = 0
+        print "%d:'%s',%d:'%s',%d:'%s',%d:'%s',%d,%.d,%d" % (
+            len(str(dir.get('A'))),
+            str(dir.get('A')),
+            len(str(dir.get('C'))),
+            str(dir.get('C')),
+            len(str(dir.get('t'))),
+            str(dir.get('t')),
+            len(str(dir.get('p'))),
+            str(dir.get('p')),
+            dir.get('f'),
+            dir.get('B') / 1000,
+            dir.get('L')
+        )
 
-	if dir.type() == "Mixed":
-		return
-
-	if dir.get('A') == None or dir.get('C') == None:
-		skip = 1
-
-
-	if skip == 0:
-		print "%d:'%s',%d:'%s',%d:'%s',%d:'%s',%d,%.d,%d" % (
-			len(str(dir.get('A'))),
-			str(dir.get('A')),
-			len(str(dir.get('C'))),
-			str(dir.get('C')),
-			len(str(dir.get('t'))),
-			str(dir.get('t')),
-			len(str(dir.get('p'))),
-			str(dir.get('p')),
-			dir.get('f'),
-			dir.get('B') / 1000,
-			dir.get('L')
-		)
 
 def subdirectories(dirs):
 	dirdict = {}
