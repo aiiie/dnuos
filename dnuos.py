@@ -271,11 +271,6 @@ def headers(token):
 		print time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
 
 
-def has_suffix(str, suffix):
-	"""check string for suffix"""
-	return suffix == string.lower(str[-len(suffix):])
-
-
 def debug(msg):
 	"""print debug message"""
 	if conf.conf.Debug: print >> sys.stderr, "?? " + msg
