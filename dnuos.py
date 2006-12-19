@@ -124,12 +124,19 @@ Options:
 __version__ = "0.93"
 
 import itertools
-import os, re, string, sys, time
+import os
+import re
+import string
+import sys
+import time
 
 # fix for some dumb version of python 2.3
 sys.path.append(os.path.abspath('.'))
 
-import audiotype, audiodir, conf
+import audiotype
+import audiodir
+import conf
+
 
 class Data:
 	def __init__(self):
