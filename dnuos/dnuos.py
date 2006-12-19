@@ -425,9 +425,9 @@ def outputplain(dirs):
                     x[1] / (1024 * 1024),
                     x[1] * 100 / globals.size["Total"])
         print line
-        totalMegs = globals.size["Total"] / (1024 * 1024)
-        print "| Total %10.2f Mb   |" % totalMegs
-        print "| Speed %10.2f Mb/s |" % (totalMegs / globals.elapsed_time)
+        total_megs = globals.size["Total"] / (1024 * 1024)
+        print "| Total %10.2f Mb   |" % total_megs
+        print "| Speed %10.2f Mb/s |" % (total_megs / globals.elapsed_time)
         print line[:25]
 
     if conf.conf.DispVersion:
