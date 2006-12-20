@@ -32,7 +32,6 @@ class Settings:
         self.IgnoreCase = 0
         self.Indent = 4
         self.Debug = 0
-        self.Delayed = 1
         self.DispVersion = 0
         self.DispTime = 0
         self.DispHelp = 0
@@ -53,7 +52,6 @@ class Settings:
         self.Fields = []
         self.OutputString = ""
         self.Stripped = 0
-        self.PreferTag = 2
         self.NoCBR = 0
         self.NoNonProfile = 0
         self.ForceOldLAMEPresets = 0
