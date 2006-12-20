@@ -41,8 +41,6 @@ class Settings:
         self.Folders = {}
         self.ListBad = 1
         self.Merge = 0
-        self.OutputDb = 0
-        self.Outfile = 0
         self.OutputFormat = "plain"
         self.OutStream = sys.__stdout__
         self.Quiet = 0
@@ -101,6 +99,7 @@ class Settings:
             return 0
 
         # parse option pairs
+        outfile = None
         for o, a in opts:
             if o in ("-b", "--bitrate"):
                 self.MP3MinBitRate = string.atoi(a)
@@ -113,9 +112,10 @@ class Settings:
             elif o == "--debug": self.Debug = 1
             elif o in ("-e", "--exclude"): self.exclude_dir(a)
             elif o in ("-f", "--file"):
-                self.Outfile = 1
-                self.set_outstream(a, 'w')
-            elif o in ("-f", "--file"): self.set_outstream(a)
+                if outfile:
+                    print >> sys.stderr, "Multiple outfiles must not be specified"
+                else:
+                    outfile = a
             elif o in ("-H", "--html"): self.OutputFormat = "HTML"
             elif o in ("-h", "--help"): self.DispHelp = 1
             elif o == "--ignore-bad": self.ListBad = 0
@@ -126,12 +126,11 @@ class Settings:
             elif o in ("-m", "--merge"): self.Merge = 1
             elif o in ("-o", "--output"): self.RawOutputString = a
             elif o in ("-O", "--output-db"):
-                if self.Outfile == 1:
-                    print "The -f and -O switches may not be used together.\n"
-                    sys.exit(1)
+                if outfile:
+                    print >> sys.stderr, "Multiple outfiles must not be specified"
                 else:
-                    self.OutputDb = 1
-                    self.set_outstream(a, 'wb')
+                    self.OutputFormat = "db"
+                    outfile = a
             elif o in ("-q", "--quiet"): self.Quiet = 1
             elif o in ("-s", "--strip"): self.Stripped = 1
             elif o in ("-S", "--stats"): self.DispResult = 1
@@ -149,6 +148,13 @@ class Settings:
                 print "This should never happen!"
                 print "Unknown option", (o, a)
                 return 0
+
+        # redirect to file
+        if outfile:
+            mode = 'w'
+            if self.OutputFormat == 'db':
+                mode += 'b'
+            self.set_outstream(outfile, mode)
 
         # add basedirs to both self.Folder and self.ExcludePaths
         self.paircount = 0

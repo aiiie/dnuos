@@ -831,7 +831,7 @@ def textencode(str):
     else:
         pass
 
-    if conf.conf.OutputDb:
+    if conf.conf.OutputFormat == 'db':
         return str.encode('latin1', 'replace').strip('\0')
     else:
         return str.encode('utf-8').strip('\0')
