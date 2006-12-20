@@ -190,13 +190,13 @@ def main():
         dirs = timer_wrapper(dirs)
         if not conf.conf.Quiet:
             dirs = indicate_progress(dirs)
-        if not conf.conf.OutputDb:
+        if not conf.conf.OutputFormat == 'db':
             dirs = collect_bad(dirs)
         dirs = filter_dirs(dirs)
-        if not conf.conf.OutputDb:
+        if not conf.conf.OutputFormat == 'db':
             dirs = total_sizes(dirs)
 
-        if conf.conf.OutputDb:
+        if conf.conf.OutputFormat == 'db':
             outputdb(dirs)
         elif conf.conf.OutputFormat == "HTML":
             outputhtml(dirs)
@@ -296,7 +296,7 @@ def filter_dirs(dirs):
                 continue
             if adir.bitrate() < conf.conf.MP3MinBitRate:
                 continue
-        if conf.conf.OutputDb and \
+        if conf.conf.OutputFormat == 'db' and \
            (adir.type() == "Mixed" or \
             adir.get('A') == None or \
             adir.get('C') == None):
