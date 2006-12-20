@@ -7,3 +7,4 @@ Installation guides? (later)
 Customize metadata output? (later)
 to_human is duplicated in audiodir.py (later)
 Really hardcode charset in html output?
+dir_test is duplicated in audiodir.py

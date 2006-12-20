@@ -16,9 +16,6 @@ Configuration module for Dnuos.
 """
 
 
-# TODO: dir_test is duplicated in audiodir.py
-
-
 __version__ = "0.92"
 
 
