@@ -295,11 +295,11 @@ def filter_dirs(dirs):
                 continue
             if adir.bitrate() < conf.conf.MP3MinBitRate:
                 continue
-            if conf.conf.OutputDb and \
-               (adir.type() == "Mixed" or \
-                adir.get('A') == None or \
-                adir.get('C') == None):
-                continue
+        if conf.conf.OutputDb and \
+           (adir.type() == "Mixed" or \
+            adir.get('A') == None or \
+            adir.get('C') == None):
+            continue
 
         yield adir
 
