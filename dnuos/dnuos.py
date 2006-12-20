@@ -14,17 +14,6 @@
 # Mattias Päivärinta <pejve@vasteras2.net>
 
 
-
-# TODO: Use list comprehension instead of bulky map and filter calls (later)
-# TODO: Make specification for smoke tests (later)
-# TODO: Actually create smoke tests (later)
-# TODO: Consider custom character escaping (later)
-# TODO: Installation guides? (later)
-# TODO: [s,5] looks bad mixing 98.2 and 100M for instance (later)
-# TODO: Customize metadata output? (later)
-# TODO: to_human is duplicated in audiodir.py (later)
-
-
 r"""Usage:  dnuos.py [options] <basedir> ...
 
 Options:
@@ -442,7 +431,6 @@ def outputhtml(dirs):
     Directories are rendered like in plain text, but with HTML header
     and footer.
     """
-    # XXX Should we _always_ use this charset?
     print """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
 <head>
