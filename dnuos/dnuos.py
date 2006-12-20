@@ -188,7 +188,8 @@ def main():
         dirs = itertools.chain(*trees)
 
         dirs = timer_wrapper(dirs)
-        dirs = indicate_progress(dirs)
+        if not conf.conf.Quiet:
+            dirs = indicate_progress(dirs)
         if not conf.conf.OutputDb:
             dirs = collect_bad(dirs)
         dirs = filter_dirs(dirs)
