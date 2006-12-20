@@ -395,24 +395,18 @@ def outputplain(dirs):
         print "Generation time:     %8.2f s" % GLOBALS.elapsed_time
 
     if conf.conf.DispResult:
-        statistics = [
-            ["Ogg", GLOBALS.size["Ogg"]],
-            ["MP3", GLOBALS.size["MP3"]],
-            ["MPC", GLOBALS.size["MPC"]],
-            ["AAC", GLOBALS.size["AAC"]],
-            ["FLAC", GLOBALS.size["FLAC"]]]
         line = "+-----------------------+-----------+"
 
         print ""
         print line
         print "| Format    Amount (Mb) | Ratio (%) |"
         print line
-        for x in statistics:
-            if x[1]:
+        for mediatype in ["Ogg", "MP3", "MPC", "AAC", "FLAC"]:
+            if GLOBALS.size[mediatype]:
                 print "| %-8s %12.2f | %9.2f |" % (
-                    x[0],
-                    x[1] / (1024 * 1024),
-                    x[1] * 100 / GLOBALS.size["Total"])
+                    mediatype,
+                    GLOBALS.size[mediatype] / (1024 * 1024),
+                    GLOBALS.size[mediatype] * 100 / GLOBALS.size["Total"])
         print line
         total_megs = GLOBALS.size["Total"] / (1024 * 1024)
         print "| Total %10.2f Mb   |" % total_megs
