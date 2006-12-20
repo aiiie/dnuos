@@ -5,8 +5,9 @@
 #
 # This program is under GPL license. See COPYING file for details.
 #
-# Copyright 2003  Sylvester Johansson  (sylvestor@telia.com)
-#                 Mattias Päivärinta   (mpa99001@student.mdh.se)
+# Copyright 2003
+# Sylvester Johansson  <sylvestor@telia.com>
+# Mattias Päivärinta   <pejve@vasteras2.net>
 
 
 # buildexe.py
