@@ -14,6 +14,6 @@ from distutils.core import setup
 import py2app
 
 setup(
-	app=['dnuos.py'],
-	options=dict(py2app=dict(optimize=1))
+    app=['dnuos.py'],
+    options=dict(py2app=dict(optimize=1))
 )
