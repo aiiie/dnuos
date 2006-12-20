@@ -141,6 +141,7 @@ class Data:
 
 
 def to_human(value, radix=1024.0):
+    """Convert a value to a string using SI suffixes"""
     i = 0
     while value >= radix:
         value /= radix
