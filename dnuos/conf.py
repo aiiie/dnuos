@@ -83,7 +83,7 @@ class Settings:
             "lame-old-preset",
             "lame-only",
             "merge",
-            "outputdb=",
+            "output-db=",
             "output=",
             "prefer-tag=",
             "quiet",
