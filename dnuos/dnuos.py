@@ -207,16 +207,6 @@ def main():
         print "audiotype version:", audiotype.__version__
 
 
-def headers(token):
-    if token == "header" and not conf.conf.Stripped:  #top header
-        fields = eval_fields(conf.conf.Fields, HeaderObject(), 0)
-        line = conf.conf.OutputString % fields
-        print line
-        print "=" * len(line)
-    elif token == "date":  #date
-        print time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
-
-
 def debug(msg):
     """print debug message"""
     if conf.conf.Debug:
@@ -362,9 +352,15 @@ def outputplain(dirs):
     directories are rendered as empty unless they were previously
     rendered. Pre-order directory tree traversal is assumed.
     """
+    # output date
     if conf.conf.DispDate:
-        headers("date")
-    headers("header")
+        print time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
+
+    # output column headers
+    fields = eval_fields(conf.conf.Fields, HeaderObject(), 0)
+    line = conf.conf.OutputString % fields
+    print line
+    print "=" * len(line)
 
     oldpath = []
     for adir in dirs:
