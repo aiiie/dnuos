@@ -38,7 +38,7 @@ class Settings:
         self.DispDate = 0
         self.DispResult = 0
         self.ExcludePaths = []
-        self.Folders = {}
+        self.Folders = []
         self.ListBad = 1
         self.Merge = 0
         self.OutputFormat = "plain"
@@ -159,11 +159,8 @@ class Settings:
         # add basedirs to both self.Folder and self.ExcludePaths
         self.paircount = 0
         for glob_dir in args:
-            dirs = self.expand(glob_dir)
-            self.ExcludePaths += dirs
-            for key, dir in map(self.add_key, dirs):
-                self.add_basedir(key, dir)
-        del self.paircount
+            self.Folders += self.expand(glob_dir)
+        self.ExcludePaths += self.Folders
 
         # reject "no operation" configurations
         if (not self.Folders

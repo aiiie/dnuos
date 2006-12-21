@@ -182,11 +182,11 @@ def main():
         return 0
 
     if conf.conf.Folders:
-        keys = conf.conf.Folders.keys()
-        conf.conf.sort(keys)
-        bases = [ conf.conf.Folders[k] for k in keys ]
-        trees = [ walk(base) for base in bases ]
-        dirs = itertools.chain(*trees)
+        trees = [ walk(basedir) for basedir in conf.conf.Folders ]
+        if conf.conf.Merge:
+            dirs = merge(*trees)
+        else:
+            dirs = itertools.chain(*trees)
 
         dirs = timer_wrapper(dirs)
         if not conf.conf.Quiet:
@@ -498,47 +498,27 @@ def merge(*iterators):
             heappush(heap, (iterator, index))
 
 
-def subdirectories(dirs):
-    dirdict = {}
-    for adir in dirs:
-        for path in adir.subdirs():
-            key = os.path.basename(path)
-            if dirdict.has_key(key):
-                dirdict[key].append(path)
-            else:
-                dirdict[key] = [ path ]
-    return dirdict
+def subdirs(path):
+    """Create a sorted iterable of subdirs"""
+    subdirs = [ (conf.conf.cmp_munge(os.path.basename(sub)),
+                 os.path.join(path, sub))
+                for sub in os.listdir(path) ]
+    subdirs = [ (key, sub) for key, sub in subdirs
+                if audiodir.dir_test(sub) and
+                   sub not in conf.conf.ExcludePaths ]
+    subdirs.sort()
+    for key, sub in subdirs:
+        yield sub
 
 
-def walk(pathlist, depth=0):
-    """Traverse one or more merged directory trees in parallell in pre order.
+def walk(path, depth=0):
+    """Traverse a directory tree in pre-order"""
+    yield audiodir.Dir(path, depth)
 
-    The subdirectories of all pathlist directories are considered
-    together. They are traversed in lexicographical order by basename.
-    If subdirectories of two or more pathlist directories share the same
-    basename, those subdirectories are traversed together.
-    """
-    # create Dir objects for all paths
-    dirs = map(lambda x: audiodir.Dir(x, depth), pathlist)
-
-    # enumerate dirs
-    for adir in dirs:
-        yield adir
-
-    # create a common dictionary over the subdirectories of all Dirs
-    subdir_dict = subdirectories(dirs)
-
-    # sort keys and traverse the dictionary
-    keys = subdir_dict.keys()
-    conf.conf.sort(keys)
-    for key in keys:
-        # weed out base and excluded directories
-        cond = lambda path: path not in conf.conf.ExcludePaths
-        dirs = filter(cond, subdir_dict[key])
-
-        # recurse
-        for adir in walk(dirs, depth + 1):
-            yield adir
+    # recurse each subdir
+    for subpath in subdirs(path):
+        for descendant in walk(subpath, depth+1):
+            yield descendant
 
 
 if __name__ == "__main__":
