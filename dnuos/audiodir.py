@@ -87,6 +87,30 @@ class Dir:
         self._album = None
         self._albumver = None
 
+    def __le__(self, other):
+        """Compare the path relative to the respective basedir
+
+        Only the paths are compared. Directory contents is not
+        considered at all.
+        """
+        mine = conf.conf.cmp_munge(self.relpath())
+        yours = conf.conf.cmp_munge(other.relpath())
+        return mine <= yours
+
+    def __eq__(self, other):
+        """Compare the path relative to the respective basedir
+
+        Only the paths are compared. Directory contents is not
+        considered at all.
+        """
+        mine = conf.conf.cmp_munge(self.relpath())
+        yours = conf.conf.cmp_munge(other.relpath())
+        return mine == yours
+
+    def relpath(self):
+        path = self.path.split(os.path.sep)
+        return os.path.join(*path[-self.depth-1:])
+
     def name(self):
         return os.path.basename(self.path) or self.path
 
