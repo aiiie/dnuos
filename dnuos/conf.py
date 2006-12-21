@@ -253,20 +253,6 @@ class Settings:
 def die(msg, exitcode):
     print >> sys.stderr, msg
 
-def num_digits(str):
-    i = 0
-    while i < len(str) and str[i] in string.digits: i += 1
-    return i
-
-
-def parse_num(str):
-    len = num_digits(str)
-    if len:
-        return string.atoi(str[:len]), str[len:]
-    else:
-        return None, str
-
-
 def parse_field(str):
     params = (str.split(",") + ["", ""])[:3]
     if params[1] == "": params[1] = None
