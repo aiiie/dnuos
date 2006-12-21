@@ -339,7 +339,7 @@ class EmptyDir:
 
     def get(self, id):
         if id == "n":
-            return ' ' * conf.conf.options.indent * self.depth + self.name
+            return conf.conf.indent(self.name, self.depth)
         else:
             return ""
 
