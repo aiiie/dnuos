@@ -105,6 +105,9 @@ def main():
             dirs = output_db_filter(dirs)
         if not conf.conf.options.output_format == 'db':
             dirs = total_sizes(dirs)
+        if not conf.conf.options.output_format =='db' and \
+           not conf.conf.options.stripped:
+            dirs = add_empty(dirs)
 
         if conf.conf.options.output_format == 'db':
             outputdb(dirs)
@@ -277,26 +280,13 @@ class EmptyDir:
             return ""
 
 
-def outputplain(dirs):
-    """Render directories to stdout.
+def add_empty(dirs):
+    """Insert empty ancestral directories
 
-    Directories are rendered according to the -o settings. Ancestral
-    directories are rendered as empty unless they were previously
-    rendered. Pre-order directory tree traversal is assumed.
+    Pre-order directory tree traversal is assumed.
     """
-    # output date
-    if conf.conf.options.disp_date:
-        print time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
-
-    # output column headers
-    fields = eval_fields(conf.conf.Fields, HeaderObject(), 0)
-    line = conf.conf.OutputString % fields
-    print line
-    print "=" * len(line)
-
     oldpath = []
     for adir in dirs:
-        # output empty ancestor directories
         path = adir.path.split(os.path.sep)[-adir.depth-1:]
         i = 0
         while i < len(path) - 1 and \
@@ -304,12 +294,30 @@ def outputplain(dirs):
               path[i] == oldpath[i]:
             i += 1
         while i < len(path) - 1:
-            fields = eval_fields(conf.conf.Fields, EmptyDir(path[i], i))
-            print conf.conf.OutputString % fields
+            yield EmptyDir(path[i], i)
             i += 1
         oldpath = path
 
-        # output audiodir
+        yield adir
+
+
+def outputplain(dirs):
+    """Render directories to stdout.
+
+    Directories are rendered according to the -o settings.
+    """
+    # output date
+    if conf.conf.options.disp_date:
+        print time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
+
+    # output column headers
+    if not conf.conf.options.stripped:
+        fields = eval_fields(conf.conf.Fields, HeaderObject(), 0)
+        line = conf.conf.OutputString % fields
+        print line
+        print "=" * len(line)
+
+    for adir in dirs:
         fields = eval_fields(conf.conf.Fields, adir)
         print conf.conf.OutputString % fields
 

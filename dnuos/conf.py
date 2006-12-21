@@ -117,7 +117,7 @@ class Settings:
                           dest="quiet", action="store_true",
                           help="Omit progress indication")
         parser.add_option("-s", "--strip",
-                          dest="strip", action="store_true",
+                          dest="stripped", action="store_true",
                           help="Strip output of field headers and empty directories")
         parser.add_option("-S", "--stats",
                           dest="disp_result", action="store_true",
