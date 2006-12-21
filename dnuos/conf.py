@@ -157,7 +157,6 @@ class Settings:
             self.set_outstream(outfile, mode)
 
         # add basedirs to both self.Folder and self.ExcludePaths
-        self.paircount = 0
         for glob_dir in args:
             self.Folders += self.expand(glob_dir)
         self.ExcludePaths += self.Folders
@@ -176,15 +175,6 @@ class Settings:
             self.ListBad = 1
         return 1
     
-    def add_key(self, dir):
-        """make a (sortkey, value) pair from a path"""
-        if self.Merge:
-            key = os.path.basename(dir) or dir
-        else:
-            self.paircount += 1
-            key = "%06d" % self.paircount
-        return (key, dir)
-
     def set_outstream(self, file, filemode):
         """open output stream for writing"""
         try:
@@ -211,13 +201,6 @@ class Settings:
         else:
             list = [ os.path.abspath(dir) ]
         return filter(self.dir_test, list)
-
-    def add_basedir(self, key, dir):
-        """add directory with sortkey to self.Folders"""
-        if self.Folders.has_key(key):
-            self.Folders[key].append(dir)
-        else:
-            self.Folders[key] = [ dir ]
 
     def process_outputstring(self):
         parts = re.split(r"(?<!\\)\[", unescape(self.RawOutputString))
