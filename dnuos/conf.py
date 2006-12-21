@@ -183,14 +183,6 @@ class Settings:
             print "Cannot open '%s' for writing" % file
             sys.exit(2)
 
-    def idate_exclude_dir(self, dir):
-        """add a directory to exclude-list"""
-        if dir[-1] == os.sep:
-            dir = dir[:-1]
-        if not os.path.isdir(dir):
-            print "There is no directory '%s'" % dir
-            sys.exit(2)
-
     def expand(self, dir):
         """translate a basedir to a list of absolute paths"""
         if self.options.wildcards and re.search("[*?]|(?:\[.*\])", dir):
