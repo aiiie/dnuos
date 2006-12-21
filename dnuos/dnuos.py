@@ -83,6 +83,8 @@ def eval_fields(fields, obj, suffixes=1):
 
 def main():
     if conf.conf.Folders:
+        sys.stdout = conf.conf.OutStream
+
         trees = [ walk(basedir) for basedir in conf.conf.Folders ]
         if conf.conf.options.merge:
             dirs = merge(*trees)

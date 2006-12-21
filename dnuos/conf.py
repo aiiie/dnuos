@@ -43,9 +43,6 @@ class Settings:
         # format outputstring
         self.process_outputstring()
 
-        # direct stdout to the correct stream
-        sys.stdout = self.OutStream
-
     def parse(self):
         usage = "%prog [options] basedir ..."
         parser = OptionParser(usage)
