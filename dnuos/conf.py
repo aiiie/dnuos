@@ -263,6 +263,9 @@ class Settings:
         return " " * self.options.indent * depth + basename
 
 
+def die(msg, exitcode):
+    print >> sys.stderr, msg
+
 def num_digits(str):
     i = 0
     while i < len(str) and str[i] in string.digits: i += 1
