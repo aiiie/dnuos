@@ -112,6 +112,7 @@ Options:
 
 __version__ = "0.93"
 
+from heapq import heappop, heappush
 import itertools
 import os
 import string
@@ -459,6 +460,27 @@ def outputdb(dirs):
             adir.get('B') / 1000,
             adir.get('L')
         )
+
+
+class Lookahead:
+    """Wrapper class for adding one element of lookahead to iterators"""
+    def __init__(self, iterable):
+        self.iterable = iterable
+        self.lookahead = None
+        self.empty = False
+        self.next()
+
+    def next(self):
+        result = self.lookahead
+        try:
+            self.lookahead = self.iterable.next()
+        except StopIteration:
+            self.lookahead = None
+            self.empty = True
+        return result
+
+    def __le__(self, other): return self.lookahead <= other.lookahead
+    def __eq__(self, other): return self.lookahead == other.lookahead
 
 
 def subdirectories(dirs):
