@@ -483,6 +483,21 @@ class Lookahead:
     def __eq__(self, other): return self.lookahead == other.lookahead
 
 
+def merge(*iterators):
+    """Merge n ordered iterators into one ordered iterator"""
+    heap = []
+    for index in range(0, len(iterators)):
+        iterator = Lookahead(iterators[index])
+        if not iterator.empty:
+            heappush(heap, (iterator, index))
+
+    while heap:
+        iterator, index = heappop(heap)
+        yield iterator.next()
+        if not iterator.empty:
+            heappush(heap, (iterator, index))
+
+
 def subdirectories(dirs):
     dirdict = {}
     for adir in dirs:
