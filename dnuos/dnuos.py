@@ -94,7 +94,13 @@ def main():
             dirs = indicate_progress(dirs)
         if not conf.conf.options.output_format == 'db':
             dirs = collect_bad(dirs)
-        dirs = filter_dirs(dirs)
+        dirs = filter_empty(dirs)
+        if conf.conf.options.no_cbr:
+            dirs = filter_cbr_mp3(dirs)
+        if conf.conf.options.no_non_profile:
+            dirs = filter_non_profile_mp3(dirs)
+        if conf.conf.options.output_format == 'db':
+            dirs = output_db_filter(dirs)
         if not conf.conf.options.output_format == 'db':
             dirs = total_sizes(dirs)
 
@@ -182,29 +188,44 @@ def collect_bad(dirs):
             GLOBALS.bad_files += adir.bad_streams()
 
 
-def filter_dirs(dirs):
-    """Filter directories according to configuration.
+def filter_empty(dirs):
+    """Filter empty directories
 
-    Directories with no recognized files are always omitted.
-    Directories can also be omitted as per -bvL settings.
+    Directories are considered empty if they contain no recognized audio files.
     """
     for adir in dirs:
-        if not adir.streams():
-            continue
-        if hasattr(adir, "type") and adir.type() == "MP3":
-            if conf.conf.options.no_cbr == 1 and adir.brtype() in "C~":
-                continue
-            if conf.conf.options.no_non_profile == 1 and adir.profile() == "":
-                continue
-            if adir.bitrate() < conf.conf.options.mp3_min_bit_rate:
-                continue
-        if conf.conf.options.output_format == 'db' and \
-           (adir.type() == "Mixed" or \
-            adir.get('A') == None or \
-            adir.get('C') == None):
-            continue
+        if adir.streams():
+            yield adir
+ 
 
-        yield adir
+def filter_cbr_mp3(dirs):
+    """Filter directories containing CBR MP3 files"""
+    for adir in dirs:
+        if not adir.type() == "MP3" or not adir.brtype() in "C~":
+            yield adir
+
+
+def filter_non_profile_mp3(dirs):
+    """Filter directories containing non-profile MP3 files"""
+    for adir in dirs:
+        if not adir.type() == "MP3" or adir.profile() != "":
+            yield adir
+
+
+def filter_non_profile_mp3(dirs):
+    """Filter directories containing MP3 files and too low average bitrate"""
+    for adir in dirs:
+        if not adir.type() == "MP3" or \
+           adir.bitrate() >= conf.conf.options.mp3_min_bit_rate:
+            yield adir
+
+
+def output_db_filter(dirs):
+    for adir in dirs:
+        if adir.type() != "Mixed" and \
+           adir.get('A') != None and \
+           adir.get('C') != None:
+            yield adir
 
 
 def total_sizes(dirs):
