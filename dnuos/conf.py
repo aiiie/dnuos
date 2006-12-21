@@ -101,12 +101,7 @@ class Settings:
         # parse option pairs
         outfile = None
         for o, a in opts:
-            if o in ("-b", "--bitrate"):
-                self.MP3MinBitRate = string.atoi(a)
-                if self.MP3MinBitRate < 1 or self.MP3MinBitRate > 320:
-                    print "Bitrate must be greater than 0 and less than or equal to 320"
-                    sys.exit(1)
-                self.MP3MinBitRate = self.MP3MinBitRate * 1000
+            if o in ("-b", "--bitrate"): self.MP3MinBitRate = a
             elif o in ("-B", "--bg"): self.BGColor = a
             elif o in ("-D", "--date"): self.DispDate = 1
             elif o == "--debug": self.Debug = 1
@@ -148,6 +143,14 @@ class Settings:
                 print "This should never happen!"
                 print "Unknown option", (o, a)
                 return 0
+
+        # validate options
+        if self.MP3MinBitRate != 0:
+            bitrate = string.atoi(self.MP3MinBitRate)
+            if bitrate < 1 or bitrate > 320:
+                print "Bitrate must be greater than 0 and less than or equal to 320"
+                sys.exit(1)
+            self.MP3MinBitRate = bitrate * 1000
 
         # redirect to file
         if outfile:
