@@ -424,7 +424,7 @@ class Dir:
         "L": lambda: self.length(),
         "m": lambda: time.ctime(self.modified()),
         "M": lambda: self.modified(),
-        "n": lambda: " " * conf.conf.options.indent * self.depth + self.name(),
+        "n": lambda: conf.conf.indent(self.name(), self.depth),
         "N": lambda: self.name(),
         "p": lambda: self.profile(),
         "P": lambda: self.path,
