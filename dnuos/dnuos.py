@@ -177,34 +177,30 @@ def eval_fields(fields, obj, suffixes=1):
 
 
 def main():
-    if conf.conf.DispHelp:
-        print >> sys.stderr, __doc__
-        return 0
-
     if conf.conf.Folders:
         trees = [ walk(basedir) for basedir in conf.conf.Folders ]
-        if conf.conf.Merge:
+        if conf.conf.options.merge:
             dirs = merge(*trees)
         else:
             dirs = itertools.chain(*trees)
 
         dirs = timer_wrapper(dirs)
-        if not conf.conf.Quiet:
+        if not conf.conf.options.quiet:
             dirs = indicate_progress(dirs)
-        if not conf.conf.OutputFormat == 'db':
+        if not conf.conf.options.output_format == 'db':
             dirs = collect_bad(dirs)
         dirs = filter_dirs(dirs)
-        if not conf.conf.OutputFormat == 'db':
+        if not conf.conf.options.output_format == 'db':
             dirs = total_sizes(dirs)
 
-        if conf.conf.OutputFormat == 'db':
+        if conf.conf.options.output_format == 'db':
             outputdb(dirs)
-        elif conf.conf.OutputFormat == "HTML":
+        elif conf.conf.options.output_format == "HTML":
             outputhtml(dirs)
         else:
             outputplain(dirs)
 
-    elif conf.conf.DispVersion:
+    elif conf.conf.options.disp_version:
         print ""
         print "dnuos version:    ", __version__
         print "audiotype version:", audiotype.__version__
@@ -212,7 +208,7 @@ def main():
 
 def debug(msg):
     """print debug message"""
-    if conf.conf.Debug:
+    if conf.conf.options.debug:
         print >> sys.stderr, "?? " + msg
 
 
@@ -269,15 +265,15 @@ def collect_bad(dirs):
     Yields an unchanged iteration of dirs with an added side effect.
     After each directory is yielded its bad files are taken care of.
     Bad files are appended to GLOBALS.Badfiles or output to stderr
-    depending on conf.conf.Debug.
+    depending on conf.conf.options.debug.
     """
     for adir in dirs:
         yield adir
 
-        if conf.conf.Debug:
+        if conf.conf.options.debug:
             for badfile in adir.bad_streams():
                 print >> sys.stderr, "Audiotype failed for:", badfile
-        elif conf.conf.ListBad:
+        elif conf.conf.options.list_bad:
             GLOBALS.bad_files += adir.bad_streams()
 
 
@@ -291,13 +287,13 @@ def filter_dirs(dirs):
         if not adir.streams():
             continue
         if hasattr(adir, "type") and adir.type() == "MP3":
-            if conf.conf.NoCBR == 1 and adir.brtype() in "C~":
+            if conf.conf.options.no_cbr == 1 and adir.brtype() in "C~":
                 continue
-            if conf.conf.NoNonProfile == 1 and adir.profile() == "":
+            if conf.conf.options.no_non_profile == 1 and adir.profile() == "":
                 continue
-            if adir.bitrate() < conf.conf.MP3MinBitRate:
+            if adir.bitrate() < conf.conf.options.mp3_min_bit_rate:
                 continue
-        if conf.conf.OutputFormat == 'db' and \
+        if conf.conf.options.output_format == 'db' and \
            (adir.type() == "Mixed" or \
             adir.get('A') == None or \
             adir.get('C') == None):
@@ -343,7 +339,7 @@ class EmptyDir:
 
     def get(self, id):
         if id == "n":
-            return ' ' * conf.conf.Indent * self.depth + self.name
+            return ' ' * conf.conf.options.indent * self.depth + self.name
         else:
             return ""
 
@@ -356,7 +352,7 @@ def outputplain(dirs):
     rendered. Pre-order directory tree traversal is assumed.
     """
     # output date
-    if conf.conf.DispDate:
+    if conf.conf.options.disp_date:
         print time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
 
     # output column headers
@@ -389,11 +385,11 @@ def outputplain(dirs):
         print "Audiotype failed on the following files:"
         print string.join(GLOBALS.bad_files, "\n")
 
-    if conf.conf.DispTime:
+    if conf.conf.options.disp_time:
         print ""
         print "Generation time:     %8.2f s" % GLOBALS.elapsed_time
 
-    if conf.conf.DispResult:
+    if conf.conf.options.disp_result:
         line = "+-----------------------+-----------+"
 
         print ""
@@ -412,7 +408,7 @@ def outputplain(dirs):
         print "| Speed %10.2f Mb/s |" % (total_megs / GLOBALS.elapsed_time)
         print line[:25]
 
-    if conf.conf.DispVersion:
+    if conf.conf.options.disp_version:
         print ""
         print "dnuos version:    ", __version__
         print "audiotype version:", audiotype.__version__
@@ -437,7 +433,7 @@ body { color: %s; background: %s; }
 </style>
 </head>
 <body>
-<pre>""" % (__version__, conf.conf.TextColor, conf.conf.BGColor)
+<pre>""" % (__version__, conf.conf.options.text_color, conf.conf.options.bg_color)
 
     outputplain(dirs)
 
@@ -505,7 +501,7 @@ def subdirs(path):
                 for sub in os.listdir(path) ]
     subdirs = [ (key, sub) for key, sub in subdirs
                 if audiodir.dir_test(sub) and
-                   sub not in conf.conf.ExcludePaths ]
+                   sub not in conf.conf.options.exclude_paths ]
     subdirs.sort()
     for key, sub in subdirs:
         yield sub

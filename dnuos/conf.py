@@ -19,7 +19,8 @@ Configuration module for Dnuos.
 __version__ = "0.92"
 
 
-import getopt, glob, os, re, string, sys
+from optparse import OptionParser, Option
+import glob, os, re, string, sys
 
 
 class Settings:
@@ -27,32 +28,10 @@ class Settings:
         # error messages are the only thing Settings should ever print
         sys.stdout = sys.__stderr__
 
-        self.MP3MinBitRate = 0
-        self.BGColor = "white"
-        self.IgnoreCase = 0
-        self.Indent = 4
-        self.Debug = 0
-        self.DispVersion = 0
-        self.DispTime = 0
-        self.DispHelp = 0
-        self.DispDate = 0
-        self.DispResult = 0
-        self.ExcludePaths = []
         self.Folders = []
-        self.ListBad = 1
-        self.Merge = 0
-        self.OutputFormat = "plain"
         self.OutStream = sys.__stdout__
-        self.Quiet = 0
-        self.TextColor = "black"
-        self.Wildcards = 0
-        self.RawOutputString = "[n,-52]| [s,5] | [t,-4] | [q]"
         self.Fields = []
         self.OutputString = ""
-        self.Stripped = 0
-        self.NoCBR = 0
-        self.NoNonProfile = 0
-        self.ForceOldLAMEPresets = 0
 
         # parse the command line
         if not self.parse():
@@ -66,107 +45,129 @@ class Settings:
         sys.stdout = self.OutStream
 
     def parse(self):
-        shortopts = "b:B:T:p:e:W:f:I:o:P:DhHimOqStVwcslLv" + "gp:W:"
-        longopts = [
-            "birate=",
-            "bg=",
-            "exclude=",
-            "date",
-            "debug",
-            "file=",
-            "help",
-            "ignore-bad",
-            "ignore-case",
-            "indent=",
-            "lame-old-preset",
-            "lame-only",
-            "merge",
-            "output-db",
-            "output=",
-            "prefer-tag=",
-            "quiet",
-            "stats",
-            "strip",
-            "text=",
-            "time",
-            "vbr-only",
-            "version",
-            "wildcards"] + ["global-sort", "preset=", "width="]
-        try:
-            opts, args = (getopt.getopt(sys.argv[1:], shortopts, longopts))
-        except getopt.GetoptError, (msg, opt):
-            print "Invalid option '%s': %s" % (opt, msg)
-            return 0
+        parser = OptionParser()
+        parser.set_defaults(mp3_min_bit_rate=None,
+                            bg_color="white",
+                            ignore_case=False,
+                            indent=4,
+                            debug=False,
+                            disp_version=False,
+                            disp_time=False,
+                            disp_date=False,
+                            disp_result=False,
+                            exclude_paths=[],
+                            list_bad=True,
+                            merge=False,
+                            no_cbr=False,
+                            no_non_profile=False,
+                            output_format="plain",
+                            prefer_tag=2,
+                            quiet=False,
+                            raw_output_string="[n,-52]| [s,5] | [t,-4] | [q]",
+                            stripped=False,
+                            text_color="black",
+                            wildcards=False)
 
-        # parse option pairs
-        outfile = None
-        for o, a in opts:
-            if o in ("-b", "--bitrate"): self.MP3MinBitRate = a
-            elif o in ("-B", "--bg"): self.BGColor = a
-            elif o in ("-D", "--date"): self.DispDate = 1
-            elif o == "--debug": self.Debug = 1
-            elif o in ("-e", "--exclude"): self.exclude_dir(a)
-            elif o in ("-f", "--file"): outfile = a
-            elif o in ("-H", "--html"): self.OutputFormat = "HTML"
-            elif o in ("-h", "--help"): self.DispHelp = 1
-            elif o == "--ignore-bad": self.ListBad = 0
-            elif o in ("-i", "--ignore-case"): self.IgnoreCase = 1
-            elif o in ("-I", "--indent"): self.Indent = string.atoi(a)
-            elif o in ("-l", "--lame-only"): self.NoNonProfile = 1
-            elif o in ("-L", "--lame-old-preset"): self.ForceOldLAMEPresets = 1
-            elif o in ("-m", "--merge"): self.Merge = 1
-            elif o in ("-o", "--output"): self.RawOutputString = a
-            elif o in ("-O", "--output-db"): self.OutputFormat = "db"
-            elif o in ("-q", "--quiet"): self.Quiet = 1
-            elif o in ("-s", "--strip"): self.Stripped = 1
-            elif o in ("-S", "--stats"): self.DispResult = 1
-            elif o in ("-T", "--text"): self.TextColor = a
-            elif o in ("-t", "--time"): self.DispTime = 1
-            elif o in ("-v", "--vbr-only"): self.NoCBR = 1
-            elif o in ("-V", "--version"): self.DispVersion = 1
-            elif o in ("-w", "--wildcards"): self.Wildcards = 1
-            elif o in ("-g", "--global-sort",
-                       "-p", "--preset",
-                   "-W", "--width"):
-                print "The '%s' option is no longer supported." % o
-                return 0
-            else:
-                print "This should never happen!"
-                print "Unknown option", (o, a)
-                return 0
+        parser.add_option("-b", "--bitrate",
+                          dest="mp3_min_bitrate", type="int")
+        parser.add_option("-B", "--bg",
+                          dest="bg_color")
+        parser.add_option("-D", "--date",
+                          dest="disp_date")
+        parser.add_option("--debug",
+                          dest="debug", action="store_true")
+        parser.add_option("-e", "--exclude",
+                          dest="exclude_paths", action="append")
+        parser.add_option("-f", "--file",
+                          dest="outfile")
+        parser.add_option("-H", "--html",
+                          dest="output_format", action="store_const", const="HTML")
+        parser.add_option("--ignore-bad",
+                          dest="list_bad", action="store_false")
+        parser.add_option("-i", "--ignore-case",
+                          dest="ignore_case", action="store_true")
+        parser.add_option("-I", "--indent",
+                          dest="indent", type="int")
+        parser.add_option("-l", "--lame-only",
+                          dest="no_non_profile", action="store_true")
+        parser.add_option("-L", "--lame-old-preset",
+                          dest="force_old_lame_presets", action="store_true")
+        parser.add_option("-m", "--merge",
+                          dest="merge", action="store_true")
+        parser.add_option("-o", "--output",
+                          dest="raw_output_string")
+        parser.add_option("-O", "--output-db",
+                          dest="output_format", action="store_const", const="db")
+        parser.add_option("-P", "--prefer-tag",
+                          dest="prefer_tag", type="int")
+        parser.add_option("-q", "--quiet",
+                          dest="quiet", action="store_true")
+        parser.add_option("-s", "--strip",
+                          dest="strip", action="store_true")
+        parser.add_option("-S", "--stats",
+                          dest="disp_result", action="store_true")
+        parser.add_option("-T", "--text",
+                          dest="text_color")
+        parser.add_option("-t", "--time",
+                          dest="disp_time", action="store_true")
+        parser.add_option("-v", "--vbr-only",
+                          dest="no_cbr", action="store_true")
+        parser.add_option("-V", "--version",
+                          dest="disp_version", action="store_true")
+        parser.add_option("-w", "--wildcards",
+                          dest="wildcards", action="store_true")
+
+        (options, args) = parser.parse_args()
+        self.options = options
 
         # validate options
-        if self.MP3MinBitRate != 0:
-            bitrate = string.atoi(self.MP3MinBitRate)
-            if bitrate < 1 or bitrate > 320:
-                print "Bitrate must be greater than 0 and less than or equal to 320"
+        if options.mp3_min_bit_rate is not None:
+            if options.mp3_min_bit_rate < 1 or \
+              options.mp3_min_bit_rate > 320:
+                print "Bitrate must be greater than 0 and less than or", \
+                      "equal to 320"
                 sys.exit(1)
-            self.MP3MinBitRate = bitrate * 1000
+            options.mp3_min_bit_rate *= 1000
+        else:
+            options.mp3_min_bit_rate = 0
+
+        for index in range(0, len(options.exclude_paths)):
+            path = options.exclude_paths[index]
+            if path[-1] == os.sep:
+                path = path[:-1]
+            if not os.path.isdir(path):
+                print "There is no directory '%s'" % path
+                sys.exit(2)
+            options.exclude_paths[index] = path
+
+        if options.prefer_tag not in [1, 2]:
+            print >> sys.stderr, "Invalid argument to --prefer-tag or -P"
+            sys.exit(2)
 
         # redirect to file
-        if outfile:
+        if options.outfile:
             mode = 'w'
-            if self.OutputFormat == 'db':
+            if options.output_format == 'db':
                 mode += 'b'
-            self.set_outstream(outfile, mode)
+            self.set_outstream(options.outfile, mode)
 
         # add basedirs to both self.Folder and self.ExcludePaths
         for glob_dir in args:
             self.Folders += self.expand(glob_dir)
-        self.ExcludePaths += self.Folders
+        options.exclude_paths += self.Folders
 
         # reject "no operation" configurations
-        if (not self.Folders
-           and not self.DispVersion
-           and not self.DispHelp):
+        if not self.Folders \
+           and not options.disp_version:
             print "No folders to process."
             return 0
 
         # options overriding eachother
-        if self.Debug or not self.OutStream.isatty():
-            self.Quiet = 1
-        if self.Debug:
-            self.ListBad = 1
+        if options.debug or not self.OutStream.isatty():
+            options.quiet = True
+        if options.debug:
+            options.list_bad = True
+
         return 1
     
     def set_outstream(self, file, filemode):
@@ -178,26 +179,24 @@ class Settings:
             print "Cannot open '%s' for writing" % file
             sys.exit(2)
 
-    def exclude_dir(self, dir):
+    def idate_exclude_dir(self, dir):
         """add a directory to exclude-list"""
         if dir[-1] == os.sep:
             dir = dir[:-1]
-        if os.path.isdir(dir):
-            self.ExcludePaths.append(dir)
-        else:
+        if not os.path.isdir(dir):
             print "There is no directory '%s'" % dir
             sys.exit(2)
 
     def expand(self, dir):
         """translate a basedir to a list of absolute paths"""
-        if self.Wildcards and re.search("[*?]|(?:\[.*\])", dir):
+        if self.options.wildcards and re.search("[*?]|(?:\[.*\])", dir):
             list = map(os.path.abspath, self.sort(glob.glob(dir)))
         else:
             list = [ os.path.abspath(dir) ]
         return filter(self.dir_test, list)
 
     def process_outputstring(self):
-        parts = re.split(r"(?<!\\)\[", unescape(self.RawOutputString))
+        parts = re.split(r"(?<!\\)\[", unescape(self.options.raw_output_string))
         parts = map(lambda x: x.replace(r"\[", "["), parts)
         self.OutputString = unescape_brackets(parts[0])
         for segment in parts[1:]:
@@ -213,7 +212,7 @@ class Settings:
         """check if it's a readable directory"""
         if (not os.path.isdir(dir)
            or not os.access(dir, os.R_OK)
-           or dir in self.ExcludePaths):
+           or dir in self.options.exclude_paths):
             return 0
 
         # does os.access(file, os.R_OK) not work for windows?
@@ -227,14 +226,14 @@ class Settings:
 
 
     def sort(self, list):
-        if self.IgnoreCase:
+        if self.options.ignore_case:
             list.sort(lambda x,y: cmp(x.lower(), y.lower()))
         else:
             list.sort()
         return list
 
     def cmp_munge(self, basename):
-        if self.IgnoreCase:
+        if self.options.ignore_case:
             return basename.lower()
         else:
             return basename
