@@ -259,6 +259,12 @@ class Settings:
             list.sort()
         return list
 
+    def cmp_munge(self, basename):
+        if self.IgnoreCase:
+            return basename.lower()
+        else:
+            return basename
+
 def num_digits(str):
     i = 0
     while i < len(str) and str[i] in string.digits: i += 1
