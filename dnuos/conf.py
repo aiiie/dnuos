@@ -66,7 +66,7 @@ class Settings:
         sys.stdout = self.OutStream
 
     def parse(self):
-        shortopts = "b:B:T:p:e:W:f:I:o:P:DhHimO:qStVwcslLv" + "gp:W:"
+        shortopts = "b:B:T:p:e:W:f:I:o:P:DhHimOqStVwcslLv" + "gp:W:"
         longopts = [
             "birate=",
             "bg=",
@@ -81,7 +81,7 @@ class Settings:
             "lame-old-preset",
             "lame-only",
             "merge",
-            "output-db=",
+            "output-db",
             "output=",
             "prefer-tag=",
             "quiet",
@@ -106,11 +106,7 @@ class Settings:
             elif o in ("-D", "--date"): self.DispDate = 1
             elif o == "--debug": self.Debug = 1
             elif o in ("-e", "--exclude"): self.exclude_dir(a)
-            elif o in ("-f", "--file"):
-                if outfile:
-                    print >> sys.stderr, "Multiple outfiles must not be specified"
-                else:
-                    outfile = a
+            elif o in ("-f", "--file"): outfile = a
             elif o in ("-H", "--html"): self.OutputFormat = "HTML"
             elif o in ("-h", "--help"): self.DispHelp = 1
             elif o == "--ignore-bad": self.ListBad = 0
@@ -120,12 +116,7 @@ class Settings:
             elif o in ("-L", "--lame-old-preset"): self.ForceOldLAMEPresets = 1
             elif o in ("-m", "--merge"): self.Merge = 1
             elif o in ("-o", "--output"): self.RawOutputString = a
-            elif o in ("-O", "--output-db"):
-                if outfile:
-                    print >> sys.stderr, "Multiple outfiles must not be specified"
-                else:
-                    self.OutputFormat = "db"
-                    outfile = a
+            elif o in ("-O", "--output-db"): self.OutputFormat = "db"
             elif o in ("-q", "--quiet"): self.Quiet = 1
             elif o in ("-s", "--strip"): self.Stripped = 1
             elif o in ("-S", "--stats"): self.DispResult = 1
