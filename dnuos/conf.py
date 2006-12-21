@@ -38,9 +38,7 @@ class Settings:
         self.OutputString = ""
 
         # parse the command line
-        if not self.parse():
-            print "Type 'dnuos.py -h' for help."
-            sys.exit(2)
+        self.parse()
 
         # format outputstring
         self.process_outputstring()
@@ -185,19 +183,11 @@ class Settings:
             self.Folders += self.expand(glob_dir)
         options.exclude_paths += self.Folders
 
-        # reject "no operation" configurations
-        if not self.Folders \
-           and not options.disp_version:
-            print "No folders to process."
-            return 0
-
         # options overriding eachother
         if options.debug or not self.OutStream.isatty():
             options.quiet = True
         if options.debug:
             options.list_bad = True
-
-        return 1
     
     def set_outstream(self, file, filemode):
         """open output stream for writing"""
