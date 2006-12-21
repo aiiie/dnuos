@@ -116,6 +116,11 @@ def main():
         print "dnuos version:    ", __version__
         print "audiotype version:", audiotype.__version__
 
+    else:
+        print "No folders to process."
+        print "Type 'dnuos.py -h' for help."
+        sys.exit(2)
+
 
 def debug(msg):
     """print debug message"""
