@@ -19,8 +19,12 @@ Configuration module for Dnuos.
 __version__ = "0.92"
 
 
+import glob
 from optparse import OptionParser, Option
-import glob, os, re, string, sys
+import os
+import re
+import string
+import sys
 
 
 class Settings:
