@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 #
-# Script gathering information about directory trees of audio files
-#
 # This program is under GPL license. See COPYING file for details.
 #
 # Copyright 2003,2006
@@ -13,102 +11,9 @@
 # Sylvester Johansson <sylvestor@telia.com>
 # Mattias Päivärinta <pejve@vasteras2.net>
 
-
-r"""Usage:  dnuos.py [options] <basedir> ...
-
-Options:
-  -b, --bitrate MIN     Exclude MP3s with bitrate lower than MIN (in Kbps)
-  -B, --bg COLOR        Set HTML background color
-  -D, --date            Display datestamp header
-      --debug           Output debug trace to stderr
-  -e, --exclude DIR     Exclude dir from search
-  -f, --file FILE       Write output to FILE (cannot be used with -O /
-                        --output-db)
-  -h, --help            Display this message
-  -H, --html            HTML output
-      --ignore-bad      Don't list files that cause Audiotype failure
-  -i, --ignore-case     Case-insensitive directory sorting
-  -I, --indent N        Set indent to N
-  -l, --lame-only       Exclude MP3s with no LAME profile
-  -L, --lame-old-preset Report "--alt-preset xxx" for "-V x" LAME MP3s
-                        where applicable
-
-  -m, --merge           Merge identical directories
-
-                        Basedirs with identical names are merged. This Means
-                        that all their subdirs are considered being subdirs of
-                        a single directory, and therefore sorted and displayed
-                        together. If there are duplicate names among the
-                        subdirs then those are also merged.
-
-  -o, --output STRING   Set output format to STRING
-
-                        Anything enclosed by brackets is considered a field. A
-                        field must have the following syntax:
-                          [TAG]
-                          [TAG,WIDTH]
-                          [TAG,WIDTH,SUFFIX]
-                          [TAG,,SUFFIX]
-
-                        TAG is any of the following characters:
-                          a     list of bitrates in Audiolist compatible format
-                          A     artist name as found in ID3 tags
-                          b     bitrate with suffix (i.e. 192k)
-                          B     bitrate in bps
-                          C     album name as found in ID3 tags
-                          D     depth; distance from respective basedir
-                          f     number of audio files (including spacers)
-                          l     length in minutes and seconds
-                          L     length in seconds
-                          m     time of last change
-                          M     time of last change in seconds since the epoch
-                          n     directory name (indented)
-                          N     directory name
-                          p     profile
-                          P     full path
-                          q     quality
-                          s     size with suffix (i.e. 65.4M)
-                          S     size in bytes
-                          t     file type
-                          T     bitrate type:
-                                  ~     mixed files
-                                  C     constant bitrate
-                                  L     lossless compression
-                                  V     variable bitrate
-
-                        WIDTH defines the exact width of the field. The output
-                        is cropped to this width if needed. Negative values will
-                        give left aligned output. Cropping is always done on the
-                        right.
-
-                        SUFFIX lets you specify a unit to be concatenated to
-                        all non-empty data.
-
-                        Other interpreted sequences are:
-                          \[    [
-                          \]    ]
-                          \n    new line
-                          \t    tab character
-
-                        Unescaped brackets are forbidden unless they define a
-                        field.
-
-                        Note: If you have any whitespace in your output string
-                        you must put it inside quotes or otherwise it will not
-                        get parsed right.
-
-  -O, --output-db FILE  Print list in output.db format to FILE
-  -P, --prefer-tag N    If both ID3v1 and ID3v2 tags exist, prefer N (1 or 2)
-  -q, --quiet           Omit progress indication
-  -s, --strip           Strip output of field headers and empty directories
-  -S, --stats           Display statistics results
-  -t, --time            Display elapsed time footer
-  -T, --text COLOR      Set HTML text color
-  -v, --vbr-only        Exclude MP3s with constant bitrates
-  -V, --version         Display version
-  -w, --wildcards       Expand wildcards in basedirs
 """
-
+Script gathering information about directory trees of audio files
+"""
 
 __version__ = "0.93"
 
