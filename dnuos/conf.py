@@ -244,7 +244,9 @@ class Settings:
 
         # does os.access(file, os.R_OK) not work for windows?
         try:
+            cwd = os.getcwd()
             os.chdir(dir)
+            os.chdir(cwd)
             return 1
         except OSError:
             return 0
