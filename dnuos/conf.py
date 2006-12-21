@@ -29,9 +29,6 @@ import sys
 
 class Settings:
     def __init__(self):
-        # error messages are the only thing Settings should ever print
-        sys.stdout = sys.__stderr__
-
         self.Folders = []
         self.OutStream = sys.__stdout__
         self.Fields = []
@@ -148,9 +145,8 @@ class Settings:
         if options.mp3_min_bit_rate is not None:
             if options.mp3_min_bit_rate < 1 or \
               options.mp3_min_bit_rate > 320:
-                print "Bitrate must be greater than 0 and less than or", \
-                      "equal to 320"
-                sys.exit(1)
+                die("Bitrate must be greater than 0 and less than or equal", \
+                    "to 320", 2)
             options.mp3_min_bit_rate *= 1000
         else:
             options.mp3_min_bit_rate = 0
@@ -160,13 +156,11 @@ class Settings:
             if path[-1] == os.sep:
                 path = path[:-1]
             if not os.path.isdir(path):
-                print "There is no directory '%s'" % path
-                sys.exit(2)
+                die("There is no directory '%s'" % path, 2)
             options.exclude_paths[index] = path
 
         if options.prefer_tag not in [1, 2]:
-            print >> sys.stderr, "Invalid argument to --prefer-tag or -P"
-            sys.exit(2)
+            die("Invalid argument to --prefer-tag or -P", 2)
 
         # redirect to file
         if options.outfile:
@@ -191,9 +185,9 @@ class Settings:
         try:
             self.OutStream = open(file, filemode)
         except IOError, (errno, errstr):
-            print "I/O Error(%s): %s" % (errno, errstr)
-            print "Cannot open '%s' for writing" % file
-            sys.exit(2)
+            msg = "I/O Error(%s): %s\nCannot open '%s' for writing" % \
+                  (errno, errstr, file)
+            die(msg, 2)
 
     def expand(self, dir):
         """translate a basedir to a list of absolute paths"""
@@ -211,8 +205,7 @@ class Settings:
             try:
                 fieldstr, text = tuple(re.split(r"(?<!\\)]", segment))
             except:
-                print "Bad format string"
-                sys.exit(2)
+                die("Bad format string", 2)
             self.OutputString += "%s" + unescape_brackets(text)
             self.Fields.append(parse_field(unescape_brackets(fieldstr)))
 
