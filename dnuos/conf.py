@@ -242,6 +242,10 @@ class Settings:
         else:
             return basename
 
+    def indent(self, basename, depth):
+        return " " * self.options.indent * depth + basename
+
+
 def num_digits(str):
     i = 0
     while i < len(str) and str[i] in string.digits: i += 1
