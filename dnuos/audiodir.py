@@ -211,14 +211,14 @@ class Dir:
             self._artistver = -1
             return
 
-        if conf.conf.PreferTag == 1:
+        if conf.conf.options.prefer_tag == 1:
             if v1taint != 1:
                 self._artist = v1uniq[0]
                 self._artistver = 1
             else:
                 self._artist = v2uniq[0]
                 self._artistver = 2
-        elif conf.conf.PreferTag == 2:
+        elif conf.conf.options.prefer_tag == 2:
             if v2taint != 1:
                 self._artist = v2uniq[0]
                 self._artistver = 2
@@ -274,14 +274,14 @@ class Dir:
             self._albumver = -1
             return
 
-        if conf.conf.PreferTag == 1:
+        if conf.conf.options.prefer_tag == 1:
             if v1taint != 1:
                 self._album = v1uniq[0]
                 self._albumver = 1
             else:
                 self._album = v2uniq[0]
                 self._albumver = 2
-        elif conf.conf.PreferTag == 2:
+        elif conf.conf.options.prefer_tag == 2:
             if v2taint != 1:
                 self._album = v2uniq[0]
                 self._albumver = 2
@@ -289,8 +289,8 @@ class Dir:
                 self._album = v1uniq[0]
                 self._albumver = 1
         else:
-            print >> sys.stderr, "Invalid argument to --prefer-tag or -P"
-            sys.exit(1)
+            print >> sys.stderr, "This should never happen"
+            raise
 
         return self._album
 
@@ -424,7 +424,7 @@ class Dir:
         "L": lambda: self.length(),
         "m": lambda: time.ctime(self.modified()),
         "M": lambda: self.modified(),
-        "n": lambda: " " * conf.conf.Indent * self.depth + self.name(),
+        "n": lambda: " " * conf.conf.options.indent * self.depth + self.name(),
         "N": lambda: self.name(),
         "p": lambda: self.profile(),
         "P": lambda: self.path,

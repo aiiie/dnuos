@@ -435,7 +435,7 @@ class MP3(AudioType):
             preset = self.mp3header[11] & 2047
 
             if preset > 0:
-                if conf.conf.ForceOldLAMEPresets:
+                if conf.conf.options.force_old_lame_presets:
                     if preset == 320:
                         return "-api"
                     if preset == 460 or preset == 470:
@@ -831,7 +831,7 @@ def textencode(str):
     else:
         pass
 
-    if conf.conf.OutputFormat == 'db':
+    if conf.conf.options.output_format == 'db':
         return str.encode('latin1', 'replace').strip('\0')
     else:
         return str.encode('utf-8').strip('\0')
