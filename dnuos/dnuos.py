@@ -453,7 +453,7 @@ def walk(path, depth=0):
 
 if __name__ == "__main__":
     GLOBALS = Data()
-    conf.init()
+    conf.conf.parse_args()
     try:
         main()
     except KeyboardInterrupt:

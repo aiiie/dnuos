@@ -34,13 +34,7 @@ class Settings:
         self.Fields = []
         self.OutputString = ""
 
-        # parse the command line
-        self.parse()
-
-        # format outputstring
-        self.process_outputstring()
-
-    def parse(self):
+    def parse_args(self, argv=sys.argv[1:]):
         usage = "%prog [options] basedir ..."
         parser = OptionParser(usage)
         parser.set_defaults(mp3_min_bit_rate=None,
@@ -138,7 +132,7 @@ class Settings:
                           dest="wildcards", action="store_true",
                           help="Expand wildcards in basedirs")
 
-        (options, args) = parser.parse_args()
+        (options, args) = parser.parse_args(argv)
         self.options = options
 
         # validate options
@@ -162,7 +156,7 @@ class Settings:
         if options.prefer_tag not in [1, 2]:
             die("Invalid argument to --prefer-tag or -P", 2)
 
-        # redirect to file
+        # open file for redirection
         if options.outfile:
             mode = 'w'
             if options.output_format == 'db':
@@ -180,6 +174,9 @@ class Settings:
         if options.debug:
             options.list_bad = True
     
+        # format outputstring
+        self.process_outputstring()
+
     def set_outstream(self, file, filemode):
         """open output stream for writing"""
         try:
@@ -267,6 +264,4 @@ def unescape_brackets(str):
     return str.replace(r"\[", "[").replace(r"\]", "]")
 
 
-def init():
-    global conf
-    conf = Settings()
+conf = Settings()
