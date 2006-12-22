@@ -30,7 +30,7 @@ sys.path.append(os.path.abspath('.'))
 
 import audiotype
 import audiodir
-import conf
+from conf import conf
 
 
 class Data:
@@ -83,41 +83,41 @@ def eval_fields(fields, obj, suffixes=1):
 
 
 def main():
-    if conf.conf.Folders:
-        sys.stdout = conf.conf.OutStream
+    if conf.Folders:
+        sys.stdout = conf.OutStream
 
-        trees = [ walk(basedir) for basedir in conf.conf.Folders ]
-        if conf.conf.options.merge:
+        trees = [ walk(basedir) for basedir in conf.Folders ]
+        if conf.options.merge:
             dirs = merge(*trees)
         else:
             dirs = itertools.chain(*trees)
 
         dirs = timer_wrapper(dirs)
-        if not conf.conf.options.quiet:
+        if not conf.options.quiet:
             dirs = indicate_progress(dirs)
-        if not conf.conf.options.output_format == 'db':
+        if not conf.options.output_format == 'db':
             dirs = collect_bad(dirs)
         dirs = ifilter(non_empty, dirs)
-        if conf.conf.options.no_cbr:
+        if conf.options.no_cbr:
             dirs = ifilter(no_cbr_mp3, dirs)
-        if conf.conf.options.no_non_profile:
+        if conf.options.no_non_profile:
             dirs = ifilter(profile_only_mp3, dirs)
-        if conf.conf.options.output_format == 'db':
+        if conf.options.output_format == 'db':
             dirs = ifilter(output_db_predicate, dirs)
-        if not conf.conf.options.output_format == 'db':
+        if not conf.options.output_format == 'db':
             dirs = total_sizes(dirs)
-        if not conf.conf.options.output_format =='db' and \
-           not conf.conf.options.stripped:
+        if not conf.options.output_format =='db' and \
+           not conf.options.stripped:
             dirs = add_empty(dirs)
 
-        if conf.conf.options.output_format == 'db':
+        if conf.options.output_format == 'db':
             outputdb(dirs)
-        elif conf.conf.options.output_format == "HTML":
+        elif conf.options.output_format == "HTML":
             outputhtml(dirs)
         else:
             outputplain(dirs)
 
-    elif conf.conf.options.disp_version:
+    elif conf.options.disp_version:
         print ""
         print "dnuos version:    ", __version__
         print "audiotype version:", audiotype.__version__
@@ -130,7 +130,7 @@ def main():
 
 def debug(msg):
     """print debug message"""
-    if conf.conf.options.debug:
+    if conf.options.debug:
         print >> sys.stderr, "?? " + msg
 
 
@@ -187,15 +187,15 @@ def collect_bad(dirs):
     Yields an unchanged iteration of dirs with an added side effect.
     After each directory is yielded its bad files are taken care of.
     Bad files are appended to GLOBALS.Badfiles or output to stderr
-    depending on conf.conf.options.debug.
+    depending on conf.options.debug.
     """
     for adir in dirs:
         yield adir
 
-        if conf.conf.options.debug:
+        if conf.options.debug:
             for badfile in adir.bad_streams():
                 print >> sys.stderr, "Audiotype failed for:", badfile
-        elif conf.conf.options.list_bad:
+        elif conf.options.list_bad:
             GLOBALS.bad_files += adir.bad_streams()
 
 
@@ -222,7 +222,7 @@ def profile_only_mp3(adir):
 def enough_bitrate_mp3(adir):
     """No low-bitrate MP3 predicate"""
     # This implentation does not consider low-bitrate MP3s in Mixed directories
-    return adir.type() != "MP3" or adir.bitrate() >= conf.conf.options.mp3_min_bit_rate
+    return adir.type() != "MP3" or adir.bitrate() >= conf.options.mp3_min_bit_rate
 
 
 def output_db_predicate(adir):
@@ -268,7 +268,7 @@ class EmptyDir:
 
     def get(self, id):
         if id == "n":
-            return conf.conf.indent(self.name, self.depth)
+            return conf.indent(self.name, self.depth)
         else:
             return ""
 
@@ -300,30 +300,30 @@ def outputplain(dirs):
     Directories are rendered according to the -o settings.
     """
     # output date
-    if conf.conf.options.disp_date:
+    if conf.options.disp_date:
         print time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
 
     # output column headers
-    if not conf.conf.options.stripped:
-        fields = eval_fields(conf.conf.Fields, HeaderObject(), 0)
-        line = conf.conf.OutputString % fields
+    if not conf.options.stripped:
+        fields = eval_fields(conf.Fields, HeaderObject(), 0)
+        line = conf.OutputString % fields
         print line
         print "=" * len(line)
 
     for adir in dirs:
-        fields = eval_fields(conf.conf.Fields, adir)
-        print conf.conf.OutputString % fields
+        fields = eval_fields(conf.Fields, adir)
+        print conf.OutputString % fields
 
     if GLOBALS.bad_files:
         print ""
         print "Audiotype failed on the following files:"
         print string.join(GLOBALS.bad_files, "\n")
 
-    if conf.conf.options.disp_time:
+    if conf.options.disp_time:
         print ""
         print "Generation time:     %8.2f s" % GLOBALS.elapsed_time
 
-    if conf.conf.options.disp_result:
+    if conf.options.disp_result:
         line = "+-----------------------+-----------+"
 
         print ""
@@ -342,7 +342,7 @@ def outputplain(dirs):
         print "| Speed %10.2f Mb/s |" % (total_megs / GLOBALS.elapsed_time)
         print line[:25]
 
-    if conf.conf.options.disp_version:
+    if conf.options.disp_version:
         print ""
         print "dnuos version:    ", __version__
         print "audiotype version:", audiotype.__version__
@@ -367,7 +367,7 @@ body { color: %s; background: %s; }
 </style>
 </head>
 <body>
-<pre>""" % (__version__, conf.conf.options.text_color, conf.conf.options.bg_color)
+<pre>""" % (__version__, conf.options.text_color, conf.options.bg_color)
 
     outputplain(dirs)
 
@@ -430,12 +430,12 @@ def merge(*iterators):
 
 def subdirs(path):
     """Create a sorted iterable of subdirs"""
-    subdirs = [ (conf.conf.cmp_munge(os.path.basename(sub)),
+    subdirs = [ (conf.cmp_munge(os.path.basename(sub)),
                  os.path.join(path, sub))
                 for sub in os.listdir(path) ]
     subdirs = [ (key, sub) for key, sub in subdirs
                 if audiodir.dir_test(sub) and
-                   sub not in conf.conf.options.exclude_paths ]
+                   sub not in conf.options.exclude_paths ]
     subdirs.sort()
     for key, sub in subdirs:
         yield sub
@@ -453,7 +453,7 @@ def walk(path, depth=0):
 
 if __name__ == "__main__":
     GLOBALS = Data()
-    conf.conf.parse_args()
+    conf.parse_args()
     try:
         main()
     except KeyboardInterrupt:
