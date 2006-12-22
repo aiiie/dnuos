@@ -19,6 +19,7 @@ __version__ = "0.93"
 
 from heapq import heappop, heappush
 import itertools
+from itertools import ifilter
 import os
 import string
 import sys
@@ -96,13 +97,13 @@ def main():
             dirs = indicate_progress(dirs)
         if not conf.conf.options.output_format == 'db':
             dirs = collect_bad(dirs)
-        dirs = filter_empty(dirs)
+        dirs = ifilter(non_empty, dirs)
         if conf.conf.options.no_cbr:
-            dirs = filter_cbr_mp3(dirs)
+            dirs = ifilter(no_cbr_mp3, dirs)
         if conf.conf.options.no_non_profile:
-            dirs = filter_non_profile_mp3(dirs)
+            dirs = ifilter(profile_only_mp3, dirs)
         if conf.conf.options.output_format == 'db':
-            dirs = output_db_filter(dirs)
+            dirs = ifilter(output_db_predicate, dirs)
         if not conf.conf.options.output_format == 'db':
             dirs = total_sizes(dirs)
         if not conf.conf.options.output_format =='db' and \
@@ -198,44 +199,36 @@ def collect_bad(dirs):
             GLOBALS.bad_files += adir.bad_streams()
 
 
-def filter_empty(dirs):
-    """Filter empty directories
+def non_empty(adir):
+    """Empty directory predicate
 
     Directories are considered empty if they contain no recognized audio files.
     """
-    for adir in dirs:
-        if adir.streams():
-            yield adir
+    return len(adir.streams()) > 0
  
 
-def filter_cbr_mp3(dirs):
-    """Filter directories containing CBR MP3 files"""
-    for adir in dirs:
-        if not adir.type() == "MP3" or not adir.brtype() in "C~":
-            yield adir
+def no_cbr_mp3(adir):
+    """No CBR MP3 files predicate"""
+    # This implentation does not consider CBR MP3s in Mixed directories
+    return adir.type() != "MP3" or adir.brtype() not in "C~"
 
 
-def filter_non_profile_mp3(dirs):
-    """Filter directories containing non-profile MP3 files"""
-    for adir in dirs:
-        if not adir.type() == "MP3" or adir.profile() != "":
-            yield adir
+def profile_only_mp3(adir):
+    """No non-profile MP3 predicate"""
+    # This implentation does not consider non-profile MP3s in Mixed directories
+    return adir.type() != "MP3" or adir.profile() != ""
 
 
-def filter_non_profile_mp3(dirs):
-    """Filter directories containing MP3 files and too low average bitrate"""
-    for adir in dirs:
-        if not adir.type() == "MP3" or \
-           adir.bitrate() >= conf.conf.options.mp3_min_bit_rate:
-            yield adir
+def enough_bitrate_mp3(adir):
+    """No low-bitrate MP3 predicate"""
+    # This implentation does not consider low-bitrate MP3s in Mixed directories
+    return adir.type() != "MP3" or adir.bitrate() >= conf.conf.options.mp3_min_bit_rate
 
 
-def output_db_filter(dirs):
-    for adir in dirs:
-        if adir.type() != "Mixed" and \
+def output_db_predicate(adir):
+    return adir.type() != "Mixed" and \
            adir.get('A') != None and \
-           adir.get('C') != None:
-            yield adir
+           adir.get('C') != None
 
 
 def total_sizes(dirs):
