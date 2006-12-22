@@ -84,8 +84,6 @@ def eval_fields(fields, obj, suffixes=1):
 
 def main():
     if conf.Folders:
-        sys.stdout = conf.OutStream
-
         trees = [ walk(basedir) for basedir in conf.Folders ]
         if conf.options.merge:
             dirs = merge(*trees)
@@ -111,11 +109,15 @@ def main():
             dirs = add_empty(dirs)
 
         if conf.options.output_format == 'db':
-            outputdb(dirs)
+            output = outputdb(dirs)
         elif conf.options.output_format == "HTML":
-            outputhtml(dirs)
+            output = outputhtml(dirs)
         else:
-            outputplain(dirs)
+            output = outputplain(dirs)
+
+        for chunk in output:
+            print >> conf.OutStream, chunk
+
 
     elif conf.options.disp_version:
         print ""
@@ -301,51 +303,51 @@ def outputplain(dirs):
     """
     # output date
     if conf.options.disp_date:
-        print time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
+        yield time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
 
     # output column headers
     if not conf.options.stripped:
         fields = eval_fields(conf.Fields, HeaderObject(), 0)
         line = conf.OutputString % fields
-        print line
-        print "=" * len(line)
+        yield line
+        yield "=" * len(line)
 
     for adir in dirs:
         fields = eval_fields(conf.Fields, adir)
-        print conf.OutputString % fields
+        yield conf.OutputString % fields
 
     if GLOBALS.bad_files:
-        print ""
-        print "Audiotype failed on the following files:"
-        print string.join(GLOBALS.bad_files, "\n")
+        yield ""
+        yield "Audiotype failed on the following files:"
+        yield string.join(GLOBALS.bad_files, "\n")
 
     if conf.options.disp_time:
-        print ""
-        print "Generation time:     %8.2f s" % GLOBALS.elapsed_time
+        yield ""
+        yield "Generation time:     %8.2f s" % GLOBALS.elapsed_time
 
     if conf.options.disp_result:
         line = "+-----------------------+-----------+"
 
-        print ""
-        print line
-        print "| Format    Amount (Mb) | Ratio (%) |"
-        print line
+        yield ""
+        yield line
+        yield "| Format    Amount (Mb) | Ratio (%) |"
+        yield line
         for mediatype in ["Ogg", "MP3", "MPC", "AAC", "FLAC"]:
             if GLOBALS.size[mediatype]:
-                print "| %-8s %12.2f | %9.2f |" % (
+                yield "| %-8s %12.2f | %9.2f |" % (
                     mediatype,
                     GLOBALS.size[mediatype] / (1024 * 1024),
                     GLOBALS.size[mediatype] * 100 / GLOBALS.size["Total"])
-        print line
+        yield line
         total_megs = GLOBALS.size["Total"] / (1024 * 1024)
-        print "| Total %10.2f Mb   |" % total_megs
-        print "| Speed %10.2f Mb/s |" % (total_megs / GLOBALS.elapsed_time)
-        print line[:25]
+        yield "| Total %10.2f Mb   |" % total_megs
+        yield "| Speed %10.2f Mb/s |" % (total_megs / GLOBALS.elapsed_time)
+        yield line[:25]
 
     if conf.options.disp_version:
-        print ""
-        print "dnuos version:    ", __version__
-        print "audiotype version:", audiotype.__version__
+        yield ""
+        yield "dnuos version:    ", __version__
+        yield "audiotype version:", audiotype.__version__
 
 
 def outputhtml(dirs):
@@ -354,7 +356,7 @@ def outputhtml(dirs):
     Directories are rendered like in plain text, but with HTML header
     and footer.
     """
-    print """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+    yield """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -369,15 +371,16 @@ body { color: %s; background: %s; }
 <body>
 <pre>""" % (__version__, conf.options.text_color, conf.options.bg_color)
 
-    outputplain(dirs)
+    for chunk in outputplain(dirs):
+        yield chunk
 
-    print"</pre>"
-    print"</body></html>"
+    yield "</pre>"
+    yield "</body></html>"
 
 
 def outputdb(dirs):
     for adir in dirs:
-        print "%d:'%s',%d:'%s',%d:'%s',%d:'%s',%d,%.d,%d" % (
+        chunk = "%d:'%s',%d:'%s',%d:'%s',%d:'%s',%d,%.d,%d" % (
             len(str(adir.get('A'))),
             str(adir.get('A')),
             len(str(adir.get('C'))),
@@ -390,6 +393,7 @@ def outputdb(dirs):
             adir.get('B') / 1000,
             adir.get('L')
         )
+        yield chunk
 
 
 class Lookahead:
