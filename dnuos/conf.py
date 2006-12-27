@@ -228,11 +228,66 @@ class Settings:
         return " " * self.options.indent * depth + basename
 
 
-def parse_field(str):
-    params = (str.split(",") + ["", ""])[:3]
-    if params[1] == "": params[1] = None
-    else: params[1] = string.atoi(params[1])
-    return tuple(params)
+class Column:
+    headers = {
+        "a": "Bitrate(s)",
+        "A": "Artist",
+        "b": "Bitrate",
+        "B": "Bitrate",
+        "c": "Channels",
+        "C": "Album",
+        "d": "Dir",
+        "D": "Depth",
+        "f": "Files",
+        "l": "Length",
+        "L": "Length",
+        "m": "Modified",
+        "n": "Album/Artist",
+        "N": "Album/Artist",
+        "p": "Profile",
+        "P": "Path",
+        "q": "Quality",
+        "r": "Sample Rate",
+        "s": "Size",
+        "S": "Size",
+        "t": "Type",
+        "T": "BR Type",
+        #"v": "Vendor",
+        #"V": "Version",
+        }
+
+    def __init__(self, tag, width, suffix):
+        self.tag, self.width, self.suffix = tag, width, suffix
+
+    def _format(self, data, suffixes):
+        if suffixes:
+            if data:
+                data += self.suffix
+            else:
+                data = ' ' * len(self.suffix)
+        if self.width != None:
+            data = "%*.*s" % (self.width, abs(self.width), data)
+        return data
+
+    def header(self, suffixes=True):
+        return self._format(self.headers[self.tag], suffixes)
+
+    def get(self, adir, suffixes=True):
+        try:
+            data, suffix = str(adir.get(self.tag)), self.suffix
+        except KeyError:
+            msg = "Unknown field <%s> in format string" % self.tag
+            die(msg, 1)
+        return self._format(data, suffixes)
+
+
+def parse_field(field_string):
+    tag, width, suffix = (field_string.split(",") + ["", ""])[:3]
+    if width == "":
+        width = None
+    else:
+        width = string.atoi(width)
+    return Column(tag, width, suffix)
 
 
 def unescape_part(part):

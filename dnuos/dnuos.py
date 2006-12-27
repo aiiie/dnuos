@@ -63,25 +63,6 @@ def to_human(value, radix=1024.0):
         return "%.1f%s" % (value, suffix)
 
 
-def eval_fields(fields, obj, suffixes=1):
-    """project an object through a field list into a tuple of strings"""
-    result = []
-    for field in fields:
-        try:
-            data, width, suffix = str(obj.get(field[0])), field[1], field[2]
-        except KeyError:
-            msg = "Unknown field <%s> in format string" % field[0]
-            die(msg, 1)
-        if not data:
-            suffix = " " * len(suffix)
-        if suffixes:
-            data += suffix
-        if width != None:
-            data = "%*.*s" % (width, abs(width), data)
-        result.append(data)
-    return tuple(result)
-
-
 def main():
     if conf.Folders:
         trees = [ walk(basedir) for basedir in conf.Folders ]
@@ -132,40 +113,6 @@ def debug(msg):
     """print debug message"""
     if conf.options.debug:
         print >> sys.stderr, "?? " + msg
-
-
-class HeaderObject:
-    def __init__(self):
-        pass
-
-    def get(self, id):
-        dict = {
-            "a": "Bitrate(s)",
-            "A": "Artist",
-            "b": "Bitrate",
-            "B": "Bitrate",
-            "c": "Channels",
-            "C": "Album",
-            "d": "Dir",
-            "D": "Depth",
-            "f": "Files",
-            "l": "Length",
-            "L": "Length",
-            "m": "Modified",
-            "n": "Album/Artist",
-            "N": "Album/Artist",
-            "p": "Profile",
-            "P": "Path",
-            "q": "Quality",
-            "r": "Sample Rate",
-            "s": "Size",
-            "S": "Size",
-            "t": "Type",
-            "T": "BR Type"
-            #"v": "Vendor",
-            #"V": "Version",
-            }
-        return dict[id]
 
 
 def indicate_progress(dirs, outs=sys.stderr):
@@ -305,14 +252,14 @@ def outputplain(dirs):
 
     # output column headers
     if not conf.options.stripped:
-        fields = eval_fields(conf.Fields, HeaderObject(), 0)
-        line = conf.OutputString % fields
+        fields = map(lambda f: f.header(), conf.Fields)
+        line = conf.OutputString % tuple(fields)
         yield line
         yield "=" * len(line)
 
     for adir in dirs:
-        fields = eval_fields(conf.Fields, adir)
-        yield conf.OutputString % fields
+        fields = map(lambda f: f.get(adir), conf.Fields)
+        yield conf.OutputString % tuple(fields)
 
     if GLOBALS.bad_files:
         yield ""
