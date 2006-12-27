@@ -168,6 +168,8 @@ class Settings:
         # add basedirs to both self.Folder and self.ExcludePaths
         for glob_dir in args:
             self.Folders += self.expand(glob_dir)
+        self.Folders = filter(lambda x: x not in options.exclude_paths,
+                              self.Folders)
         options.exclude_paths += self.Folders
 
         # options overriding eachother
@@ -210,20 +212,17 @@ class Settings:
 
     def dir_test(self, dir):
         """check if it's a readable directory"""
-        if (not os.path.isdir(dir)
-           or not os.access(dir, os.R_OK)
-           or dir in self.options.exclude_paths):
-            return 0
+        if not os.path.isdir(dir) or not os.access(dir, os.R_OK):
+            return False
 
         # does os.access(file, os.R_OK) not work for windows?
         try:
             cwd = os.getcwd()
             os.chdir(dir)
             os.chdir(cwd)
-            return 1
+            return True
         except OSError:
-            return 0
-
+            return False
 
     def sort(self, list):
         if self.options.ignore_case:
