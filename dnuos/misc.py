@@ -14,6 +14,7 @@ import sys
 
 
 def die(msg, exitcode):
+    """print message and exit with exitcode"""
     print >> sys.stderr, msg
     sys.exit(exitcode)
 
