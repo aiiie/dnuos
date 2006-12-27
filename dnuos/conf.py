@@ -26,6 +26,8 @@ import re
 import string
 import sys
 
+from misc import die
+
 
 class Settings:
     def __init__(self):
@@ -239,10 +241,6 @@ class Settings:
     def indent(self, basename, depth):
         return " " * self.options.indent * depth + basename
 
-
-def die(msg, exitcode):
-    print >> sys.stderr, msg
-    sys.exit(exitcode)
 
 def parse_field(str):
     params = (str.split(",") + ["", ""])[:3]

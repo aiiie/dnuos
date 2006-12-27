@@ -9,3 +9,9 @@
 # Mattias Päivärinta <pejve@vasteras2.net>
 
 
+import sys
+
+
+def die(msg, exitcode):
+    print >> sys.stderr, msg
+    sys.exit(exitcode)
