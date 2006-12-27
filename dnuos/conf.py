@@ -27,6 +27,7 @@ import string
 import sys
 
 from misc import die
+from misc import dir_test
 
 
 class Settings:
@@ -196,7 +197,7 @@ class Settings:
             list = map(os.path.abspath, self.sort(glob.glob(dir)))
         else:
             list = [ os.path.abspath(dir) ]
-        return filter(self.dir_test, list)
+        return filter(dir_test, list)
 
     def process_outputstring(self):
         parts = re.split(r"(?<!\\)\[", unescape(self.options.raw_output_string))
@@ -209,20 +210,6 @@ class Settings:
                 die("Bad format string", 2)
             self.OutputString += "%s" + unescape_brackets(text)
             self.Fields.append(parse_field(unescape_brackets(fieldstr)))
-
-    def dir_test(self, dir):
-        """check if it's a readable directory"""
-        if not os.path.isdir(dir) or not os.access(dir, os.R_OK):
-            return False
-
-        # does os.access(file, os.R_OK) not work for windows?
-        try:
-            cwd = os.getcwd()
-            os.chdir(dir)
-            os.chdir(cwd)
-            return True
-        except OSError:
-            return False
 
     def sort(self, list):
         if self.options.ignore_case:
