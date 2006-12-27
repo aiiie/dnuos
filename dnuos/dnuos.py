@@ -31,6 +31,7 @@ sys.path.append(os.path.abspath('.'))
 import audiotype
 import audiodir
 from conf import conf
+from misc import die
 
 
 class Data:
@@ -70,8 +71,7 @@ def eval_fields(fields, obj, suffixes=1):
             data, width, suffix = str(obj.get(field[0])), field[1], field[2]
         except KeyError:
             msg = "Unknown field <%s> in format string" % field[0]
-            print >> sys.stderr, msg
-            sys.exit(1)
+            die(msg, 1)
         if not data:
             suffix = " " * len(suffix)
         if suffixes:
@@ -125,9 +125,7 @@ def main():
         print "audiotype version:", audiotype.__version__
 
     else:
-        print "No folders to process."
-        print "Type 'dnuos.py -h' for help."
-        sys.exit(2)
+        die("No folders to process.\nType 'dnuos.py -h' for help.", 2)
 
 
 def debug(msg):
@@ -461,5 +459,4 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print >> sys.stderr, "Aborted by user"
-        sys.exit(1)
+        die("Aborted by user", 1)
