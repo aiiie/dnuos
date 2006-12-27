@@ -32,6 +32,7 @@ import audiotype
 import audiodir
 from conf import conf
 from misc import die
+from misc import dir_test
 
 
 class Data:
@@ -383,7 +384,7 @@ def subdirs(path):
                  os.path.join(path, sub))
                 for sub in os.listdir(path) ]
     subdirs = [ (key, sub) for key, sub in subdirs
-                if audiodir.dir_test(sub) and
+                if dir_test(sub) and
                    sub not in conf.options.exclude_paths ]
     subdirs.sort()
     for key, sub in subdirs:
