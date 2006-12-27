@@ -30,6 +30,7 @@ class Lookahead:
         self.next()
 
     def next(self):
+        """Get next value"""
         result = self.lookahead
         try:
             self.lookahead = self.iterable.next()
