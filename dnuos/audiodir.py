@@ -11,6 +11,7 @@
 
 import re, os, string, time
 import audiotype, conf
+from misc import dir_test
 
 
 __version__ = "0.17.3"
@@ -31,19 +32,6 @@ def map_dict(func, dict):
     for key in dict.keys():
         dict[key] = func(dict[key])
     return dict
-
-
-def dir_test(dir):
-    """check if it's a readable directory"""
-    if not os.path.isdir(dir) or not os.access(dir, os.R_OK):
-        return 0
-
-    # does os.access(file, os.R_OK) not work for windows?
-    try:
-        os.chdir(dir)
-        return 1
-    except OSError:
-        return 0
 
 
 def to_minutes(value):
