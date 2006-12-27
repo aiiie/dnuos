@@ -9,6 +9,13 @@
 # Mattias Päivärinta <pejve@vasteras2.net>
 
 
+"""
+Miscellaneous module for Dnuos.
+
+Here goes stuff that is not application specific.
+"""
+
+
 from heapq import heappop, heappush
 import os
 import sys
