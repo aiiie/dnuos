@@ -66,12 +66,14 @@ def to_human(value, radix=1024.0):
 
 def main():
     if conf.Folders:
+        # Enumerate directories
         trees = [ walk(basedir) for basedir in conf.Folders ]
         if conf.options.merge:
             dirs = merge(*trees)
         else:
             dirs = itertools.chain(*trees)
 
+        # Add layers of functionality
         dirs = timer_wrapper(dirs)
         if not conf.options.quiet:
             dirs = indicate_progress(dirs)
@@ -90,6 +92,7 @@ def main():
            not conf.options.stripped:
             dirs = add_empty(dirs)
 
+        # Render to strings
         if conf.options.output_format == 'db':
             output = outputdb(dirs)
         elif conf.options.output_format == "HTML":
@@ -97,6 +100,7 @@ def main():
         else:
             output = outputplain(dirs)
 
+        # Output
         for chunk in output:
             print >> conf.OutStream, chunk
 
