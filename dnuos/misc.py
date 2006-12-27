@@ -80,3 +80,16 @@ def merge(*iterators):
         yield iterator.next()
         if not iterator.empty:
             heappush(heap, (iterator, index))
+
+
+def subdirs(path, make_key=lambda x: x):
+    """Create a sorted iterable of subdirs
+
+    make_key(basename) is used for sort key."""
+    subs = [ os.path.join(path, sub) for sub in os.listdir(path) ]
+    subs = [ (make_key(os.path.basename(path)), path)
+             for path in subs
+             if dir_test(path) ]
+    subs.sort()
+    for key, sub in subs:
+        yield sub
