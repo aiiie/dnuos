@@ -342,16 +342,16 @@ def outputdb(dirs):
         yield chunk
 
 
-def subdirs(path):
-    """Create a sorted iterable of subdirs"""
-    subdirs = [ (conf.cmp_munge(os.path.basename(sub)),
-                 os.path.join(path, sub))
-                for sub in os.listdir(path) ]
-    subdirs = [ (key, sub) for key, sub in subdirs
-                if dir_test(sub) and
-                   sub not in conf.options.exclude_paths ]
-    subdirs.sort()
-    for key, sub in subdirs:
+def subdirs(path, make_key=lambda x: x):
+    """Create a sorted iterable of subdirs
+
+    make_key(basename) is used for sort key."""
+    subs = [ os.path.join(path, sub) for sub in os.listdir(path) ]
+    subs = [ (make_key(os.path.basename(path)), path)
+             for path in subs
+             if dir_test(path) ]
+    subs.sort()
+    for key, sub in subs:
         yield sub
 
 
@@ -360,7 +360,9 @@ def walk(path, depth=0):
     yield audiodir.Dir(path, depth)
 
     # recurse each subdir
-    for subpath in subdirs(path):
+    for subpath in subdirs(path, conf.cmp_munge):
+        if subpath in conf.options.exclude_paths:
+            continue
         for descendant in walk(subpath, depth+1):
             yield descendant
 
