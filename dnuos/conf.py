@@ -242,6 +242,7 @@ class Settings:
 
 def die(msg, exitcode):
     print >> sys.stderr, msg
+    sys.exit(exitcode)
 
 def parse_field(str):
     params = (str.split(",") + ["", ""])[:3]
