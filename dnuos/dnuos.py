@@ -292,9 +292,9 @@ def render_sizes(sizes, elapsed_time):
     yield line[:25]
 
 
-def render_version(dnuos_version, audiotype_version):
-    yield "dnuos version:    ", dnuos_version
-    yield "audiotype version:", audiotype_version
+def render_version(versions):
+    yield "dnuos version:     %s" % versions['dnuos']
+    yield "audiotype version: %s" % versions['audiotype']
 
 
 def outputplain(dirs, options, data):
