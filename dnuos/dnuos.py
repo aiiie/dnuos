@@ -47,6 +47,10 @@ class Data:
             "MPC": 0.0,
             "AAC": 0.0}
         self.elapsed_time = 0.0
+        self.version = {
+            'dnuos': __version__,
+            'audiotype': audiotype.__version__,
+        }
 
 
 def to_human(value, radix=1024.0):
@@ -92,7 +96,7 @@ def main():
            not conf.options.stripped:
             dirs = add_empty(dirs)
 
-        # Render to strings
+        # Setup renderer
         outputters = {
             'db': outputdb,
             'HTML': outputhtml,
@@ -102,18 +106,15 @@ def main():
                                                         conf.options,
                                                         GLOBALS)
 
-        # Output
-        for chunk in output:
-            print >> conf.OutStream, chunk
-
-
     elif conf.options.disp_version:
-        print ""
-        print "dnuos version:    ", __version__
-        print "audiotype version:", audiotype.__version__
+        output = render_version(GLOBALS.version)
 
     else:
         die("No folders to process.\nType 'dnuos.py -h' for help.", 2)
+
+    # Output
+    for chunk in output:
+        print >> conf.OutStream, chunk
 
 
 def debug(msg):
@@ -317,7 +318,7 @@ def outputplain(dirs, options, data):
         (lambda: options.disp_result,
          render_sizes(data.size, data.elapsed_time)),
         (lambda: options.disp_version,
-         render_version(__version__, audiotype.__version__)),
+         render_version(data.version)),
     ]
     output = [ renderer for predicate, renderer in output if predicate() ]
     output = intersperse(output, iter(["-"]))
@@ -343,7 +344,7 @@ body { color: %s; background: %s; }
 </style>
 </head>
 <body>
-<pre>""" % (__version__, options.text_color, options.bg_color)
+<pre>""" % (data.version['dnuos'], options.text_color, options.bg_color)
 
     for chunk in outputplain(dirs):
         yield chunk
