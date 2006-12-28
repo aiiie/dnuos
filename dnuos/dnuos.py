@@ -324,14 +324,6 @@ def outputplain(dirs, options, data):
     return itertools.chain(*output)
 
 
-def intersperse(items, sep):
-    iterator = iter(items)
-    yield iterator.next()
-    for item in iterator:
-        yield sep
-        yield item
-
-
 def outputhtml(dirs, options, data):
     """Render directories as HTML to stdout.
 

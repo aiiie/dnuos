@@ -67,6 +67,15 @@ def dir_test(path):
         return False
 
 
+def intersperse(items, sep):
+    """Separate each pair of elements in an iterable with a separator"""
+    iterator = iter(items)
+    yield iterator.next()
+    for item in iterator:
+        yield sep
+        yield item
+
+
 def merge(*iterators):
     """Merge n ordered iterators into one ordered iterator"""
     heap = []
