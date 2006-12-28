@@ -93,12 +93,14 @@ def main():
             dirs = add_empty(dirs)
 
         # Render to strings
-        if conf.options.output_format == 'db':
-            output = outputdb(dirs)
-        elif conf.options.output_format == "HTML":
-            output = outputhtml(dirs)
-        else:
-            output = outputplain(dirs)
+        outputters = {
+            'db': outputdb,
+            'HTML': outputhtml,
+            'plain': outputplain,
+        }
+        output = outputters[conf.options.output_format](dirs,
+                                                        conf.options,
+                                                        GLOBALS)
 
         # Output
         for chunk in output:
@@ -246,61 +248,91 @@ def add_empty(dirs):
         yield adir
 
 
-def outputplain(dirs):
-    """Render directories to stdout.
+def render_date():
+    yield time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
 
-    Directories are rendered according to the -o settings.
-    """
-    # output date
-    if conf.options.disp_date:
-        yield time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
 
-    # output column headers
-    if not conf.options.stripped:
-        fields = map(lambda f: f.header(), conf.Fields)
-        line = conf.OutputString % tuple(fields)
+def render_directories(format_string, columns, dirs, show_headers=True):
+    if show_headers:
+        fields = map(lambda c: c.header(), columns)
+        line = format_string % tuple(fields)
         yield line
         yield "=" * len(line)
 
     for adir in dirs:
-        fields = map(lambda f: f.get(adir), conf.Fields)
-        yield conf.OutputString % tuple(fields)
-
-    if GLOBALS.bad_files:
-        yield ""
-        yield "Audiotype failed on the following files:"
-        yield string.join(GLOBALS.bad_files, "\n")
-
-    if conf.options.disp_time:
-        yield ""
-        yield "Generation time:     %8.2f s" % GLOBALS.elapsed_time
-
-    if conf.options.disp_result:
-        line = "+-----------------------+-----------+"
-
-        yield ""
-        yield line
-        yield "| Format    Amount (Mb) | Ratio (%) |"
-        yield line
-        for mediatype in ["Ogg", "MP3", "MPC", "AAC", "FLAC"]:
-            if GLOBALS.size[mediatype]:
-                yield "| %-8s %12.2f | %9.2f |" % (
-                    mediatype,
-                    GLOBALS.size[mediatype] / (1024 * 1024),
-                    GLOBALS.size[mediatype] * 100 / GLOBALS.size["Total"])
-        yield line
-        total_megs = GLOBALS.size["Total"] / (1024 * 1024)
-        yield "| Total %10.2f Mb   |" % total_megs
-        yield "| Speed %10.2f Mb/s |" % (total_megs / GLOBALS.elapsed_time)
-        yield line[:25]
-
-    if conf.options.disp_version:
-        yield ""
-        yield "dnuos version:    ", __version__
-        yield "audiotype version:", audiotype.__version__
+        fields = map(lambda c: c.get(adir), columns)
+        yield format_string % tuple(fields)
 
 
-def outputhtml(dirs):
+def render_bad_files(bad_files):
+    yield "Audiotype failed on the following files:"
+    yield string.join(bad_files, "\n")
+
+
+def render_generation_time(elapsed_time):
+    yield "Generation time:     %8.2f s" % elapsed_time
+
+
+def render_sizes(sizes, elapsed_time):
+    line = "+-----------------------+-----------+"
+
+    yield line
+    yield "| Format    Amount (Mb) | Ratio (%) |"
+    yield line
+    for mediatype in ["Ogg", "MP3", "MPC", "AAC", "FLAC"]:
+        if sizes[mediatype]:
+            yield "| %-8s %12.2f | %9.2f |" % (
+                mediatype,
+                sizes[mediatype] / (1024 * 1024),
+                sizes[mediatype] * 100 / sizes["Total"])
+    yield line
+    total_megs = sizes["Total"] / (1024 * 1024)
+    yield "| Total %10.2f Mb   |" % total_megs
+    yield "| Speed %10.2f Mb/s |" % (total_megs / elapsed_time)
+    yield line[:25]
+
+
+def render_version(dnuos_version, audiotype_version):
+    yield "dnuos version:    ", dnuos_version
+    yield "audiotype version:", audiotype_version
+
+
+def outputplain(dirs, options, data):
+    """Render directories to stdout.
+
+    Directories are rendered according to the -o settings.
+    """
+    output = [
+        (lambda: options.disp_date,
+         render_date()),
+        (lambda: True,
+         render_directories(conf.OutputString,
+                            conf.Fields,
+                            dirs,
+                            not options.stripped)),
+        (lambda: data.bad_files,
+         render_bad_files(data.bad_files)),
+        (lambda: options.disp_time,
+         render_generation_time(data.elapsed_time)),
+        (lambda: options.disp_result,
+         render_sizes(data.size, data.elapsed_time)),
+        (lambda: options.disp_version,
+         render_version(__version__, audiotype.__version__)),
+    ]
+    output = [ renderer for predicate, renderer in output if predicate() ]
+    output = intersperse(output, iter(["-"]))
+    return itertools.chain(*output)
+
+
+def intersperse(items, sep):
+    iterator = iter(items)
+    yield iterator.next()
+    for item in iterator:
+        yield sep
+        yield item
+
+
+def outputhtml(dirs, options, data):
     """Render directories as HTML to stdout.
 
     Directories are rendered like in plain text, but with HTML header
@@ -319,7 +351,7 @@ body { color: %s; background: %s; }
 </style>
 </head>
 <body>
-<pre>""" % (__version__, conf.options.text_color, conf.options.bg_color)
+<pre>""" % (__version__, options.text_color, options.bg_color)
 
     for chunk in outputplain(dirs):
         yield chunk
@@ -328,7 +360,7 @@ body { color: %s; background: %s; }
     yield "</body></html>"
 
 
-def outputdb(dirs):
+def outputdb(dirs, options, data):
     for adir in dirs:
         chunk = "%d:'%s',%d:'%s',%d:'%s',%d:'%s',%d,%.d,%d" % (
             len(str(adir.get('A'))),
