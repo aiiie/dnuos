@@ -34,8 +34,6 @@ from misc import equal_elements
 from misc import merge
 from misc import subdirs
 import outputplain
-import outputhtml
-import outputdb
 
 
 class Data:
@@ -99,15 +97,8 @@ def main():
            not conf.options.stripped:
             dirs = add_empty(dirs)
 
-        # Setup renderer
-        outputters = {
-            'db': outputdb.Renderer().render,
-            'HTML': outputhtml.Renderer(conf.OutputString, conf.Fields).render,
-            'plain': outputplain.Renderer(conf.OutputString, conf.Fields).render,
-        }
-        output = outputters[conf.options.output_format](dirs,
-                                                        conf.options,
-                                                        GLOBALS)
+        # Configure renderer
+        output = conf.renderer.render(dirs, conf.options, GLOBALS)
 
     elif conf.options.disp_version:
         output = outputplain.render_version(GLOBALS.version)
