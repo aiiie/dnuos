@@ -17,6 +17,7 @@ Here goes stuff that is not application specific.
 
 
 from heapq import heappop, heappush
+from itertools import count
 import os
 import sys
 
@@ -65,6 +66,16 @@ def dir_test(path):
         return True
     except OSError:
         return False
+
+
+def equal_elements(seq1, seq2):
+    """Return the largest n such that seq1[:n] == seq2[:n]"""
+    for index in count():
+        try:
+            if seq1[index] != seq2[index]:
+                return index
+        except IndexError:
+            return index
 
 
 def intersperse(items, sep):

@@ -31,6 +31,7 @@ import audiotype
 import audiodir
 from conf import conf
 from misc import die
+from misc import equal_elements
 from misc import merge
 from misc import subdirs
 
@@ -236,14 +237,9 @@ def add_empty(dirs):
     oldpath = []
     for adir in dirs:
         path = adir.path.split(os.path.sep)[-adir.depth-1:]
-        i = 0
-        while i < len(path) - 1 and \
-              i < len(oldpath) and \
-              path[i] == oldpath[i]:
-            i += 1
-        while i < len(path) - 1:
-            yield EmptyDir(path[i], i)
-            i += 1
+        start = equal_elements(path, oldpath)
+        for depth in range(start, len(path) - 1):
+            yield EmptyDir(path[depth], depth)
         oldpath = path
 
         yield adir
