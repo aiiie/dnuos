@@ -17,11 +17,9 @@ Script gathering information about directory trees of audio files
 
 __version__ = "0.93"
 
-import itertools
 from itertools import chain
 from itertools import ifilter
 import os
-import string
 import sys
 import time
 
@@ -33,7 +31,6 @@ import audiodir
 from conf import conf
 from misc import die
 from misc import equal_elements
-from misc import intersperse
 from misc import merge
 from misc import subdirs
 import outputplain
@@ -81,7 +78,7 @@ def main():
         if conf.options.merge:
             dirs = merge(*trees)
         else:
-            dirs = itertools.chain(*trees)
+            dirs = chain(*trees)
 
         # Add layers of functionality
         dirs = timer_wrapper(dirs)
@@ -183,7 +180,8 @@ def profile_only_mp3(adir):
 def enough_bitrate_mp3(adir):
     """No low-bitrate MP3 predicate"""
     # This implentation does not consider low-bitrate MP3s in Mixed directories
-    return adir.type() != "MP3" or adir.bitrate() >= conf.options.mp3_min_bit_rate
+    return adir.type() != "MP3" or \
+           adir.bitrate() >= conf.options.mp3_min_bit_rate
 
 
 def output_db_predicate(adir):
@@ -227,8 +225,8 @@ class EmptyDir:
         self.name = name
         self.depth = depth
 
-    def get(self, id):
-        if id == "n":
+    def get(self, tag):
+        if tag == "n":
             return conf.indent(self.name, self.depth)
         else:
             return ""
