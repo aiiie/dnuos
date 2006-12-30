@@ -18,6 +18,7 @@ Script gathering information about directory trees of audio files
 __version__ = "0.93"
 
 import itertools
+from itertools import chain
 from itertools import ifilter
 import os
 import string
@@ -32,8 +33,10 @@ import audiodir
 from conf import conf
 from misc import die
 from misc import equal_elements
+from misc import intersperse
 from misc import merge
 from misc import subdirs
+import outputplain
 
 
 class Data:
@@ -101,14 +104,14 @@ def main():
         outputters = {
             'db': outputdb,
             'HTML': outputhtml,
-            'plain': outputplain,
+            'plain': outputplain.Renderer(conf.OutputString, conf.Fields).render,
         }
         output = outputters[conf.options.output_format](dirs,
                                                         conf.options,
                                                         GLOBALS)
 
     elif conf.options.disp_version:
-        output = render_version(GLOBALS.version)
+        output = outputplain.render_version(GLOBALS.version)
 
     else:
         die("No folders to process.\nType 'dnuos.py -h' for help.", 2)
@@ -245,82 +248,6 @@ def add_empty(dirs):
         yield adir
 
 
-def render_date():
-    yield time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
-
-
-def render_directories(format_string, columns, dirs, show_headers=True):
-    if show_headers:
-        fields = map(lambda c: c.header(), columns)
-        line = format_string % tuple(fields)
-        yield line
-        yield "=" * len(line)
-
-    for adir in dirs:
-        fields = map(lambda c: c.get(adir), columns)
-        yield format_string % tuple(fields)
-
-
-def render_bad_files(bad_files):
-    yield "Audiotype failed on the following files:"
-    yield string.join(bad_files, "\n")
-
-
-def render_generation_time(elapsed_time):
-    yield "Generation time:     %8.2f s" % elapsed_time
-
-
-def render_sizes(sizes, elapsed_time):
-    line = "+-----------------------+-----------+"
-
-    yield line
-    yield "| Format    Amount (Mb) | Ratio (%) |"
-    yield line
-    for mediatype in ["Ogg", "MP3", "MPC", "AAC", "FLAC"]:
-        if sizes[mediatype]:
-            yield "| %-8s %12.2f | %9.2f |" % (
-                mediatype,
-                sizes[mediatype] / (1024 * 1024),
-                sizes[mediatype] * 100 / sizes["Total"])
-    yield line
-    total_megs = sizes["Total"] / (1024 * 1024)
-    yield "| Total %10.2f Mb   |" % total_megs
-    yield "| Speed %10.2f Mb/s |" % (total_megs / elapsed_time)
-    yield line[:25]
-
-
-def render_version(versions):
-    yield "dnuos version:     %s" % versions['dnuos']
-    yield "audiotype version: %s" % versions['audiotype']
-
-
-def outputplain(dirs, options, data):
-    """Render directories to stdout.
-
-    Directories are rendered according to the -o settings.
-    """
-    output = [
-        (lambda: options.disp_date,
-         render_date()),
-        (lambda: True,
-         render_directories(conf.OutputString,
-                            conf.Fields,
-                            dirs,
-                            not options.stripped)),
-        (lambda: data.bad_files,
-         render_bad_files(data.bad_files)),
-        (lambda: options.disp_time,
-         render_generation_time(data.elapsed_time)),
-        (lambda: options.disp_result,
-         render_sizes(data.size, data.elapsed_time)),
-        (lambda: options.disp_version,
-         render_version(data.version)),
-    ]
-    output = [ renderer for predicate, renderer in output if predicate() ]
-    output = intersperse(output, iter(["-"]))
-    return itertools.chain(*output)
-
-
 def outputhtml(dirs, options, data):
     """Render directories as HTML to stdout.
 
@@ -342,7 +269,7 @@ body { color: %s; background: %s; }
 <body>
 <pre>""" % (data.version['dnuos'], options.text_color, options.bg_color)
 
-    for chunk in outputplain(dirs):
+    for chunk in outputplain.Renderer(conf.OutputString, conf.Fields).render():
         yield chunk
 
     yield "</pre>"
