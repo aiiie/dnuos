@@ -38,6 +38,7 @@ from misc import merge
 from misc import subdirs
 import outputplain
 import outputhtml
+import outputdb
 
 
 class Data:
@@ -103,7 +104,7 @@ def main():
 
         # Setup renderer
         outputters = {
-            'db': outputdb,
+            'db': outputdb.Renderer().render,
             'HTML': outputhtml.Renderer(conf.OutputString, conf.Fields).render,
             'plain': outputplain.Renderer(conf.OutputString, conf.Fields).render,
         }
@@ -247,24 +248,6 @@ def add_empty(dirs):
         oldpath = path
 
         yield adir
-
-
-def outputdb(dirs, options, data):
-    for adir in dirs:
-        chunk = "%d:'%s',%d:'%s',%d:'%s',%d:'%s',%d,%.d,%d" % (
-            len(str(adir.get('A'))),
-            str(adir.get('A')),
-            len(str(adir.get('C'))),
-            str(adir.get('C')),
-            len(str(adir.get('t'))),
-            str(adir.get('t')),
-            len(str(adir.get('p'))),
-            str(adir.get('p')),
-            adir.get('f'),
-            adir.get('B') / 1000,
-            adir.get('L')
-        )
-        yield chunk
 
 
 def walk(path, depth=0):
