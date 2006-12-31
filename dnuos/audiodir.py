@@ -34,24 +34,6 @@ def map_dict(func, dict):
     return dict
 
 
-def to_minutes(value):
-    return "%i:%02i" % (value / 60, value % 60)
-
-
-def to_human(value, radix=1024.0):
-    i = 0
-    while value >= radix:
-        value /= radix
-        i += 1
-    suffix = " kMG"[i]
-    if value > 100:
-        return "%d%s" % (value, suffix)
-    elif value < 10:
-        return "%.2f%s" % (value, suffix)
-    else:
-        return "%.1f%s" % (value, suffix)
-
-
 class Dir:
     def __init__(self, filename, depth=0):
         self.path = filename
@@ -404,39 +386,3 @@ class Dir:
         self._date = max(dates)
         return self._date
     modified = property(fget=lambda self: self.__get_modified())
-
-    def get(self, tag):
-        formatter_table = {
-            "b": lambda x: to_human(x, 1000.0),
-            "l": to_minutes,
-            "m": time.ctime,
-            "n": lambda x: conf.conf.indent(x, self.depth),
-            "s": to_human,
-        }
-        tag_table = {
-            "a": 'audiolist_format',
-            "A": 'artist',
-            "b": 'bitrate',
-            "B": 'bitrate',
-            "C": 'album',
-            "D": 'depth',
-            "f": 'num_files',
-            "l": 'length',
-            "L": 'length',
-            "m": 'modified',
-            "M": 'modified',
-            "n": 'name',
-            "N": 'name',
-            "p": 'profile',
-            "P": 'path',
-            "q": 'quality',
-            "s": 'size',
-            "S": 'size',
-            "t": 'mediatype',
-            "T": 'brtype',
-        }
-        formatter = lambda x: x
-        if tag in formatter_table:
-            formatter = formatter_table[tag]
-        attr = tag_table[tag]
-        return formatter(getattr(self, attr))
