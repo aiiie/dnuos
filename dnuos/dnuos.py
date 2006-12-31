@@ -216,11 +216,8 @@ class EmptyDir:
         self.name = name
         self.depth = depth
 
-    def get(self, tag):
-        if tag == "n":
-            return conf.indent(self.name, self.depth)
-        else:
-            return ""
+    def __getattr__(self, attr):
+        return None
 
 
 def add_empty(dirs):
