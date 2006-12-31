@@ -159,26 +159,26 @@ def non_empty(adir):
 def no_cbr_mp3(adir):
     """No CBR MP3 files predicate"""
     # This implentation does not consider CBR MP3s in Mixed directories
-    return adir.type() != "MP3" or adir.brtype() not in "C~"
+    return adir.mediatype != "MP3" or adir.brtype not in "C~"
 
 
 def profile_only_mp3(adir):
     """No non-profile MP3 predicate"""
     # This implentation does not consider non-profile MP3s in Mixed directories
-    return adir.type() != "MP3" or adir.profile() != ""
+    return adir.mediatype != "MP3" or adir.profile != ""
 
 
 def enough_bitrate_mp3(adir):
     """No low-bitrate MP3 predicate"""
     # This implentation does not consider low-bitrate MP3s in Mixed directories
-    return adir.type() != "MP3" or \
-           adir.bitrate() >= conf.options.mp3_min_bit_rate
+    return adir.mediatype != "MP3" or \
+           adir.bitrate >= conf.options.mp3_min_bit_rate
 
 
 def output_db_predicate(adir):
-    return adir.type() != "Mixed" and \
-           adir.get('A') != None and \
-           adir.get('C') != None
+    return adir.mediatype != "Mixed" and \
+           adir.artist != None and \
+           adir.album != None
 
 
 def total_sizes(dirs):
@@ -191,8 +191,8 @@ def total_sizes(dirs):
     for adir in dirs:
         yield adir
         for mediatype in adir.types():
-            GLOBALS.size[mediatype] += adir.size(mediatype)
-        GLOBALS.size["Total"] += adir.size()
+            GLOBALS.size[mediatype] += adir.get_size(mediatype)
+        GLOBALS.size["Total"] += adir.size
 
 
 def timer_wrapper(dirs):
