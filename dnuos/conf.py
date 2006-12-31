@@ -25,6 +25,7 @@ import os
 import re
 import string
 import sys
+import time
 
 from misc import die
 from misc import dir_test
@@ -32,6 +33,24 @@ import outputdb
 import outputhtml
 import outputplain
 import outputxml
+
+
+def to_human(value, radix=1024.0):
+    i = 0
+    while value >= radix:
+        value /= radix
+        i += 1
+    suffix = " kMG"[i]
+    if value > 100:
+        return "%d%s" % (value, suffix)
+    elif value < 10:
+        return "%.2f%s" % (value, suffix)
+    else:
+        return "%.1f%s" % (value, suffix)
+
+
+def to_minutes(value):
+    return "%i:%02i" % (value / 60, value % 60)
 
 
 class Settings:
@@ -245,35 +264,44 @@ class Settings:
 
 
 class Column:
-    headers = {
-        "a": "Bitrate(s)",
-        "A": "Artist",
-        "b": "Bitrate",
-        "B": "Bitrate",
-        "c": "Channels",
-        "C": "Album",
-        "d": "Dir",
-        "D": "Depth",
-        "f": "Files",
-        "l": "Length",
-        "L": "Length",
-        "m": "Modified",
-        "n": "Album/Artist",
-        "N": "Album/Artist",
-        "p": "Profile",
-        "P": "Path",
-        "q": "Quality",
-        "r": "Sample Rate",
-        "s": "Size",
-        "S": "Size",
-        "t": "Type",
-        "T": "BR Type",
-        #"v": "Vendor",
-        #"V": "Version",
-        }
-
+    formatter_table = {
+        "b": lambda data, depth: to_human(data, 1000.0),
+        "l": lambda data, depth: to_minutes(data),
+        "m": lambda data, depth: time.ctime(data),
+        "n": lambda data, depth: conf.indent(data, depth),
+        "s": lambda data, depth: to_human(data),
+    }
+    attr_table = {
+        "a": ('audiolist_format', 'Bitrate(s)'),
+        "A": ('artist', 'Artist'),
+        "b": ('bitrate', 'Bitrate'),
+        "B": ('bitrate', 'Bitrate'),
+        "C": ('album', 'Album'),
+        #"d": "Dir",
+        "D": ('depth', 'Depth'),
+        "f": ('num_files', 'Files'),
+        "l": ('length', 'Length'),
+        "L": ('length', 'Length'),
+        "m": ('modified', 'Modified'),
+        "M": ('modified', 'Modified'),
+        "n": ('name', 'Album/Artist'),
+        "N": ('name', 'Album/Artist'),
+        "p": ('profile', 'Profile'),
+        "P": ('path', 'Path'),
+        "q": ('quality', 'Quality'),
+        "s": ('size', 'Size'),
+        "S": ('size', 'Size'),
+        "t": ('mediatype', 'Type'),
+        "T": ('brtype', 'BR Type'),
+    }
+ 
     def __init__(self, tag, width, suffix):
-        self.tag, self.width, self.suffix = tag, width, suffix
+        self.width, self.suffix = width, suffix
+        if tag in self.formatter_table:
+            self.formatter = self.formatter_table[tag]
+        else:
+            self.formatter = lambda x,y: x
+        self.attr, self.name = self.attr_table[tag]
 
     def _format(self, data, suffixes):
         if suffixes:
@@ -285,18 +313,15 @@ class Column:
             data = "%*.*s" % (self.width, abs(self.width), data)
         return data
 
-    def name(self):
-        return self.headers[self.tag]
-
     def header(self, suffixes=True):
-        return self._format(self.name(), suffixes)
+        return self._format(self.name, suffixes)
 
     def get(self, adir):
-        try:
-            return adir.get(self.tag)
-        except KeyError:
-            msg = "Unknown field <%s> in format string" % self.tag
-            die(msg, 1)
+        data = getattr(adir, self.attr)
+        if data is None:
+            return ''
+        else:
+            return self.formatter(data, adir.depth)
 
     def get_formatted(self, adir, suffixes=True):
         return self._format(self.get(adir), suffixes)
