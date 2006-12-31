@@ -93,8 +93,8 @@ def main():
             dirs = ifilter(output_db_predicate, dirs)
         if not conf.options.output_format == 'db':
             dirs = total_sizes(dirs)
-        if not conf.options.output_format =='db' and \
-           not conf.options.stripped:
+        if not conf.options.stripped and \
+           conf.options.output_format in ['plain', 'html']:
             dirs = add_empty(dirs)
 
         # Configure renderer

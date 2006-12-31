@@ -31,6 +31,7 @@ from misc import dir_test
 import outputdb
 import outputhtml
 import outputplain
+import outputxml
 
 
 class Settings:
@@ -137,6 +138,9 @@ class Settings:
         parser.add_option("-w", "--wildcards",
                           dest="wildcards", action="store_true",
                           help="Expand wildcards in basedirs")
+        parser.add_option("--xml",
+                          dest="output_format", action="store_const", const="xml",
+                          help="XML output")
 
         (options, args) = parser.parse_args(argv)
         self.options = options
@@ -185,12 +189,12 @@ class Settings:
         # format outputstring
         self.process_outputstring()
 
-
         # Setup renderer
         renderers = {
             'db': outputdb.Renderer(),
             'HTML': outputhtml.Renderer(self.OutputString, self.Fields),
             'plain': outputplain.Renderer(self.OutputString, self.Fields),
+            'xml': outputxml.Renderer(self.Fields),
         }
         self.renderer = renderers[options.output_format]
 
@@ -281,16 +285,21 @@ class Column:
             data = "%*.*s" % (self.width, abs(self.width), data)
         return data
 
-    def header(self, suffixes=True):
-        return self._format(self.headers[self.tag], suffixes)
+    def name(self):
+        return self.headers[self.tag]
 
-    def get(self, adir, suffixes=True):
+    def header(self, suffixes=True):
+        return self._format(self.name(), suffixes)
+
+    def get(self, adir):
         try:
-            data, suffix = str(adir.get(self.tag)), self.suffix
+            return adir.get(self.tag)
         except KeyError:
             msg = "Unknown field <%s> in format string" % self.tag
             die(msg, 1)
-        return self._format(data, suffixes)
+
+    def get_formatted(self, adir, suffixes=True):
+        return self._format(self.get(adir), suffixes)
 
 
 def parse_field(field_string):
