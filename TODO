@@ -8,3 +8,5 @@ Customize metadata output? (later)
 to_human is duplicated in audiodir.py (later)
 Really hardcode charset in html output?
 dir_test is duplicated in audiodir.py
+Make outputxml escape its data
+Make outputxml handle dir>* tags in a non-crappy way
