@@ -405,27 +405,38 @@ class Dir:
         return self._date
     modified = property(fget=lambda self: self.__get_modified())
 
-    def get(self, id):
-        table = {
-        "a": lambda: self.audiolist_format,
-        "A": lambda: self.artist,
-        "b": lambda: to_human(self.bitrate, 1000.0),
-        "B": lambda: self.bitrate,
-        "C": lambda: self.album,
-        "D": lambda: self.depth,
-        "f": lambda: self.num_files,
-        "l": lambda: to_minutes(self.length),
-        "L": lambda: self.length,
-        "m": lambda: time.ctime(self.modified),
-        "M": lambda: self.modified,
-        "n": lambda: conf.conf.indent(self.name, self.depth),
-        "N": lambda: self.name,
-        "p": lambda: self.profile,
-        "P": lambda: self.path,
-        "q": lambda: self.quality,
-        "s": lambda: to_human(self.size),
-        "S": lambda: self.size,
-        "t": lambda: self.mediatype,
-        "T": lambda: self.brtype
+    def get(self, tag):
+        formatter_table = {
+            "b": lambda x: to_human(x, 1000.0),
+            "l": to_minutes,
+            "m": time.ctime,
+            "n": lambda x: conf.conf.indent(x, self.depth),
+            "s": to_human,
         }
-        return table[id]()
+        tag_table = {
+            "a": 'audiolist_format',
+            "A": 'artist',
+            "b": 'bitrate',
+            "B": 'bitrate',
+            "C": 'album',
+            "D": 'depth',
+            "f": 'num_files',
+            "l": 'length',
+            "L": 'length',
+            "m": 'modified',
+            "M": 'modified',
+            "n": 'name',
+            "N": 'name',
+            "p": 'profile',
+            "P": 'path',
+            "q": 'quality',
+            "s": 'size',
+            "S": 'size',
+            "t": 'mediatype',
+            "T": 'brtype',
+        }
+        formatter = lambda x: x
+        if tag in formatter_table:
+            formatter = formatter_table[tag]
+        attr = tag_table[tag]
+        return formatter(getattr(self, attr))
