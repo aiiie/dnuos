@@ -317,14 +317,15 @@ class Column:
         return self._format(self.name, suffixes)
 
     def get(self, adir):
-        data = getattr(adir, self.attr)
-        if data is None:
-            return ''
-        else:
-            return self.formatter(data, adir.depth)
+        return getattr(adir, self.attr)
 
     def get_formatted(self, adir, suffixes=True):
-        return self._format(self.get(adir), suffixes)
+        data = self.get(adir)
+        if data is None:
+            data = ''
+        else:
+            data = self.formatter(data, adir.depth)
+        return self._format(data, suffixes)
 
 
 def parse_field(field_string):
