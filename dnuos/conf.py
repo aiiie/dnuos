@@ -2,7 +2,7 @@
 #
 # This program is under GPL license. See COPYING file for details.
 #
-# Copyright 2003,2006
+# Copyright 2003,2006,2007
 # Sylvester Johansson <sylvestor@telia.com>
 # Mattias Päivärinta <pejve@vasteras2.net>
 #
