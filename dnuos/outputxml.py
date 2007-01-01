@@ -3,7 +3,7 @@
 #
 # This program is under GPL license. See COPYING file for details.
 #
-# Copyright 2006
+# Copyright 2006,2007
 # Mattias Päivärinta <pejve@vasteras2.net>
 #
 # Authors
