@@ -17,6 +17,7 @@ Module for rendering xml output.
 from itertools import chain
 from time import localtime
 from time import strftime
+from xml.sax.saxutils import escape
 
 from misc import intersperse
 
@@ -51,6 +52,7 @@ class Renderer:
         return ''.join(attrs)
 
     def tag(self, name, value):
+        value = escape(str(value))
         return self.indent + "<%s>%s</%s>" % (name, value, name)
 
     def tag_start(self, name, **kwargs):
