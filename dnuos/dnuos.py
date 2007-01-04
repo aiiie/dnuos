@@ -101,13 +101,15 @@ def main():
             dirs = add_empty(dirs)
 
         # Configure renderer
-        renderers = {
-            'db': outputdb.Renderer(),
-            'HTML': outputhtml.Renderer(conf.OutputString, conf.Fields),
-            'plain': outputplain.Renderer(conf.OutputString, conf.Fields),
-            'xml': outputxml.Renderer(conf.Fields),
+        renderer_modules = {
+            'db': outputdb,
+            'HTML': outputhtml,
+            'plain': outputplain,
+            'xml': outputxml,
         }
-        renderer = renderers[conf.options.output_format]
+        renderer = renderer_modules[conf.options.output_format].Renderer()
+        renderer.format_string = conf.OutputString
+        renderer.columns = conf.Fields
         output = renderer.render(dirs, conf.options, GLOBALS)
 
     elif conf.options.disp_version:
