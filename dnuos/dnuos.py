@@ -103,7 +103,7 @@ def main():
         # Configure renderer
         renderer_modules = {
             'db': outputdb,
-            'HTML': outputhtml,
+            'html': outputhtml,
             'plain': outputplain,
             'xml': outputxml,
         }

@@ -100,7 +100,7 @@ class Settings:
                           dest="outfile",
                           help="Write output to FILE", metavar="FILE")
         parser.add_option("-H", "--html",
-                          dest="output_format", action="store_const", const="HTML",
+                          dest="output_format", action="store_const", const="html",
                           help="HTML output")
         parser.add_option("--ignore-bad",
                           dest="list_bad", action="store_false",
