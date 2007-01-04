@@ -156,9 +156,6 @@ class Settings:
         parser.add_option("-w", "--wildcards",
                           dest="wildcards", action="store_true",
                           help="Expand wildcards in basedirs")
-        parser.add_option("--xml",
-                          dest="output_format", action="store_const", const="xml",
-                          help="XML output (deprecated, use --template xml)")
 
         (options, args) = parser.parse_args(argv)
         self.options = options
