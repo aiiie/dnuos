@@ -33,7 +33,10 @@ from misc import die
 from misc import equal_elements
 from misc import merge
 from misc import subdirs
+import outputdb
+import outputhtml
 import outputplain
+import outputxml
 
 
 class Data:
@@ -98,7 +101,14 @@ def main():
             dirs = add_empty(dirs)
 
         # Configure renderer
-        output = conf.renderer.render(dirs, conf.options, GLOBALS)
+        renderers = {
+            'db': outputdb.Renderer(),
+            'HTML': outputhtml.Renderer(conf.OutputString, conf.Fields),
+            'plain': outputplain.Renderer(conf.OutputString, conf.Fields),
+            'xml': outputxml.Renderer(conf.Fields),
+        }
+        renderer = renderers[conf.options.output_format]
+        output = renderer.render(dirs, conf.options, GLOBALS)
 
     elif conf.options.disp_version:
         output = outputplain.render_version(GLOBALS.version)

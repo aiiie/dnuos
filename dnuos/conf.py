@@ -29,10 +29,6 @@ import time
 
 from misc import die
 from misc import dir_test
-import outputdb
-import outputhtml
-import outputplain
-import outputxml
 
 
 def to_human(value, radix=1024.0):
@@ -207,15 +203,6 @@ class Settings:
     
         # format outputstring
         self.process_outputstring()
-
-        # Setup renderer
-        renderers = {
-            'db': outputdb.Renderer(),
-            'HTML': outputhtml.Renderer(self.OutputString, self.Fields),
-            'plain': outputplain.Renderer(self.OutputString, self.Fields),
-            'xml': outputxml.Renderer(self.Fields),
-        }
-        self.renderer = renderers[options.output_format]
 
     def set_outstream(self, file, filemode):
         """open output stream for writing"""
