@@ -73,7 +73,7 @@ class Settings:
                             merge=False,
                             no_cbr=False,
                             no_non_profile=False,
-                            output_format="plain",
+                            output_format="plaintext",
                             prefer_tag=2,
                             quiet=False,
                             raw_output_string="[n,-52]| [s,5] | [t,-4] | [q]",

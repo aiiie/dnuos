@@ -97,14 +97,14 @@ def main():
         if not conf.options.output_format == 'db':
             dirs = total_sizes(dirs)
         if not conf.options.stripped and \
-           conf.options.output_format in ['plain', 'html']:
+           conf.options.output_format in ['plaintext', 'html']:
             dirs = add_empty(dirs)
 
         # Configure renderer
         renderer_modules = {
             'db': outputdb,
             'html': outputhtml,
-            'plain': outputplain,
+            'plaintext': outputplain,
             'xml': outputxml,
         }
         renderer = renderer_modules[conf.options.output_format].Renderer()
