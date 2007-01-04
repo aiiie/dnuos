@@ -101,7 +101,7 @@ class Settings:
                           help="Write output to FILE", metavar="FILE")
         parser.add_option("-H", "--html",
                           dest="output_format", action="store_const", const="html",
-                          help="HTML output")
+                          help="HTML output (deprecated, use --template html)")
         parser.add_option("--ignore-bad",
                           dest="list_bad", action="store_false",
                           help="Don't list files that cause Audiotype failure")
@@ -125,7 +125,7 @@ class Settings:
                           help="Set output format STRING used in plain-text and HTML output. Refer to documentation for details on syntax. (default %default)", metavar="STRING")
         parser.add_option("-O", "--output-db",
                           dest="output_format", action="store_const", const="db",
-                          help="Print list in output.db format")
+                          help="Print list in output.db format (deprecated, use --template db)")
         parser.add_option("-P", "--prefer-tag",
                           dest="prefer_tag", type="int",
                           help="If both ID3v1 and ID3v2 tags exist, prefer n (1 or 2) (default %default)", metavar="n")
@@ -158,7 +158,7 @@ class Settings:
                           help="Expand wildcards in basedirs")
         parser.add_option("--xml",
                           dest="output_format", action="store_const", const="xml",
-                          help="XML output")
+                          help="XML output (deprecated, use --template xml)")
 
         (options, args) = parser.parse_args(argv)
         self.options = options
