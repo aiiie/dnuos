@@ -138,6 +138,9 @@ class Settings:
         parser.add_option("-S", "--stats",
                           dest="disp_result", action="store_true",
                           help="Display statistics results")
+        parser.add_option("--template",
+                          dest="output_format",
+                          help="Set output TEMPLATE (default %default)", metavar="TEMPLATE")
         parser.add_option("-t", "--time",
                           dest="disp_time", action="store_true",
                           help="Display elapsed time footer")
