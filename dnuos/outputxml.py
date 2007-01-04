@@ -23,8 +23,7 @@ from misc import intersperse
 
 
 class Renderer:
-    def __init__(self, columns):
-        self.columns = columns
+    def __init__(self):
         self.indent = ''
 
     def render(self, dirs, options, data):

@@ -20,10 +20,6 @@ from misc import intersperse
 
 
 class Renderer:
-    def __init__(self, format_string, columns):
-        self.format_string = format_string
-        self.columns = columns
-
     def render(self, dirs, options, data):
         """Render directories to a sequence of strings."""
         output = [

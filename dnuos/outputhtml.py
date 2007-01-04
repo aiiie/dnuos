@@ -18,9 +18,16 @@ import outputplain
 
 
 class Renderer:
-    def __init__(self, format_string, columns):
-        self.format_string = format_string
-        self.columns = columns
+    def __init__(self):
+        self.renderer = outputplain.Renderer()
+
+    def __set_format_string(self, format_string):
+        self.renderer.format_string = format_string
+    format_string = property(fset=__set_format_string)
+
+    def __set_columns(self, columns):
+        self.renderer.columns = columns
+    columns = property(fset=__set_columns)
 
     def render(self, dirs, options, data):
         """Render directories as HTML to stdout.
@@ -43,8 +50,7 @@ body { color: %s; background: %s; }
 <body>
 <pre>""" % (data.version['dnuos'], options.text_color, options.bg_color)
 
-        plain_renderer = outputplain.Renderer(self.format_string, self.columns)
-        for chunk in plain_renderer.render(dirs, options, data):
+        for chunk in self.renderer.render(dirs, options, data):
             yield chunk
 
         yield "</pre>"
