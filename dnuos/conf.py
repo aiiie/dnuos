@@ -31,6 +31,11 @@ from misc import die
 from misc import dir_test
 
 
+def set_db_format(option, opt_str, value, parser):
+    parser.values.outfile = value
+    parser.values.output_format = 'db'
+
+
 def to_human(value, radix=1024.0):
     i = 0
     while value >= radix:
@@ -124,8 +129,8 @@ class Settings:
                           dest="raw_output_string",
                           help="Set output format STRING used in plain-text and HTML output. Refer to documentation for details on syntax. (default %default)", metavar="STRING")
         parser.add_option("-O", "--output-db",
-                          dest="output_format", action="store_const", const="db",
-                          help="Print list in output.db format (deprecated, use --template db)")
+                          action="callback", nargs=1, callback=set_db_format, type="string",
+                          help="Write list in output.db format to FILE (deprecated, use --template db)", metavar="FILE")
         parser.add_option("-P", "--prefer-tag",
                           dest="prefer_tag", type="int",
                           help="If both ID3v1 and ID3v2 tags exist, prefer n (1 or 2) (default %default)", metavar="n")
