@@ -20,6 +20,7 @@ __version__ = "0.92"
 
 
 import glob
+from optparse import OptionGroup
 from optparse import OptionParser, Option
 import os
 import re
@@ -86,81 +87,98 @@ class Settings:
                             text_color="black",
                             wildcards=False)
 
-        parser.add_option("-b", "--bitrate",
-                          dest="mp3_min_bitrate", type="int",
-                          help="Exclude MP3s with bitrate lower than MIN (in Kbps)", metavar="MIN")
-        parser.add_option("-B", "--bg",
-                          dest="bg_color",
-                          help="Set HTML background COLOR (default %default)", metavar="COLOR")
-        parser.add_option("-D", "--date",
-                          dest="disp_date", action="store_true",
-                          help="Display datestamp header")
-        parser.add_option("--debug",
-                          dest="debug", action="store_true",
-                          help="Output debug trace to stderr")
-        parser.add_option("-e", "--exclude",
-                          dest="exclude_paths", action="append",
-                          help="Exclude DIR from search", metavar="DIR")
-        parser.add_option("-f", "--file",
-                          dest="outfile",
-                          help="Write output to FILE", metavar="FILE")
-        parser.add_option("-H", "--html",
-                          dest="output_format", action="store_const", const="html",
-                          help="HTML output (deprecated, use --template html)")
-        parser.add_option("--ignore-bad",
-                          dest="list_bad", action="store_false",
-                          help="Don't list files that cause Audiotype failure")
-        parser.add_option("-i", "--ignore-case",
-                          dest="ignore_case", action="store_true",
-                          help="Case-insensitive directory sorting")
-        parser.add_option("-I", "--indent",
-                          dest="indent", type="int",
-                          help="Set indent to n (default %default)", metavar="n")
-        parser.add_option("-l", "--lame-only",
-                          dest="no_non_profile", action="store_true",
-                          help="Exclude MP3s with no LAME profile")
-        parser.add_option("-L", "--lame-old-preset",
-                          dest="force_old_lame_presets", action="store_true",
-                          help='Report "--alt-preset xxx" for "-V x" LAME MP3s where applicable')
-        parser.add_option("-m", "--merge",
-                          dest="merge", action="store_true",
-                          help="Parse basedirs in parallell as opposed to one after the other")
-        parser.add_option("-o", "--output",
-                          dest="raw_output_string",
-                          help="Set output format STRING used in plain-text and HTML output. Refer to documentation for details on syntax. (default %default)", metavar="STRING")
-        parser.add_option("-O", "--output-db",
-                          action="callback", nargs=1, callback=set_db_format, type="string",
-                          help="Write list in output.db format to FILE (deprecated, use --template db)", metavar="FILE")
-        parser.add_option("-P", "--prefer-tag",
-                          dest="prefer_tag", type="int",
-                          help="If both ID3v1 and ID3v2 tags exist, prefer n (1 or 2) (default %default)", metavar="n")
-        parser.add_option("-q", "--quiet",
-                          dest="quiet", action="store_true",
-                          help="Omit progress indication")
-        parser.add_option("-s", "--strip",
-                          dest="stripped", action="store_true",
-                          help="Strip output of field headers and empty directories")
-        parser.add_option("-S", "--stats",
-                          dest="disp_result", action="store_true",
-                          help="Display statistics results")
-        parser.add_option("--template",
-                          dest="output_format",
-                          help="Set output TEMPLATE (default %default)", metavar="TEMPLATE")
-        parser.add_option("-t", "--time",
-                          dest="disp_time", action="store_true",
-                          help="Display elapsed time footer")
-        parser.add_option("-T", "--text",
-                          dest="text_color",
-                          help="Set HTML text COLOR (default %default)", metavar="COLOR")
-        parser.add_option("-v", "--vbr-only",
-                          dest="no_cbr", action="store_true",
-                          help="Exclude MP3s with constant bitrates")
-        parser.add_option("-V", "--version",
-                          dest="disp_version", action="store_true",
-                          help="Display version")
-        parser.add_option("-w", "--wildcards",
-                          dest="wildcards", action="store_true",
-                          help="Expand wildcards in basedirs")
+        group = OptionGroup(parser, "Application")
+        group.add_option("--debug",
+                         dest="debug", action="store_true",
+                         help="Output debug trace to stderr")
+        group.add_option("--ignore-bad",
+                         dest="list_bad", action="store_false",
+                         help="Don't list files that cause Audiotype failure")
+        group.add_option("-q", "--quiet",
+                         dest="quiet", action="store_true",
+                         help="Omit progress indication")
+        group.add_option("-V", "--version",
+                         dest="disp_version", action="store_true",
+                         help="Display version")
+        parser.add_option_group(group)
+
+        group = OptionGroup(parser, "Directory walking")
+        group.add_option("-e", "--exclude",
+                         dest="exclude_paths", action="append",
+                         help="Exclude DIR from search", metavar="DIR")
+        group.add_option("-i", "--ignore-case",
+                         dest="ignore_case", action="store_true",
+                         help="Case-insensitive directory sorting")
+        group.add_option("-m", "--merge",
+                         dest="merge", action="store_true",
+                         help="Parse basedirs in parallell as opposed to one after the other")
+        group.add_option("-w", "--wildcards",
+                         dest="wildcards", action="store_true",
+                         help="Expand wildcards in basedirs")
+        parser.add_option_group(group)
+
+        group = OptionGroup(parser, "Filtering")
+        group.add_option("-b", "--bitrate",
+                         dest="mp3_min_bitrate", type="int",
+                         help="Exclude MP3s with bitrate lower than MIN (in Kbps)", metavar="MIN")
+        group.add_option("-l", "--lame-only",
+                         dest="no_non_profile", action="store_true",
+                         help="Exclude MP3s with no LAME profile")
+        group.add_option("-v", "--vbr-only",
+                         dest="no_cbr", action="store_true",
+                         help="Exclude MP3s with constant bitrates")
+        parser.add_option_group(group)
+
+        group = OptionGroup(parser, "Parsing")
+        group.add_option("-L", "--lame-old-preset",
+                         dest="force_old_lame_presets", action="store_true",
+                         help='Report "--alt-preset xxx" for "-V x" LAME MP3s where applicable')
+        group.add_option("-P", "--prefer-tag",
+                         dest="prefer_tag", type="int",
+                         help="If both ID3v1 and ID3v2 tags exist, prefer n (1 or 2) (default %default)", metavar="n")
+        parser.add_option_group(group)
+
+        group = OptionGroup(parser, "Output")
+        group.add_option("-B", "--bg",
+                         dest="bg_color",
+                         help="Set HTML background COLOR (default %default)", metavar="COLOR")
+        group.add_option("-f", "--file",
+                         dest="outfile",
+                         help="Write output to FILE", metavar="FILE")
+        group.add_option("-H", "--html",
+                         dest="output_format", action="store_const", const="html",
+                         help="HTML output (deprecated, use --template html)")
+        group.add_option("-I", "--indent",
+                         dest="indent", type="int",
+                         help="Set indent to n (default %default)", metavar="n")
+        group.add_option("-o", "--output",
+                         dest="raw_output_string",
+                         help="Set output format STRING used in plain-text and HTML output. Refer to documentation for details on syntax. (default %default)", metavar="STRING")
+        group.add_option("-O", "--output-db",
+                         action="callback", nargs=1, callback=set_db_format, type="string",
+                         help="Write list in output.db format to FILE (deprecated, use --template db)", metavar="FILE")
+        group.add_option("-s", "--strip",
+                         dest="stripped", action="store_true",
+                         help="Strip output of field headers and empty directories")
+        group.add_option("--template",
+                         dest="output_format",
+                         help="Set output TEMPLATE (default %default)", metavar="TEMPLATE")
+        group.add_option("-T", "--text",
+                         dest="text_color",
+                         help="Set HTML text COLOR (default %default)", metavar="COLOR")
+        parser.add_option_group(group)
+
+        group = OptionGroup(parser, "Statistics")
+        group.add_option("-D", "--date",
+                         dest="disp_date", action="store_true",
+                         help="Display datestamp header")
+        group.add_option("-S", "--stats",
+                         dest="disp_result", action="store_true",
+                         help="Display statistics results")
+        group.add_option("-t", "--time",
+                         dest="disp_time", action="store_true",
+                         help="Display elapsed time footer")
+        parser.add_option_group(group)
 
         (options, args) = parser.parse_args(argv)
         self.options = options
