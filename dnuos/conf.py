@@ -47,6 +47,15 @@ def set_mp3_min_bitrate(option, opt_str, value, parser):
         raise OptionValueError("Bitrate must be 0 or in the range (1..320)")
 
 
+def add_exclude_dir(option, opt_str, value, parser):
+    if value[-1] == os.sep:
+        value = value[:-1]
+    if os.path.isdir(value):
+        parser.values.exclude_paths.append(value)
+    else:
+        raise OptionValueError("There is no directory '%s'" % value)
+
+
 def to_human(value, radix=1024.0):
     i = 0
     while value >= radix:
@@ -114,7 +123,7 @@ class Settings:
 
         group = OptionGroup(parser, "Directory walking")
         group.add_option("-e", "--exclude",
-                         dest="exclude_paths", action="append",
+                         action="callback", nargs=1, callback=add_exclude_dir, type="string",
                          help="Exclude DIR from search", metavar="DIR")
         group.add_option("-i", "--ignore-case",
                          dest="ignore_case", action="store_true",
@@ -194,14 +203,6 @@ class Settings:
         self.options = options
 
         # validate options
-        for index in range(0, len(options.exclude_paths)):
-            path = options.exclude_paths[index]
-            if path[-1] == os.sep:
-                path = path[:-1]
-            if not os.path.isdir(path):
-                die("There is no directory '%s'" % path, 2)
-            options.exclude_paths[index] = path
-
         if options.prefer_tag not in [1, 2]:
             die("Invalid argument to --prefer-tag or -P", 2)
 
