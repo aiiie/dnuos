@@ -92,6 +92,8 @@ def main():
             dirs = ifilter(no_cbr_mp3, dirs)
         if conf.options.no_non_profile:
             dirs = ifilter(profile_only_mp3, dirs)
+        if conf.options.mp3_min_bit_rate:
+            dirs = ifilter(enough_bitrate_mp3, dirs)
         if conf.options.output_format == 'db':
             dirs = ifilter(output_db_predicate, dirs)
         if not conf.options.output_format == 'db':
