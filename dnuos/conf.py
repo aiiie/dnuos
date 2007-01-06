@@ -61,6 +61,21 @@ def add_exclude_dir(option, opt_str, value, parser):
         raise OptionValueError("There is no directory '%s'" % value)
 
 
+def process_outputstring(data):
+    parts = re.split(r"(?<!\\)\[", unescape(data))
+    parts = map(lambda x: x.replace(r"\[", "["), parts)
+    format_string = unescape_brackets(parts[0])
+    fields = []
+    for segment in parts[1:]:
+        try:
+            fieldstr, text = tuple(re.split(r"(?<!\\)]", segment))
+        except:
+            die("Bad format string", 2)
+        format_string += "%s" + unescape_brackets(text)
+        fields.append(parse_field(unescape_brackets(fieldstr)))
+    return format_string, fields
+
+
 def to_human(value, radix=1024.0):
     i = 0
     while value >= radix:
@@ -227,7 +242,7 @@ class Settings:
             options.list_bad = True
     
         # format outputstring
-        self.process_outputstring()
+        options.format_string, options.fields = process_outputstring(options.raw_output_string)
 
     def set_outstream(self, file, filemode):
         """open output stream for writing"""
@@ -245,18 +260,6 @@ class Settings:
         else:
             list = [ os.path.abspath(dir) ]
         return filter(dir_test, list)
-
-    def process_outputstring(self):
-        parts = re.split(r"(?<!\\)\[", unescape(self.options.raw_output_string))
-        parts = map(lambda x: x.replace(r"\[", "["), parts)
-        self.options.format_string = unescape_brackets(parts[0])
-        for segment in parts[1:]:
-            try:
-                fieldstr, text = tuple(re.split(r"(?<!\\)]", segment))
-            except:
-                die("Bad format string", 2)
-            self.options.format_string += "%s" + unescape_brackets(text)
-            self.options.fields.append(parse_field(unescape_brackets(fieldstr)))
 
     def sort(self, list):
         if self.options.ignore_case:
