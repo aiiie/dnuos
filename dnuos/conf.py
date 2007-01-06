@@ -47,6 +47,13 @@ def set_mp3_min_bitrate(option, opt_str, value, parser):
         raise OptionValueError("Bitrate must be 0 or in the range (1..320)")
 
 
+def set_preferred_tag(option, opt_str, value, parser):
+    if value in [1, 2]:
+        parser.values.prefer_tag = value
+    else:
+        raise OptionValueError("Invalid argument to %s" % opt_str)
+
+
 def add_exclude_dir(option, opt_str, value, parser):
     if value[-1] == os.sep:
         value = value[:-1]
@@ -153,7 +160,7 @@ class Settings:
                          dest="force_old_lame_presets", action="store_true",
                          help='Report "--alt-preset xxx" for "-V x" LAME MP3s where applicable')
         group.add_option("-P", "--prefer-tag",
-                         dest="prefer_tag", type="int",
+                         action="callback", nargs=1, callback=set_preferred_tag, type="int",
                          help="If both ID3v1 and ID3v2 tags exist, prefer n (1 or 2) (default %default)", metavar="n")
         parser.add_option_group(group)
 
@@ -201,10 +208,6 @@ class Settings:
 
         (options, args) = parser.parse_args(argv)
         self.options = options
-
-        # validate options
-        if options.prefer_tag not in [1, 2]:
-            die("Invalid argument to --prefer-tag or -P", 2)
 
         # open file for redirection
         if options.outfile:
