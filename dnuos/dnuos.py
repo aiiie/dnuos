@@ -110,7 +110,7 @@ def main():
             'xml': outputxml,
         }
         renderer = renderer_modules[conf.options.output_format].Renderer()
-        renderer.format_string = conf.OutputString
+        renderer.format_string = conf.options.format_string
         renderer.columns = conf.Fields
         output = renderer.render(dirs, conf.options, GLOBALS)
 

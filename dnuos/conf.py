@@ -84,7 +84,6 @@ class Settings:
         self.Folders = []
         self.OutStream = sys.__stdout__
         self.Fields = []
-        self.OutputString = ""
 
     def parse_args(self, argv=sys.argv[1:]):
         usage = "%prog [options] basedir ..."
@@ -250,13 +249,13 @@ class Settings:
     def process_outputstring(self):
         parts = re.split(r"(?<!\\)\[", unescape(self.options.raw_output_string))
         parts = map(lambda x: x.replace(r"\[", "["), parts)
-        self.OutputString = unescape_brackets(parts[0])
+        self.options.format_string = unescape_brackets(parts[0])
         for segment in parts[1:]:
             try:
                 fieldstr, text = tuple(re.split(r"(?<!\\)]", segment))
             except:
                 die("Bad format string", 2)
-            self.OutputString += "%s" + unescape_brackets(text)
+            self.options.format_string += "%s" + unescape_brackets(text)
             self.Fields.append(parse_field(unescape_brackets(fieldstr)))
 
     def sort(self, list):
