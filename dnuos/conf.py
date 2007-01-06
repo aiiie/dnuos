@@ -39,9 +39,7 @@ def set_db_format(option, opt_str, value, parser):
 
 
 def set_mp3_min_bitrate(option, opt_str, value, parser):
-    if value == 0:
-        parser.values.mp3_min_bit_rate = None
-    elif value >= 1 and value <= 320:
+    if value >= 0 and value <= 320:
         parser.values.mp3_min_bit_rate = 1000 * value
     else:
         raise OptionValueError("Bitrate must be 0 or in the range (1..320)")
@@ -91,7 +89,7 @@ class Settings:
     def parse_args(self, argv=sys.argv[1:]):
         usage = "%prog [options] basedir ..."
         parser = OptionParser(usage)
-        parser.set_defaults(mp3_min_bit_rate=None,
+        parser.set_defaults(mp3_min_bit_rate=0,
                             bg_color="white",
                             ignore_case=False,
                             indent=4,
