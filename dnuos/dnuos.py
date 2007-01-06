@@ -111,7 +111,7 @@ def main():
         }
         renderer = renderer_modules[conf.options.output_format].Renderer()
         renderer.format_string = conf.options.format_string
-        renderer.columns = conf.Fields
+        renderer.columns = conf.options.fields
         output = renderer.render(dirs, conf.options, GLOBALS)
 
     elif conf.options.disp_version:
