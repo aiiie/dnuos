@@ -83,7 +83,6 @@ class Settings:
     def __init__(self):
         self.Folders = []
         self.OutStream = sys.__stdout__
-        self.Fields = []
 
     def parse_args(self, argv=sys.argv[1:]):
         usage = "%prog [options] basedir ..."
@@ -98,6 +97,7 @@ class Settings:
                             disp_date=False,
                             disp_result=False,
                             exclude_paths=[],
+                            fields=[],
                             list_bad=True,
                             merge=False,
                             no_cbr=False,
@@ -256,7 +256,7 @@ class Settings:
             except:
                 die("Bad format string", 2)
             self.options.format_string += "%s" + unescape_brackets(text)
-            self.Fields.append(parse_field(unescape_brackets(fieldstr)))
+            self.options.fields.append(parse_field(unescape_brackets(fieldstr)))
 
     def sort(self, list):
         if self.options.ignore_case:
