@@ -21,6 +21,7 @@ __version__ = "0.92"
 
 import glob
 from optparse import OptionGroup
+from optparse import OptionValueError
 from optparse import OptionParser, Option
 import os
 import re
@@ -35,6 +36,15 @@ from misc import dir_test
 def set_db_format(option, opt_str, value, parser):
     parser.values.outfile = value
     parser.values.output_format = 'db'
+
+
+def set_mp3_min_bitrate(option, opt_str, value, parser):
+    if value == 0:
+        parser.values.mp3_min_bit_rate = None
+    elif value >= 1 and value <= 320:
+        parser.values.mp3_min_bit_rate = 1000 * value
+    else:
+        raise OptionValueError("Bitrate must be 0 or in the range (1..320)")
 
 
 def to_human(value, radix=1024.0):
@@ -119,7 +129,7 @@ class Settings:
 
         group = OptionGroup(parser, "Filtering")
         group.add_option("-b", "--bitrate",
-                         dest="mp3_min_bitrate", type="int",
+                         action="callback", nargs=1, callback=set_mp3_min_bitrate, type="int",
                          help="Exclude MP3s with bitrate lower than MIN (in Kbps)", metavar="MIN")
         group.add_option("-l", "--lame-only",
                          dest="no_non_profile", action="store_true",
@@ -184,15 +194,6 @@ class Settings:
         self.options = options
 
         # validate options
-        if options.mp3_min_bit_rate is not None:
-            if options.mp3_min_bit_rate < 1 or \
-              options.mp3_min_bit_rate > 320:
-                die("Bitrate must be greater than 0 and less than or equal", \
-                    "to 320", 2)
-            options.mp3_min_bit_rate *= 1000
-        else:
-            options.mp3_min_bit_rate = 0
-
         for index in range(0, len(options.exclude_paths)):
             path = options.exclude_paths[index]
             if path[-1] == os.sep:
