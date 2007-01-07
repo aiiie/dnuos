@@ -38,6 +38,14 @@ def set_db_format(option, opt_str, value, parser):
     parser.values.output_format = 'db'
 
 
+def set_format_string(option, opt_str, value, parser):
+    try:
+        parser.values.format_string, parser.values.fields = \
+            process_outputstring(value)
+    except ValueError:
+        raise OptionValueError("Bad format string argument to %s" % opt_str)
+
+
 def set_mp3_min_bitrate(option, opt_str, value, parser):
     if value >= 0 and value <= 320:
         parser.values.mp3_min_bit_rate = 1000 * value
@@ -70,7 +78,7 @@ def process_outputstring(data):
         try:
             fieldstr, text = tuple(re.split(r"(?<!\\)]", segment))
         except:
-            die("Bad format string", 2)
+            raise ValueError()
         format_string += "%s" + unescape_brackets(text)
         fields.append(parse_field(unescape_brackets(fieldstr)))
     return format_string, fields
@@ -100,6 +108,8 @@ class Settings:
         self.OutStream = sys.__stdout__
 
     def parse_args(self, argv=sys.argv[1:]):
+        default_format_string="[n,-52]| [s,5] | [t,-4] | [q]"
+        format_string, fields = process_outputstring(default_format_string)
         usage = "%prog [options] basedir ..."
         parser = OptionParser(usage)
         parser.set_defaults(mp3_min_bit_rate=0,
@@ -112,7 +122,8 @@ class Settings:
                             disp_date=False,
                             disp_result=False,
                             exclude_paths=[],
-                            fields=[],
+                            format_string=format_string,
+                            fields=fields,
                             list_bad=True,
                             merge=False,
                             no_cbr=False,
@@ -120,7 +131,6 @@ class Settings:
                             output_format="plaintext",
                             prefer_tag=2,
                             quiet=False,
-                            raw_output_string="[n,-52]| [s,5] | [t,-4] | [q]",
                             stripped=False,
                             text_color="black",
                             wildcards=False)
@@ -190,8 +200,8 @@ class Settings:
                          dest="indent", type="int",
                          help="Set indent to n (default %default)", metavar="n")
         group.add_option("-o", "--output",
-                         dest="raw_output_string",
-                         help="Set output format STRING used in plain-text and HTML output. Refer to documentation for details on syntax. (default %default)", metavar="STRING")
+                         action="callback", nargs=1, callback=set_format_string, type="string",
+                         help="Set output format STRING used in plain-text and HTML output. Refer to documentation for details on syntax. (default %s)" % default_format_string, metavar="STRING")
         group.add_option("-O", "--output-db",
                          action="callback", nargs=1, callback=set_db_format, type="string",
                          help="Write list in output.db format to FILE (deprecated, use --template db)", metavar="FILE")
@@ -240,9 +250,6 @@ class Settings:
             options.quiet = True
         if options.debug:
             options.list_bad = True
-    
-        # format outputstring
-        options.format_string, options.fields = process_outputstring(options.raw_output_string)
 
     def set_outstream(self, file, filemode):
         """open output stream for writing"""
