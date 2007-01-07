@@ -73,9 +73,9 @@ def to_human(value, radix=1024.0):
 
 
 def main():
-    if conf.Folders:
+    if conf.options.basedirs:
         # Enumerate directories
-        trees = [ walk(basedir) for basedir in conf.Folders ]
+        trees = [ walk(basedir) for basedir in conf.options.basedirs ]
         if conf.options.merge:
             dirs = merge(*trees)
         else:

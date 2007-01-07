@@ -104,7 +104,6 @@ def to_minutes(value):
 
 class Settings:
     def __init__(self):
-        self.Folders = []
         self.OutStream = sys.__stdout__
 
     def parse_args(self, argv=sys.argv[1:]):
@@ -239,11 +238,12 @@ class Settings:
             self.set_outstream(options.outfile, mode)
 
         # add basedirs to both self.Folder and self.ExcludePaths
+        options.basedirs = []
         for glob_dir in args:
-            self.Folders += self.expand(glob_dir)
-        self.Folders = filter(lambda x: x not in options.exclude_paths,
-                              self.Folders)
-        options.exclude_paths += self.Folders
+            options.basedirs += self.expand(glob_dir)
+        options.basedirs = filter(lambda x: x not in options.exclude_paths,
+                                  options.basedirs)
+        options.exclude_paths += options.basedirs
 
         # options overriding eachother
         if options.debug or not self.OutStream.isatty():
