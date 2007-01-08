@@ -89,12 +89,18 @@ def intersperse(items, sep):
 
 def merge(*iterators):
     """Merge n ordered iterators into one ordered iterator"""
+    # Make a heap of the given iterators. The heap is sorted by to the head
+    # elements. Thus the need for the lookahead.
     heap = []
     for index in range(0, len(iterators)):
         iterator = Lookahead(iterators[index])
         if not iterator.empty:
             heappush(heap, (iterator, index))
 
+    # Since all iterators are ordered (precondition) and the heap is ordered
+    # by head elements of the iterators, the head element of the head iterator
+    # on the heap is the smallest element of all remaining elements, and thus
+    # the next element in the ordered merged iteration.
     while heap:
         iterator, index = heappop(heap)
         yield iterator.next()
