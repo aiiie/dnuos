@@ -139,7 +139,7 @@ def indicate_progress(dirs, outs=sys.stderr):
     throughout the iteration.
     """
     for adir in dirs:
-        print >> outs, "%sb processed\r" % to_human(GLOBALS.size["Total"]),
+        print >> outs, "%sB processed\r" % to_human(GLOBALS.size["Total"]),
         yield adir
     print >> outs, "\r               \r",
 
