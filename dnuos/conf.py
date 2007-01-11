@@ -218,10 +218,7 @@ class Settings:
 
         # open file for redirection
         if options.outfile:
-            mode = 'w'
-            if options.output_format == 'db':
-                mode += 'b'
-            self.set_outstream(options.outfile, mode)
+            self.set_outstream(options.outfile, 'w')
 
         # add basedirs to both self.Folder and self.ExcludePaths
         options.basedirs = []
