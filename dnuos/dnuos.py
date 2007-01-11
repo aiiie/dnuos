@@ -60,33 +60,33 @@ class Data:
 
 
 def main():
-    if conf.options.basedirs:
+    if OPTIONS.basedirs:
         # Enumerate directories
-        trees = [ walk(basedir) for basedir in conf.options.basedirs ]
-        if conf.options.merge:
+        trees = [ walk(basedir) for basedir in OPTIONS.basedirs ]
+        if OPTIONS.merge:
             dirs = merge(*trees)
         else:
             dirs = chain(*trees)
 
         # Add layers of functionality
         dirs = timer_wrapper(dirs)
-        if not conf.options.quiet:
+        if not OPTIONS.quiet:
             dirs = indicate_progress(dirs)
-        if not conf.options.output_format == 'db':
+        if not OPTIONS.output_format == 'db':
             dirs = collect_bad(dirs)
         dirs = ifilter(non_empty, dirs)
-        if conf.options.no_cbr:
+        if OPTIONS.no_cbr:
             dirs = ifilter(no_cbr_mp3, dirs)
-        if conf.options.no_non_profile:
+        if OPTIONS.no_non_profile:
             dirs = ifilter(profile_only_mp3, dirs)
-        if conf.options.mp3_min_bit_rate != 0:
+        if OPTIONS.mp3_min_bit_rate != 0:
             dirs = ifilter(enough_bitrate_mp3, dirs)
-        if conf.options.output_format == 'db':
+        if OPTIONS.output_format == 'db':
             dirs = ifilter(output_db_predicate, dirs)
-        if not conf.options.output_format == 'db':
+        if not OPTIONS.output_format == 'db':
             dirs = total_sizes(dirs)
-        if not conf.options.stripped and \
-           conf.options.output_format in ['plaintext', 'html']:
+        if not OPTIONS.stripped and \
+           OPTIONS.output_format in ['plaintext', 'html']:
             dirs = add_empty(dirs)
 
         # Configure renderer
@@ -96,27 +96,27 @@ def main():
             'plaintext': outputplain,
             'xml': outputxml,
         }
-        renderer = renderer_modules[conf.options.output_format].Renderer()
-        renderer.format_string = conf.options.format_string
-        renderer.columns = conf.options.fields
+        renderer = renderer_modules[OPTIONS.output_format].Renderer()
+        renderer.format_string = OPTIONS.format_string
+        renderer.columns = OPTIONS.fields
 
-        output = renderer.render(dirs, conf.options, GLOBALS)
+        output = renderer.render(dirs, OPTIONS, GLOBALS)
 
-    elif conf.options.disp_version:
+    elif OPTIONS.disp_version:
         output = outputplain.render_version(GLOBALS.version)
 
     else:
         die("No folders to process.\nType 'dnuos.py -h' for help.", 2)
 
     # Output
-    outfile = get_outfile(conf.options.outfile)
+    outfile = get_outfile(OPTIONS.outfile)
     for chunk in output:
         print >> outfile, chunk
 
 
 def debug(msg):
     """print debug message"""
-    if conf.options.debug:
+    if OPTIONS.debug:
         print >> sys.stderr, "?? " + msg
 
 
@@ -139,15 +139,15 @@ def collect_bad(dirs):
     Yields an unchanged iteration of dirs with an added side effect.
     After each directory is yielded its bad files are taken care of.
     Bad files are appended to GLOBALS.Badfiles or output to stderr
-    depending on conf.options.debug.
+    depending on OPTIONS.debug.
     """
     for adir in dirs:
         yield adir
 
-        if conf.options.debug:
+        if OPTIONS.debug:
             for badfile in adir.bad_streams():
                 print >> sys.stderr, "Audiotype failed for:", badfile
-        elif conf.options.list_bad:
+        elif OPTIONS.list_bad:
             GLOBALS.bad_files += adir.bad_streams()
 
 
@@ -175,7 +175,7 @@ def enough_bitrate_mp3(adir):
     """No low-bitrate MP3 predicate"""
     # This implentation does not consider low-bitrate MP3s in Mixed directories
     return adir.mediatype != "MP3" or \
-           adir.bitrate >= conf.options.mp3_min_bit_rate
+           adir.bitrate >= OPTIONS.mp3_min_bit_rate
 
 
 def output_db_predicate(adir):
@@ -247,14 +247,14 @@ def walk(path):
     """
     depth0 = dir_depth(path)
     for dirname, subdirs, files in os.walk(path):
-        subdirs = filter(lambda x: x not in conf.options.exclude_paths, subdirs)
+        subdirs = filter(lambda x: x not in OPTIONS.exclude_paths, subdirs)
         subdirs = conf.sort(subdirs)
         yield audiodir.Dir(dirname, dir_depth(dirname) - depth0)
 
 
 if __name__ == "__main__":
     GLOBALS = Data()
-    conf.parse_args()
+    OPTIONS = conf.parse_args()
     try:
         main()
     except KeyboardInterrupt:
