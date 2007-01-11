@@ -54,8 +54,19 @@ def die(msg, exitcode):
 
 
 def dir_depth(path):
-    """Return the subdirectory depth of a path"""
-    return len(os.path.abspath(path).split(os.path.sep))
+    """Return the subdirectory depth of a path
+
+    >>> dir_depth('/')
+    0
+    >>> dir_depth('/usr')
+    1
+    >>> dir_depth('/usr/')
+    1
+    >>> dir_depth('/usr/local')
+    2
+    """
+    parts = os.path.abspath(path).split(os.path.sep)[1:]
+    return parts != [''] and len(parts) or 0
 
 
 def equal_elements(seq1, seq2):
