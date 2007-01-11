@@ -88,7 +88,14 @@ def intersperse(items, sep):
 
 
 def merge(*iterators):
-    """Merge n ordered iterators into one ordered iterator"""
+    """Merge n ordered iterators into one ordered iterator
+
+    Merge two ordered iterators
+    >>> xs = iter(['a1', 'b1', 'c1'])
+    >>> ys = iter(['a2', 'b2', 'c2'])
+    >>> list(merge(xs, ys))
+    ['a1', 'a2', 'b1', 'b2', 'c1', 'c2']
+    """
     # Make a heap of the given iterators. The heap is sorted by to the head
     # elements. Thus the need for the lookahead.
     heap = []
