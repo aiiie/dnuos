@@ -96,3 +96,18 @@ def merge(*iterators):
         yield iterator.next()
         if not iterator.empty:
             heappush(heap, (iterator, index))
+
+
+def to_human(value, radix=1024.0):
+    """Convert a value to a string using SI suffixes"""
+    i = 0
+    while value >= radix:
+        value /= radix
+        i += 1
+    suffix = " kMG"[i]
+    if value > 100:
+        return "%d%s" % (value, suffix)
+    elif value < 10:
+        return "%.2f%s" % (value, suffix)
+    else:
+        return "%.1f%s" % (value, suffix)

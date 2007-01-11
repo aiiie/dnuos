@@ -33,6 +33,7 @@ from misc import die
 from misc import dir_depth
 from misc import equal_elements
 from misc import merge
+from misc import to_human
 import outputdb
 import outputhtml
 import outputplain
@@ -55,21 +56,6 @@ class Data:
             'dnuos': __version__,
             'audiotype': audiotype.__version__,
         }
-
-
-def to_human(value, radix=1024.0):
-    """Convert a value to a string using SI suffixes"""
-    i = 0
-    while value >= radix:
-        value /= radix
-        i += 1
-    suffix = " kMG"[i]
-    if value > 100:
-        return "%d%s" % (value, suffix)
-    elif value < 10:
-        return "%.2f%s" % (value, suffix)
-    else:
-        return "%.1f%s" % (value, suffix)
 
 
 def main():
