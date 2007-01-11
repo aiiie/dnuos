@@ -260,6 +260,8 @@ class Settings:
         if options.debug:
             options.list_bad = True
 
+        return options
+
     def expand(self, dir):
         """translate a basedir to a list of absolute paths"""
         if self.options.wildcards and re.search("[*?]|(?:\[.*\])", dir):
