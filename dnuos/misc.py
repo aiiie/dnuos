@@ -59,7 +59,19 @@ def dir_depth(path):
 
 
 def equal_elements(seq1, seq2):
-    """Return the largest n such that seq1[:n] == seq2[:n]"""
+    """Return the largest n such that seq1[:n] == seq2[:n]
+
+    >>> equal_elements('', '')
+    0
+    >>> equal_elements('abcd', 'abcd')
+    4
+    >>> equal_elements('abcd', 'abCD')
+    2
+    >>> equal_elements('abcd', 'abcdef')
+    4
+    >>> equal_elements('abcdef', 'abcd')
+    4
+    """
     for index in count():
         try:
             if seq1[index] != seq2[index]:
