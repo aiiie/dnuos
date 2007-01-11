@@ -251,7 +251,11 @@ def add_empty(dirs):
 
 
 def walk(path):
-    """Traverse a directory tree in pre-order"""
+    """Traverse a directory tree in pre-order
+
+    Directories are sorted according to the --ignore-case setting and branches
+    specified by --exclude are ignored.
+    """
     depth0 = dir_depth(path)
     for dirname, subdirs, files in os.walk(path):
         subdirs = filter(lambda x: x not in conf.options.exclude_paths, subdirs)
