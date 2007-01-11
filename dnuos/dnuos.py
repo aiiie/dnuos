@@ -30,9 +30,9 @@ import audiotype
 import audiodir
 from conf import conf
 from misc import die
+from misc import dir_depth
 from misc import equal_elements
 from misc import merge
-from misc import subdirs
 import outputdb
 import outputhtml
 import outputplain
@@ -250,16 +250,13 @@ def add_empty(dirs):
         yield adir
 
 
-def walk(path, depth=0):
+def walk(path):
     """Traverse a directory tree in pre-order"""
-    yield audiodir.Dir(path, depth)
-
-    # recurse each subdir
-    for subpath in subdirs(path, conf.cmp_munge):
-        if subpath in conf.options.exclude_paths:
-            continue
-        for descendant in walk(subpath, depth+1):
-            yield descendant
+    depth0 = dir_depth(path)
+    for dirname, subdirs, files in os.walk(path):
+        subdirs = filter(lambda x: x not in conf.options.exclude_paths, subdirs)
+        subdirs = conf.sort(subdirs)
+        yield audiodir.Dir(dirname, dir_depth(dirname) - depth0)
 
 
 if __name__ == "__main__":
