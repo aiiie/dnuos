@@ -68,6 +68,16 @@ def equal_elements(seq1, seq2):
             return index
 
 
+def get_outfile(filename):
+    """Open file for writing"""
+    try:
+        return filename and open(filename, 'w') or sys.stdout
+    except IOError, (errno, errstr):
+        msg = "I/O Error(%s): %s\nCannot open '%s' for writing" % \
+              (errno, errstr, file)
+        die(msg, 2)
+
+
 def intersperse(items, sep):
     """Separate each pair of elements in an iterable with a separator"""
     iterator = iter(items)
