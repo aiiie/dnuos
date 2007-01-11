@@ -32,6 +32,7 @@ from conf import conf
 from misc import die
 from misc import dir_depth
 from misc import equal_elements
+from misc import get_outfile
 from misc import merge
 from misc import to_human
 import outputdb
@@ -98,6 +99,7 @@ def main():
         renderer = renderer_modules[conf.options.output_format].Renderer()
         renderer.format_string = conf.options.format_string
         renderer.columns = conf.options.fields
+
         output = renderer.render(dirs, conf.options, GLOBALS)
 
     elif conf.options.disp_version:
@@ -107,8 +109,9 @@ def main():
         die("No folders to process.\nType 'dnuos.py -h' for help.", 2)
 
     # Output
+    outfile = get_outfile(conf.options.outfile)
     for chunk in output:
-        print >> conf.OutStream, chunk
+        print >> outfile, chunk
 
 
 def debug(msg):
