@@ -41,7 +41,7 @@ def set_db_format(option, opt_str, value, parser):
 def set_format_string(option, opt_str, value, parser):
     try:
         parser.values.format_string, parser.values.fields = \
-            process_outputstring(value)
+            parse_format_string2(value)
     except ValueError:
         raise OptionValueError("Bad format string argument to %s" % opt_str)
 
@@ -69,19 +69,48 @@ def add_exclude_dir(option, opt_str, value, parser):
         raise OptionValueError("There is no directory '%s'" % value)
 
 
-def process_outputstring(data):
-    parts = re.split(r"(?<!\\)\[", unescape(data))
-    parts = map(lambda x: x.replace(r"\[", "["), parts)
-    format_string = unescape_brackets(parts[0])
+def parse_format_string(data):
+    r"""Extract field strings from input, replacing them with %s
+
+    >>> parse_format_string('abcde')
+    ('abcde', [])
+    >>> parse_format_string('[a]bcde')
+    ('%sbcde', ['a'])
+    >>> parse_format_string('ab[c]de')
+    ('ab%sde', ['c'])
+    >>> parse_format_string('a[b]c[d]e')
+    ('a%sc%se', ['b', 'd'])
+    >>> parse_format_string(r'ab\[c]de')
+    ('ab[c]de', [])
+    >>> parse_format_string(r'ab\\[c]de')
+    ('ab\\%sde', ['c'])
+    >>> parse_format_string(r'ab\\\[c]de')
+    ('ab\\[c]de', [])
+    >>> parse_format_string(r'ab\\\\[c]de')
+    ('ab\\\\%sde', ['c'])
+    """
+    even_backslashes = r'(?:^|[^\\])(?:\\\\)*'
+    fieldRE = re.compile(r'(?P<backslashes>%s)\[(?P<field>.*?%s)\]' % \
+                         (even_backslashes, even_backslashes))
+
     fields = []
-    for segment in parts[1:]:
-        try:
-            fieldstr, text = tuple(re.split(r"(?<!\\)]", segment))
-        except:
-            raise ValueError()
-        format_string += "%s" + unescape_brackets(text)
-        fields.append(parse_field(unescape_brackets(fieldstr)))
-    return format_string, fields
+    match = fieldRE.search(data)
+    while match:
+        fields.append(match.group('field'))
+        data = fieldRE.sub(r'\1%s', data, 1)
+        match = fieldRE.search(data)
+
+    return data, fields
+
+
+def parse_format_string2(data):
+    """--output format string -> (python format string, Column instances)
+
+    This is a wrapper for parse_format_string() unescaping the format string
+    and making Column instances from the field strings.
+    """
+    format, fields = parse_format_string(data)
+    return unescape(format), map(lambda x: parse_field(unescape(x)), fields)
 
 
 def to_minutes(value):
@@ -94,7 +123,7 @@ class Settings:
 
     def parse_args(self, argv=sys.argv[1:]):
         default_format_string="[n,-52]| [s,5] | [t,-4] | [q]"
-        format_string, fields = process_outputstring(default_format_string)
+        format_string, fields = parse_format_string2(default_format_string)
         usage = "%prog [options] basedir ..."
         parser = OptionParser(usage)
         parser.set_defaults(mp3_min_bit_rate=0,
@@ -341,18 +370,10 @@ def parse_field(field_string):
     return Column(tag, width, suffix)
 
 
-def unescape_part(part):
-    r"""unescape the \t and \n sequences of a string"""
-    return part.replace(r"\t", "\t").replace(r"\n", "\n")
-
-
-def unescape(str):
-    r"""unescape the \t, \n and \\ sequences of a string"""
-    return string.join(map(unescape_part, str.split(r"\\")), "\\")
-
-
-def unescape_brackets(str):
-    return str.replace(r"\[", "[").replace(r"\]", "]")
+def unescape(data):
+    data = data.replace(r'\t', '\t').replace(r'\n', '\n')
+    data = re.sub(r'\\([\\\[\]])', r'\1', data)
+    return data
 
 
 conf = Settings()
