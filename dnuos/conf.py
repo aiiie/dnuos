@@ -30,6 +30,7 @@ import sys
 import time
 
 from misc import die
+from misc import to_human
 
 
 def set_db_format(option, opt_str, value, parser):
@@ -81,20 +82,6 @@ def process_outputstring(data):
         format_string += "%s" + unescape_brackets(text)
         fields.append(parse_field(unescape_brackets(fieldstr)))
     return format_string, fields
-
-
-def to_human(value, radix=1024.0):
-    i = 0
-    while value >= radix:
-        value /= radix
-        i += 1
-    suffix = " kMG"[i]
-    if value > 100:
-        return "%d%s" % (value, suffix)
-    elif value < 10:
-        return "%.2f%s" % (value, suffix)
-    else:
-        return "%.1f%s" % (value, suffix)
 
 
 def to_minutes(value):
