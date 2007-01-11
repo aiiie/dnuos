@@ -81,13 +81,13 @@ def parse_format_string(data):
     >>> parse_format_string('a[b]c[d]e')
     ('a%sc%se', ['b', 'd'])
     >>> parse_format_string(r'ab\[c]de')
-    ('ab[c]de', [])
-    >>> parse_format_string(r'ab\\[c]de')
-    ('ab\\%sde', ['c'])
-    >>> parse_format_string(r'ab\\\[c]de')
     ('ab\\[c]de', [])
-    >>> parse_format_string(r'ab\\\\[c]de')
+    >>> parse_format_string(r'ab\\[c]de')
     ('ab\\\\%sde', ['c'])
+    >>> parse_format_string(r'ab\\\[c]de')
+    ('ab\\\\\\[c]de', [])
+    >>> parse_format_string(r'ab\\\\[c]de')
+    ('ab\\\\\\\\%sde', ['c'])
     """
     even_backslashes = r'(?:^|[^\\])(?:\\\\)*'
     fieldRE = re.compile(r'(?P<backslashes>%s)\[(?P<field>.*?%s)\]' % \
