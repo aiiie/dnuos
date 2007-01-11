@@ -23,9 +23,9 @@ import sys
 
 
 class Lookahead:
-    """Wrapper class for adding one element of lookahead to iterators"""
-    def __init__(self, iterable):
-        self.iterable = iterable
+    """Wrapper class for adding one element of lookahead to an iterator"""
+    def __init__(self, iterator):
+        self.iterator = iterator
         self.lookahead = None
         self.empty = False
         self.next()
@@ -34,16 +34,18 @@ class Lookahead:
         """Get next value"""
         result = self.lookahead
         try:
-            self.lookahead = self.iterable.next()
+            self.lookahead = self.iterator.next()
         except StopIteration:
             self.lookahead = None
             self.empty = True
         return result
 
     def __le__(self, other):
+        """Compare iterator heads for (<=) inequality - as opposed to the entire iterators"""
         return self.lookahead <= other.lookahead
 
     def __eq__(self, other):
+        """Compare iterator heads for equality - as opposed to the entire iterators"""
         return self.lookahead == other.lookahead
 
 
