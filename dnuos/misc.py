@@ -58,21 +58,6 @@ def dir_depth(path):
     return len(os.path.abspath(path).split(os.path.sep))
 
 
-def dir_test(path):
-    """check if it's a readable directory"""
-    if not os.path.isdir(path) or not os.access(path, os.R_OK):
-        return False
-
-    # does os.access(file, os.R_OK) not work for windows?
-    try:
-        cwd = os.getcwd()
-        os.chdir(path)
-        os.chdir(cwd)
-        return True
-    except OSError:
-        return False
-
-
 def equal_elements(seq1, seq2):
     """Return the largest n such that seq1[:n] == seq2[:n]"""
     for index in count():

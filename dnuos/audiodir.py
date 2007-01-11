@@ -11,7 +11,6 @@
 
 import re, os, string, time
 import audiotype, conf
-from misc import dir_test
 
 
 __version__ = "0.17.3"

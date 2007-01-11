@@ -30,7 +30,6 @@ import sys
 import time
 
 from misc import die
-from misc import dir_test
 
 
 def set_db_format(option, opt_str, value, parser):
@@ -263,10 +262,9 @@ class Settings:
     def expand(self, dir):
         """translate a basedir to a list of absolute paths"""
         if self.options.wildcards and re.search("[*?]|(?:\[.*\])", dir):
-            list = map(os.path.abspath, self.sort(glob.glob(dir)))
+            return map(os.path.abspath, self.sort(glob.glob(dir)))
         else:
-            list = [ os.path.abspath(dir) ]
-        return filter(dir_test, list)
+            return [ os.path.abspath(dir) ]
 
     def sort(self, list):
         if self.options.ignore_case:
