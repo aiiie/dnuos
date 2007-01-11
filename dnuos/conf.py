@@ -142,6 +142,7 @@ class Settings:
                             merge=False,
                             no_cbr=False,
                             no_non_profile=False,
+                            outfile=None,
                             output_format="plaintext",
                             prefer_tag=2,
                             quiet=False,
@@ -245,10 +246,6 @@ class Settings:
         (options, args) = parser.parse_args(argv)
         self.options = options
 
-        # open file for redirection
-        if options.outfile:
-            self.set_outstream(options.outfile, 'w')
-
         # add basedirs to both self.Folder and self.ExcludePaths
         options.basedirs = []
         for glob_dir in args:
@@ -262,15 +259,6 @@ class Settings:
             options.quiet = True
         if options.debug:
             options.list_bad = True
-
-    def set_outstream(self, file, filemode):
-        """open output stream for writing"""
-        try:
-            self.OutStream = open(file, filemode)
-        except IOError, (errno, errstr):
-            msg = "I/O Error(%s): %s\nCannot open '%s' for writing" % \
-                  (errno, errstr, file)
-            die(msg, 2)
 
     def expand(self, dir):
         """translate a basedir to a list of absolute paths"""
