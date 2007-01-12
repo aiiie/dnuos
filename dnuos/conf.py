@@ -254,8 +254,6 @@ class Settings:
         # options overriding eachother
         if options.debug or not options.outfile:
             options.quiet = True
-        if options.debug:
-            options.list_bad = True
 
         return options
 
