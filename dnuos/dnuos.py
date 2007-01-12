@@ -63,6 +63,7 @@ class Data:
 
 
 def main():
+    data = Data()
     options = conf.parse_args()
 
     if options.basedirs:
@@ -77,13 +78,13 @@ def main():
             dirs = chain(*trees)
 
         # Add layers of functionality
-        dirs = timer_wrapper(dirs, GLOBALS.times)
+        dirs = timer_wrapper(dirs, data.times)
         if not options.quiet:
-            dirs = indicate_progress(dirs, GLOBALS.size)
+            dirs = indicate_progress(dirs, data.size)
         if options.debug:
             dirs = print_bad(dirs)
         elif options.list_bad:
-            dirs = collect_bad(dirs, GLOBALS.bad_files)
+            dirs = collect_bad(dirs, data.bad_files)
         dirs = ifilter(non_empty, dirs)
         if options.no_cbr:
             dirs = ifilter(no_cbr_mp3, dirs)
@@ -94,7 +95,7 @@ def main():
         if options.output_format == 'db':
             dirs = ifilter(output_db_predicate, dirs)
         if not options.output_format == 'db':
-            dirs = total_sizes(dirs, GLOBALS.size)
+            dirs = total_sizes(dirs, data.size)
         if not options.stripped and \
            options.output_format in ['plaintext', 'html']:
             dirs = add_empty(dirs)
@@ -110,10 +111,10 @@ def main():
         renderer.format_string = options.format_string
         renderer.columns = options.fields
 
-        output = renderer.render(dirs, options, GLOBALS)
+        output = renderer.render(dirs, options, data)
 
     elif options.disp_version:
-        output = outputplain.render_version(GLOBALS.version)
+        output = outputplain.render_version(data.version)
 
     else:
         die("No folders to process.\nType 'dnuos.py -h' for help.", 2)
@@ -267,7 +268,6 @@ def walk(basedir, excluded=[]):
 
 
 if __name__ == "__main__":
-    GLOBALS = Data()
     try:
         main()
     except KeyboardInterrupt:
