@@ -378,7 +378,7 @@ class Dir:
             if br not in list: list.append(br)
         list.sort()
         return string.join(map(str, list), ", ")
-    audiolist_format = property(fget=lambda self: self.__audiolist_format())
+    audiolist_format = property(fget=lambda self: self.__get_audiolist_format())
 
     def __get_modified(self):
         if self._date: return self._date
