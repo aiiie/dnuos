@@ -263,7 +263,8 @@ class Settings:
     def expand(self, dir):
         """translate a basedir to a list of absolute paths"""
         if self.options.wildcards and re.search("[*?]|(?:\[.*\])", dir):
-            return map(os.path.abspath, self.sort(glob.glob(dir)))
+            dirs = sort(glob.glob(dir), self.options.sort_key)
+            return map(os.path.abspath, dirs)
         else:
             return [ os.path.abspath(dir) ]
 
