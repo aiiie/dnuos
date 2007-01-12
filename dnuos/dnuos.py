@@ -242,20 +242,18 @@ def add_empty(dirs):
         yield adir
 
 
-def walk(path):
+def walk(basedir):
     """Traverse a directory tree in pre-order
 
     Directories are sorted according to the --ignore-case setting and branches
     specified by --exclude are ignored.
     """
-    depth0 = dir_depth(path)
-    for dirname, subdirs, _ in os.walk(path):
+    for dirname, subdirs, _ in os.walk(basedir):
         # Give os.walk directions for further traversal
-        subdirs = conf.sort([ path for path in subdirs
-                              if path not in OPTIONS.exclude_paths ])
+        subdirs = conf.sort([ sub for sub in subdirs
+                              if sub not in OPTIONS.exclude_paths ])
 
-        # Create audiodir instance here because it's easy to measure depth here
-        yield audiodir.Dir(dirname, dir_depth(dirname) - depth0)
+        yield audiodir.Dir(dirname, basedir)
 
 
 if __name__ == "__main__":
