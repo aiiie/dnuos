@@ -85,7 +85,7 @@ def main():
         if OPTIONS.no_non_profile:
             dirs = ifilter(profile_only_mp3, dirs)
         if OPTIONS.mp3_min_bit_rate != 0:
-            dirs = ifilter(enough_bitrate_mp3, dirs)
+            dirs = ifilter(enough_bitrate_mp3(OPTIONS.mp3_min_bit_rate), dirs)
         if OPTIONS.output_format == 'db':
             dirs = ifilter(output_db_predicate, dirs)
         if not OPTIONS.output_format == 'db':
@@ -185,11 +185,11 @@ def profile_only_mp3(adir):
     return adir.mediatype != "MP3" or adir.profile != ""
 
 
-def enough_bitrate_mp3(adir):
-    """No low-bitrate MP3 predicate"""
+def enough_bitrate_mp3(mp3_min_bit_rate):
+    """Create low-bitrate MP3 predicate"""
     # This implentation does not consider low-bitrate MP3s in Mixed directories
-    return adir.mediatype != "MP3" or \
-           adir.bitrate >= OPTIONS.mp3_min_bit_rate
+    return lambda adir: (adir.mediatype != "MP3" or
+                         adir.bitrate >= mp3_min_bit_rate)
 
 
 def output_db_predicate(adir):
