@@ -22,8 +22,11 @@ import os
 import sys
 
 
-class Lookahead:
+class Lookahead(object):
     """Wrapper class for adding one element of lookahead to an iterator"""
+
+    __slots__ = ['iterator', 'lookahead', 'empty']
+
     def __init__(self, iterator):
         self.iterator = iterator
         self.lookahead = None
