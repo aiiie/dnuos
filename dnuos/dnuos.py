@@ -34,6 +34,7 @@ from misc import dir_depth
 from misc import equal_elements
 from misc import get_outfile
 from misc import merge
+from misc import sort
 from misc import to_human
 import outputdb
 import outputhtml
@@ -70,7 +71,7 @@ def main():
         # Make an iterator over all subdirectories of the base directories,
         # including the base directories themselves. The directory trees are
         # sorted either separately or together according to the merge setting.
-        trees = [ walk(basedir, options.exclude_paths)
+        trees = [ walk(basedir, options.sort_key, options.exclude_paths)
                   for basedir in options.basedirs ]
         if options.merge:
             dirs = merge(*trees)
@@ -253,7 +254,7 @@ def add_empty(dirs):
         yield adir
 
 
-def walk(basedir, excluded=[]):
+def walk(basedir, sort_key=lambda x: x, excluded=[]):
     """Traverse a directory tree in pre-order
 
     Directories are sorted according to the --ignore-case setting and branches
@@ -261,8 +262,8 @@ def walk(basedir, excluded=[]):
     """
     for dirname, subdirs, _ in os.walk(basedir):
         # Give os.walk directions for further traversal
-        subdirs = conf.sort([ sub for sub in subdirs
-                              if sub not in excluded ])
+        subdirs = sort([ sub for sub in subdirs if sub not in excluded ],
+                       sort_key)
 
         yield audiodir.Dir(dirname, basedir)
 
