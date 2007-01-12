@@ -211,10 +211,11 @@ def timer_wrapper(dirs):
     GLOBALS.elapsed_time = time.clock() - GLOBALS.start
 
 
-class EmptyDir:
-    """
-    Represent a group of merged empty directories.
-    """
+class EmptyDir(object):
+    """Represent a group of merged empty directories."""
+
+    __slots__ = ['depth', 'name']
+
     def __init__(self, name, depth):
         self.name = name
         self.depth = depth
