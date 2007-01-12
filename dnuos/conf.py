@@ -118,9 +118,6 @@ def to_minutes(value):
 
 
 class Settings:
-    def __init__(self):
-        self.OutStream = sys.__stdout__
-
     def parse_args(self, argv=sys.argv[1:]):
         default_format_string="[n,-52]| [s,5] | [t,-4] | [q]"
         format_string, fields = parse_format_string2(default_format_string)
@@ -255,7 +252,7 @@ class Settings:
         options.exclude_paths += options.basedirs
 
         # options overriding eachother
-        if options.debug or not self.OutStream.isatty():
+        if options.debug or not options.outfile:
             options.quiet = True
         if options.debug:
             options.list_bad = True
