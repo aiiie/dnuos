@@ -30,6 +30,7 @@ import sys
 import time
 
 from misc import die
+from misc import sort
 from misc import to_human
 
 
@@ -132,7 +133,6 @@ class Settings:
                             exclude_paths=[],
                             fields=fields,
                             format_string=format_string,
-                            ignore_case=False,
                             indent=4,
                             list_bad=True,
                             merge=False,
@@ -143,6 +143,7 @@ class Settings:
                             output_format="plaintext",
                             prefer_tag=2,
                             quiet=False,
+                            sort_key=lambda x: x,
                             stripped=False,
                             text_color="black",
                             wildcards=False)
@@ -167,7 +168,7 @@ class Settings:
                          action="callback", nargs=1, callback=add_exclude_dir, type="string",
                          help="Exclude DIR from search", metavar="DIR")
         group.add_option("-i", "--ignore-case",
-                         dest="ignore_case", action="store_true",
+                         dest="sort_key", action="store_const", const=string.lower,
                          help="Case-insensitive directory sorting")
         group.add_option("-m", "--merge",
                          dest="merge", action="store_true",
@@ -267,17 +268,10 @@ class Settings:
             return [ os.path.abspath(dir) ]
 
     def sort(self, list):
-        if self.options.ignore_case:
-            list.sort(lambda x,y: cmp(x.lower(), y.lower()))
-        else:
-            list.sort()
-        return list
+        return sort(list, self.options.sort_key)
 
     def cmp_munge(self, basename):
-        if self.options.ignore_case:
-            return basename.lower()
-        else:
-            return basename
+        return self.options.sort_key(basename)
 
     def indent(self, basename, depth):
         return " " * self.options.indent * depth + basename
