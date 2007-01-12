@@ -249,9 +249,12 @@ def walk(path):
     specified by --exclude are ignored.
     """
     depth0 = dir_depth(path)
-    for dirname, subdirs, files in os.walk(path):
-        subdirs = filter(lambda x: x not in OPTIONS.exclude_paths, subdirs)
-        subdirs = conf.sort(subdirs)
+    for dirname, subdirs, _ in os.walk(path):
+        # Give os.walk directions for further traversal
+        subdirs = conf.sort([ path for path in subdirs
+                              if path not in OPTIONS.exclude_paths ])
+
+        # Create audiodir instance here because it's easy to measure depth here
         yield audiodir.Dir(dirname, dir_depth(dirname) - depth0)
 
 
