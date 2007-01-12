@@ -60,38 +60,40 @@ class Data:
 
 
 def main():
-    if OPTIONS.basedirs:
+    options = conf.parse_args()
+
+    if options.basedirs:
         # Make an iterator over all subdirectories of the base directories,
         # including the base directories themselves. The directory trees are
         # sorted either separately or together according to the merge setting.
-        trees = [ walk(basedir, OPTIONS.exclude_paths)
-                  for basedir in OPTIONS.basedirs ]
-        if OPTIONS.merge:
+        trees = [ walk(basedir, options.exclude_paths)
+                  for basedir in options.basedirs ]
+        if options.merge:
             dirs = merge(*trees)
         else:
             dirs = chain(*trees)
 
         # Add layers of functionality
         dirs = timer_wrapper(dirs)
-        if not OPTIONS.quiet:
+        if not options.quiet:
             dirs = indicate_progress(dirs)
-        if OPTIONS.debug:
+        if options.debug:
             dirs = print_bad(dirs)
-        elif OPTIONS.list_bad:
+        elif options.list_bad:
             dirs = collect_bad(dirs)
         dirs = ifilter(non_empty, dirs)
-        if OPTIONS.no_cbr:
+        if options.no_cbr:
             dirs = ifilter(no_cbr_mp3, dirs)
-        if OPTIONS.no_non_profile:
+        if options.no_non_profile:
             dirs = ifilter(profile_only_mp3, dirs)
-        if OPTIONS.mp3_min_bit_rate != 0:
-            dirs = ifilter(enough_bitrate_mp3(OPTIONS.mp3_min_bit_rate), dirs)
-        if OPTIONS.output_format == 'db':
+        if options.mp3_min_bit_rate != 0:
+            dirs = ifilter(enough_bitrate_mp3(options.mp3_min_bit_rate), dirs)
+        if options.output_format == 'db':
             dirs = ifilter(output_db_predicate, dirs)
-        if not OPTIONS.output_format == 'db':
+        if not options.output_format == 'db':
             dirs = total_sizes(dirs)
-        if not OPTIONS.stripped and \
-           OPTIONS.output_format in ['plaintext', 'html']:
+        if not options.stripped and \
+           options.output_format in ['plaintext', 'html']:
             dirs = add_empty(dirs)
 
         # Configure renderer
@@ -101,20 +103,20 @@ def main():
             'plaintext': outputplain,
             'xml': outputxml,
         }
-        renderer = renderer_modules[OPTIONS.output_format].Renderer()
-        renderer.format_string = OPTIONS.format_string
-        renderer.columns = OPTIONS.fields
+        renderer = renderer_modules[options.output_format].Renderer()
+        renderer.format_string = options.format_string
+        renderer.columns = options.fields
 
-        output = renderer.render(dirs, OPTIONS, GLOBALS)
+        output = renderer.render(dirs, options, GLOBALS)
 
-    elif OPTIONS.disp_version:
+    elif options.disp_version:
         output = outputplain.render_version(GLOBALS.version)
 
     else:
         die("No folders to process.\nType 'dnuos.py -h' for help.", 2)
 
     # Output
-    outfile = get_outfile(OPTIONS.outfile)
+    outfile = get_outfile(options.outfile)
     for chunk in output:
         print >> outfile, chunk
 
@@ -264,7 +266,6 @@ def walk(basedir, excluded=[]):
 
 if __name__ == "__main__":
     GLOBALS = Data()
-    OPTIONS = conf.parse_args()
     try:
         main()
     except KeyboardInterrupt:
