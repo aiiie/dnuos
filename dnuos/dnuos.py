@@ -76,11 +76,11 @@ def main():
         # Add layers of functionality
         dirs = timer_wrapper(dirs)
         if not options.quiet:
-            dirs = indicate_progress(dirs)
+            dirs = indicate_progress(dirs, GLOBALS.size)
         if options.debug:
             dirs = print_bad(dirs)
         elif options.list_bad:
-            dirs = collect_bad(dirs)
+            dirs = collect_bad(dirs, GLOBALS.bad_files)
         dirs = ifilter(non_empty, dirs)
         if options.no_cbr:
             dirs = ifilter(no_cbr_mp3, dirs)
@@ -91,7 +91,7 @@ def main():
         if options.output_format == 'db':
             dirs = ifilter(output_db_predicate, dirs)
         if not options.output_format == 'db':
-            dirs = total_sizes(dirs)
+            dirs = total_sizes(dirs, GLOBALS.size)
         if not options.stripped and \
            options.output_format in ['plaintext', 'html']:
             dirs = add_empty(dirs)
@@ -121,15 +121,15 @@ def main():
         print >> outfile, chunk
 
 
-def indicate_progress(dirs, outs=sys.stderr):
+def indicate_progress(dirs, sizes, outs=sys.stderr):
     """Indicate progress.
 
     Yields an unchanged iteration of dirs with an added side effect.
-    Total size in GLOBALS.size is updated to stderr every step
+    Total size in sizes is updated to stderr every step
     throughout the iteration.
     """
     for adir in dirs:
-        print >> outs, "%sB processed\r" % to_human(GLOBALS.size["Total"]),
+        print >> outs, "%sB processed\r" % to_human(sizes["Total"]),
         yield adir
     print >> outs, "\r               \r",
 
@@ -148,17 +148,17 @@ def print_bad(dirs):
             print >> sys.stderr, "Audiotype failed for:", badfile
 
 
-def collect_bad(dirs):
+def collect_bad(dirs, bad_files):
     """Collect bad files.
 
     Yields an unchanged iteration of dirs with an added side effect.
     After each directory is yielded its bad files are appended to
-    GLOBALS.Badfiles.
+    bad_files.
     """
     for adir in dirs:
         yield adir
 
-        GLOBALS.bad_files += adir.bad_streams()
+        bad_files += adir.bad_streams()
 
 
 def non_empty(adir):
@@ -194,18 +194,18 @@ def output_db_predicate(adir):
            adir.album != None
 
 
-def total_sizes(dirs):
+def total_sizes(dirs, sizes):
     """Calculate audio file size totals.
 
     Yields an unchanged iteration of dirs with an added side effect.
     After each directory is yielded its filesize statistics are
-    added to GLOBALS.size.
+    added to sizes.
     """
     for adir in dirs:
         yield adir
         for mediatype in adir.types():
-            GLOBALS.size[mediatype] += adir.get_size(mediatype)
-        GLOBALS.size["Total"] += adir.size
+            sizes[mediatype] += adir.get_size(mediatype)
+        sizes["Total"] += adir.size
 
 
 def timer_wrapper(dirs):
