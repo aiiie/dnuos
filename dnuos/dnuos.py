@@ -119,12 +119,6 @@ def main():
         print >> outfile, chunk
 
 
-def debug(msg):
-    """print debug message"""
-    if OPTIONS.debug:
-        print >> sys.stderr, "?? " + msg
-
-
 def indicate_progress(dirs, outs=sys.stderr):
     """Indicate progress.
 
