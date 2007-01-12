@@ -36,7 +36,7 @@ class Renderer:
             (lambda: data.bad_files,
              self.render_bad_files(data.bad_files)),
             (lambda: options.disp_time,
-             self.render_generation_time(data.elapsed_time)),
+             self.render_generation_time(data.times['elapsed_time'])),
             (lambda: options.disp_result,
              self.render_sizes(data.size)),
             (lambda: options.disp_version,

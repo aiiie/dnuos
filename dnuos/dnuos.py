@@ -44,15 +44,18 @@ import outputxml
 class Data:
     def __init__(self):
         self.bad_files = []
-        self.start = 0
         self.size = {
             "Total": 0.0,
             "FLAC": 0.0,
             "Ogg": 0.0,
             "MP3": 0.0,
             "MPC": 0.0,
-            "AAC": 0.0}
-        self.elapsed_time = 0.0
+            "AAC": 0.0,
+        }
+        self.times = {
+            'start': 0,
+            'elapsed_time': 0.0,
+        }
         self.version = {
             'dnuos': __version__,
             'audiotype': audiotype.__version__,
@@ -74,7 +77,7 @@ def main():
             dirs = chain(*trees)
 
         # Add layers of functionality
-        dirs = timer_wrapper(dirs)
+        dirs = timer_wrapper(dirs, GLOBALS.times)
         if not options.quiet:
             dirs = indicate_progress(dirs, GLOBALS.size)
         if options.debug:
@@ -208,17 +211,16 @@ def total_sizes(dirs, sizes):
         sizes["Total"] += adir.size
 
 
-def timer_wrapper(dirs):
+def timer_wrapper(dirs, times):
     """Time the iteration.
 
     Yields an unchanged iteration of dirs with an added side effect.
-    Time in seconds elapsed over the iteration is stored in
-    GLOBALS.elapsed_time.
+    Time in seconds elapsed over the iteration is stored in times.
     """
-    GLOBALS.start = time.clock()
+    times['start'] = time.clock()
     for adir in dirs:
         yield adir
-    GLOBALS.elapsed_time = time.clock() - GLOBALS.start
+    times['elapsed_time'] = time.clock() - times['start']
 
 
 class EmptyDir(object):
