@@ -254,6 +254,8 @@ class Settings:
         # options overriding eachother
         if options.debug or not options.outfile:
             options.quiet = True
+        if options.output_format == 'db':
+            options.list_bad = False
 
         return options
 
