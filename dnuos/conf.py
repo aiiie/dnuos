@@ -267,9 +267,6 @@ class Settings:
         else:
             return [ os.path.abspath(dir) ]
 
-    def sort(self, list):
-        return sort(list, self.options.sort_key)
-
     def indent(self, basename, depth):
         return " " * self.options.indent * depth + basename
 
