@@ -12,6 +12,8 @@
 import re, os, string, time
 import audiotype, conf
 
+from misc import dir_depth
+
 
 __version__ = "0.17.3"
 
@@ -34,9 +36,9 @@ def map_dict(func, dict):
 
 
 class Dir:
-    def __init__(self, filename, depth=0):
-        self.path = filename
-        self.depth = depth
+    def __init__(self, path, basedir):
+        self.path = path
+        self.depth = dir_depth(path) - dir_depth(basedir)
         self._children = None
         self._streams = None
         self._num_streams = None
