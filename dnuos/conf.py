@@ -270,9 +270,6 @@ class Settings:
     def sort(self, list):
         return sort(list, self.options.sort_key)
 
-    def cmp_munge(self, basename):
-        return self.options.sort_key(basename)
-
     def indent(self, basename, depth):
         return " " * self.options.indent * depth + basename
 
