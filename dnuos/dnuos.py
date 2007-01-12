@@ -74,7 +74,9 @@ def main():
         dirs = timer_wrapper(dirs)
         if not OPTIONS.quiet:
             dirs = indicate_progress(dirs)
-        if not OPTIONS.output_format == 'db':
+        if OPTIONS.debug:
+            dirs = print_bad(dirs)
+        elif OPTIONS.list_bad:
             dirs = collect_bad(dirs)
         dirs = ifilter(non_empty, dirs)
         if OPTIONS.no_cbr:
@@ -135,22 +137,31 @@ def indicate_progress(dirs, outs=sys.stderr):
     print >> outs, "\r               \r",
 
 
-def collect_bad(dirs):
-    """Collect bad files.
+def print_bad(dirs):
+    """Print bad files.
 
     Yields an unchanged iteration of dirs with an added side effect.
-    After each directory is yielded its bad files are taken care of.
-    Bad files are appended to GLOBALS.Badfiles or output to stderr
-    depending on OPTIONS.debug.
+    After each directory is yielded its bad files are output to
+    stderr.
     """
     for adir in dirs:
         yield adir
 
-        if OPTIONS.debug:
-            for badfile in adir.bad_streams():
-                print >> sys.stderr, "Audiotype failed for:", badfile
-        elif OPTIONS.list_bad:
-            GLOBALS.bad_files += adir.bad_streams()
+        for badfile in adir.bad_streams():
+            print >> sys.stderr, "Audiotype failed for:", badfile
+
+
+def collect_bad(dirs):
+    """Collect bad files.
+
+    Yields an unchanged iteration of dirs with an added side effect.
+    After each directory is yielded its bad files are appended to
+    GLOBALS.Badfiles.
+    """
+    for adir in dirs:
+        yield adir
+
+        GLOBALS.bad_files += adir.bad_streams()
 
 
 def non_empty(adir):
