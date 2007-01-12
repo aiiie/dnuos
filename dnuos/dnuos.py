@@ -61,7 +61,9 @@ class Data:
 
 def main():
     if OPTIONS.basedirs:
-        # Enumerate directories
+        # Make an iterator over all subdirectories of the base directories,
+        # including the base directories themselves. The directory trees are
+        # sorted either separately or together according to the merge setting.
         trees = [ walk(basedir) for basedir in OPTIONS.basedirs ]
         if OPTIONS.merge:
             dirs = merge(*trees)
