@@ -64,8 +64,8 @@ class Dir:
         Only the paths are compared. Directory contents is not
         considered at all.
         """
-        mine = conf.conf.cmp_munge(self.relpath)
-        yours = conf.conf.cmp_munge(other.relpath)
+        mine = conf.conf.options.sort_key(self.relpath)
+        yours = conf.conf.options.sort_key(other.relpath)
         return mine <= yours
 
     def __eq__(self, other):
@@ -74,8 +74,8 @@ class Dir:
         Only the paths are compared. Directory contents is not
         considered at all.
         """
-        mine = conf.conf.cmp_munge(self.relpath)
-        yours = conf.conf.cmp_munge(other.relpath)
+        mine = conf.conf.options.sort_key(self.relpath)
+        yours = conf.conf.options.sort_key(other.relpath)
         return mine == yours
 
     def __get_relpath(self):
