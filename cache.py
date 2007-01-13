@@ -105,8 +105,8 @@ def make_included_pred(included, excluded):
                    for base in excluded ]
 
     # any() is nicer than max(), but only supported by 2.5+
-    return lambda path: (max(fmap(path, incl_preds)) and not
-                         max(fmap(path, excl_preds)))
+    return lambda path: ((included and max(fmap(path, incl_preds))) and not
+                         (excluded and max(fmap(path, excl_preds))))
 
 
 class Cache(object):
