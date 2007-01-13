@@ -120,7 +120,7 @@ def make_included_pred(included, excluded):
                          not max(fmap(path, excl_preds)))
 
 
-class Cache:
+class Cache(object):
     __slots__ = ['filename', 'read', 'updates']
 
     def __init__(self, filename):
@@ -128,7 +128,7 @@ class Cache:
 
     def init(self, include, exclude):
         is_path_included = make_included_pred(include, exclude)
-        is_entry_included = lambda ((path, timestamp), value):
+        is_entry_included = lambda ((path, timestamp), value): \
                                    is_path_included(path)
         self.read, self.updates = split_dict(self._read(), is_entry_included)
 
@@ -143,7 +143,7 @@ class Cache:
             copy2(self.filename, self.filename + '.bak')
         except IOError:
             pass
-        pickle.dump(self.update_cache, open(self.filename, 'w'))
+        pickle.dump(self.updates, open(self.filename, 'w'))
 
 
 class cached(object):
@@ -151,21 +151,20 @@ class cached(object):
     If called later with the same arguments, the cached value is returned, and
     not re-evaluated.
     """
-    def __init__(self, func, read_cache, update_cache):
+    def __init__(self, func, cache):
         self.func = func
-        self.read_cache = read_cache
-        self.update_cache = update_cache
+        self.cache = cache
 
     def __call__(self, *args):
         try:
-            value = self.read_cache[args]
+            value = self.cache.read[args]
         except KeyError:
             value = self.func(*args)
         except TypeError:
             # uncachable -- for instance, passing a list as an argument.
             # Better to not cache than to blow up entirely.
             return self.func(*args)
-        self.update_cache[args] = value
+        self.cache.updates[args] = value
         return value
 
     def __repr__(self):
@@ -177,21 +176,6 @@ def get_key(path):
     return path, os.stat(path)[stat.ST_MTIME]
 
 
-def read_cache():
-    try:
-        return pickle.load(open(CACHE_FILE))
-    except IOError:
-        return attrdict()
-
-
-def write_cache(cache):
-    try:
-        copy2(CACHE_FILE, CACHE_FILE + '.bak')
-    except IOError:
-        pass
-    pickle.dump(cache, open(CACHE_FILE, 'w'))
-
-
 def mywalk(base, exclude):
     for dirname, subdirs, files in os.walk(base):
         subdirs[:] = [ sub for sub in subdirs
@@ -200,18 +184,17 @@ def mywalk(base, exclude):
 
 
 def main():
+    def get_value(path, timestamp):
+        return Dir(path).collect()
+    cache = Cache(CACHE_FILE)
+    get_value = cached(get_value, cache)
+
     # Rather lame command line parsing
     include = [ os.path.abspath(arg[1:]) for arg in sys.argv if arg[0] == '+' ]
     exclude = [ os.path.abspath(arg[1:]) for arg in sys.argv if arg[0] == '-' ]
 
     # Initialize cache
-    is_path_included = make_included_pred(include, exclude)
-    is_entry_included = lambda ((path, timestam), value): is_path_included(path)
-    old_cache, new_cache = split_dict(read_cache(), is_entry_included)
-
-    def get_value(path, timestamp):
-        return Dir(path).collect()
-    get_value = cached(get_value, old_cache, new_cache)
+    cache.init(include, exclude)
 
     # Traverse the base directories avoiding the excluded parts
     dirs = chain(*[ mywalk(base, exclude) for base in include ])
@@ -220,12 +203,12 @@ def main():
 
     # Print some kind of result
     print 'CACHE'
-    print '\n'.join([ str(item) for item in old_cache.items() ])
+    print '\n'.join([ str(item) for item in cache.read.items() ])
     print 'UPDATED'
-    print '\n'.join([ str(item) for item in new_cache.items() ])
+    print '\n'.join([ str(item) for item in cache.updates.items() ])
 
-    # Store updated and (partially) garbage collected cache
-    write_cache(new_cache)
+    # Write out updated and (partially) garbage collected cache
+    cache.write()
 
 
 if __name__ == '__main__':
