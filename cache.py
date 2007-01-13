@@ -22,6 +22,28 @@ class Dir(object):
         return res
 
 
+def partition(iterable, func):
+    """Partition a set of objects into equivalence classes
+
+    Returns a dictionary { func(obj): [equivalent objects] }
+    Object o1 and o2 are equivalent if and only if func(o1) == func(o2)
+
+    >>> p = partition(range(0, 10), lambda x: x % 3)
+
+    >>> classes = p.keys()
+    >>> classes.sort()
+    >>> print classes
+    [0, 1, 2]
+
+    >>> print p[0], p[1], p[2]
+    [0, 3, 6, 9] [1, 4, 7] [2, 5, 8]
+    """
+    partitions = { }
+    for obj in iterable:
+        partitions.setdefault(func(obj), []).append(obj)
+    return partitions
+
+
 def fmap(value, funcs):
     """Feeds the same value to a list of functions
 
