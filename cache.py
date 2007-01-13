@@ -220,9 +220,9 @@ def main():
 
     # Print some kind of result
     print 'CACHE'
-    print '\n'.join([ str(item) for item in Cache.instances[0].read.items() ])
+    print '\n'.join([ str(key) for key in Cache.instances[0].read.keys() ])
     print 'UPDATED'
-    print '\n'.join([ str(item) for item in Cache.instances[0].updates.items() ])
+    print '\n'.join([ str(key) for key in Cache.instances[0].updates.keys() ])
 
     # Write out updated and (partially) garbage collected cache
     Cache.writeout()
