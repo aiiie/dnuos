@@ -105,13 +105,12 @@ def make_included_pred(included, excluded):
                          not max(fmap(path, excl_preds)))
 
 
-def get_outside(cache, include, exclude):
-    """Return the parts of cache that are outside the current domain
+def split_cache(cache, pred):
+    """Split the cache in two by a predicate function
     """
-    is_included = make_included_pred(include, exclude)
-    return [ ((path, timestamp), value)
-             for (path, timestamp), value in cache.items()
-             if not is_included(path) ]
+    cells = partition(cache.items(),
+                      lambda ((path, timestamp), value): pred(path))
+    return dict(cells.get(True, [])), dict(cells.get(False, []))
 
 
 def cache_lookup(dirs, old_cache, new_cache):
@@ -155,8 +154,8 @@ if __name__ == '__main__':
     exclude = [ os.path.abspath(arg[1:]) for arg in sys.argv if arg[0] == '-' ]
 
     # Initialize cache
-    old_cache = read_cache()
-    new_cache = {}
+    is_included = make_included_pred(include, exclude)
+    old_cache, new_cache = split_cache(read_cache(), is_included)
 
     # Traverse the base directories avoiding the excluded parts
     dirs = chain(*[ mywalk(base, exclude) for base in include ])
@@ -171,5 +170,4 @@ if __name__ == '__main__':
     print '\n'.join(map(str, new_cache.items()))
 
     # Store updated and (partially) garbage collected cache
-    new_cache.update(get_outside(old_cache, include, exclude))
     write_cache(new_cache)
