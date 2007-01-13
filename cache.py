@@ -120,6 +120,32 @@ def make_included_pred(included, excluded):
                          not max(fmap(path, excl_preds)))
 
 
+class Cache:
+    __slots__ = ['filename', 'read', 'updates']
+
+    def __init__(self, filename):
+        self.filename = filename
+
+    def init(self, include, exclude):
+        is_path_included = make_included_pred(include, exclude)
+        is_entry_included = lambda ((path, timestamp), value):
+                                   is_path_included(path)
+        self.read, self.updates = split_dict(self._read(), is_entry_included)
+
+    def _read(self):
+        try:
+            return pickle.load(open(self.filename))
+        except IOError:
+            return attrdict()
+
+    def write(self):
+        try:
+            copy2(self.filename, self.filename + '.bak')
+        except IOError:
+            pass
+        pickle.dump(self.update_cache, open(self.filename, 'w'))
+
+
 class cached(object):
     """Decorator that caches a function's return value each time it is called.
     If called later with the same arguments, the cached value is returned, and
