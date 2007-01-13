@@ -87,19 +87,18 @@ def get_outside(cache, include, exclude):
     """Return the parts of cache that are outside the current domain
     """
     is_included = make_included_pred(include, exclude)
-    return [ (path, value) for path, value in cache.items()
-                           if not is_included(path) ]
+    return [ ((path, timestamp), value)
+             for (path, timestamp), value in cache.items()
+             if not is_included(path) ]
 
 
 def cache_lookup(dirs, cache, updates):
     """Get lookups from cache or calculate and put them in cache
     """
     for adir in dirs:
-        if adir.path not in cache or adir.modified > cache[adir.path].modified:
-            data = adir.collect()
-        else:
-            data = cache[adir.path]
-        updates[adir.path] = data
+        key = (adir.path, adir.modified)
+        data = cache.get(key) or adir.collect()
+        updates[key] = data
         yield data
 
 
