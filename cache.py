@@ -120,14 +120,11 @@ def make_included_pred(included, excluded):
                          not max(fmap(path, excl_preds)))
 
 
-def cache_lookup(dirs, old_cache, new_cache):
-    """Get lookups from cache or calculate and put them in cache
-    """
-    for adir in dirs:
-        key = (adir.path, adir.modified)
-        data = old_cache.get(key) or adir.collect()
-        new_cache[key] = data
-        yield data
+def lookup(adir, read_cache, cache_to_be_written):
+    key = (adir.path, adir.modified)
+    data = read_cache.get(key) or adir.collect()
+    cache_to_be_written[key] = data
+    return data
 
 
 def read_cache():
@@ -164,9 +161,8 @@ def main():
 
     # Traverse the base directories avoiding the excluded parts
     dirs = chain(*[ mywalk(base, exclude) for base in include ])
-    dirs = cache_lookup(dirs, old_cache, new_cache)
-    for path in dirs:
-        pass
+    for adir in dirs:
+        lookup(adir, old_cache, new_cache)
 
     # Print some kind of result
     print 'CACHE'
