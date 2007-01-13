@@ -15,6 +15,7 @@ class Dir(object):
         self.modified = os.stat(path)[stat.ST_MTIME]
 
     def collect(self):
+        print "COLLECT:", self.path
         res = attrdict(
             modified=self.modified,
             children=os.listdir(self.path),
