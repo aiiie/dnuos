@@ -123,10 +123,27 @@ def make_included_pred(included, excluded):
 class Cache(object):
     __slots__ = ['filename', 'read', 'updates']
 
+    instances = []
+
     def __init__(self, filename):
+        Cache.register(self)
         self.filename = filename
 
-    def init(self, include, exclude):
+    def register(cls, instance):
+        cls.instances.append(instance)
+    register = classmethod(register)
+
+    def setup(cls, include, exclude):
+        for instance in cls.instances:
+            instance._setup(include, exclude)
+    setup = classmethod(setup)
+
+    def writeout(cls):
+        for instance in cls.instances:
+            instance._write()
+    writeout = classmethod(writeout)
+
+    def _setup(self, include, exclude):
         is_path_included = make_included_pred(include, exclude)
         is_entry_included = lambda ((path, timestamp), value): \
                                    is_path_included(path)
@@ -138,7 +155,7 @@ class Cache(object):
         except IOError:
             return attrdict()
 
-    def write(self):
+    def _write(self):
         try:
             copy2(self.filename, self.filename + '.bak')
         except IOError:
@@ -151,9 +168,9 @@ class cached(object):
     If called later with the same arguments, the cached value is returned, and
     not re-evaluated.
     """
-    def __init__(self, func, cache):
+    def __init__(self, func, filename):
         self.func = func
-        self.cache = cache
+        self.cache = Cache(filename)
 
     def __call__(self, *args):
         try:
@@ -172,6 +189,11 @@ class cached(object):
         return self.func.__doc__
 
 
+def get_value(path, timestamp):
+    return Dir(path).collect()
+get_value = cached(get_value, CACHE_FILE)
+
+
 def get_key(path):
     return path, os.stat(path)[stat.ST_MTIME]
 
@@ -184,17 +206,12 @@ def mywalk(base, exclude):
 
 
 def main():
-    def get_value(path, timestamp):
-        return Dir(path).collect()
-    cache = Cache(CACHE_FILE)
-    get_value = cached(get_value, cache)
-
     # Rather lame command line parsing
     include = [ os.path.abspath(arg[1:]) for arg in sys.argv if arg[0] == '+' ]
     exclude = [ os.path.abspath(arg[1:]) for arg in sys.argv if arg[0] == '-' ]
 
     # Initialize cache
-    cache.init(include, exclude)
+    Cache.setup(include, exclude)
 
     # Traverse the base directories avoiding the excluded parts
     dirs = chain(*[ mywalk(base, exclude) for base in include ])
@@ -203,12 +220,12 @@ def main():
 
     # Print some kind of result
     print 'CACHE'
-    print '\n'.join([ str(item) for item in cache.read.items() ])
+    print '\n'.join([ str(item) for item in Cache.instances[0].read.items() ])
     print 'UPDATED'
-    print '\n'.join([ str(item) for item in cache.updates.items() ])
+    print '\n'.join([ str(item) for item in Cache.instances[0].updates.items() ])
 
     # Write out updated and (partially) garbage collected cache
-    cache.write()
+    Cache.writeout()
 
 
 if __name__ == '__main__':
