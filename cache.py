@@ -99,8 +99,10 @@ def make_included_pred(included, excluded):
     >>> pred('/home')
     False
     """
-    incl_preds = [ lambda path: is_subdir(path, base) for base in included ]
-    excl_preds = [ lambda path: is_subdir(path, base) for base in excluded ]
+    incl_preds = [ lambda path, base=base: is_subdir(path, base)
+                   for base in included ]
+    excl_preds = [ lambda path, base=base: is_subdir(path, base)
+                   for base in excluded ]
 
     # any() is nicer than max(), but only supported by 2.5+
     return lambda path: (max(fmap(path, incl_preds)) and not
