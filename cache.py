@@ -207,13 +207,7 @@ def main():
     # Traverse the base directories avoiding the excluded parts
     dir_cache_keys = chain(*[ mywalk(base, exclude) for base in include ])
     for dir_cache_key in dir_cache_keys:
-        get_dir(*dir_cache_key)
-
-    # Print some kind of result
-    print 'CACHE'
-    print '\n'.join([ str(key) for key in Cache.instances[0].read.keys() ])
-    print 'UPDATED'
-    print '\n'.join([ str(key) for key in Cache.instances[0].updates.keys() ])
+        print get_dir(*dir_cache_key)
 
     # Write out updated and (partially) garbage collected cache
     Cache.writeout()
