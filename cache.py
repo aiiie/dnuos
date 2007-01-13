@@ -107,14 +107,14 @@ def make_included_pred(included, excluded):
     >>> pred('/usr/local/share')
     True
     """
-    incl_preds = [ lambda path, base=base: is_subdir(path, base)
-                   for base in included ]
-    excl_preds = [ lambda path, base=base: is_subdir(path, base)
-                   for base in excluded ]
+    i_preds = [ lambda path, base=base: is_subdir(path, base)
+                for base in included ]
+    e_preds = [ lambda path, base=base: is_subdir(path, base)
+                for base in excluded ]
 
     # any() is nicer than max(), but only supported by 2.5+
-    return lambda path: ((included and max(fmap(path, incl_preds))) and not
-                         (excluded and max(fmap(path, excl_preds))))
+    return lambda path: ((bool(included) and max(fmap(path, i_preds))) and not
+                         (bool(excluded) and max(fmap(path, e_preds))))
 
 
 class Cache(object):
