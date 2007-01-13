@@ -120,11 +120,35 @@ def make_included_pred(included, excluded):
                          not max(fmap(path, excl_preds)))
 
 
-def lookup(adir, read_cache, cache_to_be_written):
-    key = (adir.path, adir.modified)
-    data = read_cache.get(key) or adir.collect()
-    cache_to_be_written[key] = data
-    return data
+class cached(object):
+    """Decorator that caches a function's return value each time it is called.
+    If called later with the same arguments, the cached value is returned, and
+    not re-evaluated.
+    """
+    def __init__(self, func, read_cache, update_cache):
+        self.func = func
+        self.read_cache = read_cache
+        self.update_cache = update_cache
+
+    def __call__(self, *args):
+        try:
+            value = self.read_cache[args]
+        except KeyError:
+            value = self.func(*args)
+        except TypeError:
+            # uncachable -- for instance, passing a list as an argument.
+            # Better to not cache than to blow up entirely.
+            return self.func(*args)
+        self.update_cache[args] = value
+        return value
+
+    def __repr__(self):
+        """Return the function's docstring."""
+        return self.func.__doc__
+
+
+def get_key(path):
+    return path, os.stat(path)[stat.ST_MTIME]
 
 
 def read_cache():
@@ -146,7 +170,7 @@ def mywalk(base, exclude):
     for dirname, subdirs, files in os.walk(base):
         subdirs[:] = [ sub for sub in subdirs
                         if os.path.join(dirname, sub) not in exclude ]
-        yield Dir(dirname)
+        yield dirname
 
 
 def main():
@@ -159,10 +183,14 @@ def main():
     is_entry_included = lambda ((path, timestam), value): is_path_included(path)
     old_cache, new_cache = split_dict(read_cache(), is_entry_included)
 
+    def get_value(path, timestamp):
+        return Dir(path).collect()
+    get_value = cached(get_value, old_cache, new_cache)
+
     # Traverse the base directories avoiding the excluded parts
     dirs = chain(*[ mywalk(base, exclude) for base in include ])
-    for adir in dirs:
-        lookup(adir, old_cache, new_cache)
+    for path in dirs:
+        get_value(*get_key(path))
 
     # Print some kind of result
     print 'CACHE'
@@ -177,4 +205,5 @@ def main():
 if __name__ == '__main__':
     import sys
     from itertools import chain
+
     main()
