@@ -98,6 +98,14 @@ def make_included_pred(included, excluded):
     True
     >>> pred('/home')
     False
+
+    >>> pred = make_included_pred([], ['/usr/local'])
+    >>> pred('/')
+    False
+
+    >>> pred = make_included_pred(['/usr'], [])
+    >>> pred('/usr/local/share')
+    True
     """
     incl_preds = [ lambda path, base=base: is_subdir(path, base)
                    for base in included ]
