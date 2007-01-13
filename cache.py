@@ -43,7 +43,7 @@ def is_subdir(path1, path2):
     """
     path1 = path1.split(os.path.sep)
     path2 = path2.split(os.path.sep)
-    return len(path1) >= len(path2) and path2 == path1[:len(path2)]
+    return path2 == path1[:len(path2)]
 
 
 def make_subdir_pred(base):
