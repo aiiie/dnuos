@@ -145,10 +145,7 @@ def mywalk(base, exclude):
         yield Dir(dirname)
 
 
-if __name__ == '__main__':
-    import sys
-    from itertools import chain
-
+def main():
     # Rather lame command line parsing
     include = [ os.path.abspath(arg[1:]) for arg in sys.argv if arg[0] == '+' ]
     exclude = [ os.path.abspath(arg[1:]) for arg in sys.argv if arg[0] == '-' ]
@@ -171,3 +168,9 @@ if __name__ == '__main__':
 
     # Store updated and (partially) garbage collected cache
     write_cache(new_cache)
+
+
+if __name__ == '__main__':
+    import sys
+    from itertools import chain
+    main()
