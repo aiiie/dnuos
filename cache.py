@@ -44,6 +44,21 @@ def partition(iterable, func):
     return partitions
 
 
+def split_dict(dct, pred):
+    """Split dictionary in two by a predicate function
+
+    >>> dct = {1:'a', 2:'b', 3:'c'}
+    >>> pred = lambda (key, value): key % 2 == 0
+    >>> t, f = split_dict(dct, pred)
+    >>> t
+    {2: 'b'}
+    >>> print len(f), 1 in f, 3 in f
+    2 True True
+    """
+    cells = partition(dct.items(), pred)
+    return dict(cells.get(True, [])), dict(cells.get(False, []))
+
+
 def fmap(value, funcs):
     """Feeds the same value to a list of functions
 
@@ -105,14 +120,6 @@ def make_included_pred(included, excluded):
                          not max(fmap(path, excl_preds)))
 
 
-def split_cache(cache, pred):
-    """Split the cache in two by a predicate function
-    """
-    cells = partition(cache.items(),
-                      lambda ((path, timestamp), value): pred(path))
-    return dict(cells.get(True, [])), dict(cells.get(False, []))
-
-
 def cache_lookup(dirs, old_cache, new_cache):
     """Get lookups from cache or calculate and put them in cache
     """
@@ -151,8 +158,9 @@ def main():
     exclude = [ os.path.abspath(arg[1:]) for arg in sys.argv if arg[0] == '-' ]
 
     # Initialize cache
-    is_included = make_included_pred(include, exclude)
-    old_cache, new_cache = split_cache(read_cache(), is_included)
+    is_path_included = make_included_pred(include, exclude)
+    is_entry_included = lambda ((path, timestam), value): is_path_included(path)
+    old_cache, new_cache = split_dict(read_cache(), is_entry_included)
 
     # Traverse the base directories avoiding the excluded parts
     dirs = chain(*[ mywalk(base, exclude) for base in include ])
