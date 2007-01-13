@@ -103,8 +103,8 @@ def make_included_pred(included, excluded):
     excl_preds = [ lambda path: is_subdir(path, base) for base in excluded ]
 
     # any() is nicer than max(), but only supported by 2.5+
-    return lambda path: (max(fmap(path, incl_preds)) and
-                         not max(fmap(path, excl_preds)))
+    return lambda path: (max(fmap(path, incl_preds)) and not
+                         max(fmap(path, excl_preds)))
 
 
 class Cache(object):
