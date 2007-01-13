@@ -168,6 +168,8 @@ class cached(object):
     If called later with the same arguments, the cached value is returned, and
     not re-evaluated.
     """
+    __slots__ = ['func', 'cache']
+
     def __init__(self, func, filename):
         self.func = func
         self.cache = Cache(filename)
