@@ -84,20 +84,6 @@ def is_subdir(path1, path2):
     return path2 == path1[:len(path2)]
 
 
-def make_subdir_pred(base):
-    """Create predicate for subdirectories of base
-
-    >>> pred = make_subdir_pred('/usr')
-    >>> pred('/home')
-    False
-    >>> pred('/usr/local')
-    True
-    >>> pred('/usr')
-    True
-    """
-    return lambda path: is_subdir(path, base)
-
-
 def make_included_pred(included, excluded):
     """Create predicate for included but not excluded paths
     
@@ -113,8 +99,8 @@ def make_included_pred(included, excluded):
     >>> pred('/home')
     False
     """
-    incl_preds = [ make_subdir_pred(base) for base in included ]
-    excl_preds = [ make_subdir_pred(base) for base in excluded ]
+    incl_preds = [ lambda path: is_subdir(path, base) for base in included ]
+    excl_preds = [ lambda path: is_subdir(path, base) for base in excluded ]
 
     # any() is nicer than max(), but only supported by 2.5+
     return lambda path: (max(fmap(path, incl_preds)) and
