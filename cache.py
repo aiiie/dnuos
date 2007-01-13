@@ -50,7 +50,7 @@ def fmap(value, funcs):
     >>> fmap(-5.5, [str, int, abs])
     ['-5.5', -5, 5.5]
     """
-    return map(lambda f: f(value), funcs)
+    return [ func(value) for func in funcs ]
 
 
 def is_subdir(path1, path2):
@@ -97,8 +97,8 @@ def make_included_pred(included, excluded):
     >>> pred('/home')
     False
     """
-    incl_preds = map(lambda base: make_subdir_pred(base), included)
-    excl_preds = map(lambda base: make_subdir_pred(base), excluded)
+    incl_preds = [ make_subdir_pred(base) for base in included ]
+    excl_preds = [ make_subdir_pred(base) for base in excluded ]
 
     # any() is nicer than max(), but only supported by 2.5+
     return lambda path: (max(fmap(path, incl_preds)) and
@@ -165,9 +165,9 @@ if __name__ == '__main__':
 
     # Print some kind of result
     print 'CACHE'
-    print '\n'.join(map(str, old_cache.items()))
+    print '\n'.join([ str(item) for item in old_cache.items() ])
     print 'UPDATED'
-    print '\n'.join(map(str, new_cache.items()))
+    print '\n'.join([ str(item) for item in new_cache.items() ])
 
     # Store updated and (partially) garbage collected cache
     write_cache(new_cache)
