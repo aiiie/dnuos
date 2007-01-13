@@ -139,8 +139,10 @@ def write_cache(cache):
     pickle.dump(cache, open(CACHE_FILE, 'w'))
 
 
-def mywalk(base):
+def mywalk(base, exclude):
     for dirname, subdirs, files in os.walk(base):
+        subdirs[:] = [ sub for sub in subdirs
+                        if os.path.join(dirname, sub) not in exclude ]
         yield Dir(dirname)
 
 
@@ -157,7 +159,7 @@ if __name__ == '__main__':
     new_cache = {}
 
     # Traverse the base directories avoiding the excluded parts
-    dirs = chain(*map(mywalk, include))
+    dirs = chain(*[ mywalk(base, exclude) for base in include ])
     dirs = cache_lookup(dirs, old_cache, new_cache)
     for path in dirs:
         pass
