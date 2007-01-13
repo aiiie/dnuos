@@ -170,9 +170,9 @@ class cached(object):
     """
     __slots__ = ['func', 'cache']
 
-    def __init__(self, func, filename):
+    def __init__(self, func, cache):
         self.func = func
-        self.cache = Cache(filename)
+        self.cache = cache
 
     def __call__(self, *args):
         try:
@@ -193,7 +193,7 @@ class cached(object):
 
 def get_dir(path, timestamp):
     return Dir(path).collect()
-get_dir = cached(get_dir, CACHE_FILE)
+get_dir = cached(get_dir, Cache(CACHE_FILE))
 
 
 def get_dir_cache_key(path):
