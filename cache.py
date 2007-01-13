@@ -92,13 +92,13 @@ def get_outside(cache, include, exclude):
              if not is_included(path) ]
 
 
-def cache_lookup(dirs, cache, updates):
+def cache_lookup(dirs, old_cache, new_cache):
     """Get lookups from cache or calculate and put them in cache
     """
     for adir in dirs:
         key = (adir.path, adir.modified)
-        data = cache.get(key) or adir.collect()
-        updates[key] = data
+        data = old_cache.get(key) or adir.collect()
+        new_cache[key] = data
         yield data
 
 
@@ -131,21 +131,21 @@ if __name__ == '__main__':
     exclude = [ os.path.abspath(arg[1:]) for arg in sys.argv if arg[0] == '-' ]
 
     # Initialize cache
-    cache = read_cache()
-    updated = {}
+    old_cache = read_cache()
+    new_cache = {}
 
     # Traverse the base directories avoiding the excluded parts
     dirs = chain(*map(mywalk, include))
-    dirs = cache_lookup(dirs, cache, updated)
+    dirs = cache_lookup(dirs, old_cache, new_cache)
     for path in dirs:
         pass
 
     # Print some kind of result
     print 'CACHE'
-    print '\n'.join(map(str, cache.items()))
+    print '\n'.join(map(str, old_cache.items()))
     print 'UPDATED'
-    print '\n'.join(map(str, updated.items()))
+    print '\n'.join(map(str, new_cache.items()))
 
     # Store updated and (partially) garbage collected cache
-    updated.update(get_outside(cache, include, exclude))
-    write_cache(updated)
+    new_cache.update(get_outside(old_cache, include, exclude))
+    write_cache(new_cache)
