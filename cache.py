@@ -191,12 +191,12 @@ class cached(object):
         return self.func.__doc__
 
 
-def get_value(path, timestamp):
+def get_dir(path, timestamp):
     return Dir(path).collect()
-get_value = cached(get_value, CACHE_FILE)
+get_dir = cached(get_dir, CACHE_FILE)
 
 
-def get_key(path):
+def get_dir_cache_key(path):
     return path, os.stat(path)[stat.ST_MTIME]
 
 
@@ -204,7 +204,7 @@ def mywalk(base, exclude):
     for dirname, subdirs, files in os.walk(base):
         subdirs[:] = [ sub for sub in subdirs
                         if os.path.join(dirname, sub) not in exclude ]
-        yield dirname
+        yield get_dir_cache_key(dirname)
 
 
 def main():
@@ -216,9 +216,9 @@ def main():
     Cache.setup(include, exclude)
 
     # Traverse the base directories avoiding the excluded parts
-    dirs = chain(*[ mywalk(base, exclude) for base in include ])
-    for path in dirs:
-        get_value(*get_key(path))
+    dir_cache_keys = chain(*[ mywalk(base, exclude) for base in include ])
+    for dir_cache_key in dir_cache_keys:
+        get_dir(*dir_cache_key)
 
     # Print some kind of result
     print 'CACHE'
