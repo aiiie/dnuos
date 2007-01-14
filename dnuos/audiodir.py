@@ -400,7 +400,7 @@ class Dir:
 
     def cache_key(self):
         """Make a cache key for this directory"""
-        files = tuple([ file.name for file in self.audio_files() ])
+        files = tuple(self.audio_files())
         return (self.path, self.modified, files)
 
     def is_audio_file(filename):
