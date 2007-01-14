@@ -39,6 +39,7 @@ class Dir:
     def __init__(self, path, basedir):
         self.path = path
         self.depth = dir_depth(path) - dir_depth(basedir)
+        self._basedir = basedir  # this MUST NOT go into the summary
         self._children = None
         self._streams = None
         self._num_streams = None

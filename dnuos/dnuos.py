@@ -133,6 +133,11 @@ def main():
     Cache.writeout()
 
 
+def cache_lookup(dirs):
+    for adir in dirs:
+        yield audiodir.Dir.get_summary(adir.cache_key(), adir._basedir)
+
+
 def indicate_progress(dirs, sizes, outs=sys.stderr):
     """Indicate progress.
 
