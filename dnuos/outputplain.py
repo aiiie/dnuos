@@ -30,9 +30,9 @@ class Renderer:
             (lambda: data.bad_files,
              self.render_bad_files(data.bad_files)),
             (lambda: options.disp_time,
-             self.render_generation_time(data.times['elapsed_time'])),
+             self.render_generation_time(data.times)),
             (lambda: options.disp_result,
-             self.render_sizes(data.size, data.times['elapsed_time'])),
+             self.render_sizes(data.size, data.times)),
             (lambda: options.disp_version,
              render_version(data.version)),
         ]
@@ -58,10 +58,10 @@ class Renderer:
         yield "Audiotype failed on the following files:"
         yield string.join(bad_files, "\n")
 
-    def render_generation_time(self, elapsed_time):
-        yield "Generation time:     %8.2f s" % elapsed_time
+    def render_generation_time(self, times):
+        yield "Generation time:     %8.2f s" % times['elapsed_time']
 
-    def render_sizes(self, sizes, elapsed_time):
+    def render_sizes(self, sizes, times):
         line = "+-----------------------+-----------+"
 
         yield line
@@ -76,7 +76,7 @@ class Renderer:
         yield line
         total_megs = sizes["Total"] / (1024 * 1024)
         yield "| Total %10.2f Mb   |" % total_megs
-        yield "| Speed %10.2f Mb/s |" % (total_megs / elapsed_time)
+        yield "| Speed %10.2f Mb/s |" % (total_megs / times['elapsed_time'])
         yield line[:25]
 
 
