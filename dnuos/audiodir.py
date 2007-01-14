@@ -36,6 +36,10 @@ def map_dict(func, dict):
 
 
 class Dir:
+    pattern = r"\.(?:mp3|mpc|mp\+|m4a|ogg|flac|fla|flc)$"
+    audio_file_extRE = re.compile(pattern, re.IGNORECASE)
+    del pattern
+
     def __init__(self, path, basedir):
         self.path = path
         self.depth = dir_depth(path) - dir_depth(basedir)
@@ -394,3 +398,24 @@ class Dir:
         self._date = max(dates)
         return self._date
     modified = property(fget=lambda self: self.__get_modified())
+
+    def audio_files(self):
+        """Return a list of all audio files based on file extensions"""
+        return [ file for file in self.children() if self.is_audio_file(file) ]
+
+    def cache_key(self):
+        """Make a cache key for this directory"""
+        files = tuple([ file.name for file in self.audio_files() ])
+        return (self.path, self.modified, files)
+
+    def is_audio_file(filename):
+        """Test if a filename has the extension of an audio file
+
+        >> Dir.is_audio_file('some.mp3')
+        True
+        >>> Dir.is_audio_file('some.m3u')
+        False
+        """
+        return (os.path.isfile(filename) and
+                Dir.audio_file_extRE.search(filename))
+    is_audio_file = staticmethod(is_audio_file)
