@@ -87,6 +87,7 @@ def main():
         elif options.list_bad:
             dirs = collect_bad(dirs, data.bad_files)
         dirs = ifilter(non_empty, dirs)
+
         if options.no_cbr:
             dirs = ifilter(no_cbr_mp3, dirs)
         if options.no_non_profile:
