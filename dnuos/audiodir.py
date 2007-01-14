@@ -281,6 +281,13 @@ class Dir:
         return self._size[type]
     size = property(fget=lambda self: self.get_size())
 
+    def __get_sizes(self):
+        res = dict.fromkeys(self.types(), 0)
+        for mediatype in self.types():
+            res[mediatype] += self.get_size(mediatype)
+        return res
+    sizes = property(fget=__get_sizes)
+
     def __get_length(self, type="all"):
         if self._length != None: return self._length[type]
         tot = 0
