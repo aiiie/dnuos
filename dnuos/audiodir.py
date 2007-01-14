@@ -18,10 +18,6 @@ from misc import dir_depth
 __version__ = "0.17.3"
 
 
-def _is_audio_file(file):
-    return os.path.isfile(file) and re.search("(?i)\.(?:mp3|m4a|mp\+|mpc|ogg|flac|fla|flc)$", file)
-
-
 def uniq(list):
     """make a list with all duplicate elements removed"""
     if not list: return []
@@ -102,8 +98,7 @@ class Dir:
         self._streams = []
         self._bad = []
         self._num_streams = 0
-        list = filter(_is_audio_file, self.children())
-        for child in list:
+        for child in self.audio_files():
             self._num_streams += 1
             try:
                 self._streams.append(audiotype.openstream(child))
@@ -120,7 +115,7 @@ class Dir:
         return self._bad
 
     def __get_num_files(self):
-        return len(filter(_is_audio_file, self.children()))
+        return len(self.audio_files())
     num_files = property(fget=lambda self: self.__get_num_files())
 
     def types(self):
