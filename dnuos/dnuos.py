@@ -26,8 +26,10 @@ import time
 # fix for some dumb version of python 2.3
 sys.path.append(os.path.abspath('.'))
 
+import app
 import audiotype
 import audiodir
+from cache import Cache
 from conf import conf
 from misc import die
 from misc import dir_depth
@@ -66,6 +68,7 @@ class Data:
 def main():
     data = Data()
     options = conf.parse_args()
+    Cache.setup(options.basedirs, options.exclude_paths)
 
     if options.basedirs:
         # Make an iterator over all subdirectories of the base directories,
@@ -125,6 +128,9 @@ def main():
     outfile = get_outfile(options.outfile)
     for chunk in output:
         print >> outfile, chunk
+
+    app.create_user_data_dir()
+    Cache.writeout()
 
 
 def indicate_progress(dirs, sizes, outs=sys.stderr):
