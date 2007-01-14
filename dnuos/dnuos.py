@@ -208,8 +208,8 @@ def total_sizes(dirs, sizes):
     """
     for adir in dirs:
         yield adir
-        for mediatype in adir.types():
-            sizes[mediatype] += adir.get_size(mediatype)
+        for mediatype, size in adir.sizes.items():
+            sizes[mediatype] += size
         sizes["Total"] += adir.size
 
 
