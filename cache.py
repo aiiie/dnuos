@@ -3,10 +3,11 @@ import pickle
 from shutil import copy2
 import stat
 
+import app
 from attrdict import attrdict
 
 
-CACHE_FILE = 'data.pkl'
+CACHE_FILE = app.user_data_file('data.pkl')
 
 
 class Dir(object):
@@ -218,6 +219,7 @@ def main():
         print get_dir(*dir_cache_key)
 
     # Write out updated and (partially) garbage collected cache
+    app.create_user_data_dir()
     Cache.writeout()
 
 
