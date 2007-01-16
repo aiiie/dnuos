@@ -411,8 +411,8 @@ class Dir:
 
     def cache_key(self):
         """Make a cache key for this directory"""
-        files = tuple(self.audio_files())
-        return (self.path, self.modified, files)
+        files = [ os.path.basename(file) for file in self.audio_files() ]
+        return (self.path, self.modified, tuple(files))
 
     def get_summary(path, modified, files):
         """Get a Dir summary relative to some base directory"""
