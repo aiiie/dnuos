@@ -244,13 +244,11 @@ class Settings:
         (options, args) = parser.parse_args(argv)
         self.options = options
 
-        # add basedirs to both self.Folder and self.ExcludePaths
+        # add basedirs to self.Folder
         options.basedirs = []
         for glob_dir in args:
-            options.basedirs += self.expand(glob_dir)
-        options.basedirs = filter(lambda x: x not in options.exclude_paths,
-                                  options.basedirs)
-        options.exclude_paths += options.basedirs
+            options.basedirs += [ path for path in self.expand(glob_dir)
+                                       if path not in options.exclude_paths ]
 
         # options overriding eachother
         if options.debug or not options.outfile:
