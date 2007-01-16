@@ -12,10 +12,17 @@
 import re, os, string, time
 import audiotype, conf
 
+import app
+from attrdict import attrdict
+from cache import Cache
+from cache import cached
 from misc import dir_depth
 
 
 __version__ = "0.17.3"
+
+
+DIR_SUMMARY_FILE = app.user_data_file('dirs.pkl')
 
 
 def uniq(list):
@@ -404,6 +411,12 @@ class Dir:
         files = tuple(self.audio_files())
         return (self.path, self.modified, files)
 
+    def get_summary(path, modified, files):
+        """Get a Dir summary relative to some base directory"""
+        return Dir(path, basedir).summarize()
+    get_summary = staticmethod(get_summary)
+    get_summary = cached(get_summary, Cache(DIR_SUMMARY_FILE))
+
     def is_audio_file(filename):
         """Test if a filename has the extension of an audio file
 
@@ -415,3 +428,14 @@ class Dir:
         return (os.path.isfile(filename) and
                 Dir.audio_file_extRE.search(filename))
     is_audio_file = staticmethod(is_audio_file)
+
+    def summarize(self):
+        """Summarize the attributes of a Dir object in an attrdict"""
+
+        attrs = ('album artist audiolist_format bitrate brtype length '
+                 'mediatype modified name num_files path profile quality '
+                 'size sizes').split()
+        res = attrdict()
+        for attr in attrs:
+            res[attr] = getattr(self, attr)
+        return res
