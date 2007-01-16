@@ -122,7 +122,7 @@ class Cache(object):
 
     def _setup(self, include, exclude):
         is_path_included = make_included_pred(include, exclude)
-        is_entry_included = lambda ((path, timestamp), value): \
+        is_entry_included = lambda ((path, timestamp, files), value): \
                                    is_path_included(path)
         self.read, self.updates = split_dict(self._read(), is_entry_included)
 

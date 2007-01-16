@@ -90,6 +90,7 @@ def main():
         elif options.list_bad:
             dirs = collect_bad(dirs, data.bad_files)
         dirs = ifilter(non_empty, dirs)
+        dirs = cache_lookup(dirs)
 
         if options.no_cbr:
             dirs = ifilter(no_cbr_mp3, dirs)
@@ -135,8 +136,8 @@ def main():
 
 def cache_lookup(dirs):
     for adir in dirs:
-        summary = audiodir.Dir.get_summary(adir.cache_key())
-        audiodir.Dir.set_basedir(summary, adir._basedir)
+        summary = audiodir.Dir.get_summary(*adir.cache_key())
+        audiodir.set_basedir(summary, adir._basedir)
         yield summary
 
 
@@ -280,7 +281,7 @@ def walk(basedir, sort_key=lambda x: x, excluded=[]):
                        sort_key)
 
         adir = audiodir.Dir(dirname)
-        adir.set_basedir(basedir)
+        audiodir.set_basedir(adir, basedir)
         yield adir
 
 

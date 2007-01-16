@@ -38,6 +38,14 @@ def map_dict(func, dict):
     return dict
 
 
+def set_basedir(self, basedir):
+    # XXX These things don't belong here!!
+    self._basedir = basedir
+    self._depth = dir_depth(self.path) - dir_depth(basedir)
+    path = self.path.split(os.path.sep)
+    self._relpath = os.path.join(*path[-self._depth-1:])
+
+
 class Dir:
     pattern = r"\.(?:mp3|mpc|mp\+|m4a|ogg|flac|fla|flc)$"
     audio_file_extRE = re.compile(pattern, re.IGNORECASE)
@@ -63,13 +71,6 @@ class Dir:
         self._artistver = None
         self._album = None
         self._albumver = None
-
-    def set_basedir(self, basedir):
-        # XXX These things don't belong here!!
-        self._basedir = basedir
-        self._depth = dir_depth(self.path) - dir_depth(basedir)
-        path = self.path.split(os.path.sep)
-        self._relpath = os.path.join(*path[-self._depth-1:])
 
     def __le__(self, other):
         """Compare the path relative to the respective basedir
@@ -415,9 +416,9 @@ class Dir:
 
     def get_summary(path, modified, files):
         """Get a Dir summary relative to some base directory"""
-        return Dir(path, basedir).summarize()
-    get_summary = staticmethod(get_summary)
+        return Dir(path).summarize()
     get_summary = cached(get_summary, Cache(DIR_SUMMARY_FILE))
+    get_summary = staticmethod(get_summary)
 
     def is_audio_file(filename):
         """Test if a filename has the extension of an audio file
