@@ -24,14 +24,13 @@ class Dir(object):
         return res
 
 
-def get_dir(path, timestamp):
+def get_dir(path, timestamp, children):
     return Dir(path).collect()
 get_dir = cached(get_dir, Cache(CACHE_FILE))
 
 
 def get_dir_cache_key(path):
-    return path, os.stat(path)[stat.ST_MTIME]
-
+    return path, os.stat(path)[stat.ST_MTIME], tuple(os.listdir(path))
 
 def mywalk(base, exclude):
     for dirname, subdirs, files in os.walk(base):
