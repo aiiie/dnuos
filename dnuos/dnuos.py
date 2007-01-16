@@ -135,7 +135,9 @@ def main():
 
 def cache_lookup(dirs):
     for adir in dirs:
-        yield audiodir.Dir.get_summary(adir.cache_key(), adir._basedir)
+        summary = audiodir.Dir.get_summary(adir.cache_key())
+        audiodir.Dir.set_basedir(summary, adir._basedir)
+        yield summary
 
 
 def indicate_progress(dirs, sizes, outs=sys.stderr):
@@ -240,11 +242,11 @@ def timer_wrapper(dirs, times):
 class EmptyDir(object):
     """Represent a group of merged empty directories."""
 
-    __slots__ = ['depth', 'name']
+    __slots__ = ['_depth', 'name']
 
     def __init__(self, name, depth):
         self.name = name
-        self.depth = depth
+        self._depth = depth
 
     def __getattr__(self, attr):
         return None
@@ -257,7 +259,7 @@ def add_empty(dirs):
     """
     oldpath = []
     for adir in dirs:
-        path = adir.path.split(os.path.sep)[-adir.depth-1:]
+        path = adir.path.split(os.path.sep)[-adir._depth-1:]
         start = equal_elements(path, oldpath)
         for depth in range(start, len(path) - 1):
             yield EmptyDir(path[depth], depth)
@@ -277,7 +279,9 @@ def walk(basedir, sort_key=lambda x: x, excluded=[]):
         subdirs = sort([ sub for sub in subdirs if sub not in excluded ],
                        sort_key)
 
-        yield audiodir.Dir(dirname, basedir)
+        adir = audiodir.Dir(dirname)
+        adir.set_basedir(basedir)
+        yield adir
 
 
 if __name__ == "__main__":
