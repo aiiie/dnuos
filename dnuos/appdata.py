@@ -31,7 +31,7 @@ def user_data_dir(appname, vendor, version=None):
             from win32com.shell import shellcon, shell
             path = shell.SHGetFolderPath(0, shellcon.CSIDL_APPDATA, 0, 0)
         except ImportError:
-            path = os.environ('APPDATA')
+            path = os.environ['APPDATA']
         try:
             path = unicode(path)
         except UnicodeError:
