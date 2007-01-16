@@ -151,7 +151,7 @@ class Cache(object):
         try:
             return pickle.load(open(self.filename))
         except IOError:
-            return attrdict()
+            return {}
 
     def _write(self):
         try:
