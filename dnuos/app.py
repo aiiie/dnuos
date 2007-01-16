@@ -8,11 +8,8 @@ USER_DATA_DIR = appdata.user_data_dir('Dnuos', 'Dnuos')
 
 
 def create_user_data_dir():
-    try:
-        os.mkdir(USER_DATA_DIR)
-    except OSError, e:
-        if e.errno != errno.EEXIST:
-            raise e
+    if not os.path.exists(USER_DATA_DIR):
+        os.makedirs(USER_DATA_DIR)
 
 
 def user_data_file(filename):
