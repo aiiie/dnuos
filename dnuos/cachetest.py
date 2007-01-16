@@ -7,7 +7,7 @@ from cache import Cache
 from cache import cached
 
 
-CACHE_FILE = app.user_data_file('data.pkl')
+CACHE_FILE = app.user_data_file('dirs.pkl')
 
 
 class Dir(object):
@@ -53,8 +53,8 @@ def main():
         print get_dir(*dir_cache_key)
 
     # Write out updated and (partially) garbage collected cache
-    app.create_user_data_dir()
-    Cache.writeout()
+    #app.create_user_data_dir()
+    #Cache.writeout()
 
 
 if __name__ == '__main__':
