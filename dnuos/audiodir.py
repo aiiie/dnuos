@@ -43,10 +43,8 @@ class Dir:
     audio_file_extRE = re.compile(pattern, re.IGNORECASE)
     del pattern
 
-    def __init__(self, path, basedir):
+    def __init__(self, path):
         self.path = path
-        self.depth = dir_depth(path) - dir_depth(basedir)
-        self._basedir = basedir  # this MUST NOT go into the summary
         self._children = None
         self._streams = None
         self._num_streams = None
@@ -66,14 +64,22 @@ class Dir:
         self._album = None
         self._albumver = None
 
+    def set_basedir(self, basedir):
+        # XXX These things don't belong here!!
+        self._basedir = basedir
+        self._depth = dir_depth(self.path) - dir_depth(basedir)
+        path = self.path.split(os.path.sep)
+        self._relpath = os.path.join(*path[-self._depth-1:])
+
     def __le__(self, other):
         """Compare the path relative to the respective basedir
 
         Only the paths are compared. Directory contents is not
         considered at all.
         """
-        mine = conf.conf.options.sort_key(self.relpath)
-        yours = conf.conf.options.sort_key(other.relpath)
+        # XXX This don't belong here!!
+        mine = conf.conf.options.sort_key(self._relpath)
+        yours = conf.conf.options.sort_key(other._relpath)
         return mine <= yours
 
     def __eq__(self, other):
@@ -82,14 +88,10 @@ class Dir:
         Only the paths are compared. Directory contents is not
         considered at all.
         """
-        mine = conf.conf.options.sort_key(self.relpath)
-        yours = conf.conf.options.sort_key(other.relpath)
+        # XXX This don't belong here!!
+        mine = conf.conf.options.sort_key(self._relpath)
+        yours = conf.conf.options.sort_key(other._relpath)
         return mine == yours
-
-    def __get_relpath(self):
-        path = self.path.split(os.path.sep)
-        return os.path.join(*path[-self.depth-1:])
-    relpath = property(fget=lambda self: self.__get_relpath())
 
     def __get_name(self):
         return os.path.basename(self.path) or self.path

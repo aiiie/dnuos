@@ -70,7 +70,7 @@ class Renderer:
     def render_directories(self, dirs):
         yield self.tag_start('tree')
         for adir in dirs:
-            yield self.tag_start('dir', path=adir.relpath)
+            yield self.tag_start('dir', path=adir._relpath)
             for col in self.columns:
                 yield self.tag(col.attr, col.get(adir))
             yield self.tag_end('dir')
