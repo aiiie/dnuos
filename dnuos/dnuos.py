@@ -35,6 +35,7 @@ from misc import die
 from misc import dir_depth
 from misc import equal_elements
 from misc import get_outfile
+from misc import make_included_pred
 from misc import merge
 from misc import sort
 from misc import to_human
@@ -68,7 +69,11 @@ class Data:
 def main():
     data = Data()
     options = conf.parse_args()
-    Cache.setup(options.basedirs, options.exclude_paths)
+    is_path_included = make_included_pred(options.basedirs,
+                                          options.exclude_paths)
+    is_entry_excluded = lambda ((path, timestamp, files), value): \
+                               not is_path_included(path)
+    Cache.setup(treat_as_update=is_entry_excluded)
 
     if options.basedirs:
         # Make an iterator over all subdirectories of the base directories,

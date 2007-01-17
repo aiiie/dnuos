@@ -5,6 +5,7 @@ import app
 from attrdict import attrdict
 from cache import Cache
 from cache import cached
+from misc import make_included_pred
 
 
 CACHE_FILE = app.user_data_file('dirs.pkl')
@@ -45,7 +46,10 @@ def main():
     exclude = [ os.path.abspath(arg[1:]) for arg in sys.argv if arg[0] == '-' ]
 
     # Initialize cache
-    Cache.setup(include, exclude)
+    is_path_included = make_included_pred(include, exclude)
+    is_entry_excluded = lambda ((path, timestamp, files), value): \
+                               not is_path_included(path)
+    Cache.setup(treat_as_update=is_entry_excluded)
 
     # Traverse the base directories avoiding the excluded parts
     dir_cache_keys = chain(*[ mywalk(base, exclude) for base in include ])
