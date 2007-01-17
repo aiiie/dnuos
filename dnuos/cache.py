@@ -7,39 +7,6 @@ from misc import is_subdir
 from misc import split_dict
 
 
-def make_included_pred(included, excluded):
-    """Create predicate for included but not excluded paths
-    
-    >>> pred = make_included_pred(['/etc','/usr'], ['/usr/local'])
-    >>> pred('/usr/local')
-    False
-    >>> pred('/usr/local/share')
-    False
-    >>> pred('/usr')
-    True
-    >>> pred('/usr/doc')
-    True
-    >>> pred('/home')
-    False
-
-    >>> pred = make_included_pred([], ['/usr/local'])
-    >>> pred('/')
-    False
-
-    >>> pred = make_included_pred(['/usr'], [])
-    >>> pred('/usr/local/share')
-    True
-    """
-    i_preds = [ lambda path, base=base: is_subdir(path, base)
-                for base in included ]
-    e_preds = [ lambda path, base=base: is_subdir(path, base)
-                for base in excluded ]
-
-    # any() is nicer than max(), but only supported by 2.5+
-    return lambda path: ((bool(included) and max(fmap(path, i_preds))) and not
-                         (bool(excluded) and max(fmap(path, e_preds))))
-
-
 class Cache(object):
     __slots__ = ['filename', 'read', 'updates']
 
@@ -53,9 +20,9 @@ class Cache(object):
         cls.instances.append(instance)
     register = classmethod(register)
 
-    def setup(cls, include, exclude):
+    def setup(cls, treat_as_update=lambda entry: False):
         for instance in cls.instances:
-            instance._setup(include, exclude)
+            instance._setup(treat_as_update)
     setup = classmethod(setup)
 
     def writeout(cls):
@@ -63,11 +30,8 @@ class Cache(object):
             instance._write()
     writeout = classmethod(writeout)
 
-    def _setup(self, include, exclude):
-        is_path_included = make_included_pred(include, exclude)
-        is_entry_included = lambda ((path, timestamp, files), value): \
-                                   is_path_included(path)
-        self.read, self.updates = split_dict(self._read(), is_entry_included)
+    def _setup(self, treat_as_update):
+        self.updates, self.read = split_dict(self._read(), treat_as_update)
 
     def _read(self):
         try:
