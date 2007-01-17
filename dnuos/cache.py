@@ -13,12 +13,8 @@ class Cache(object):
     instances = []
 
     def __init__(self, filename):
-        Cache.register(self)
+        Cache.instances.append(self)
         self.filename = filename
-
-    def register(cls, instance):
-        cls.instances.append(instance)
-    register = classmethod(register)
 
     def setup(cls, treat_as_update=lambda entry: False):
         for instance in cls.instances:
