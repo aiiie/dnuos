@@ -17,25 +17,14 @@ from attrdict import attrdict
 from cache import Cache
 from cache import cached
 from misc import dir_depth
+from misc import map_dict
+from misc import uniq
 
 
 __version__ = "0.17.3"
 
 
 DIR_SUMMARY_FILE = app.user_data_file('dirs.pkl')
-
-
-def uniq(list):
-    """make a list with all duplicate elements removed"""
-    if not list: return []
-    list[0] = [ list[0] ]
-    return reduce(lambda A,x: x in A and A or A+[x], list)
-
-
-def map_dict(func, dict):
-    for key in dict.keys():
-        dict[key] = func(dict[key])
-    return dict
 
 
 def set_basedir(self, basedir):

@@ -142,6 +142,12 @@ def is_subdir(path1, path2):
     return path2 == path1[:len(path2)]
 
 
+def map_dict(func, dict):
+    for key in dict.keys():
+        dict[key] = func(dict[key])
+    return dict
+
+
 def merge(*iterators):
     """Merge n ordered iterators into one ordered iterator
 
@@ -235,3 +241,10 @@ def to_human(value, radix=1024.0):
         return "%.2f%s" % (value, suffix)
     else:
         return "%.1f%s" % (value, suffix)
+
+
+def uniq(list):
+    """make a list with all duplicate elements removed"""
+    if not list: return []
+    list[0] = [ list[0] ]
+    return reduce(lambda A,x: x in A and A or A+[x], list)
