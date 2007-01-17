@@ -12,7 +12,10 @@
 """
 Miscellaneous module for Dnuos.
 
-Here goes stuff that is not application specific.
+Most of these things are algorithms for various lowlevel things. Not all
+however.
+Don't import other Dnuos modules from here.
+Feel free to organize this in a better way if you know how. I don't.
 """
 
 
