@@ -41,7 +41,6 @@ class Dir:
     del pattern
 
     def __init__(self, path):
-        self._children = None
         self._streams = None
         self._num_streams = None
         self._subdirs = None
@@ -77,7 +76,6 @@ class Dir:
         self.modified = self.get_modified()
         self._bad = []
 
-        del self._children
         del self._streams
         del self._num_streams
         del self._subdirs
@@ -121,10 +119,7 @@ class Dir:
         return os.path.basename(self.path) or self.path
 
     def children(self):
-        if self._children: return self._children
-        self._children = map(lambda x: os.path.join(self.path, x),
-                             os.listdir(self.path))
-        return self._children
+        return [ os.path.join(self.path, f) for f in os.listdir(self.path) ]
 
     def streams(self):
         if self._streams: return self._streams
