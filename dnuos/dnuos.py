@@ -191,7 +191,7 @@ def non_empty(adir):
 
     Directories are considered empty if they contain no recognized audio files.
     """
-    return len(adir.streams()) > 0
+    return adir.num_files > 0
  
 
 def no_cbr_mp3(adir):
