@@ -42,21 +42,15 @@ class Dir:
 
     def __init__(self, path):
         self._streams = None
-        self._num_streams = None
-        self._subdirs = None
         self._types = None
         self._size = None
         self._length = None
-        self._lengths = None
         self._bitrate = None
-        self._br_list = []
         self._brtype = None
         self._profile = None
-        self._date = None
         self._artist = None
         self._artistver = None
         self._album = None
-        self._albumver = None
 
         self.path = path
         self.audio_files = self.get_audio_files()
@@ -74,24 +68,16 @@ class Dir:
         self.quality = self.get_quality()
         self.audiolist_format = self.get_audiolist_format()
         self.modified = self.get_modified()
-        self._bad = []
 
         del self._streams
-        del self._num_streams
-        del self._subdirs
         del self._types
         del self._size
         del self._length
-        del self._lengths
         del self._bitrate
-        del self._br_list
         del self._brtype
         del self._profile
-        del self._date
         del self._artist
-        del self._artistver
         del self._album
-        del self._albumver
 
     def __le__(self, other):
         """Compare the path relative to the respective basedir
@@ -125,9 +111,7 @@ class Dir:
         if self._streams: return self._streams
         self._streams = []
         self._bad = []
-        self._num_streams = 0
         for child in self.audio_files:
-            self._num_streams += 1
             try:
                 self._streams.append(audiotype.openstream(child))
             except KeyboardInterrupt:
@@ -199,23 +183,18 @@ class Dir:
 
         if v1taint == 1 and v2taint == 1:
             self._artist = None
-            self._artistver = -1
             return
 
         if conf.conf.options.prefer_tag == 1:
             if v1taint != 1:
                 self._artist = v1uniq[0]
-                self._artistver = 1
             else:
                 self._artist = v2uniq[0]
-                self._artistver = 2
         elif conf.conf.options.prefer_tag == 2:
             if v2taint != 1:
                 self._artist = v2uniq[0]
-                self._artistver = 2
             else:
                 self._artist = v1uniq[0]
-                self._artistver = 1
         else:
             print >> sys.stderr, "Invalid argument to --prefer-tag or -P"
             sys.exit(1)
@@ -262,23 +241,18 @@ class Dir:
 
         if v1taint == 1 and v2taint == 1:
             self._album = None
-            self._albumver = -1
             return
 
         if conf.conf.options.prefer_tag == 1:
             if v1taint != 1:
                 self._album = v1uniq[0]
-                self._albumver = 1
             else:
                 self._album = v2uniq[0]
-                self._albumver = 2
         elif conf.conf.options.prefer_tag == 2:
             if v2taint != 1:
                 self._album = v2uniq[0]
-                self._albumver = 2
             else:
                 self._album = v1uniq[0]
-                self._albumver = 1
         else:
             print >> sys.stderr, "This should never happen"
             raise
