@@ -407,11 +407,10 @@ class Dir:
         return string.join(map(str, list), ", ")
 
     def get_modified(self):
-        if self._date: return self._date
-        dates = map(lambda x: x.modified(), self.streams())
-        dates.append(os.path.getmtime(self.path))
-        self._date = max(dates)
-        return self._date
+        files = self.audio_files[:]
+        files.append(self.path)
+        dates = [ os.path.getmtime(f) for f in files ]
+        return max(dates)
 
     def get_audio_files(self):
         """Return a list of all audio files based on file extensions"""
