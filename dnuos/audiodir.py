@@ -41,7 +41,6 @@ class Dir:
     del pattern
 
     def __init__(self, path):
-        self.path = path
         self._children = None
         self._streams = None
         self._num_streams = None
@@ -54,12 +53,47 @@ class Dir:
         self._br_list = []
         self._brtype = None
         self._profile = None
-        self._bad = None
         self._date = None
         self._artist = None
         self._artistver = None
         self._album = None
         self._albumver = None
+
+        self.path = path
+        self.audio_files = self.get_audio_files()
+        self.name = self.get_name()
+        self.num_files = self.get_num_files()
+        self.mediatype = self.get_mediatype()
+        self.artist = self.get_artist()
+        self.album = self.get_album()
+        self.size = self.get_size()
+        self.sizes = self.get_sizes()
+        self.length = self.get_length()
+        self.brtype = self.get_brtype()
+        self.bitrate = self.get_bitrate()
+        self.profile = self.get_profile()
+        self.quality = self.get_quality()
+        self.audiolist_format = self.get_audiolist_format()
+        self.modified = self.get_modified()
+        self._bad = []
+
+        del self._children
+        del self._streams
+        del self._num_streams
+        del self._subdirs
+        del self._types
+        del self._size
+        del self._length
+        del self._lengths
+        del self._bitrate
+        del self._br_list
+        del self._brtype
+        del self._profile
+        del self._date
+        del self._artist
+        del self._artistver
+        del self._album
+        del self._albumver
 
     def __le__(self, other):
         """Compare the path relative to the respective basedir
@@ -83,9 +117,8 @@ class Dir:
         yours = conf.conf.options.sort_key(other._relpath)
         return mine == yours
 
-    def __get_name(self):
+    def get_name(self):
         return os.path.basename(self.path) or self.path
-    name = property(fget=lambda self: self.__get_name())
 
     def children(self):
         if self._children: return self._children
@@ -98,7 +131,7 @@ class Dir:
         self._streams = []
         self._bad = []
         self._num_streams = 0
-        for child in self.audio_files():
+        for child in self.audio_files:
             self._num_streams += 1
             try:
                 self._streams.append(audiotype.openstream(child))
@@ -111,12 +144,10 @@ class Dir:
         return self._streams
 
     def bad_streams(self):
-        self.streams()
         return self._bad
 
-    def __get_num_files(self):
-        return len(self.audio_files())
-    num_files = property(fget=lambda self: self.__get_num_files())
+    def get_num_files(self):
+        return len(self.audio_files)
 
     def types(self):
         if self._types != None: return self._types
@@ -125,16 +156,15 @@ class Dir:
         self._types.sort()
         return self._types
 
-    def __get_mediatype(self):
+    def get_mediatype(self):
         if not self.types():
             return "?"
         elif len(self.types()) == 1:
             return self.types()[0]
         else:
             return "Mixed"
-    mediatype = property(fget=lambda self: self.__get_mediatype())
 
-    def __get_artist(self):
+    def get_artist(self):
         if self.mediatype in ("Ogg", "AAC"):
             taint = 0
             names = map(lambda x: x.artist(), self.streams())
@@ -196,9 +226,8 @@ class Dir:
             sys.exit(1)
 
         return self._artist
-    artist = property(fget=lambda self: self.__get_artist())
 
-    def __get_album(self):
+    def get_album(self):
         if self.mediatype in ("Ogg", "AAC"):
             taint = 0
             names = map(lambda x: x.album(), self.streams())
@@ -260,7 +289,6 @@ class Dir:
             raise
 
         return self._album
-    album = property(fget=lambda self: self.__get_album())
 
     def get_size(self, type="all"):
         """report size in bytes
@@ -278,16 +306,14 @@ class Dir:
                 self._size[file.type()] = file.streamsize()
             self._size["all"] += file.streamsize()
         return self._size[type]
-    size = property(fget=lambda self: self.get_size())
 
-    def __get_sizes(self):
+    def get_sizes(self):
         res = dict.fromkeys(self.types(), 0)
         for mediatype in self.types():
             res[mediatype] += self.get_size(mediatype)
         return res
-    sizes = property(fget=__get_sizes)
 
-    def __get_length(self, type="all"):
+    def get_length(self, type="all"):
         if self._length != None: return self._length[type]
         tot = 0
         self._length = {}
@@ -300,7 +326,6 @@ class Dir:
             self._length["all"] += file.time
         self._length = map_dict(int, self._length)
         return self._length[type]
-    length = property(fget=lambda self: self.__get_length())
 
     def _variable_bitrate(self):
         if self.length == 0:
@@ -318,7 +343,7 @@ class Dir:
                 self._variable_bitrate()
         self._bitrate = int(self._bitrate)
 
-    def __get_brtype(self):
+    def get_brtype(self):
         """report the bitrate type
 
         If multiple types are found "~" is returned.
@@ -339,9 +364,8 @@ class Dir:
         if self._brtype == "C":
             self._constant_bitrate()
         return self._brtype
-    brtype = property(fget=lambda self: self.__get_brtype())
 
-    def __get_bitrate(self):
+    def get_bitrate(self):
         """report average bitrate in bits per second
 
         If no audio is found zero is returned."""
@@ -349,9 +373,8 @@ class Dir:
         if self._bitrate: return self._bitrate
         if self.brtype != "C": self._variable_bitrate()
         return self._bitrate
-    bitrate = property(fget=lambda self: self.__get_bitrate())
 
-    def __get_profile(self):
+    def get_profile(self):
         if self._profile != None: return self._profile
         if self.brtype == "~":
             self._profile = ""
@@ -364,14 +387,12 @@ class Dir:
                 self._profile = ""
                 break
         return self._profile
-    profile = property(fget=lambda self: self.__get_profile())
 
-    def __get_quality(self):
+    def get_quality(self):
         if self.profile: return self.profile
         return "%s %s" % (self.bitrate / 1000, self.brtype)
-    quality = property(fget=lambda self: self.__get_quality())
 
-    def __get_audiolist_format(self):
+    def get_audiolist_format(self):
         if self.brtype == "V": return "VBR"
         list = []
         for stream in self.streams():
@@ -384,23 +405,21 @@ class Dir:
             if br not in list: list.append(br)
         list.sort()
         return string.join(map(str, list), ", ")
-    audiolist_format = property(fget=lambda self: self.__get_audiolist_format())
 
-    def __get_modified(self):
+    def get_modified(self):
         if self._date: return self._date
         dates = map(lambda x: x.modified(), self.streams())
         dates.append(os.path.getmtime(self.path))
         self._date = max(dates)
         return self._date
-    modified = property(fget=lambda self: self.__get_modified())
 
-    def audio_files(self):
+    def get_audio_files(self):
         """Return a list of all audio files based on file extensions"""
         return [ file for file in self.children() if self.is_audio_file(file) ]
 
     def cache_key(self):
         """Make a cache key for this directory"""
-        files = [ os.path.basename(file) for file in self.audio_files() ]
+        files = [ os.path.basename(file) for file in self.audio_files ]
         return (self.path, self.modified, tuple(files))
 
     def get_summary(path, modified, files):
