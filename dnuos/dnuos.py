@@ -69,10 +69,8 @@ class Data:
 def main():
     data = Data()
     options = conf.parse_args()
-    is_path_included = make_included_pred(options.basedirs,
-                                          options.exclude_paths)
-    is_entry_excluded = lambda ((path, timestamp, files), value): \
-                               not is_path_included(path)
+    is_path_included = make_included_pred(options.basedirs, options.exclude_paths)
+    is_entry_excluded = lambda ((path,), value): not is_path_included(path)
     Cache.setup(treat_as_update=is_entry_excluded)
 
     if options.basedirs:
@@ -95,8 +93,6 @@ def main():
         elif options.list_bad:
             dirs = collect_bad(dirs, data.bad_files)
         dirs = ifilter(non_empty, dirs)
-        dirs = cache_lookup(dirs)
-
         if options.no_cbr:
             dirs = ifilter(no_cbr_mp3, dirs)
         if options.no_non_profile:
@@ -137,13 +133,6 @@ def main():
 
     app.create_user_data_dir()
     Cache.writeout()
-
-
-def cache_lookup(dirs):
-    for adir in dirs:
-        summary = audiodir.Dir.get_summary(*adir.cache_key())
-        audiodir.set_basedir(summary, adir._basedir)
-        yield summary
 
 
 def indicate_progress(dirs, sizes, outs=sys.stderr):
@@ -285,7 +274,8 @@ def walk(basedir, sort_key=lambda x: x, excluded=[]):
         subdirs = sort([ sub for sub in subdirs if sub not in excluded ],
                        sort_key)
 
-        adir = audiodir.Dir(dirname)
+        adir = audiodir.get_dir(dirname)
+        adir.validate()
         audiodir.set_basedir(adir, basedir)
         yield adir
 

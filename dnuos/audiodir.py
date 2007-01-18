@@ -144,7 +144,7 @@ class Dir:
         return self._streams
 
     def bad_streams(self):
-        return self._bad
+        return hasattr(self, '_bad') and self._bad or []
 
     def get_num_files(self):
         return len(self.audio_files)
@@ -416,16 +416,10 @@ class Dir:
         """Return a list of all audio files based on file extensions"""
         return [ file for file in self.children() if self.is_audio_file(file) ]
 
-    def cache_key(self):
-        """Make a cache key for this directory"""
-        files = [ os.path.basename(file) for file in self.audio_files ]
-        return (self.path, self.modified, tuple(files))
-
-    def get_summary(path, modified, files):
-        """Get a Dir summary relative to some base directory"""
-        return Dir(path).summarize()
-    get_summary = cached(get_summary, Cache(DIR_SUMMARY_FILE))
-    get_summary = staticmethod(get_summary)
+    def validate(self):
+        if (self.modified != self.get_modified() or
+            self.audio_files != self.get_audio_files()):
+            self.__init__(self.path)
 
     def is_audio_file(filename):
         """Test if a filename has the extension of an audio file
@@ -439,13 +433,13 @@ class Dir:
                 Dir.audio_file_extRE.search(filename))
     is_audio_file = staticmethod(is_audio_file)
 
-    def summarize(self):
-        """Summarize the attributes of a Dir object in an attrdict"""
-
-        attrs = ('album artist audiolist_format bitrate brtype length '
-                 'mediatype modified name num_files path profile quality '
+    def __getstate__(self):
+        attrs = ('album artist audio_files audiolist_format bitrate brtype '
+                 'length mediatype modified name num_files path profile quality '
                  'size sizes').split()
         res = attrdict()
         for attr in attrs:
             res[attr] = getattr(self, attr)
         return res
+
+get_dir = cached(Dir, Cache(DIR_SUMMARY_FILE))
