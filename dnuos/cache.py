@@ -36,6 +36,9 @@ class UpdateTrackingDict(dict):
         self.wkeys |= Set(other.keys())
 
     def written(self):
+        """
+        Get a dict of all updated items.
+        """
         return dict([ (key, self[key]) for key in self.wkeys ])
 
 
