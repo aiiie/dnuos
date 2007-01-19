@@ -35,7 +35,7 @@ def set_basedir(self, basedir):
     self._relpath = os.path.join(*path[-self._depth-1:])
 
 
-class Dir:
+class Dir(object):
     pattern = r"\.(?:mp3|mpc|mp\+|m4a|ogg|flac|fla|flc)$"
     audio_file_extRE = re.compile(pattern, re.IGNORECASE)
     del pattern
