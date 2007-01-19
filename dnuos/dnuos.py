@@ -29,7 +29,7 @@ sys.path.append(os.path.abspath('.'))
 import app
 import audiotype
 import audiodir
-from cache import Cache
+from cache import PersistentDict
 from conf import conf
 from misc import die
 from misc import dir_depth
@@ -70,8 +70,8 @@ def main():
     data = Data()
     options = conf.parse_args()
     is_path_included = make_included_pred(options.basedirs, options.exclude_paths)
-    is_entry_excluded = lambda ((path,), value): not is_path_included(path)
-    Cache.setup(treat_as_update=is_entry_excluded)
+    is_entry_excluded = lambda (path,), value: not is_path_included(path)
+    PersistentDict[audiodir.DIR_PERSISTENCE_FILE].load(keep_pred=is_entry_excluded)
 
     if options.basedirs:
         # Make an iterator over all subdirectories of the base directories,
@@ -132,7 +132,7 @@ def main():
         print >> outfile, chunk
 
     app.create_user_data_dir()
-    Cache.writeout()
+    PersistentDict.writeout()
 
 
 def indicate_progress(dirs, sizes, outs=sys.stderr):
