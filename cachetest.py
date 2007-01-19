@@ -33,6 +33,7 @@ get_dir = memoized(get_dir, PersistentDict(filename=CACHE_FILE, default={}))
 def get_dir_cache_key(path):
     return path, os.stat(path)[stat.ST_MTIME], tuple(os.listdir(path))
 
+
 def mywalk(base, exclude):
     for dirname, subdirs, files in os.walk(base):
         subdirs[:] = [ sub for sub in subdirs
