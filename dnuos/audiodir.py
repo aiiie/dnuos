@@ -14,8 +14,8 @@ import audiotype, conf
 
 import app
 from attrdict import attrdict
-from cache import Cache
-from cache import cached
+from cache import PersistentDict
+from cache import memoized
 from misc import dir_depth
 from misc import map_dict
 from misc import uniq
@@ -24,7 +24,7 @@ from misc import uniq
 __version__ = "0.17.3"
 
 
-DIR_SUMMARY_FILE = app.user_data_file('dirs.pkl')
+DIR_PERSISTENCE_FILE = app.user_data_file('dirs.pkl')
 
 
 def set_basedir(self, basedir):
@@ -411,4 +411,4 @@ class Dir(object):
             res[attr] = getattr(self, attr)
         return res
 
-get_dir = cached(Dir, Cache(DIR_SUMMARY_FILE))
+get_dir = memoized(Dir, PersistentDict(filename=DIR_PERSISTENCE_FILE, default={}))

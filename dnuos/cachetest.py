@@ -3,8 +3,8 @@ import stat
 
 import app
 from attrdict import attrdict
-from cache import Cache
-from cache import cached
+from cache import PersistentDict
+from cache import memoized
 from misc import make_included_pred
 
 
@@ -27,7 +27,7 @@ class Dir(object):
 
 def get_dir(path, timestamp, children):
     return Dir(path).collect()
-get_dir = cached(get_dir, Cache(CACHE_FILE))
+get_dir = memoized(get_dir, PersistentDict(filename=CACHE_FILE, default={}))
 
 
 def get_dir_cache_key(path):
@@ -47,9 +47,9 @@ def main():
 
     # Initialize cache
     is_path_included = make_included_pred(include, exclude)
-    is_entry_excluded = lambda ((path, timestamp, files), value): \
+    is_entry_excluded = lambda (path, timestamp, files), value: \
                                not is_path_included(path)
-    Cache.setup(treat_as_update=is_entry_excluded)
+    PersistentDict[CACHE_FILE].load(keep_pred=is_entry_excluded)
 
     # Traverse the base directories avoiding the excluded parts
     dir_cache_keys = chain(*[ mywalk(base, exclude) for base in include ])

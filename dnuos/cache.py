@@ -1,5 +1,6 @@
 import os
 import pickle
+from sets import Set
 from shutil import copy2
 
 from misc import fmap
@@ -7,63 +8,132 @@ from misc import is_subdir
 from misc import split_dict
 
 
-class Cache(object):
-    __slots__ = ['filename', 'read', 'updates']
+class UpdateTrackingDict(dict):
+    """
+    A dict that tracks what items have been updated.
 
-    instances = []
+    Clear or otherwise modify the wkeys instance attribute to control what changes
+    are tracked.
+    """
+    def __init__(self, *args, **kwargs):
+        super(UpdateTrackingDict, self).__init__(*args, **kwargs)
+        self.wkeys = Set()
 
-    def __init__(self, filename):
-        Cache.instances.append(self)
-        self.filename = filename
+    def __set__(self, value):
+        super(UpdateTrackingDict, self).__set__(value)
+        self.wkeys = Set(value.keys())
 
-    def setup(cls, treat_as_update=lambda entry: False):
-        for instance in cls.instances:
-            instance._setup(treat_as_update)
-    setup = classmethod(setup)
+    def __setitem__(self, key, value):
+        super(UpdateTrackingDict, self).__setitem__(key, value)
+        self.wkeys.add(key)
+
+    def clear(self):
+        super(UpdateTrackingDict, self).clear()
+        self.wkeys.clear()
+
+    def update(self, other):
+        super(UpdateTrackingDict, self).update(other)
+        self.wkeys |= Set(other.keys())
+
+    def written(self):
+        return dict([ (key, self[key]) for key in self.wkeys ])
+
+
+class PersistentDictMetaClass(type):
+    """
+    Meta class for PersistentDict.
+    """
+    def __getitem__(cls, filename):
+        """
+        Get the PersistentDict instance using a specific file.
+        """
+        return PersistentDict.instances[filename]
+
+
+class PersistentDict(UpdateTrackingDict):
+    """
+    A dict with persistence.
+    """
+    __metaclass__ = PersistentDictMetaClass
+
+    instances = {}
+
+    def __init__(self, *args, **kwargs):
+        super(PersistentDict, self).__init__(*args, **kwargs)
+        self.filename = filename = os.path.abspath(kwargs['filename'])
+        if filename in PersistentDict.instances:
+            raise ValueError("PersistentDict for '%s' already exists." % filename)
+        PersistentDict.instances[filename] = self
+        self.default = kwargs.get('default')
+
+    # Class methods
 
     def writeout(cls):
-        for instance in cls.instances:
+        """
+        Flush all instances of PersistentDict to their respective files.
+        """
+        for instance in PersistentDict.instances.values():
             instance._write()
     writeout = classmethod(writeout)
 
-    def _setup(self, treat_as_update):
-        self.updates, self.read = split_dict(self._read(), treat_as_update)
+    # Instance methods
+
+    def load(self, keep_pred=lambda k,v: True):
+        """
+        Load persistence data from file.
+
+        Arguments:
+            keep_pred - A predicate function (key, value) -> bool
+                        Return values:
+                            True  - This item is included in writeout (unless
+                                    overwritten)
+                            False - This item is excluded from writeout (unless
+                                    updated)
+        """
+        self.clear()
+        self.update(self._read())
+        self.wkeys = Set([ key for key, value in self.items()
+                               if keep_pred(key, value) ])
 
     def _read(self):
+        """
+        Deserialize data from file.
+        """
         try:
             return pickle.load(open(self.filename))
         except IOError:
-            return {}
+            return self.default
 
     def _write(self):
+        """
+        Serialize data to file, keeping a copy of the previous version.
+        """
         try:
             copy2(self.filename, self.filename + '.bak')
         except IOError:
             pass
-        pickle.dump(self.updates, open(self.filename, 'w'))
+        pickle.dump(self.written(), open(self.filename, 'w'))
 
 
-class cached(object):
+class memoized(object):
     """Decorator that caches a function's return value each time it is called.
     If called later with the same arguments, the cached value is returned, and
     not re-evaluated.
     """
-    __slots__ = ['func', 'cache']
-
-    def __init__(self, func, cache):
+    def __init__(self, func, cache={}):
         self.func = func
         self.cache = cache
 
     def __call__(self, *args):
         try:
-            value = self.cache.read[args]
+            value = self.cache[args]
         except KeyError:
             value = self.func(*args)
         except TypeError:
             # uncachable -- for instance, passing a list as an argument.
             # Better to not cache than to blow up entirely.
             return self.func(*args)
-        self.cache.updates[args] = value
+        self.cache[args] = value
         return value
 
     def __repr__(self):
