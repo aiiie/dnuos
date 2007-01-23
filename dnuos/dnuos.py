@@ -69,9 +69,11 @@ class Data:
 def main():
     data = Data()
     options = conf.parse_args()
-    is_path_included = make_included_pred(options.basedirs, options.exclude_paths)
-    is_entry_excluded = lambda (path,), value: not is_path_included(path)
-    PersistentDict[audiodir.DIR_PERSISTENCE_FILE].load(keep_pred=is_entry_excluded)
+
+    if options.use_cache:
+        is_path_included = make_included_pred(options.basedirs, options.exclude_paths)
+        is_entry_excluded = lambda (path,), value: not is_path_included(path)
+        PersistentDict[audiodir.DIR_PERSISTENCE_FILE].load(keep_pred=is_entry_excluded)
 
     if options.basedirs:
         # Make an iterator over all subdirectories of the base directories,
@@ -84,7 +86,7 @@ def main():
         else:
             dirs = chain(*trees)
 
-        dirs = to_adir(dirs)
+        dirs = to_adir(dirs, options.use_cache)
 
         # Add layers of functionality
         dirs = timer_wrapper(dirs, data.times)
@@ -133,8 +135,9 @@ def main():
     for chunk in output:
         print >> outfile, chunk
 
-    app.create_user_data_dir()
-    PersistentDict.writeout()
+    if options.use_cache:
+        app.create_user_data_dir()
+        PersistentDict.writeout()
 
 
 def indicate_progress(dirs, sizes, outs=sys.stderr):
@@ -282,9 +285,10 @@ def walk(basedir, sort_key=lambda x: x, excluded=[]):
         yield dirname[len(root):], root
 
 
-def to_adir(dirs):
+def to_adir(dirs, use_cache=True):
     for relpath, root in dirs:
-        adir = audiodir.CachedDir(root + relpath)
+        constructor = use_cache and audiodir.CachedDir or audiodir.Dir
+        adir = constructor(root + relpath)
         adir.validate()
         audiodir.set_root(adir, root)
         yield adir
