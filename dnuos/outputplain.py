@@ -15,6 +15,8 @@ Module for rendering plain-text output.
 
 
 from itertools import chain
+from itertools import ifilter
+from itertools import imap
 
 from misc import intersperse
 
@@ -36,9 +38,14 @@ class Renderer:
             (lambda: options.disp_version,
              render_version(data.version)),
         ]
-        output = [ renderer for predicate, renderer in output if predicate() ]
-        output = intersperse(output, iter(["-"]))
-        return chain(*output)
+        first = True
+        for pred, renderer in output:
+            if pred():
+                if not first:
+                    yield ''
+                for chunk in renderer:
+                    yield chunk
+                first = False
 
     def render_date(self):
         yield time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
@@ -56,7 +63,7 @@ class Renderer:
 
     def render_bad_files(self, bad_files):
         yield "Audiotype failed on the following files:"
-        yield string.join(bad_files, "\n")
+        yield "\n".join(bad_files)
 
     def render_generation_time(self, times):
         yield "Generation time:     %8.2f s" % times['elapsed_time']
