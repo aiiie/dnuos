@@ -146,6 +146,7 @@ class Settings:
                             sort_key=lambda x: x,
                             stripped=False,
                             text_color="black",
+                            use_cache=True,
                             wildcards=False)
 
         group = OptionGroup(parser, "Application")
@@ -164,6 +165,9 @@ class Settings:
         parser.add_option_group(group)
 
         group = OptionGroup(parser, "Directory walking")
+        group.add_option("--disable-cache",
+                         dest="use_cache", action="store_false",
+                         help="Disable caching")
         group.add_option("-e", "--exclude",
                          action="callback", nargs=1, callback=add_exclude_dir, type="string",
                          help="Exclude DIR from search", metavar="DIR")
