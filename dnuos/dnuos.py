@@ -163,7 +163,7 @@ def print_bad(dirs):
     for adir in dirs:
         yield adir
 
-        for badfile in adir.bad_streams():
+        for badfile in adir.bad_files:
             print >> sys.stderr, "Audiotype failed for:", badfile
 
 
@@ -177,7 +177,7 @@ def collect_bad(dirs, bad_files):
     for adir in dirs:
         yield adir
 
-        bad_files += adir.bad_streams()
+        bad_files.extend(adir.bad_files)
 
 
 def non_empty(adir):
