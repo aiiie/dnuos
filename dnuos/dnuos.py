@@ -254,7 +254,7 @@ def add_empty(dirs):
     """
     oldpath = []
     for adir in dirs:
-        path = adir.path.split(os.path.sep)[-adir._depth-1:]
+        path = adir._relpath.split(os.path.sep)
         start = equal_elements(path, oldpath)
         for depth in range(start, len(path) - 1):
             yield EmptyDir(path[depth], depth)
