@@ -411,4 +411,4 @@ class Dir(object):
             res[attr] = getattr(self, attr)
         return res
 
-get_dir = memoized(Dir, PersistentDict(filename=DIR_PERSISTENCE_FILE, default={}))
+CachedDir = memoized(Dir, PersistentDict(filename=DIR_PERSISTENCE_FILE, default={}))
