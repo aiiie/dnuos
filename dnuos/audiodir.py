@@ -27,10 +27,10 @@ __version__ = "0.17.3"
 DIR_PERSISTENCE_FILE = app.user_data_file('dirs.pkl')
 
 
-def set_basedir(self, basedir):
+def set_root(self, root):
     # XXX These things don't belong here!!
-    self._basedir = basedir
-    self._depth = dir_depth(self.path) - dir_depth(basedir)
+    self._root = root
+    self._depth = dir_depth(self.path) - dir_depth(root) - 1
     path = self.path.split(os.path.sep)
     self._relpath = os.path.join(*path[-self._depth-1:])
 
