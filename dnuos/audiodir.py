@@ -79,28 +79,6 @@ class Dir(object):
         del self._artist
         del self._album
 
-    def __le__(self, other):
-        """Compare the path relative to the respective basedir
-
-        Only the paths are compared. Directory contents is not
-        considered at all.
-        """
-        # XXX This don't belong here!!
-        mine = conf.conf.options.sort_key(self._relpath)
-        yours = conf.conf.options.sort_key(other._relpath)
-        return mine <= yours
-
-    def __eq__(self, other):
-        """Compare the path relative to the respective basedir
-
-        Only the paths are compared. Directory contents is not
-        considered at all.
-        """
-        # XXX This don't belong here!!
-        mine = conf.conf.options.sort_key(self._relpath)
-        yours = conf.conf.options.sort_key(other._relpath)
-        return mine == yours
-
     def get_name(self):
         return os.path.basename(self.path) or self.path
 
