@@ -274,7 +274,7 @@ def walk(basedir, sort_key=lambda x: x, excluded=[]):
         subdirs = sort([ sub for sub in subdirs if sub not in excluded ],
                        sort_key)
 
-        adir = audiodir.get_dir(dirname)
+        adir = audiodir.CachedDir(dirname)
         adir.validate()
         audiodir.set_basedir(adir, basedir)
         yield adir
