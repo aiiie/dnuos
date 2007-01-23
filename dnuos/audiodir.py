@@ -68,6 +68,7 @@ class Dir(object):
         self.quality = self.get_quality()
         self.audiolist_format = self.get_audiolist_format()
         self.modified = self.get_modified()
+        self.bad_files = self.get_bad_files()
 
         del self._streams
         del self._types
@@ -88,7 +89,7 @@ class Dir(object):
     def streams(self):
         if self._streams: return self._streams
         self._streams = []
-        self._bad = []
+        self.bad_files = []
         for child in self.audio_files:
             try:
                 self._streams.append(audiotype.openstream(child))
@@ -97,11 +98,12 @@ class Dir(object):
             except audiotype.SpacerError:
                 continue
             except Exception, msg:
-                self._bad.append(child)
+                self.bad_files.append(child)
         return self._streams
 
-    def bad_streams(self):
-        return hasattr(self, '_bad') and self._bad or []
+    def get_bad_files(self):
+        self.streams()
+        return self.bad_files
 
     def get_num_files(self):
         return len(self.audio_files)
@@ -381,9 +383,9 @@ class Dir(object):
     is_audio_file = staticmethod(is_audio_file)
 
     def __getstate__(self):
-        attrs = ('album artist audio_files audiolist_format bitrate brtype '
-                 'length mediatype modified name num_files path profile quality '
-                 'size sizes').split()
+        attrs = ('album artist audio_files audiolist_format bad_files bitrate '
+                 'brtype length mediatype modified name num_files path profile '
+                 'quality size sizes').split()
         res = attrdict()
         for attr in attrs:
             res[attr] = getattr(self, attr)
