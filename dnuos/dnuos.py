@@ -269,6 +269,9 @@ def walk(basedir, sort_key=lambda x: x, excluded=[]):
     Directories are sorted according to the --ignore-case setting and branches
     specified by --exclude are ignored.
     """
+
+    root = os.path.dirname(basedir)
+
     for dirname, subdirs, _ in os.walk(basedir):
         # Give os.walk directions for further traversal
         subdirs = sort([ sub for sub in subdirs if sub not in excluded ],
@@ -276,7 +279,7 @@ def walk(basedir, sort_key=lambda x: x, excluded=[]):
 
         adir = audiodir.CachedDir(dirname)
         adir.validate()
-        audiodir.set_basedir(adir, basedir)
+        audiodir.set_root(adir, root)
         yield adir
 
 
