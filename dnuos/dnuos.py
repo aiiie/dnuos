@@ -84,6 +84,8 @@ def main():
         else:
             dirs = chain(*trees)
 
+        dirs = to_adir(dirs)
+
         # Add layers of functionality
         dirs = timer_wrapper(dirs, data.times)
         if not options.quiet:
@@ -277,7 +279,12 @@ def walk(basedir, sort_key=lambda x: x, excluded=[]):
         subdirs = sort([ sub for sub in subdirs if sub not in excluded ],
                        sort_key)
 
-        adir = audiodir.CachedDir(dirname)
+        yield dirname[len(root):], root
+
+
+def to_adir(dirs):
+    for relpath, root in dirs:
+        adir = audiodir.CachedDir(root + relpath)
         adir.validate()
         audiodir.set_root(adir, root)
         yield adir
