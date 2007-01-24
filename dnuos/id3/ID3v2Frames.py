@@ -117,6 +117,8 @@ class ID3v2Frame(object):
     def parse_frame(self, data):
         try:
             self._parse_frame(data)
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt
         except id3.BrokenFrameError:
             raise
         except:
@@ -254,6 +256,8 @@ class ID3v2Frame(object):
                 return '\x01'
             else:
                 return '\x03'
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt
         except:
             print "%r" % type(value)
             raise
