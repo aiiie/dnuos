@@ -142,7 +142,7 @@ class Settings:
                             outfile=None,
                             output_format="plaintext",
                             prefer_tag=2,
-                            quiet=False,
+                            show_progress=True,
                             sort_key=lambda x: x,
                             stripped=False,
                             text_color="black",
@@ -157,7 +157,7 @@ class Settings:
                          dest="list_bad", action="store_false",
                          help="Don't list files that cause Audiotype failure")
         group.add_option("-q", "--quiet",
-                         dest="quiet", action="store_true",
+                         dest="show_progress", action="store_false",
                          help="Omit progress indication")
         group.add_option("-V", "--version",
                          dest="disp_version", action="store_true",
@@ -256,7 +256,7 @@ class Settings:
 
         # options overriding eachother
         if options.debug or (not options.outfile and sys.stdout.isatty()):
-            options.quiet = True
+            options.show_progress = False
         if options.output_format == 'db':
             options.list_bad = False
 
