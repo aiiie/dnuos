@@ -90,7 +90,7 @@ def main():
 
         # Add layers of functionality
         dirs = timer_wrapper(dirs, data.times)
-        if not options.quiet:
+        if options.show_progress:
             dirs = indicate_progress(dirs, data.size)
         if options.debug:
             dirs = print_bad(dirs)
