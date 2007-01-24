@@ -82,11 +82,15 @@ def main():
         trees = [ walk(basedir, options.sort_key, options.exclude_paths)
                   for basedir in options.basedirs ]
         if options.merge:
-            dirs = merge(*trees)
+            path_pairs = merge(*trees)
         else:
-            dirs = chain(*trees)
+            path_pairs = chain(*trees)
 
-        dirs = to_adir(dirs, options.use_cache)
+        # Make Dirs from paths
+        if options.use_cache:
+            dirs = to_adir(path_pairs, audiodir.CachedDir)
+        else:
+            dirs = to_adir(path_pairs, audiodir.Dir)
 
         # Add layers of functionality
         dirs = timer_wrapper(dirs, data.times)
@@ -285,9 +289,14 @@ def walk(basedir, sort_key=lambda x: x, excluded=[]):
         yield dirname[len(root):], root
 
 
-def to_adir(dirs, use_cache=True):
-    for relpath, root in dirs:
-        constructor = use_cache and audiodir.CachedDir or audiodir.Dir
+def to_adir(path_pairs, constructor):
+    """
+    Converts a sequence of path pairs into a sequence of Dirs
+
+    A path pair is a tuple (relpath, root). The Dir is validated and root is
+    assigned to it.
+    """
+    for relpath, root in path_pairs:
         adir = constructor(root + relpath)
         adir.validate()
         audiodir.set_root(adir, root)
