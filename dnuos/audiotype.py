@@ -287,10 +287,19 @@ class MP3(AudioType):
             [44100, 48000, 32000]  #MPEG 1  
             ]
 
-        try: self.id3v1 = id3.ID3v1(file)
-        except: self.id3v1 = None
-        try: self.id3v2 = id3.ID3v2(file)
-        except: self.id3v2 = None
+        try:
+            self.id3v1 = id3.ID3v1(file)
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt
+        except:
+            self.id3v1 = None
+
+        try:
+            self.id3v2 = id3.ID3v2(file)
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt
+        except:
+            self.id3v2 = None
 
         #try:
         self.mp3header = self.getheader(self.stream_begin())
@@ -526,10 +535,19 @@ class MPC(AudioType):
         self._bitrate = int(self.streamsize() * 144000.0 / float(self.framecount * self._freq))
         self.time = (float(self.framecount) * 1.150 / float(44.1) + float(0.5))
 
-        try: self.id3v1 = id3.ID3v1(file)
-        except: self.id3v1 = None
-        try: self.id3v2 = id3.ID3v2(file)
-        except: self.id3v2 = None
+        try:
+            self.id3v1 = id3.ID3v1(file)
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt
+        except:
+            self.id3v1 = None
+
+        try:
+            self.id3v2 = id3.ID3v2(file)
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt
+        except:
+            self.id3v2 = None
 
     def v1artist(self):
         if self.id3v1 != None and self.id3v1.artist:
