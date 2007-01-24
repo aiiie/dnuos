@@ -255,7 +255,7 @@ class Settings:
                                        if path not in options.exclude_paths ]
 
         # options overriding eachother
-        if options.debug or not options.outfile:
+        if options.debug or (not options.outfile and sys.stdout.isatty()):
             options.quiet = True
         if options.output_format == 'db':
             options.list_bad = False
