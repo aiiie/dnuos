@@ -1,10 +1,26 @@
-import os
-import sys
+# -*- coding: iso-8859-1 -*-
+#
+# A module for gathering information about a directory of audio files
+#
+# This program is under GPL license. See COPYING file for details.
+#
+# Copyright 2005,2007
+# Trent Mick <TrentM at ActiveState.com>
+# Mattias Päivärinta <pejve@vasteras2.net>
+
 
 """
+Module dealing with application data.
+
 Most of this comes from
 http://mail.python.org/pipermail/python-list/2005-September/341702.html
 """
+
+
+import errno
+import os
+import sys
+
 
 def user_data_dir(appname, vendor, version=None):
     """Return full path to the user-specific data dir for this application.
@@ -49,3 +65,15 @@ def user_data_dir(appname, vendor, version=None):
     if version:
         path = os.path.join(path, version)
     return path
+
+
+USER_DATA_DIR = user_data_dir('Dnuos', 'Dnuos')
+
+
+def create_user_data_dir():
+    if not os.path.exists(USER_DATA_DIR):
+        os.makedirs(USER_DATA_DIR)
+
+
+def user_data_file(filename):
+    return os.path.join(USER_DATA_DIR, filename)
