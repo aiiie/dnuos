@@ -26,7 +26,7 @@ import time
 # fix for some dumb version of python 2.3
 sys.path.append(os.path.abspath('.'))
 
-import app
+import appdata
 import audiotype
 import audiodir
 from cache import PersistentDict
@@ -136,7 +136,7 @@ def main():
         print >> outfile, chunk
 
     if options.use_cache:
-        app.create_user_data_dir()
+        appdata.create_user_data_dir()
         PersistentDict.writeout()
 
 

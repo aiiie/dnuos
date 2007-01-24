@@ -12,7 +12,7 @@
 import re, os, string, time
 import audiotype, conf
 
-import app
+import appdata
 from cache import PersistentDict
 from cache import memoized
 from misc import dir_depth
@@ -23,7 +23,7 @@ from misc import uniq
 __version__ = "0.17.3"
 
 
-DIR_PERSISTENCE_FILE = app.user_data_file('dirs.pkl')
+DIR_PERSISTENCE_FILE = appdata.user_data_file('dirs.pkl')
 
 
 def set_root(self, root):
