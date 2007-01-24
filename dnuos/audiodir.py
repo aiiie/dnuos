@@ -13,7 +13,6 @@ import re, os, string, time
 import audiotype, conf
 
 import app
-from attrdict import attrdict
 from cache import PersistentDict
 from cache import memoized
 from misc import dir_depth
@@ -386,7 +385,7 @@ class Dir(object):
         attrs = ('album artist audio_files audiolist_format bad_files bitrate '
                  'brtype length mediatype modified name num_files path profile '
                  'quality size sizes').split()
-        res = attrdict()
+        res = {}
         for attr in attrs:
             res[attr] = getattr(self, attr)
         return res
