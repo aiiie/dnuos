@@ -13,7 +13,8 @@
 # TODO: Implement *.audiosize() that also excludes vorbis comments and such?
 
 
-import os, re, string, struct, sys, warnings, conf, codecs, id3
+import os, re, string, struct, sys, warnings, codecs, id3
+from conf import Settings
 
 __version__ = "0.94"
 
@@ -444,7 +445,7 @@ class MP3(AudioType):
             preset = self.mp3header[11] & 2047
 
             if preset > 0:
-                if conf.conf.options.force_old_lame_presets:
+                if Settings().options.force_old_lame_presets:
                     if preset == 320:
                         return "-api"
                     if preset == 460 or preset == 470:
@@ -849,7 +850,7 @@ def textencode(str):
     else:
         pass
 
-    if conf.conf.options.output_format == 'db':
+    if Settings().options.output_format == 'db':
         return str.encode('latin1', 'replace').strip('\0')
     else:
         return str.encode('utf-8').strip('\0')

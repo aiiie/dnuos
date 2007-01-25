@@ -280,7 +280,7 @@ class Column(object):
         "b": lambda data, depth: to_human(data, 1000.0),
         "l": lambda data, depth: to_minutes(data),
         "m": lambda data, depth: time.ctime(data),
-        "n": lambda data, depth: conf.indent(data, depth),
+        "n": lambda data, depth: Settings().indent(data, depth),
         "s": lambda data, depth: to_human(data),
     }
     attr_table = {
@@ -353,6 +353,3 @@ def unescape(data):
     data = data.replace(r'\t', '\t').replace(r'\n', '\n')
     data = re.sub(r'\\([\\\[\]])', r'\1', data)
     return data
-
-
-conf = Settings()
