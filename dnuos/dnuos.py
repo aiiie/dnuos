@@ -113,13 +113,8 @@ def main():
             dirs = add_empty(dirs)
 
         # Configure renderer
-        renderer_modules = {
-            'db': output.db,
-            'html': output.html,
-            'plaintext': output.plaintext,
-            'xml': output.xml,
-        }
-        renderer = renderer_modules[options.output_format].Renderer()
+        module = getattr(output, options.output_format)
+        renderer = module.Renderer()
         renderer.format_string = options.format_string
         renderer.columns = options.fields
 
