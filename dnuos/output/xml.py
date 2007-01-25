@@ -14,10 +14,23 @@ Module for rendering xml output.
 """
 
 
+def my_import(name):
+    """
+    Import and return a module
+
+    http://www.python.org/doc/current/lib/built-in-funcs.html#l2h-6
+    """
+    mod = __import__(name)
+    components = name.split('.')
+    for comp in components[1:]:
+        mod = getattr(mod, comp)
+    return mod
+
+
 from itertools import chain
 from time import localtime
 from time import strftime
-from xml.sax.saxutils import escape
+escape = my_import('xml.sax.saxutils').escape
 
 from misc import intersperse
 

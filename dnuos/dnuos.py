@@ -39,10 +39,7 @@ from misc import make_included_pred
 from misc import merge
 from misc import sort
 from misc import to_human
-import outputdb
-import outputhtml
-import outputplain
-import outputxml
+import output
 
 
 class Data(object):
@@ -117,26 +114,26 @@ def main():
 
         # Configure renderer
         renderer_modules = {
-            'db': outputdb,
-            'html': outputhtml,
-            'plaintext': outputplain,
-            'xml': outputxml,
+            'db': output.db,
+            'html': output.html,
+            'plaintext': output.plaintext,
+            'xml': output.xml,
         }
         renderer = renderer_modules[options.output_format].Renderer()
         renderer.format_string = options.format_string
         renderer.columns = options.fields
 
-        output = renderer.render(dirs, options, data)
+        result = renderer.render(dirs, options, data)
 
     elif options.disp_version:
-        output = outputplain.render_version(data.version)
+        result = output.plaintext.render_version(data.version)
 
     else:
         die("No folders to process.\nType 'dnuos.py -h' for help.", 2)
 
     # Output
     outfile = get_outfile(options.outfile)
-    for chunk in output:
+    for chunk in result:
         print >> outfile, chunk
 
     if options.use_cache:
