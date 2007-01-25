@@ -123,9 +123,16 @@ class PersistentDict(UpdateTrackingDict):
 
 
 class memoized(object):
-    """Decorator that caches a function's return value each time it is called.
+    """
+    Decorator that caches a function's return value each time it is called.
+
     If called later with the same arguments, the cached value is returned, and
     not re-evaluated.
+
+    This a derivate of the one in the Python Decorator Library:
+    http://wiki.python.org/moin/PythonDecoratorLibrary
+    It has been changed to take the cache mapping as an argument and to store
+    the result on both cache misses and cache hits.
     """
     def __init__(self, func, cache={}):
         self.func = func
