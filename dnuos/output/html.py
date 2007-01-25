@@ -14,12 +14,13 @@ Module for rendering HTML output.
 """
 
 
-import outputplain
+import output
+
 
 
 class Renderer(object):
     def __init__(self):
-        self.renderer = outputplain.Renderer()
+        self.renderer = output.plaintext.Renderer()
 
     def __set_format_string(self, format_string):
         self.renderer.format_string = format_string
