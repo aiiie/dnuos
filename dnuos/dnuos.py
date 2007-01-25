@@ -30,7 +30,7 @@ import appdata
 import audiotype
 import audiodir
 from cache import PersistentDict
-from conf import conf
+from conf import Settings
 from misc import die
 from misc import dir_depth
 from misc import equal_elements
@@ -68,7 +68,7 @@ class Data(object):
 
 def main():
     data = Data()
-    options = conf.parse_args()
+    options = Settings().parse_args()
 
     if options.use_cache:
         is_path_included = make_included_pred(options.basedirs, options.exclude_paths)

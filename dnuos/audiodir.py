@@ -10,11 +10,12 @@
 
 
 import re, os, string, time
-import audiotype, conf
+import audiotype
 
 import appdata
 from cache import PersistentDict
 from cache import memoized
+from conf import Settings
 from misc import dir_depth
 from misc import map_dict
 from misc import uniq
@@ -164,12 +165,12 @@ class Dir(object):
             self._artist = None
             return
 
-        if conf.conf.options.prefer_tag == 1:
+        if Settings().options.prefer_tag == 1:
             if v1taint != 1:
                 self._artist = v1uniq[0]
             else:
                 self._artist = v2uniq[0]
-        elif conf.conf.options.prefer_tag == 2:
+        elif Settings().options.prefer_tag == 2:
             if v2taint != 1:
                 self._artist = v2uniq[0]
             else:
@@ -222,12 +223,12 @@ class Dir(object):
             self._album = None
             return
 
-        if conf.conf.options.prefer_tag == 1:
+        if Settings().options.prefer_tag == 1:
             if v1taint != 1:
                 self._album = v1uniq[0]
             else:
                 self._album = v2uniq[0]
-        elif conf.conf.options.prefer_tag == 2:
+        elif Settings().options.prefer_tag == 2:
             if v2taint != 1:
                 self._album = v2uniq[0]
             else:
