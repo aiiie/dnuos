@@ -3,11 +3,6 @@ import pickle
 from sets import Set
 from shutil import copy2
 
-from misc import fmap
-from misc import is_subdir
-from misc import split_dict
-
-
 class UpdateTrackingDict(dict):
     """
     A dict that tracks what items have been updated.
