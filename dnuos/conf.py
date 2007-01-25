@@ -29,6 +29,7 @@ import string
 import sys
 import time
 
+from singleton import Singleton
 from misc import die
 from misc import sort
 from misc import to_human
@@ -118,7 +119,7 @@ def to_minutes(value):
     return "%i:%02i" % (value / 60, value % 60)
 
 
-class Settings(object):
+class Settings(Singleton):
     def parse_args(self, argv=sys.argv[1:]):
         default_format_string="[n,-52]| [s,5] | [t,-4] | [q]"
         format_string, fields = parse_format_string2(default_format_string)
