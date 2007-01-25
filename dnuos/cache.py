@@ -1,3 +1,12 @@
+# -*- coding: iso-8859-1 -*-
+#
+# A module for gathering information about a directory of audio files
+#
+# This program is under GPL license. See COPYING file for details.
+#
+# Copyright 2007
+# Mattias Päivärinta <pejve@vasteras2.net>
+
 import os
 import pickle
 from sets import Set
