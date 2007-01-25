@@ -14,7 +14,7 @@ Module for rendering outputdb format.
 """
 
 
-class Renderer:
+class Renderer(object):
     def render(self, dirs, options, data):
         for adir in dirs:
             chunk = "%d:'%s',%d:'%s',%d:'%s',%d:'%s',%d,%.d,%d" % (

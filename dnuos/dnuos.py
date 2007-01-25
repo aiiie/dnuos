@@ -45,7 +45,7 @@ import outputplain
 import outputxml
 
 
-class Data:
+class Data(object):
     def __init__(self):
         self.bad_files = []
         self.size = {
