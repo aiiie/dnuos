@@ -17,7 +17,7 @@ Module for rendering HTML output.
 import outputplain
 
 
-class Renderer:
+class Renderer(object):
     def __init__(self):
         self.renderer = outputplain.Renderer()
 

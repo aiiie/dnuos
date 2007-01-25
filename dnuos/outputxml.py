@@ -22,7 +22,7 @@ from xml.sax.saxutils import escape
 from misc import intersperse
 
 
-class Renderer:
+class Renderer(object):
     def __init__(self):
         self.indent = ''
 

@@ -26,7 +26,7 @@ class SpacerError(Exception):
         return repr(self.value)
 
 
-class AudioType:
+class AudioType(object):
     def __init__(self, file):
         self._filename = file
         self._f = open(self._filename, 'rb')

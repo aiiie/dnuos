@@ -118,7 +118,7 @@ def to_minutes(value):
     return "%i:%02i" % (value / 60, value % 60)
 
 
-class Settings:
+class Settings(object):
     def parse_args(self, argv=sys.argv[1:]):
         default_format_string="[n,-52]| [s,5] | [t,-4] | [q]"
         format_string, fields = parse_format_string2(default_format_string)
@@ -274,7 +274,7 @@ class Settings:
         return " " * self.options.indent * depth + basename
 
 
-class Column:
+class Column(object):
     formatter_table = {
         "b": lambda data, depth: to_human(data, 1000.0),
         "l": lambda data, depth: to_minutes(data),
