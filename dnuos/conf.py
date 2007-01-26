@@ -33,11 +33,12 @@ from singleton import Singleton
 from misc import die
 from misc import sort
 from misc import to_human
+import output
 
 
 def set_db_format(option, opt_str, value, parser):
     parser.values.outfile = value
-    parser.values.output_format = 'db'
+    parser.values.output_module = output.db
 
 
 def set_format_string(option, opt_str, value, parser):
@@ -53,6 +54,14 @@ def set_mp3_min_bitrate(option, opt_str, value, parser):
         parser.values.mp3_min_bit_rate = 1000 * value
     else:
         raise OptionValueError("Bitrate must be 0 or in the range (1..320)")
+
+
+def set_output_module(option, opt_str, value, parser):
+    try:
+        module = getattr(output, value)
+    except AttributeError:
+        raise OptionValueError("Unknown template '%s'" % value)
+    parser.values.output_module = module
 
 
 def set_preferred_tag(option, opt_str, value, parser):
@@ -141,7 +150,7 @@ class Settings(Singleton):
                             no_cbr=False,
                             no_non_profile=False,
                             outfile=None,
-                            output_format="plaintext",
+                            output_module=output.plaintext,
                             prefer_tag=2,
                             show_progress=True,
                             sort_key=lambda x: x,
@@ -212,7 +221,7 @@ class Settings(Singleton):
                          dest="outfile",
                          help="Write output to FILE", metavar="FILE")
         group.add_option("-H", "--html",
-                         dest="output_format", action="store_const", const="html",
+                         dest="output_module", action="store_const", const=output.html,
                          help="HTML output (deprecated, use --template html)")
         group.add_option("-I", "--indent",
                          dest="indent", type="int",
@@ -227,7 +236,7 @@ class Settings(Singleton):
                          dest="stripped", action="store_true",
                          help="Strip output of field headers and empty directories")
         group.add_option("--template",
-                         dest="output_format",
+                         action="callback", nargs=1, callback=set_output_module, type="string",
                          help="Set output TEMPLATE (default %default)", metavar="TEMPLATE")
         group.add_option("-T", "--text",
                          dest="text_color",
@@ -258,7 +267,7 @@ class Settings(Singleton):
         # options overriding eachother
         if options.debug or (not options.outfile and sys.stdout.isatty()):
             options.show_progress = False
-        if options.output_format == 'db':
+        if options.output_module == output.db:
             options.list_bad = False
 
         return options

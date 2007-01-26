@@ -104,20 +104,16 @@ def main():
             dirs = ifilter(profile_only_mp3, dirs)
         if options.mp3_min_bit_rate != 0:
             dirs = ifilter(enough_bitrate_mp3(options.mp3_min_bit_rate), dirs)
-        if options.output_format == 'db':
+        if options.output_module == output.db:
             dirs = ifilter(output_db_predicate, dirs)
-        if not options.output_format == 'db':
+        if not options.output_module == output.db:
             dirs = total_sizes(dirs, data.size)
         if not options.stripped and \
-           options.output_format in ['plaintext', 'html']:
+           options.output_module in [output.plaintext, output.html]:
             dirs = add_empty(dirs)
 
         # Configure renderer
-        try:
-            module = getattr(output, options.output_format)
-        except AttributeError:
-            die("Unknown template '%s'." % options.output_format, 2)
-        renderer = module.Renderer()
+        renderer = options.output_module.Renderer()
         renderer.format_string = options.format_string
         renderer.columns = options.fields
 
