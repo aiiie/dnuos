@@ -113,7 +113,10 @@ def main():
             dirs = add_empty(dirs)
 
         # Configure renderer
-        module = getattr(output, options.output_format)
+        try:
+            module = getattr(output, options.output_format)
+        except AttributeError:
+            die("Unknown template '%s'." % options.output_format, 2)
         renderer = module.Renderer()
         renderer.format_string = options.format_string
         renderer.columns = options.fields
