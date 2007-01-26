@@ -62,77 +62,81 @@ class Data(object):
             'audiotype': audiotype.__version__,
         }
 
+def make_listing(options, data):
+    # Make an iterator over all subdirectories of the base directories,
+    # including the base directories themselves. The directory trees are
+    # sorted either separately or together according to the merge setting.
+    trees = [ walk(basedir, options.sort_key, options.exclude_paths)
+              for basedir in options.basedirs ]
+    if options.merge:
+        path_pairs = merge(*trees)
+    else:
+        path_pairs = chain(*trees)
+
+    # Make Dirs from paths
+    if options.use_cache:
+        dirs = to_adir(path_pairs, audiodir.CachedDir)
+    else:
+        dirs = to_adir(path_pairs, audiodir.Dir)
+
+    # Add layers of functionality
+    dirs = timer_wrapper(dirs, data.times)
+    if options.show_progress:
+        dirs = indicate_progress(dirs, data.size)
+    if options.debug:
+        dirs = print_bad(dirs)
+    elif options.list_bad:
+        dirs = collect_bad(dirs, data.bad_files)
+    dirs = ifilter(non_empty, dirs)
+    if options.no_cbr:
+        dirs = ifilter(no_cbr_mp3, dirs)
+    if options.no_non_profile:
+        dirs = ifilter(profile_only_mp3, dirs)
+    if options.mp3_min_bit_rate != 0:
+        dirs = ifilter(enough_bitrate_mp3(options.mp3_min_bit_rate), dirs)
+    if options.output_module == output.db:
+        dirs = ifilter(output_db_predicate, dirs)
+    if not options.output_module == output.db:
+        dirs = total_sizes(dirs, data.size)
+    if not options.stripped and \
+       options.output_module in [output.plaintext, output.html]:
+        dirs = add_empty(dirs)
+
+    # Setup renderer
+    renderer = options.output_module.Renderer()
+    renderer.format_string = options.format_string
+    renderer.columns = options.fields
+    return renderer.render(dirs, options, data)
+
 
 def main():
-    data = Data()
-    options = Settings().parse_args()
+    try:
+        data = Data()
+        options = Settings().parse_args()
 
-    if options.use_cache:
-        is_path_included = make_included_pred(options.basedirs, options.exclude_paths)
-        is_entry_excluded = lambda (path,), value: not is_path_included(path)
-        PersistentDict[audiodir.DIR_PERSISTENCE_FILE].load(keep_pred=is_entry_excluded)
-
-    if options.basedirs:
-        # Make an iterator over all subdirectories of the base directories,
-        # including the base directories themselves. The directory trees are
-        # sorted either separately or together according to the merge setting.
-        trees = [ walk(basedir, options.sort_key, options.exclude_paths)
-                  for basedir in options.basedirs ]
-        if options.merge:
-            path_pairs = merge(*trees)
-        else:
-            path_pairs = chain(*trees)
-
-        # Make Dirs from paths
         if options.use_cache:
-            dirs = to_adir(path_pairs, audiodir.CachedDir)
+            is_path_included = make_included_pred(options.basedirs, options.exclude_paths)
+            is_entry_excluded = lambda (path,), value: not is_path_included(path)
+            PersistentDict[audiodir.DIR_PERSISTENCE_FILE].load(keep_pred=is_entry_excluded)
+
+        if options.basedirs:
+            result = make_listing(options, data)
+        elif options.disp_version:
+            result = output.plaintext.render_version(data.version)
         else:
-            dirs = to_adir(path_pairs, audiodir.Dir)
+            die("No folders to process.\nType 'dnuos.py -h' for help.", 2)
 
-        # Add layers of functionality
-        dirs = timer_wrapper(dirs, data.times)
-        if options.show_progress:
-            dirs = indicate_progress(dirs, data.size)
-        if options.debug:
-            dirs = print_bad(dirs)
-        elif options.list_bad:
-            dirs = collect_bad(dirs, data.bad_files)
-        dirs = ifilter(non_empty, dirs)
-        if options.no_cbr:
-            dirs = ifilter(no_cbr_mp3, dirs)
-        if options.no_non_profile:
-            dirs = ifilter(profile_only_mp3, dirs)
-        if options.mp3_min_bit_rate != 0:
-            dirs = ifilter(enough_bitrate_mp3(options.mp3_min_bit_rate), dirs)
-        if options.output_module == output.db:
-            dirs = ifilter(output_db_predicate, dirs)
-        if not options.output_module == output.db:
-            dirs = total_sizes(dirs, data.size)
-        if not options.stripped and \
-           options.output_module in [output.plaintext, output.html]:
-            dirs = add_empty(dirs)
+        # Output
+        outfile = get_outfile(options.outfile)
+        for chunk in result:
+            print >> outfile, chunk
 
-        # Configure renderer
-        renderer = options.output_module.Renderer()
-        renderer.format_string = options.format_string
-        renderer.columns = options.fields
+        if options.use_cache:
+            appdata.create_user_data_dir()
+            PersistentDict.writeout()
 
-        result = renderer.render(dirs, options, data)
-
-    elif options.disp_version:
-        result = output.plaintext.render_version(data.version)
-
-    else:
-        die("No folders to process.\nType 'dnuos.py -h' for help.", 2)
-
-    # Output
-    outfile = get_outfile(options.outfile)
-    for chunk in result:
-        print >> outfile, chunk
-
-    if options.use_cache:
-        appdata.create_user_data_dir()
-        PersistentDict.writeout()
+    except KeyboardInterrupt:
+        die("Aborted by user", 1)
 
 
 def indicate_progress(dirs, sizes, outs=sys.stderr):
@@ -295,7 +299,4 @@ def to_adir(path_pairs, constructor):
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        die("Aborted by user", 1)
+    main()

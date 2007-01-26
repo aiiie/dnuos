@@ -14,8 +14,7 @@ Module for rendering HTML output.
 """
 
 
-import output
-
+import dnuos.output
 
 
 class Renderer(object):

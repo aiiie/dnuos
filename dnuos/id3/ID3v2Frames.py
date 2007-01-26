@@ -3,8 +3,8 @@ __version__ = "$Revision: 1.5 $"
 
 import sys, re, zlib, warnings, imghdr, struct
 
-from id3 import binfuncs
-import id3
+from dnuos.id3 import binfuncs
+import dnuos.id3
 
 class ID3v2Frame(object):
     def __init__(self, id, version = (2,3,0,), data = None):
