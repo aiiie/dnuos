@@ -11,6 +11,7 @@
 
 import re, os, string, time
 
+import audiotype
 import appdata
 from cache import PersistentDict
 from cache import memoized
