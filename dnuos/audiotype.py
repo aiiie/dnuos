@@ -289,14 +289,14 @@ class MP3(AudioType):
             ]
 
         try:
-            self.id3v1 = id3.ID3v1(file)
+            self.id3v1 = dnuos.id3.ID3v1(file)
         except KeyboardInterrupt:
             raise KeyboardInterrupt
         except:
             self.id3v1 = None
 
         try:
-            self.id3v2 = id3.ID3v2(file)
+            self.id3v2 = dnuos.id3.ID3v2(file)
         except KeyboardInterrupt:
             raise KeyboardInterrupt
         except:
@@ -537,14 +537,14 @@ class MPC(AudioType):
         self.time = (float(self.framecount) * 1.150 / float(44.1) + float(0.5))
 
         try:
-            self.id3v1 = id3.ID3v1(file)
+            self.id3v1 = dnuos.id3.ID3v1(file)
         except KeyboardInterrupt:
             raise KeyboardInterrupt
         except:
             self.id3v1 = None
 
         try:
-            self.id3v2 = id3.ID3v2(file)
+            self.id3v2 = dnuos.id3.ID3v2(file)
         except KeyboardInterrupt:
             raise KeyboardInterrupt
         except:

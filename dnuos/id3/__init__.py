@@ -4,7 +4,7 @@ __revision__ = "$Revision: 1.5 $"
 import sys, re, os, warnings, struct
 import cStringIO as StringIO
 
-from id3 import ID3v2Frames
+from dnuos.id3 import ID3v2Frames
 
 DEBUG_LEVEL = 0
 
