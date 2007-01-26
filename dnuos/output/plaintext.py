@@ -18,8 +18,6 @@ from itertools import chain
 from itertools import ifilter
 from itertools import imap
 
-from misc import intersperse
-
 
 class Renderer(object):
     def render(self, dirs, options, data):

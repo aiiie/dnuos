@@ -118,15 +118,6 @@ def get_outfile(filename):
         die(msg, 2)
 
 
-def intersperse(items, sep):
-    """Separate each pair of elements in an iterable with a separator"""
-    iterator = iter(items)
-    yield iterator.next()
-    for item in iterator:
-        yield sep
-        yield item
-
-
 def is_subdir(path1, path2):
     """Returns True if path1 is a subdirectory of path2, otherwise False
 
