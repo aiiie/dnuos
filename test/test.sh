@@ -4,7 +4,7 @@ DATA='/home/mattias/dnuos/data/testdata/'
 REF_DIR='/home/mattias/dnuos/data/refoutput/'
 PYTHON='python2.3'
 BASEDIR=`dirname $0`
-BASEDIR=`abspath $BASEDIR`
+BASEDIR=`abspath $BASEDIR/../src`
 
 do_test() {
     rm -f ~/.dnuos/dirs.pkl

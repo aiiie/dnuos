@@ -13,7 +13,9 @@
 # TODO: Implement *.audiosize() that also excludes vorbis comments and such?
 
 
-import os, re, string, struct, sys, warnings, codecs, id3
+import os, re, string, struct, sys, warnings, codecs
+
+import id3
 from conf import Settings
 
 __version__ = "0.94"

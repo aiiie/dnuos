@@ -5,7 +5,8 @@ from setuptools import setup, find_packages
 setup(
     name = 'Dnuos',
     version = '0.95',
-    packages = find_packages(),
+    packages = find_packages('src'),
+    package_dir = {'': 'src'},
 
     zip_safe = True,
 
