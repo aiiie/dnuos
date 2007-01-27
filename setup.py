@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: iso-8859-1 -*-
 
 from setuptools import setup, find_packages
 
@@ -19,7 +20,7 @@ setup(
     },
 
     # Metadata for upload to PyPI
-    author = 'Mattias P√§iv√§rinta, aiiie',
+    author = 'Mattias P‰iv‰rinta, aiiie',
     author_email = 'pejve@vasteras2.net, aiiie@aiiie.co',
     description = 'Dnuos creates lists of your music collection',
     license = 'GNU/GPL',
