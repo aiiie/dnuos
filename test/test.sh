@@ -1,15 +1,15 @@
 abspath() { ( cd "$1" ; pwd ; ) ; }
 
-DATA='/home/mattias/dnuos/data/testdata/'
-REF_DIR='/home/mattias/dnuos/data/refoutput/'
-PYTHON='python2.3'
+DATA_DIR="`abspath ~/share/dnuos/testdata/`"
+REF_DIR="`abspath ~/share/dnuos/refoutput/`"
+PYTHON='python'
 BASEDIR=`dirname $0`
 BASEDIR=`abspath $BASEDIR/../src`
 
 do_test() {
     rm -f ~/.dnuos/dirs.pkl
     CMD="PYTHONPATH=$PYTHONPATH:$BASEDIR $PYTHON -c 'import dnuos.dnuos ; dnuos.dnuos.main()' $1"
-    pushd $DATA > /dev/null
+    pushd $DATA_DIR > /dev/null
     (
     echo -n "test empty $2 ... " &&
     eval "$CMD" &&
