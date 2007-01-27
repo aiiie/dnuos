@@ -8,7 +8,7 @@ BASEDIR=`abspath $BASEDIR/../src`
 
 func_test() {
     rm -f ~/.dnuos/dirs.pkl
-    CMD="PYTHONPATH=$PYTHONPATH:$BASEDIR $PYTHON -c 'import dnuos.dnuos ; dnuos.dnuos.main()' $1"
+    CMD="PYTHONPATH=$BASEDIR $PYTHON -c 'import dnuos ; dnuos.main()' $1"
     pushd $DATA_DIR > /dev/null
     (
     echo -n "test empty $2 ... " &&
