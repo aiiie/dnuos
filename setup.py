@@ -15,7 +15,7 @@ setup(
 
     entry_points = {
         'console_scripts': [
-            'dnuos = dnuos.dnuos:main',
+            'dnuos = dnuos:main',
         ],
     },
 
