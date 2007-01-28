@@ -19,7 +19,7 @@ import dnuos.output
 
 class Renderer(object):
     def __init__(self):
-        self.renderer = output.plaintext.Renderer()
+        self.renderer = dnuos.output.plaintext.Renderer()
 
     def __set_format_string(self, format_string):
         self.renderer.format_string = format_string
