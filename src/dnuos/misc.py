@@ -23,6 +23,7 @@ from heapq import heappop, heappush
 from itertools import count
 import os
 import sys
+from warnings import warn
 
 
 class Lookahead(object):
@@ -53,6 +54,10 @@ class Lookahead(object):
     def __eq__(self, other):
         """Compare iterator heads for equality - as opposed to the entire iterators"""
         return self.lookahead == other.lookahead
+
+
+def deprecation(message):
+    warn(message, DeprecationWarning, stacklevel=2)
 
 
 def die(msg, exitcode):
@@ -106,6 +111,11 @@ def fmap(value, funcs):
     ['-5.5', -5, 5.5]
     """
     return [ func(value) for func in funcs ]
+
+
+def formatwarning(message, category, filename, lineno):
+    """Custom warning formatting."""
+    return "%s: %s\n" % (category.__name__, message)
 
 
 def get_outfile(filename):

@@ -30,7 +30,7 @@ import sys
 import time
 
 from singleton import Singleton
-from misc import die
+from misc import deprecation
 from misc import sort
 from misc import to_human
 import output
@@ -39,6 +39,7 @@ import output
 def set_db_format(option, opt_str, value, parser):
     parser.values.outfile = value
     parser.values.output_module = output.db
+    deprecation("The %s option is deprecated and will be removed in a future version. Use --template=db --file=FILE instead to ensure compatibility with future versions." % opt_str)
 
 
 def set_format_string(option, opt_str, value, parser):
@@ -47,6 +48,11 @@ def set_format_string(option, opt_str, value, parser):
             parse_format_string2(value)
     except ValueError:
         raise OptionValueError("Bad format string argument to %s" % opt_str)
+
+
+def set_html_format(option, opt_str, value, parser):
+    parser.values.output_module = output.html
+    deprecation("The %s option is deprecated and will be removed in a future version. Use --template=html instead to ensure compatibility with future versions." % opt_str)
 
 
 def set_mp3_min_bitrate(option, opt_str, value, parser):
@@ -221,7 +227,7 @@ class Settings(Singleton):
                          dest="outfile",
                          help="Write output to FILE", metavar="FILE")
         group.add_option("-H", "--html",
-                         dest="output_module", action="store_const", const=output.html,
+                         action="callback", nargs=0, callback=set_html_format,
                          help="HTML output (deprecated, use --template html)")
         group.add_option("-I", "--indent",
                          dest="indent", type="int",

@@ -22,6 +22,7 @@ from itertools import ifilter
 import os
 import sys
 import time
+import warnings
 
 # fix for some dumb version of python 2.3
 sys.path.append(os.path.abspath('.'))
@@ -34,6 +35,7 @@ from conf import Settings
 from misc import die
 from misc import dir_depth
 from misc import equal_elements
+from misc import formatwarning
 from misc import get_outfile
 from misc import make_included_pred
 from misc import merge
@@ -111,6 +113,8 @@ def make_listing(options, data):
 
 def main():
     try:
+        warnings.formatwarning = formatwarning
+
         data = Data()
         options = Settings().parse_args()
 
