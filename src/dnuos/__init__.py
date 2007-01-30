@@ -119,9 +119,12 @@ def main():
         options = Settings().parse_args()
 
         if options.use_cache:
-            is_path_included = make_included_pred(options.basedirs, options.exclude_paths)
-            is_entry_excluded = lambda (path,), value: not is_path_included(path)
-            PersistentDict[audiodir.DIR_PERSISTENCE_FILE].load(keep_pred=is_entry_excluded)
+            is_path_included = make_included_pred(options.basedirs,
+                                                  options.exclude_paths)
+            is_entry_excluded = lambda (path,), value: \
+                                       not is_path_included(path)
+            cache = PersistentDict[audiodir.DIR_PERSISTENCE_FILE]
+            cache.load(keep_pred=is_entry_excluded)
 
         if options.basedirs:
             result = make_listing(options, data)
