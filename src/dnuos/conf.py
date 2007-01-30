@@ -271,7 +271,9 @@ class Settings(Singleton):
                                        if path not in options.exclude_paths ]
 
         # options overriding eachother
-        if options.debug or (not options.outfile and sys.stdout.isatty()):
+        if options.debug or (not options.outfile and
+                             isinstance(sys.stdout, file) and
+                             sys.stdout.isatty()):
             options.show_progress = False
         if options.output_module == output.db:
             options.list_bad = False
