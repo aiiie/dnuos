@@ -8,7 +8,7 @@ BASEDIR=`abspath $BASEDIR/../src`
 
 func_test() {
     rm -f ~/.dnuos/dirs.pkl
-    CMD="PYTHONPATH=$BASEDIR $PYTHON -c 'import dnuos ; dnuos.main()' $1"
+    CMD="PYTHONPATH=$BASEDIR $PYTHON -c 'import sys, dnuos ; sys.argv.pop(0) ; dnuos.main()' $1"
     pushd $DATA_DIR > /dev/null
     (
     echo -n "test empty $2 ... " &&
@@ -36,6 +36,10 @@ unit_tests() {
     return $RV
 }
 
+func_doctests() {
+    nosetests --with-doctest -v
+}
+
 (
 echo Unit tests
 echo ==========
@@ -44,8 +48,8 @@ unit_tests &&
 echo &&
 echo Functional tests &&
 echo ================ &&
+func_doctests &&
 func_test_piped default aac lame &&
-func_test_piped version -V &&
 func_test_piped merge -m merge1/* merge2/* &&
 func_test_piped outputdb --template db aac lame &&
 func_test_piped strip -s aac &&
