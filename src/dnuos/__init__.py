@@ -111,12 +111,12 @@ def make_listing(options, data):
     return renderer.render(dirs, options, data)
 
 
-def main():
+def main(argv=sys.argv):
     try:
         warnings.formatwarning = formatwarning
 
         data = Data()
-        options = Settings().parse_args()
+        options = Settings().parse_args(argv)
 
         if options.use_cache:
             is_path_included = make_included_pred(options.basedirs,
