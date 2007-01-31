@@ -110,13 +110,12 @@ def make_listing(options, data):
     return renderer.render(dirs, options, data)
 
 
-def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
+def main():
     try:
-        sys.stderr = stderr
         warnings.formatwarning = formatwarning
 
         data = Data()
-        options = Settings().parse_args(argv)
+        options = Settings().parse_args(sys.argv)
 
         if options.use_cache:
             is_path_included = make_included_pred(options.basedirs,
@@ -135,7 +134,7 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
 
         # Output
         try:
-            outfile = options.outfile and open(options.outfile, 'w') or stdout
+            outfile = options.outfile and open(options.outfile, 'w') or sys.stdout
         except IOError, (errno, errstr):
             msg = "I/O Error(%s): %s\nCannot open '%s' for writing" % \
                   (errno, errstr, filename)
