@@ -118,16 +118,6 @@ def formatwarning(message, category, filename, lineno):
     return "%s: %s\n" % (category.__name__, message)
 
 
-def get_outfile(filename):
-    """Open file for writing"""
-    try:
-        return filename and open(filename, 'w') or sys.stdout
-    except IOError, (errno, errstr):
-        msg = "I/O Error(%s): %s\nCannot open '%s' for writing" % \
-              (errno, errstr, file)
-        die(msg, 2)
-
-
 def is_subdir(path1, path2):
     """Returns True if path1 is a subdirectory of path2, otherwise False
 

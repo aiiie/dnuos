@@ -36,7 +36,6 @@ from misc import die
 from misc import dir_depth
 from misc import equal_elements
 from misc import formatwarning
-from misc import get_outfile
 from misc import make_included_pred
 from misc import merge
 from misc import sort
@@ -111,8 +110,9 @@ def make_listing(options, data):
     return renderer.render(dirs, options, data)
 
 
-def main(argv=sys.argv):
+def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
     try:
+        sys.stderr = stderr
         warnings.formatwarning = formatwarning
 
         data = Data()
@@ -134,7 +134,12 @@ def main(argv=sys.argv):
             die("No folders to process.\nType 'dnuos.py -h' for help.", 2)
 
         # Output
-        outfile = get_outfile(options.outfile)
+        try:
+            outfile = options.outfile and open(options.outfile, 'w') or stdout
+        except IOError, (errno, errstr):
+            msg = "I/O Error(%s): %s\nCannot open '%s' for writing" % \
+                  (errno, errstr, filename)
+            die(msg, 2)
         for chunk in result:
             print >> outfile, chunk
 
