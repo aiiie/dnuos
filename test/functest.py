@@ -45,7 +45,11 @@ def write_unified_diff(a, b):
 
 def write_dnuos_diff(args, expected):
     output = StringIO()
-    dnuos.main(process_args(args), output, output)
+    old = sys.argv, sys.stderr, sys.stdout
+    sys.argv = process_args(args)
+    sys.stderr = sys.stdout = output
+    dnuos.main()
+    sys.argv, sys.stderr, sys.stdout = old
     write_unified_diff(expected, output.getvalue())
 
 

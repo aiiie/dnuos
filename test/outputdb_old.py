@@ -3,13 +3,18 @@
 """
 
 from cStringIO import StringIO
+import sys
+
 from functest import process_args, write_unified_diff
 import dnuos
 
 def test():
-    args = process_args("-q --output-db=/tmp/output aac lame")
     output = StringIO()
-    dnuos.main(args, output, output)
+    old = sys.argv, sys.stderr, sys.stdout
+    sys.argv = process_args("-q --output-db=/tmp/output aac lame")
+    sys.stderr = sys.stdout = output
+    dnuos.main()
+    sys.argv, sys.stderr, sys.stdout = old
 
     expected_stdout_and_stderr = """
 DeprecationWarning: The --output-db option is deprecated and will be removed in a future version. Use --template=db --file=FILE instead to ensure compatibility with future versions.
