@@ -32,7 +32,6 @@ import audiotype
 import audiodir
 from cache import PersistentDict
 from conf import Settings
-from misc import die
 from misc import dir_depth
 from misc import equal_elements
 from misc import formatwarning
@@ -130,15 +129,10 @@ def main():
         elif options.disp_version:
             result = output.plaintext.render_version(data.version)
         else:
-            die("No folders to process.\nType 'dnuos.py -h' for help.", 2)
+            raise ValueError("No folders to process.\nType 'dnuos.py -h' for help.")
 
         # Output
-        try:
-            outfile = options.outfile and open(options.outfile, 'w') or sys.stdout
-        except IOError, (errno, errstr):
-            msg = "I/O Error(%s): %s\nCannot open '%s' for writing" % \
-                  (errno, errstr, filename)
-            die(msg, 2)
+        outfile = options.outfile and open(options.outfile, 'w') or sys.stdout
         for chunk in result:
             print >> outfile, chunk
 
@@ -146,8 +140,18 @@ def main():
             appdata.create_user_data_dir()
             PersistentDict.writeout()
 
+    except ValueError, err:
+        print >> sys.stderr, err
+        return 2
+
     except KeyboardInterrupt:
-        die("Aborted by user", 1)
+        print >> sys.stderr, "Aborted by user"
+        return 1
+
+    except IOError, (errno, errstr):
+        print >> sys.stderr, "I/O Error(%s): %s" % (errno, errstr)
+        print >> sys.stderr, "Cannot open '%s' for writing" % filename
+        return 1
 
 
 def indicate_progress(dirs, sizes, outs=sys.stderr):
