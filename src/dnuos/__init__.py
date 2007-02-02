@@ -115,7 +115,7 @@ def main():
         warnings.formatwarning = formatwarning
 
         data = Data()
-        options = Settings().parse_args(sys.argv)
+        options = Settings().parse_args(sys.argv[1:])
 
         if options.use_cache:
             is_path_included = make_included_pred(options.basedirs,
