@@ -60,12 +60,6 @@ def deprecation(message):
     warn(message, DeprecationWarning, stacklevel=2)
 
 
-def die(msg, exitcode):
-    """print message and exit with exitcode"""
-    print >> sys.stderr, msg
-    sys.exit(exitcode)
-
-
 def dir_depth(path):
     """Return the subdirectory depth of a path
 
