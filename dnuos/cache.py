@@ -154,5 +154,8 @@ class memoized(object):
         """Return the function's docstring."""
         return self.func.__doc__
 
-def cached(func, filename):
-  return memoized(func, PersistentDict(filename=filename, default={}))
+
+class cached(memoized):
+    def __init__(self, func, filename):
+        cache = PersistentDict(filename=filename, default={})
+        super(cached, self).__init__(func, cache)
