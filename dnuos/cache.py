@@ -131,3 +131,12 @@ class cached(memoized):
     def __init__(self, func, filename):
         cache = PersistentDict(filename=filename, default={})
         super(cached, self).__init__(func, cache)
+
+    def load(self, keep_pred=None):
+        if keep_pred:
+            self.cache.load(keep_pred)
+        else:
+            self.cache.load()
+
+    def flush(self):
+        self.cache.flush()

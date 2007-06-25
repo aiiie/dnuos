@@ -111,6 +111,7 @@ def main():
         data = Data()
         options = Settings().parse_args(sys.argv[1:])
 
+        # Setup Cache
         if options.use_cache:
             cache_file = appdata.user_data_file('dirs.pkl')
             adir_class = cached(audiodir.Dir, filename=cache_file)
@@ -119,7 +120,7 @@ def main():
                                                   options.exclude_paths)
             is_entry_excluded = lambda (path,), value: \
                                        not is_path_included(path)
-            adir_class.cache.load(keep_pred=is_entry_excluded)
+            adir_class.load(keep_pred=is_entry_excluded)
         else:
             adir_class = audiodir.Dir
 
@@ -139,7 +140,7 @@ def main():
 
         if options.use_cache:
             appdata.create_user_data_dir()
-            adir_class.cache.flush()
+            adir_class.flush()
 
     except ValueError, err:
         print >> sys.stderr, err
