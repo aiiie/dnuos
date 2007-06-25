@@ -13,7 +13,6 @@ import re, os, string, time
 
 import audiotype
 import appdata
-from cache import cached
 from conf import Settings
 from misc import dir_depth
 from misc import map_dict
@@ -21,9 +20,6 @@ from misc import uniq
 
 
 __version__ = "0.17.3"
-
-
-DIR_PERSISTENCE_FILE = appdata.user_data_file('dirs.pkl')
 
 
 def set_root(self, root):
@@ -389,5 +385,3 @@ class Dir(object):
         for attr in attrs:
             res[attr] = getattr(self, attr)
         return res
-
-CachedDir = cached(Dir, filename=DIR_PERSISTENCE_FILE)
