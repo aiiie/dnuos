@@ -153,3 +153,6 @@ class memoized(object):
     def __repr__(self):
         """Return the function's docstring."""
         return self.func.__doc__
+
+def cached(func, filename):
+  return memoized(func, PersistentDict(filename=filename, default={}))
