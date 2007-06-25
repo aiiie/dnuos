@@ -31,7 +31,6 @@ import appdata
 import audiotype
 import audiodir
 from cache import cached
-from cache import PersistentDict
 from conf import Settings
 from misc import dir_depth
 from misc import equal_elements
@@ -120,8 +119,7 @@ def main():
                                                   options.exclude_paths)
             is_entry_excluded = lambda (path,), value: \
                                        not is_path_included(path)
-            cache = PersistentDict[cache_file]
-            cache.load(keep_pred=is_entry_excluded)
+            adir_class.cache.load(keep_pred=is_entry_excluded)
         else:
             adir_class = audiodir.Dir
 
@@ -141,7 +139,7 @@ def main():
 
         if options.use_cache:
             appdata.create_user_data_dir()
-            PersistentDict.writeout()
+            adir_class.cache.flush()
 
     except ValueError, err:
         print >> sys.stderr, err

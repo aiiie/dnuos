@@ -46,42 +46,14 @@ class UpdateTrackingDict(dict):
         return dict([ (key, self[key]) for key in self.wkeys ])
 
 
-class PersistentDictMetaClass(type):
-    """
-    Meta class for PersistentDict.
-    """
-    def __getitem__(cls, filename):
-        """
-        Get the PersistentDict instance using a specific file.
-        """
-        return PersistentDict.instances[filename]
-
-
 class PersistentDict(UpdateTrackingDict):
     """
     A dict with persistence.
     """
-    __metaclass__ = PersistentDictMetaClass
-
-    instances = {}
-
     def __init__(self, *args, **kwargs):
         super(PersistentDict, self).__init__(*args, **kwargs)
         self.filename = filename = os.path.abspath(kwargs['filename'])
-        if filename in PersistentDict.instances:
-            raise ValueError("PersistentDict for '%s' already exists." % filename)
-        PersistentDict.instances[filename] = self
         self.default = kwargs.get('default')
-
-    # Class methods
-
-    def writeout(cls):
-        """
-        Flush all instances of PersistentDict to their respective files.
-        """
-        for instance in PersistentDict.instances.values():
-            instance._write()
-    writeout = classmethod(writeout)
 
     # Instance methods
 
@@ -111,7 +83,7 @@ class PersistentDict(UpdateTrackingDict):
         except IOError:
             return self.default
 
-    def _write(self):
+    def flush(self):
         """
         Serialize data to file, keeping a copy of the previous version.
         """
