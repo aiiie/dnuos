@@ -30,6 +30,7 @@ sys.path.append(os.path.abspath('.'))
 import appdata
 import audiotype
 import audiodir
+from cache import cached
 from cache import PersistentDict
 from conf import Settings
 from misc import dir_depth
@@ -112,13 +113,15 @@ def main():
         options = Settings().parse_args(sys.argv[1:])
 
         if options.use_cache:
+            cache_file = appdata.user_data_file('dirs.pkl')
+            adir_class = cached(audiodir.Dir, filename=cache_file)
+
             is_path_included = make_included_pred(options.basedirs,
                                                   options.exclude_paths)
             is_entry_excluded = lambda (path,), value: \
                                        not is_path_included(path)
-            cache = PersistentDict[audiodir.DIR_PERSISTENCE_FILE]
+            cache = PersistentDict[cache_file]
             cache.load(keep_pred=is_entry_excluded)
-            adir_class = audiodir.CacheDir
         else:
             adir_class = audiodir.Dir
 
