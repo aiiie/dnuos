@@ -22,11 +22,6 @@ from misc import uniq
 __version__ = "0.17.3"
 
 
-def set_root(self, root):
-    # XXX These things don't belong here!!
-    self._depth = dir_depth(self.path) - dir_depth(root) - 1
-
-
 class Dir(object):
     pattern = r"\.(?:mp3|mpc|mp\+|m4a|ogg|flac|fla|flc)$"
     audio_file_extRE = re.compile(pattern, re.IGNORECASE)
@@ -71,6 +66,9 @@ class Dir(object):
         del self._profile
         del self._artist
         del self._album
+
+    def depth_from(self, root):
+        return dir_depth(self.path) - dir_depth(root) - 1
 
     def get_name(self):
         return os.path.basename(self.path) or self.path
