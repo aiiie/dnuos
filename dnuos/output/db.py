@@ -15,8 +15,8 @@ Module for rendering outputdb format.
 
 
 class Renderer(object):
-    def render(self, dirs, options, data):
-        for adir in dirs:
+    def render(self, dir_pairs, options, data):
+        for adir, root in dir_pairs:
             chunk = "%d:'%s',%d:'%s',%d:'%s',%d:'%s',%d,%.d,%d" % (
                 len(str(adir.album)),
                 str(adir.album),
