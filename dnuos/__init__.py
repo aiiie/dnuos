@@ -322,10 +322,10 @@ def walk(basedir, sort_key=lambda x: x, excluded=[]):
 
 def to_adir(path_pairs, constructor):
     """
-    Converts a sequence of path pairs into a sequence of Dirs
+    Converts a sequence of path pairs into a sequence of dir pairs
 
-    A path pair is a tuple (relpath, root). The Dir is validated and root is
-    assigned to it.
+    A path pair is a tuple (relpath, root). A dir pair is tuple (Dir,
+    root). The Dir is validated and root is assigned to it.
     """
     for relpath, root in path_pairs:
         adir = constructor(root + relpath)
