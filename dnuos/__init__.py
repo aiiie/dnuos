@@ -73,13 +73,7 @@ def make_path_pairs(options):
     else:
         return chain(*trees)
 
-def make_listing(path_pairs, options, data):
-    # Make Dirs from paths
-    if options.use_cache:
-        dirs = to_adir(path_pairs, audiodir.CachedDir)
-    else:
-        dirs = to_adir(path_pairs, audiodir.Dir)
-
+def make_listing(dirs, options, data):
     # Add layers of functionality
     dirs = timer_wrapper(dirs, data.times)
     if options.show_progress:
@@ -127,7 +121,12 @@ def main():
 
         if options.basedirs:
             path_pairs = make_path_pairs(options)
-            result = make_listing(path_pairs, options, data)
+            # Make Dirs from paths
+            if options.use_cache:
+                dirs = to_adir(path_pairs, audiodir.CachedDir)
+            else:
+                dirs = to_adir(path_pairs, audiodir.Dir)
+            result = make_listing(dirs, options, data)
         elif options.disp_version:
             result = output.plaintext.render_version(data.version)
         else:
