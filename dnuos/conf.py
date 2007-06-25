@@ -348,7 +348,7 @@ class Column(object):
     def get(self, adir):
         return getattr(adir, self.attr)
 
-    def get_formatted(self, adir, suffixes=True):
+    def get_formatted(self, adir, root, suffixes=True):
         data = self.get(adir)
         if data is None:
             data = ''
