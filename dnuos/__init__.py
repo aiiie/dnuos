@@ -273,8 +273,8 @@ class EmptyDir(object):
 
     __slots__ = ['name', 'path']
 
-    def __init__(self, name, path):
-        self.name = name
+    def __init__(self, path):
+        self.name = os.path.basename(path)
         self.path = path
 
     def __getattr__(self, attr):
@@ -296,7 +296,8 @@ def add_empty(dir_pairs):
 
         start = equal_elements(path, oldpath)
         for depth in range(start, len(path) - 1):
-            yield EmptyDir(path[depth], os.path.join(root, *path[:depth+1])), root
+            emptypath = os.path.join(root, *path[:depth+1])
+            yield EmptyDir(emptypath), root
         oldpath = path
 
         yield adir, root
