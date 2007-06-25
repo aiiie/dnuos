@@ -20,13 +20,13 @@ from itertools import imap
 
 
 class Renderer(object):
-    def render(self, dirs, options, data):
+    def render(self, dir_pairs, options, data):
         """Render directories to a sequence of strings."""
         output = [
             (lambda: options.disp_date,
              self.render_date()),
             (lambda: True,
-             self.render_directories(dirs, not options.stripped)),
+             self.render_directories(dir_pairs, not options.stripped)),
             (lambda: data.bad_files,
              self.render_bad_files(data.bad_files)),
             (lambda: options.disp_time,
@@ -48,14 +48,14 @@ class Renderer(object):
     def render_date(self):
         yield time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
 
-    def render_directories(self, dirs, show_headers=True):
+    def render_directories(self, dir_pairs, show_headers=True):
         if show_headers:
             fields = map(lambda c: c.header(), self.columns)
             line = self.format_string % tuple(fields)
             yield line
             yield "=" * len(line)
 
-        for adir in dirs:
+        for adir, root in dir_pairs:
             fields = map(lambda c: c.get_formatted(adir), self.columns)
             yield self.format_string % tuple(fields)
 

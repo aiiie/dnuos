@@ -77,35 +77,36 @@ def make_path_pairs(basedirs, exclude_paths, sort_key, use_merge):
         return chain(*trees)
 
 
-def make_listing(dirs, options, data):
+def make_listing(dir_pairs, options, data):
     # Add layers of functionality
-    dirs = timer_wrapper(dirs, data.times)
+    dir_pairs = timer_wrapper(dir_pairs, data.times)
     if options.show_progress:
-        dirs = indicate_progress(dirs, data.size)
+        dir_pairs = indicate_progress(dir_pairs, data.size)
     if options.debug:
-        dirs = print_bad(dirs)
+        dir_pairs = print_bad(dir_pairs)
     elif options.list_bad:
-        dirs = collect_bad(dirs, data.bad_files)
-    dirs = ifilter(non_empty, dirs)
+        dir_pairs = collect_bad(dir_pairs, data.bad_files)
+    dir_pairs = ifilter(non_empty, dir_pairs)
     if options.no_cbr:
-        dirs = ifilter(no_cbr_mp3, dirs)
+        dir_pairs = ifilter(no_cbr_mp3, dir_pairs)
     if options.no_non_profile:
-        dirs = ifilter(profile_only_mp3, dirs)
+        dir_pairs = ifilter(profile_only_mp3, dir_pairs)
     if options.mp3_min_bit_rate != 0:
-        dirs = ifilter(enough_bitrate_mp3(options.mp3_min_bit_rate), dirs)
+        dir_pairs = ifilter(enough_bitrate_mp3(options.mp3_min_bit_rate),
+                            dir_pairs)
     if options.output_module == output.db:
-        dirs = ifilter(output_db_predicate, dirs)
+        dir_pairs = ifilter(output_db_predicate, dir_pairs)
     if not options.output_module == output.db:
-        dirs = total_sizes(dirs, data.size)
+        dir_pairs = total_sizes(dir_pairs, data.size)
     if not options.stripped and \
        options.output_module in [output.plaintext, output.html]:
-        dirs = add_empty(dirs)
+        dir_pairs = add_empty(dir_pairs)
 
     # Setup renderer
     renderer = options.output_module.Renderer()
     renderer.format_string = options.format_string
     renderer.columns = options.fields
-    return renderer.render(dirs, options, data)
+    return renderer.render(dir_pairs, options, data)
 
 
 def setup_cache(cache_filename, basedirs, exclude_paths):
@@ -138,8 +139,8 @@ def main():
                                          options.exclude_paths,
                                          options.sort_key,
                                          options.merge)
-            dirs = to_adir(path_pairs, adir_class)
-            result = make_listing(dirs, options, data)
+            dir_pairs = to_adir(path_pairs, adir_class)
+            result = make_listing(dir_pairs, options, data)
         elif options.disp_version:
             result = output.plaintext.render_version(data.version)
         else:
@@ -168,47 +169,47 @@ def main():
         return 1
 
 
-def indicate_progress(dirs, sizes, outs=sys.stderr):
+def indicate_progress(dir_pairs, sizes, outs=sys.stderr):
     """Indicate progress.
 
     Yields an unchanged iteration of dirs with an added side effect.
     Total size in sizes is updated to stderr every step
     throughout the iteration.
     """
-    for adir in dirs:
+    for adir, root in dir_pairs:
         print >> outs, "%sB processed\r" % to_human(sizes["Total"]),
-        yield adir
+        yield adir, root 
     print >> outs, "\r               \r",
 
 
-def print_bad(dirs):
+def print_bad(dir_pairs):
     """Print bad files.
 
     Yields an unchanged iteration of dirs with an added side effect.
     After each directory is yielded its bad files are output to
     stderr.
     """
-    for adir in dirs:
-        yield adir
+    for adir, root in dir_pairs:
+        yield adir, root
 
         for badfile in adir.bad_files:
             print >> sys.stderr, "Audiotype failed for:", badfile
 
 
-def collect_bad(dirs, bad_files):
+def collect_bad(dir_pairs, bad_files):
     """Collect bad files.
 
     Yields an unchanged iteration of dirs with an added side effect.
     After each directory is yielded its bad files are appended to
     bad_files.
     """
-    for adir in dirs:
-        yield adir
+    for adir, root in dir_pairs:
+        yield adir, root
 
         bad_files.extend(adir.bad_files)
 
 
-def non_empty(adir):
+def non_empty((adir, root)):
     """Empty directory predicate
 
     Directories are considered empty if they contain no recognized audio files.
@@ -216,13 +217,13 @@ def non_empty(adir):
     return adir.num_files > len(adir.bad_files)
  
 
-def no_cbr_mp3(adir):
+def no_cbr_mp3((adir, root)):
     """No CBR MP3 files predicate"""
     # This implentation does not consider CBR MP3s in Mixed directories
     return adir.mediatype != "MP3" or adir.brtype not in "C~"
 
 
-def profile_only_mp3(adir):
+def profile_only_mp3((adir, root)):
     """No non-profile MP3 predicate"""
     # This implentation does not consider non-profile MP3s in Mixed directories
     return adir.mediatype != "MP3" or adir.profile != ""
@@ -231,39 +232,39 @@ def profile_only_mp3(adir):
 def enough_bitrate_mp3(mp3_min_bit_rate):
     """Create low-bitrate MP3 predicate"""
     # This implentation does not consider low-bitrate MP3s in Mixed directories
-    return lambda adir: (adir.mediatype != "MP3" or
-                         adir.bitrate >= mp3_min_bit_rate)
+    return lambda (adir, root): (adir.mediatype != "MP3" or
+                                 adir.bitrate >= mp3_min_bit_rate)
 
 
-def output_db_predicate(adir):
+def output_db_predicate((adir, root)):
     return adir.mediatype != "Mixed" and \
            adir.artist != None and \
            adir.album != None
 
 
-def total_sizes(dirs, sizes):
+def total_sizes(dir_pairs, sizes):
     """Calculate audio file size totals.
 
     Yields an unchanged iteration of dirs with an added side effect.
     After each directory is yielded its filesize statistics are
     added to sizes.
     """
-    for adir in dirs:
-        yield adir
+    for adir, root in dir_pairs:
+        yield adir, root
         for mediatype, size in adir.sizes.items():
             sizes[mediatype] += size
         sizes["Total"] += adir.size
 
 
-def timer_wrapper(dirs, times):
+def timer_wrapper(dir_pairs, times):
     """Time the iteration.
 
     Yields an unchanged iteration of dirs with an added side effect.
-    Time in seconds elapsed over the iteration is stored in times.
+    Time in seconds elapsed over the entire iteration is stored in times.
     """
     times['start'] = time.clock()
-    for adir in dirs:
-        yield adir
+    for adir, root in dir_pairs:
+        yield adir, root
     times['elapsed_time'] = time.clock() - times['start']
 
 
@@ -280,20 +281,20 @@ class EmptyDir(object):
         return None
 
 
-def add_empty(dirs):
+def add_empty(dir_pairs):
     """Insert empty ancestral directories
 
     Pre-order directory tree traversal is assumed.
     """
     oldpath = []
-    for adir in dirs:
+    for adir, root in dir_pairs:
         path = adir._relpath.split(os.path.sep)
         start = equal_elements(path, oldpath)
         for depth in range(start, len(path) - 1):
-            yield EmptyDir(path[depth], depth)
+            yield EmptyDir(path[depth], depth), root
         oldpath = path
 
-        yield adir
+        yield adir, root
 
 
 def walk(basedir, sort_key=lambda x: x, excluded=[]):
@@ -324,4 +325,4 @@ def to_adir(path_pairs, constructor):
         adir = constructor(root + relpath)
         adir.validate()
         audiodir.set_root(adir, root)
-        yield adir
+        yield adir, root

@@ -29,7 +29,7 @@ class Renderer(object):
         self.renderer.columns = columns
     columns = property(fset=__set_columns)
 
-    def render(self, dirs, options, data):
+    def render(self, dir_pairs, options, data):
         """Render directories as HTML to stdout.
 
         Directories are rendered like in plain text, but with HTML header
@@ -50,7 +50,7 @@ body { color: %s; background: %s; }
 <body>
 <pre>""" % (data.version['dnuos'], options.text_color, options.bg_color)
 
-        for chunk in self.renderer.render(dirs, options, data):
+        for chunk in self.renderer.render(dir_pairs, options, data):
             yield chunk
 
         yield "</pre>"
