@@ -118,14 +118,13 @@ def main():
                                        not is_path_included(path)
             cache = PersistentDict[audiodir.DIR_PERSISTENCE_FILE]
             cache.load(keep_pred=is_entry_excluded)
+            adir_class = audiodir.CacheDir
+        else:
+            adir_class = audiodir.Dir
 
         if options.basedirs:
             path_pairs = make_path_pairs(options)
-            # Make Dirs from paths
-            if options.use_cache:
-                dirs = to_adir(path_pairs, audiodir.CachedDir)
-            else:
-                dirs = to_adir(path_pairs, audiodir.Dir)
+            dirs = to_adir(path_pairs, adir_class)
             result = make_listing(dirs, options, data)
         elif options.disp_version:
             result = output.plaintext.render_version(data.version)
