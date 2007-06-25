@@ -106,6 +106,16 @@ def make_listing(dirs, options, data):
     return renderer.render(dirs, options, data)
 
 
+def setup_cache(cache_filename, basedirs, exclude_paths):
+    is_path_included = make_included_pred(basedirs,
+                                          exclude_paths)
+    is_entry_excluded = lambda (path,), value: \
+                               not is_path_included(path)
+    cache = PersistentDict(filename=cache_filename, default={})
+    cache.load(keep_pred=is_entry_excluded)
+    return cache
+
+
 def main():
     try:
         warnings.formatwarning = formatwarning
@@ -113,22 +123,15 @@ def main():
         data = Data()
         options = Settings().parse_args(sys.argv[1:])
 
-        # Setup Cache
-        if options.use_cache:
-            cache_file = appdata.user_data_file('dirs.pkl')
-            cache = PersistentDict(filename=cache_file, default={})
-
-            is_path_included = make_included_pred(options.basedirs,
-                                                  options.exclude_paths)
-            is_entry_excluded = lambda (path,), value: \
-                                       not is_path_included(path)
-            cache.load(keep_pred=is_entry_excluded)
-
-            adir_class = memoized(audiodir.Dir, cache)
-        else:
-            adir_class = audiodir.Dir
-
         if options.basedirs:
+            if options.use_cache:
+                cache = setup_cache(appdata.user_data_file('dirs.pkl'),
+                                    options.basedirs,
+                                    options.exclude_paths)
+                adir_class = memoized(audiodir.Dir, cache)
+            else:
+                adir_class = audiodir.Dir
+
             path_pairs = make_path_pairs(options)
             dirs = to_adir(path_pairs, adir_class)
             result = make_listing(dirs, options, data)
@@ -142,7 +145,7 @@ def main():
         for chunk in result:
             print >> outfile, chunk
 
-        if options.use_cache:
+        if options.basedirs and options.use_cache:
             appdata.create_user_data_dir()
             cache.flush()
 
