@@ -13,8 +13,7 @@ import re, os, string, time
 
 import audiotype
 import appdata
-from cache import PersistentDict
-from cache import memoized
+from cache import cached
 from conf import Settings
 from misc import dir_depth
 from misc import map_dict
@@ -391,4 +390,4 @@ class Dir(object):
             res[attr] = getattr(self, attr)
         return res
 
-CachedDir = memoized(Dir, PersistentDict(filename=DIR_PERSISTENCE_FILE, default={}))
+CachedDir = cached(Dir, filename=DIR_PERSISTENCE_FILE)
