@@ -5,7 +5,7 @@ BASEDIR=`dirname $0`
 BASEDIR=`abspath $BASEDIR/..`
 
 unit_tests() {
-    pushd $BASEDIR/src > /dev/null
+    pushd $BASEDIR/dnuos > /dev/null
     nosetests --with-doctest -v
     RV=$?
     popd > /dev/null
@@ -14,7 +14,7 @@ unit_tests() {
 
 func_doctests() {
     pushd $BASEDIR/test > /dev/null
-    nosetests --with-doctest -v
+    nosetests --with-doctest -v "$BASEDIR/tests/functional"
     RV=$?
     popd > /dev/null
     return $RV
