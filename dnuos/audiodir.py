@@ -25,8 +25,6 @@ __version__ = "0.17.3"
 def set_root(self, root):
     # XXX These things don't belong here!!
     self._depth = dir_depth(self.path) - dir_depth(root) - 1
-    path = self.path.split(os.path.sep)
-    self._relpath = os.path.join(*path[-self._depth-1:])
 
 
 class Dir(object):
