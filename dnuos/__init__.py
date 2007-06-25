@@ -288,7 +288,9 @@ def add_empty(dir_pairs):
     """
     oldpath = []
     for adir, root in dir_pairs:
-        path = adir._relpath.split(os.path.sep)
+
+        path = adir.path.split(os.path.sep)[-adir._depth-1:]
+
         start = equal_elements(path, oldpath)
         for depth in range(start, len(path) - 1):
             yield EmptyDir(path[depth], depth), root
