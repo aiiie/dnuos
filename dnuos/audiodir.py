@@ -373,6 +373,9 @@ class Dir(object):
     is_audio_file = staticmethod(is_audio_file)
 
     def __getstate__(self):
+        # XXX Not sure if this attribute list is necessary now that _root,
+        # _depth and _relpath are gone. Maybe we could just return
+        # self.__dict__ or something.
         attrs = ('album artist audio_files audiolist_format bad_files bitrate '
                  'brtype length mediatype modified name num_files path profile '
                  'quality size sizes').split()
