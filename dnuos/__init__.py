@@ -64,16 +64,18 @@ class Data(object):
             'audiotype': audiotype.__version__,
         }
 
-def make_path_pairs(options):
+
+def make_path_pairs(basedirs, exclude_paths, sort_key, use_merge):
     # Make an iterator over all subdirectories of the base directories,
     # including the base directories themselves. The directory trees are
     # sorted either separately or together according to the merge setting.
-    trees = [ walk(basedir, options.sort_key, options.exclude_paths)
-              for basedir in options.basedirs ]
-    if options.merge:
+    trees = [ walk(basedir, sort_key, exclude_paths)
+              for basedir in basedirs ]
+    if use_merge:
         return merge(*trees)
     else:
         return chain(*trees)
+
 
 def make_listing(dirs, options, data):
     # Add layers of functionality
@@ -132,7 +134,10 @@ def main():
             else:
                 adir_class = audiodir.Dir
 
-            path_pairs = make_path_pairs(options)
+            path_pairs = make_path_pairs(options.basedirs,
+                                         options.exclude_paths,
+                                         options.sort_key,
+                                         options.merge)
             dirs = to_adir(path_pairs, adir_class)
             result = make_listing(dirs, options, data)
         elif options.disp_version:
