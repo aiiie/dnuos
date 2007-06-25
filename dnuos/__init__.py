@@ -271,14 +271,17 @@ def timer_wrapper(dir_pairs, times):
 class EmptyDir(object):
     """Represent a group of merged empty directories."""
 
-    __slots__ = ['_depth', 'name']
+    __slots__ = ['name', 'path']
 
-    def __init__(self, name, depth):
+    def __init__(self, name, path):
         self.name = name
-        self._depth = depth
+        self.path = path
 
     def __getattr__(self, attr):
         return None
+
+    def depth_from(self, root):
+        return dir_depth(self.path) - dir_depth(root) - 1
 
 
 def add_empty(dir_pairs):
@@ -289,11 +292,11 @@ def add_empty(dir_pairs):
     oldpath = []
     for adir, root in dir_pairs:
 
-        path = adir.path.split(os.path.sep)[-adir._depth-1:]
+        path = adir.path[len(root)+1:].split(os.path.sep)
 
         start = equal_elements(path, oldpath)
         for depth in range(start, len(path) - 1):
-            yield EmptyDir(path[depth], depth), root
+            yield EmptyDir(path[depth], os.path.join(root, *path[:depth+1])), root
         oldpath = path
 
         yield adir, root
@@ -326,5 +329,4 @@ def to_adir(path_pairs, constructor):
     for relpath, root in path_pairs:
         adir = constructor(root + relpath)
         adir.validate()
-        audiodir.set_root(adir, root)
         yield adir, root

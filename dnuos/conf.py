@@ -353,7 +353,7 @@ class Column(object):
         if data is None:
             data = ''
         else:
-            data = self.formatter(data, adir._depth)
+            data = self.formatter(data, adir.depth_from(root))
         return self._format(data, suffixes)
 
 
