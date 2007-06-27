@@ -25,14 +25,14 @@ class UpdateTrackingDict(dict):
         super(UpdateTrackingDict, self).__init__(*args, **kwargs)
         self.wkeys = Set()
 
-    def __set__(self, value):
-        super(UpdateTrackingDict, self).__set__(value)
-        self.wkeys = Set(value.keys())
-
     def __setitem__(self, key, value):
         super(UpdateTrackingDict, self).__setitem__(key, value)
         self.wkeys.add(key)
 
+    def __delitem__(self, key):
+        super(UpdateTrackingDict, self).__delitem__(key)
+        del self.wkeys[key]
+        
     def clear(self):
         super(UpdateTrackingDict, self).clear()
         self.wkeys.clear()
@@ -50,6 +50,18 @@ class UpdateTrackingDict(dict):
         """
         return dict([ (key, self[key]) for key in self.wkeys ])
 
+    def clear_written(self):
+        """
+        Clear the memory of updated entries.
+        """
+        self.wkeys.clear()
+
+    def touch(self, key):
+        """
+        Make a dict entry appear updated.
+        """
+        self.wkeys.add(key)
+
 
 class PersistentDict(UpdateTrackingDict):
     """
@@ -61,13 +73,6 @@ class PersistentDict(UpdateTrackingDict):
     following save.
     """
     def __init__(self, *args, **kwargs):
-        super(PersistentDict, self).__init__(*args, **kwargs)
-        self.filename = filename = os.path.abspath(kwargs['filename'])
-        self.default = kwargs.get('default')
-
-    # Instance methods
-
-    def load(self, keep_pred=lambda k,v: True):
         """
         Arguments:
             filename  -
@@ -79,12 +84,12 @@ class PersistentDict(UpdateTrackingDict):
                             False - This item is excluded from writeout
                                     (unless updated)
         """
-        self.clear()
-        self.update(self._read())
-        self.wkeys = Set([ key for key, value in self.items()
-                               if keep_pred(key, value) ])
+        super(PersistentDict, self).__init__(*args, **kwargs)
+        self.filename = filename = os.path.abspath(kwargs['filename'])
+        self.default = kwargs.get('default', {})
+        self.keep_pred = kwargs.get('keep_pred', lambda k,v: True)
 
-    def _read(self):
+    def load(self):
         """
         Deserialize data from file.
 
@@ -94,11 +99,17 @@ class PersistentDict(UpdateTrackingDict):
         is used for initialization.
         """
         try:
-            return pickle.load(open(self.filename))
-        except IOError:
-            return self.default
+            data = pickle.load(open(self.filename))
+        except:
+            data = self.default
+        self.clear()
+        self.update(data)
+        self.clear_written()
+        for key, value in self.items():
+            if self.keep_pred(key, value):
+                self.wkeys.touch(key)
 
-    def flush(self):
+    def save(self):
         """
         Serialize data to file.
 
