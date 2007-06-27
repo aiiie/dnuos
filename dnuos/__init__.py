@@ -101,12 +101,7 @@ def make_listing(dir_pairs, options, data):
     if not options.stripped and \
        options.output_module in [output.plaintext, output.html]:
         dir_pairs = add_empty(dir_pairs)
-
-    # Setup renderer
-    renderer = options.output_module.Renderer()
-    renderer.format_string = options.format_string
-    renderer.columns = options.fields
-    return renderer.render(dir_pairs, options, data)
+    return dir_pairs
 
 
 def setup_cache(cache_filename, basedirs, exclude_paths):
@@ -117,6 +112,13 @@ def setup_cache(cache_filename, basedirs, exclude_paths):
     cache = PersistentDict(filename=cache_filename, default={})
     cache.load(keep_pred=is_entry_excluded)
     return cache
+
+
+def setup_renderer(output_module, format_string, columns):
+    renderer = output_module.Renderer()
+    renderer.format_string = format_string
+    renderer.columns = columns
+    return renderer
 
 
 def main():
@@ -140,7 +142,13 @@ def main():
                                          options.sort_key,
                                          options.merge)
             dir_pairs = to_adir(path_pairs, adir_class)
-            result = make_listing(dir_pairs, options, data)
+            dir_pairs = make_listing(dir_pairs, options, data)
+
+            renderer = setup_renderer(options.output_module,
+                                      options.format_string,
+                                      options.fields)
+
+            result = renderer.render(dir_pairs, options, data)
         elif options.disp_version:
             result = output.plaintext.render_version(data.version)
         else:
