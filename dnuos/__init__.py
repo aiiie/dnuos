@@ -158,10 +158,12 @@ def main():
             raise ValueError("No folders to process.\nType 'dnuos.py -h' for help.")
 
         # Output
-        outfile = options.outfile and open(options.outfile, 'w') or sys.stdout
+        outfile = options.outfile and open(options.outfile, 'w') \
+                                  or sys.stdout
         for chunk in result:
             print >> outfile, chunk
 
+        # Store updated cache
         if options.basedirs and options.use_cache:
             appdata.create_user_data_dir()
             cache.flush()
