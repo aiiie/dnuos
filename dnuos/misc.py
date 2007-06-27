@@ -49,10 +49,14 @@ class Lookahead(object):
 
     def __le__(self, other):
         """Compare iterator heads for (<=) inequality - as opposed to the entire iterators"""
+        # This is a bit sloppy as it never considers the type of the
+        # other element
         return self.lookahead <= other.lookahead
 
     def __eq__(self, other):
         """Compare iterator heads for equality - as opposed to the entire iterators"""
+        # This is a bit sloppy as it never considers the type of the
+        # other element
         return self.lookahead == other.lookahead
 
 
@@ -175,8 +179,13 @@ def merge(*iterators):
     >>> list(merge(xs, ys))
     ['a1', 'a2', 'b1', 'b2', 'c1', 'c2']
     """
-    # Make a heap of the given iterators. The heap is sorted by to the head
-    # elements. Thus the need for the lookahead.
+    # Make a heap of the given iterators. The heap is sorted by the
+    # iterator head elements, or if those are equal, by the order of
+    # insertion. Thats what the index is for.
+    # Heappush and heappop use the __lt__ and __eq__ methods of the
+    # elements for the sorting. Generator items dont have meaningful
+    # comparison operators, so we wrap them in Lookahead which defines
+    # the inequality as per the respective head elements.
     heap = []
     for index in range(0, len(iterators)):
         iterator = Lookahead(iterators[index])
@@ -184,9 +193,9 @@ def merge(*iterators):
             heappush(heap, (iterator, index))
 
     # Since all iterators are ordered (precondition) and the heap is ordered
-    # by head elements of the iterators, the head element of the head iterator
-    # on the heap is the smallest element of all remaining elements, and thus
-    # the next element in the ordered merged iteration.
+    # by head elements of the iterators, the head element of the head
+    # iterator on the heap is the smallest element of all remaining
+    # elements, and thus the next element in the ordered merged iteration.
     while heap:
         iterator, index = heappop(heap)
         yield iterator.next()

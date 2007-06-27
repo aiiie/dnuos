@@ -16,8 +16,10 @@ class UpdateTrackingDict(dict):
     """
     A dict that tracks what items have been updated.
 
-    Clear or otherwise modify the wkeys instance attribute to control what changes
-    are tracked.
+    Keeps track of what entries have been (over)written since
+    construction or since last call to clear_written. Old values are
+    not kept, but the subset of written entries can be obtained
+    through the written-method.
     """
     def __init__(self, *args, **kwargs):
         super(UpdateTrackingDict, self).__init__(*args, **kwargs)
@@ -42,6 +44,9 @@ class UpdateTrackingDict(dict):
     def written(self):
         """
         Get a dict of all updated items.
+
+        The returned dict contains the subset of updated items in
+        self.
         """
         return dict([ (key, self[key]) for key in self.wkeys ])
 
@@ -49,6 +54,11 @@ class UpdateTrackingDict(dict):
 class PersistentDict(UpdateTrackingDict):
     """
     A dict with persistence.
+  
+    A wrapper around UpdateTrackingDict that adds the ability to
+    pickle written entries to and from a file. A predicate function
+    can be specified to decide what entries to keep from a load to the
+    following save.
     """
     def __init__(self, *args, **kwargs):
         super(PersistentDict, self).__init__(*args, **kwargs)
@@ -59,15 +69,15 @@ class PersistentDict(UpdateTrackingDict):
 
     def load(self, keep_pred=lambda k,v: True):
         """
-        Load persistence data from file.
-
         Arguments:
+            filename  -
+            default   -
             keep_pred - A predicate function (key, value) -> bool
                         Return values:
-                            True  - This item is included in writeout (unless
-                                    overwritten)
-                            False - This item is excluded from writeout (unless
-                                    updated)
+                            True  - This item is included in writeout
+                                    (unless overwritten)
+                            False - This item is excluded from writeout
+                                    (unless updated)
         """
         self.clear()
         self.update(self._read())
@@ -77,6 +87,11 @@ class PersistentDict(UpdateTrackingDict):
     def _read(self):
         """
         Deserialize data from file.
+
+        Clear previous contents, deserialize data from file and update
+        written-status according as per the predicate function.
+        If deserialisation fails for whatever reason the default dict
+        is used for initialization.
         """
         try:
             return pickle.load(open(self.filename))
@@ -85,6 +100,8 @@ class PersistentDict(UpdateTrackingDict):
 
     def flush(self):
         """
+        Serialize data to file.
+
         Serialize data to file, keeping a copy of the previous version.
         """
         try:
@@ -96,15 +113,16 @@ class PersistentDict(UpdateTrackingDict):
 
 class memoized(object):
     """
-    Decorator that caches a function's return value each time it is called.
+    Decorator that caches a function's return value each time it is
+    called.
 
-    If called later with the same arguments, the cached value is returned, and
-    not re-evaluated.
+    If called later with the same arguments, the cached value is
+    returned, and not re-evaluated.
 
     This a derivate of the one in the Python Decorator Library:
     http://wiki.python.org/moin/PythonDecoratorLibrary
-    It has been changed to take the cache mapping as an argument and to store
-    the result on both cache misses and cache hits.
+    It has been changed to take the cache mapping as an argument and
+    to store the result on both cache misses and cache hits.
     """
     def __init__(self, func, cache={}):
         self.func = func
