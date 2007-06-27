@@ -65,19 +65,23 @@ class Data(object):
         }
 
 
-def make_path_pairs(basedirs, exclude_paths, sort_key, use_merge):
+def make_raw_listing(basedirs, exclude_paths, sort_key, use_merge,
+        adir_class):
     # Make an iterator over all subdirectories of the base directories,
     # including the base directories themselves. The directory trees are
     # sorted either separately or together according to the merge setting.
     trees = [ walk(basedir, sort_key, exclude_paths)
               for basedir in basedirs ]
+
     if use_merge:
-        return merge(*trees)
+        tree = merge(*trees)
     else:
-        return chain(*trees)
+        tree = chain(*trees)
+
+    return to_adir(tree, adir_class)
 
 
-def make_listing(dir_pairs, options, data):
+def prepare_listing(dir_pairs, options, data):
     # Add layers of functionality
     dir_pairs = timer_wrapper(dir_pairs, data.times)
     if options.show_progress:
@@ -137,18 +141,17 @@ def main():
             else:
                 adir_class = audiodir.Dir
 
-            path_pairs = make_path_pairs(options.basedirs,
-                                         options.exclude_paths,
-                                         options.sort_key,
-                                         options.merge)
-            dir_pairs = to_adir(path_pairs, adir_class)
-            dir_pairs = make_listing(dir_pairs, options, data)
-
             renderer = setup_renderer(options.output_module,
                                       options.format_string,
                                       options.fields)
 
-            result = renderer.render(dir_pairs, options, data)
+            adirs = make_raw_listing(options.basedirs,
+                                     options.exclude_paths,
+                                     options.sort_key,
+                                     options.merge,
+                                     adir_class)
+            adirs = prepare_listing(adirs, options, data)
+            result = renderer.render(adirs, options, data)
         elif options.disp_version:
             result = output.plaintext.render_version(data.version)
         else:
