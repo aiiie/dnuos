@@ -29,9 +29,6 @@ class Dir(object):
     del pattern
 
     def __init__(self, path):
-        self._bitrate = None
-        self._brtype = None
-
         self.path = path
         self.audio_files = self.get_audio_files()
         self.name = self.get_name()
@@ -42,16 +39,19 @@ class Dir(object):
         self.size = self.get_size()
         self.sizes = self.get_sizes()
         self.length = self.get_length()
+
+        self._bitrate = None
+
         self.brtype = self.get_brtype()
         self.bitrate = self.get_bitrate()
+
+        del self._bitrate
+
         self.profile = self.get_profile()
         self.quality = self.get_quality()
         self.audiolist_format = self.get_audiolist_format()
         self.modified = self.get_modified()
         self.bad_files = self.get_bad_files()
-
-        del self._bitrate
-        del self._brtype
 
     def depth_from(self, root):
         return dir_depth(self.path) - dir_depth(root) - 1
@@ -249,14 +249,16 @@ class Dir(object):
             self._bitrate = int(self.size * 8.0 / self.length)
 
     def _constant_bitrate(self):
+        brtype = "C"
         for file in self.streams():
             br = file.bitrate()
             if self._bitrate == None:
                 self._bitrate = br
             elif self._bitrate != br:
-                self._brtype = "~"
+                brtype = "~"
                 self._variable_bitrate()
         self._bitrate = int(self._bitrate)
+        return brtype
 
     def get_brtype(self):
         """report the bitrate type
@@ -264,21 +266,18 @@ class Dir(object):
         If multiple types are found "~" is returned.
         If no audio is found the empty string is returned."""
 
-        if self._brtype: return self._brtype
-        self._brtype = ""
         if self.mediatype == "Mixed":
-            self._brtype = "~"
-            return self._brtype
+            return "~"`
+        brtype = ""
         for file in self.streams():
             type = file.brtype()
-            if self._brtype == "":
-                self._brtype = type
-            elif self._brtype != type:
-                self._brtype = "~"
-                break
-        if self._brtype == "C":
-            self._constant_bitrate()
-        return self._brtype
+            if brtype == "":
+                brtype = type
+            elif brtype != type:
+                return "~"`
+        if brtype == "C":
+            brtype = self._constant_bitrate()
+        return brtype
 
     def get_bitrate(self):
         """report average bitrate in bits per second
