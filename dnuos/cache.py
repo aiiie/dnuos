@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 #
-# A module for gathering information about a directory of audio files
+# A module for caching.
 #
 # This program is under GPL license. See COPYING file for details.
 #
