@@ -29,7 +29,6 @@ class Dir(object):
     del pattern
 
     def __init__(self, path):
-        self._streams = None
         self._bitrate = None
         self._brtype = None
 
@@ -51,7 +50,6 @@ class Dir(object):
         self.modified = self.get_modified()
         self.bad_files = self.get_bad_files()
 
-        del self._streams
         del self._bitrate
         del self._brtype
 
@@ -65,19 +63,18 @@ class Dir(object):
         return [ os.path.join(self.path, f) for f in os.listdir(self.path) ]
 
     def streams(self):
-        if self._streams: return self._streams
-        self._streams = []
+        streams = []
         self.bad_files = []
         for child in self.audio_files:
             try:
-                self._streams.append(audiotype.openstream(child))
+                streams.append(audiotype.openstream(child))
             except KeyboardInterrupt:
                 raise KeyboardInterrupt
             except audiotype.SpacerError:
                 continue
             except Exception, msg:
                 self.bad_files.append(child)
-        return self._streams
+        return streams
 
     def get_bad_files(self):
         self.streams()
