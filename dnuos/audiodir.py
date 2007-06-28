@@ -32,7 +32,6 @@ class Dir(object):
         self._streams = None
         self._types = None
         self._size = None
-        self._length = None
         self._bitrate = None
         self._brtype = None
 
@@ -57,7 +56,6 @@ class Dir(object):
         del self._streams
         del self._types
         del self._size
-        del self._length
         del self._bitrate
         del self._brtype
 
@@ -241,18 +239,17 @@ class Dir(object):
         return res
 
     def get_length(self, type="all"):
-        if self._length != None: return self._length[type]
         tot = 0
-        self._length = {}
-        self._length["all"] = 0
+        length = {}
+        length["all"] = 0
         for file in self.streams():
-            if file.type() in self._length:
-                self._length[file.type()] += file.time
+            if file.type() in length:
+                length[file.type()] += file.time
             else:
-                self._length[file.type()] = file.time
-            self._length["all"] += file.time
-        self._length = map_dict(int, self._length)
-        return self._length[type]
+                length[file.type()] = file.time
+            length["all"] += file.time
+        length = map_dict(int, length)
+        return length[type]
 
     def _variable_bitrate(self):
         if self.length == 0:
