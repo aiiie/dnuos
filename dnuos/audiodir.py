@@ -37,7 +37,6 @@ class Dir(object):
         self._profile = None
         self._artist = None
         self._artistver = None
-        self._album = None
 
         self.path = path
         self.audio_files = self.get_audio_files()
@@ -65,7 +64,6 @@ class Dir(object):
         del self._brtype
         del self._profile
         del self._artist
-        del self._album
 
     def depth_from(self, root):
         return dir_depth(self.path) - dir_depth(root) - 1
@@ -185,7 +183,7 @@ class Dir(object):
                 taint = 1
 
             if taint == 1:
-                return
+                return None
             else:
                 return namesuniq[0]
 
@@ -210,24 +208,21 @@ class Dir(object):
             v2taint = 1
 
         if v1taint == 1 and v2taint == 1:
-            self._album = None
-            return
+            return None
 
         if Settings().options.prefer_tag == 1:
             if v1taint != 1:
-                self._album = v1uniq[0]
+                return v1uniq[0]
             else:
-                self._album = v2uniq[0]
+                return v2uniq[0]
         elif Settings().options.prefer_tag == 2:
             if v2taint != 1:
-                self._album = v2uniq[0]
+                return v2uniq[0]
             else:
-                self._album = v1uniq[0]
+                return v1uniq[0]
         else:
             print >> sys.stderr, "This should never happen"
             raise
-
-        return self._album
 
     def get_size(self, type="all"):
         """report size in bytes
