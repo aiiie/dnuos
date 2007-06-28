@@ -1,4 +1,5 @@
 # -*- coding: iso-8859-1 -*-
+# vim: tabstop=4 expandtab shiftwidth=4
 #
 # A module for caching.
 #
