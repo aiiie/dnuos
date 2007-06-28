@@ -36,7 +36,6 @@ class Dir(object):
         self._brtype = None
         self._profile = None
         self._artist = None
-        self._artistver = None
 
         self.path = path
         self.audio_files = self.get_audio_files()
