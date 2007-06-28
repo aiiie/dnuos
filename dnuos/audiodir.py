@@ -40,14 +40,8 @@ class Dir(object):
         self.size = self.get_size()
         self.sizes = self.get_sizes()
         self.length = self.get_length()
-
-        self._bitrate = None
-
         self.brtype = self.get_brtype()
         self.bitrate = self.get_bitrate()
-
-        del self._bitrate
-
         self.profile = self.get_profile()
         self.quality = self.get_quality()
         self.audiolist_format = self.get_audiolist_format()
@@ -245,21 +239,19 @@ class Dir(object):
 
     def _variable_bitrate(self):
         if self.length == 0:
-            self._bitrate = 0
+            return 0
         else:
-            self._bitrate = int(self.size * 8.0 / self.length)
+            return int(self.size * 8.0 / self.length)
 
     def _constant_bitrate(self):
-        brtype = "C"
+        bitrate = None
         for file in self.streams():
             br = file.bitrate()
-            if self._bitrate == None:
-                self._bitrate = br
-            elif self._bitrate != br:
-                brtype = "~"
-                self._variable_bitrate()
-        self._bitrate = int(self._bitrate)
-        return brtype
+            if bitrate == None:
+                bitrate = br
+            elif bitrate != br:
+                return self._variable_bitrate(), "~"
+        return int(bitrate), "C"
 
     def get_brtype(self):
         """report the bitrate type
@@ -268,16 +260,16 @@ class Dir(object):
         If no audio is found the empty string is returned."""
 
         if self.mediatype == "Mixed":
-            return "~"`
+            return "~"
         brtype = ""
         for file in self.streams():
             type = file.brtype()
             if brtype == "":
                 brtype = type
             elif brtype != type:
-                return "~"`
+                return "~"
         if brtype == "C":
-            brtype = self._constant_bitrate()
+            bitrate, brtype = self._constant_bitrate()
         return brtype
 
     def get_bitrate(self):
@@ -285,9 +277,11 @@ class Dir(object):
 
         If no audio is found zero is returned."""
 
-        if self._bitrate: return self._bitrate
-        if self.brtype != "C": self._variable_bitrate()
-        return self._bitrate
+        if self.brtype == "C":
+            bitrate, brtype = self._constant_bitrate()
+        else:
+            bitrate = self._variable_bitrate()
+        return bitrate
 
     def get_profile(self):
         """
