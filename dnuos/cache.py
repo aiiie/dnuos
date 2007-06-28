@@ -141,10 +141,10 @@ class memoized(object):
     If called later with the same arguments, the cached value is
     returned, and not re-evaluated.
 
-    This a derivate of the one in the Python Decorator Library:
-    http://wiki.python.org/moin/PythonDecoratorLibrary
+    This a derivate of the memoized decorator in the Python Decorator
+    Library: http://wiki.python.org/moin/PythonDecoratorLibrary
     It has been changed to take the cache mapping as an argument and
-    to store the result on both cache misses and cache hits.
+    to store the result on cache misses as well as cache hits.
     """
     def __init__(self, func, cache={}):
         self.func = func
