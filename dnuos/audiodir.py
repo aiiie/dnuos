@@ -30,7 +30,6 @@ class Dir(object):
 
     def __init__(self, path):
         self._streams = None
-        self._types = None
         self._bitrate = None
         self._brtype = None
 
@@ -53,7 +52,6 @@ class Dir(object):
         self.bad_files = self.get_bad_files()
 
         del self._streams
-        del self._types
         del self._bitrate
         del self._brtype
 
@@ -89,11 +87,10 @@ class Dir(object):
         return len(self.audio_files)
 
     def types(self):
-        if self._types != None: return self._types
         types = map(lambda x: x.type(), self.streams())
-        self._types = uniq(types)
-        self._types.sort()
-        return self._types
+        types = uniq(types)
+        types.sort()
+        return types
 
     def get_mediatype(self):
         if not self.types():
