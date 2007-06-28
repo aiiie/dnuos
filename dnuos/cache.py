@@ -74,15 +74,26 @@ class PersistentDict(UpdateTrackingDict):
     """
     def __init__(self, *args, **kwargs):
         """
+        Construct a new PersistentDict instance.
+
+        This just stores the specified arguments. Call the load method
+        to initialize.
+
         Arguments:
-            filename  -
-            default   -
-            keep_pred - A predicate function (key, value) -> bool
-                        Return values:
-                            True  - This item is included in writeout
-                                    (unless overwritten)
-                            False - This item is excluded from writeout
-                                    (unless updated)
+            filename  - The persistence data file for loading and
+                        saving.
+            default   - Data to be used if the loading of the data
+                        file fails for whatever reason.
+            keep_pred - A predicate function (args, result) -> bool.
+                        This is used at loading to control what
+                        entries are to be presistent through
+                        subsequent saves. Entries that are updated
+                        between load and save will persist in any
+                        case.
+                        When the predicate returns True, the entry
+                        will persist.
+                        When the predicate returns False, the entry
+                        will be dropped unless it's been updated.
         """
         super(PersistentDict, self).__init__(*args, **kwargs)
         self.filename = filename = os.path.abspath(kwargs['filename'])
