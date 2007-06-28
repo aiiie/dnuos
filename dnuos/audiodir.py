@@ -31,7 +31,6 @@ class Dir(object):
     def __init__(self, path):
         self._streams = None
         self._types = None
-        self._size = None
         self._bitrate = None
         self._brtype = None
 
@@ -55,7 +54,6 @@ class Dir(object):
 
         del self._streams
         del self._types
-        del self._size
         del self._bitrate
         del self._brtype
 
@@ -221,16 +219,15 @@ class Dir(object):
         Note: The size reported is the total audio file size, not the
         total directory size."""
 
-        if self._size != None: return self._size[type]
-        self._size = {}
-        self._size["all"] = 0
+        size = {}
+        size["all"] = 0
         for file in self.streams():
-            if file.type() in self._size:
-                self._size[file.type()] += file.streamsize()
+            if file.type() in size:
+                size[file.type()] += file.streamsize()
             else:
-                self._size[file.type()] = file.streamsize()
-            self._size["all"] += file.streamsize()
-        return self._size[type]
+                size[file.type()] = file.streamsize()
+            size["all"] += file.streamsize()
+        return size[type]
 
     def get_sizes(self):
         res = dict.fromkeys(self.types(), 0)
