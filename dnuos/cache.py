@@ -69,7 +69,7 @@ class PersistentDict(UpdateTrackingDict):
   
     A wrapper around UpdateTrackingDict that adds the ability to
     pickle written entries to and from a file. A predicate function
-    can be specified to decide what entries to keep from a load to the
+    can be specified to control what entries to keep from a load to the
     following save.
     """
     def __init__(self, *args, **kwargs):
