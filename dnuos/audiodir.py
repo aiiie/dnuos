@@ -35,7 +35,6 @@ class Dir(object):
         self._bitrate = None
         self._brtype = None
         self._profile = None
-        self._artist = None
 
         self.path = path
         self.audio_files = self.get_audio_files()
@@ -62,7 +61,6 @@ class Dir(object):
         del self._bitrate
         del self._brtype
         del self._profile
-        del self._artist
 
     def depth_from(self, root):
         return dir_depth(self.path) - dir_depth(root) - 1
@@ -124,7 +122,7 @@ class Dir(object):
                 taint = 1
 
             if taint == 1:
-                return
+                return None
             else:
                 return namesuniq[0]
 
@@ -149,24 +147,21 @@ class Dir(object):
             v2taint = 1
 
         if v1taint == 1 and v2taint == 1:
-            self._artist = None
-            return
+            return None
 
         if Settings().options.prefer_tag == 1:
             if v1taint != 1:
-                self._artist = v1uniq[0]
+                return v1uniq[0]
             else:
-                self._artist = v2uniq[0]
+                return v2uniq[0]
         elif Settings().options.prefer_tag == 2:
             if v2taint != 1:
-                self._artist = v2uniq[0]
+                return v2uniq[0]
             else:
-                self._artist = v1uniq[0]
+                return v1uniq[0]
         else:
             print >> sys.stderr, "Invalid argument to --prefer-tag or -P"
             sys.exit(1)
-
-        return self._artist
 
     def get_album(self):
         if self.mediatype in ("Ogg", "AAC"):
