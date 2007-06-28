@@ -33,7 +33,7 @@ class UpdateTrackingDict(dict):
     def __delitem__(self, key):
         super(UpdateTrackingDict, self).__delitem__(key)
         del self.wkeys[key]
-        
+
     def clear(self):
         super(UpdateTrackingDict, self).clear()
         self.wkeys.clear()
