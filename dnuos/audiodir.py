@@ -10,6 +10,7 @@
 
 
 import re, os, string, time
+from sets import Set
 
 import audiotype
 import appdata
@@ -34,7 +35,6 @@ class Dir(object):
         self._length = None
         self._bitrate = None
         self._brtype = None
-        self._profile = None
 
         self.path = path
         self.audio_files = self.get_audio_files()
@@ -60,7 +60,6 @@ class Dir(object):
         del self._length
         del self._bitrate
         del self._brtype
-        del self._profile
 
     def depth_from(self, root):
         return dir_depth(self.path) - dir_depth(root) - 1
@@ -303,18 +302,17 @@ class Dir(object):
         return self._bitrate
 
     def get_profile(self):
-        if self._profile != None: return self._profile
-        if self.brtype == "~":
-            self._profile = ""
-            return self._profile
-        for file in self.streams():
-            p = file.profile()
-            if not self._profile:
-                self._profile = p
-            if not p or p != self._profile:
-                self._profile = ""
-                break
-        return self._profile
+        """
+        report encoding profile name
+
+        If no or inconsistent profiles are detected, an empty string
+        is returned.
+        """
+        profiles = Set([ file.profile() for file in self.streams() ])
+        if len(profiles) != 1:
+          return ""
+        else:
+          return profiles.pop()
 
     def get_quality(self):
         if self.profile: return self.profile
