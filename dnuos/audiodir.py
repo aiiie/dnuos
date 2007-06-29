@@ -49,6 +49,10 @@ class Dir(object):
         self.bad_files = self.get_bad_files()
 
     def depth_from(self, root):
+        """
+        Return the relative depth of the directory from the given
+        root.
+        """
         return dir_depth(self.path) - dir_depth(root) - 1
 
     def get_name(self):
