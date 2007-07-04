@@ -119,10 +119,10 @@ def setup_cache(cache_filename, basedirs, exclude_paths):
     return cache
 
 
-def setup_renderer(output_module, format_string, fields):
+def setup_renderer(output_module, format_string, fields, indent):
     renderer = output_module.Renderer()
     renderer.format_string = format_string
-    renderer.set_fields(fields)
+    renderer.set_fields(fields, indent)
     return renderer
 
 
@@ -144,7 +144,8 @@ def main():
 
             renderer = setup_renderer(options.output_module,
                                       options.format_string,
-                                      options.fields)
+                                      options.fields,
+                                      options.indent)
 
             adirs = make_raw_listing(options.basedirs,
                                      options.exclude_paths,

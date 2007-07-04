@@ -283,9 +283,6 @@ class Settings(Singleton):
         else:
             return [ os.path.abspath(dir) ]
 
-    def indent(self, basename, depth):
-        return " " * self.options.indent * depth + basename
-
 
 def unescape(data):
     data = data.replace(r'\t', '\t').replace(r'\n', '\n')

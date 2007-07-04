@@ -1,21 +1,13 @@
 import string
 from dnuos.misc import to_human
-import dnuos.conf
 
 
 class AbstractRenderer(object):
-    def set_fields(self, fields):
-        self.columns = map(parse_field, fields)
+    def set_fields(self, fields, indent):
+        self.columns = map(lambda x: parse_field(x, indent), fields)
 
 
 class Column(object):
-    formatter_table = {
-        "b": lambda data, depth: to_human(data, 1000.0),
-        "l": lambda data, depth: to_minutes(data),
-        "m": lambda data, depth: time.ctime(data),
-        "n": lambda data, depth: dnuos.conf.Settings().indent(data, depth),
-        "s": lambda data, depth: to_human(data),
-    }
     attr_table = {
         "a": ('audiolist_format', 'Bitrate(s)'),
         "A": ('artist', 'Artist'),
@@ -41,9 +33,16 @@ class Column(object):
     }
 
     def __init__(self, tag, width, suffix):
+        formatter_table = {
+            "b": lambda data, depth: to_human(data, 1000.0),
+            "l": lambda data, depth: to_minutes(data),
+            "m": lambda data, depth: time.ctime(data),
+            "n": lambda data, depth: self.indent(data, depth),
+            "s": lambda data, depth: to_human(data),
+        }
         self.width, self.suffix = width, suffix
-        if tag in self.formatter_table:
-            self.formatter = self.formatter_table[tag]
+        if tag in formatter_table:
+            self.formatter = formatter_table[tag]
         else:
             self.formatter = lambda x,y: x
         self.attr, self.name = self.attr_table[tag]
@@ -73,13 +72,15 @@ class Column(object):
         return self._format(data, suffixes)
 
 
-def parse_field(field_string):
+def parse_field(field_string, indent):
     tag, width, suffix = (field_string.split(",") + ["", ""])[:3]
     if width == "":
         width = None
     else:
         width = string.atoi(width)
-    return Column(tag, width, suffix)
+    column = Column(tag, width, suffix)
+    column.indent = lambda basename, depth, indent=indent: " " * indent * depth + basename
+    return column
 
 
 def to_minutes(value):
