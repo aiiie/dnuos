@@ -14,7 +14,10 @@ Module for rendering outputdb format.
 """
 
 
-class Renderer(object):
+from dnuos.output.abstract_renderer import AbstractRenderer
+
+
+class Renderer(AbstractRenderer):
     def render(self, dir_pairs, options, data):
         for adir, root in dir_pairs:
             chunk = "%d:'%s',%d:'%s',%d:'%s',%d:'%s',%d,%.d,%d" % (
