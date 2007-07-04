@@ -3,7 +3,7 @@ from dnuos.misc import to_human
 
 
 class AbstractRenderer(object):
-    def set_fields(self, fields, indent):
+    def setup_columns(self, fields, indent):
         self.columns = map(lambda x: parse_field(x, indent), fields)
 
 

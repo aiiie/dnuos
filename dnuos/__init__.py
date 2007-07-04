@@ -122,7 +122,7 @@ def setup_cache(cache_filename, basedirs, exclude_paths):
 def setup_renderer(output_module, format_string, fields, indent):
     renderer = output_module.Renderer()
     renderer.format_string = format_string
-    renderer.set_fields(fields, indent)
+    renderer.setup_columns(fields, indent)
     return renderer
 
 
