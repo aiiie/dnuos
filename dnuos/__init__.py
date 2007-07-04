@@ -119,10 +119,10 @@ def setup_cache(cache_filename, basedirs, exclude_paths):
     return cache
 
 
-def setup_renderer(output_module, format_string, columns):
+def setup_renderer(output_module, format_string, fields):
     renderer = output_module.Renderer()
     renderer.format_string = format_string
-    renderer.columns = columns
+    renderer.set_fields(fields)
     return renderer
 
 

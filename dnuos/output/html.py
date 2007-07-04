@@ -14,10 +14,11 @@ Module for rendering HTML output.
 """
 
 
+from dnuos.output.abstract_renderer import AbstractRenderer
 import dnuos.output
 
 
-class Renderer(object):
+class Renderer(AbstractRenderer):
     def __init__(self):
         self.renderer = dnuos.output.plaintext.Renderer()
 

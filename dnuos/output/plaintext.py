@@ -14,12 +14,14 @@ Module for rendering plain-text output.
 """
 
 
+from dnuos.output.abstract_renderer import AbstractRenderer
 from itertools import chain
 from itertools import ifilter
 from itertools import imap
+import dnuos.output
 
 
-class Renderer(object):
+class Renderer(AbstractRenderer):
     def render(self, dir_pairs, options, data):
         """Render directories to a sequence of strings."""
         output = [
