@@ -15,6 +15,7 @@ from sets import Set
 
 import audiotype
 import appdata
+import dnuos.output.db
 from conf import Settings
 from misc import dir_depth
 from misc import map_dict
@@ -66,7 +67,14 @@ class Dir(object):
         self.bad_files = []
         for child in self.audio_files:
             try:
-                streams.append(audiotype.openstream(child))
+                if Settings().options.output_module == dnuos.output.db:
+                    encoding = ('latin1', 'replace')
+                else:
+                    encoding = ('utf-8',)
+                force_old_lame_presets = Settings().options.force_old_lame_presets
+                streams.append(audiotype.openstream(child,
+                                                    encoding,
+                                                    force_old_lame_presets))
             except KeyboardInterrupt:
                 raise KeyboardInterrupt
             except audiotype.SpacerError:
