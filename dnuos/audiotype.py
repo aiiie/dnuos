@@ -29,13 +29,12 @@ class SpacerError(Exception):
 
 
 class AudioType(object):
-    def __init__(self, file, encoding):
+    def __init__(self, file):
         self._filename = file
         self._f = open(self._filename, 'rb')
         self._begin = None
         self._end = None
         self._meta = []
-        self._encoding = encoding
 
     def name(self):        return os.path.basename(self._filename)
     def path(self):        return os.path.dirname(self._filename)
@@ -113,22 +112,10 @@ class AudioType(object):
         if width != None: data = "%*s" % (width, str(data)[:width])
         return data
 
-    def textencode(self, str):
-        try:
-            x = unicode(str, "ascii")
-        except UnicodeError:
-            str = unicode(str, "latin1")
-        except TypeError:
-            pass
-        else:
-            pass
-
-        return str.encode(*self._encoding).strip('\0')
-
 
 class Ogg(AudioType):
-    def __init__(self, file, encoding):
-        AudioType.__init__(self, file, encoding)
+    def __init__(self, file):
+        AudioType.__init__(self, file)
 
         self.header = self.getheader()
         self.version = self.header[1]
@@ -280,8 +267,8 @@ class MP3(AudioType):
         [44100, 48000, 32000]  #MPEG 1  
         ]
 
-    def __init__(self, file, encoding, force_old_lame_presets):
-        AudioType.__init__(self, file, encoding)
+    def __init__(self, file, force_old_lame_presets):
+        AudioType.__init__(self, file)
 
         self._force_old_lame_presets = force_old_lame_presets
 
@@ -355,21 +342,21 @@ class MP3(AudioType):
     def artist(self):
         res = { 'id3v1': None, 'id3v2': None }
         if self.id3v1 and self.id3v1.artist:
-            res['id3v1'] = self.textencode(self.id3v1.artist)
+            res['id3v1'] = self.id3v1.artist
         if self.id3v2:
             for frame in self.id3v2.frames:
                 if frame.id == 'TPE1':
-                    res['id3v2'] = self.textencode(frame.value)
+                    res['id3v2'] = frame.value
         return res
 
     def album(self):
         res = { 'id3v1': None, 'id3v2': None }
         if self.id3v1 and self.id3v1.album:
-            res['id3v1'] = self.textencode(self.id3v1.album)
+            res['id3v1'] = self.id3v1.album
         if self.id3v2:
             for frame in self.id3v2.frames:
                 if frame.id == 'TALB':
-                    res['id3v2'] = self.textencode(frame.value)
+                    res['id3v2'] = frame.value
         return res
 
     def type(self):     return "MP3"
@@ -527,8 +514,8 @@ class MP3(AudioType):
 
 
 class MPC(AudioType):
-    def __init__(self, file, encoding):
-        AudioType.__init__(self, file, encoding)
+    def __init__(self, file):
+        AudioType.__init__(self, file)
 
         self.profiletable = [
             'NoProfile',
@@ -572,21 +559,21 @@ class MPC(AudioType):
     def artist(self):
         res = {}
         if self.id3v1 and self.id3v1.artist:
-            res['id3v1'] = self.textencode(self.id3v1.artist)
+            res['id3v1'] = self.id3v1.artist
         if self.id3v2:
             for frame in self.id3v2.frames:
                 if frame.id == 'TPE1':
-                    res['id3v2'] = self.textencode(frame.value)
+                    res['id3v2'] = frame.value
         return res
 
     def album(self):
         res = {}
         if self.id3v1 and self.id3v1.album:
-            res['id3v1'] = self.textencode(self.id3v1.album)
+            res['id3v1'] = self.id3v1.album
         if self.id3v2:
             for frame in self.id3v2.frames:
                 if frame.id == 'TALB':
-                    res['id3v2'] = self.textencode(frame.value)
+                    res['id3v2'] = frame.value
         return res
 
     def type(self):      return "MPC"
@@ -641,8 +628,8 @@ class MPC(AudioType):
 
 
 class FLAC(AudioType):
-    def __init__(self, file, encoding):
-        AudioType.__init__(self, file, encoding)
+    def __init__(self, file):
+        AudioType.__init__(self, file)
 
         # [(sample number, byte offset, samples in frame), ...]
         self.seekpoints = []
@@ -734,8 +721,8 @@ class FLAC(AudioType):
         return vendor, list  #, struct.unpack('<B', fd.read(1))
 
 class AAC(AudioType):
-    def __init__(self, file, encoding):
-        AudioType.__init__(self, file, encoding)
+    def __init__(self, file):
+        AudioType.__init__(self, file)
 
         self.header = self.getheader()
         self._artist    = self.header[0]
@@ -860,15 +847,15 @@ def unpack_bits(bits):
         value = value | chunk
     return value
 
-def openstream(filename, encoding, force_old_lame_presets):
+def openstream(filename, force_old_lame_presets):
     if has_suffix(filename, ".mp3"):
-        return MP3(filename, encoding, force_old_lame_presets)
+        return MP3(filename, force_old_lame_presets)
     elif has_suffix(filename, ".mpc") or has_suffix(filename, ".mp+"):
-        return MPC(filename, encoding)
+        return MPC(filename)
     elif has_suffix(filename, ".ogg"):
-        return Ogg(filename, encoding)
+        return Ogg(filename)
     elif has_suffix(filename, ".flac") or has_suffix(filename, ".fla") or has_suffix(filename, ".flc"):
-        return FLAC(filename, encoding)
+        return FLAC(filename)
     elif has_suffix(filename, ".m4a"):
         return AAC(filename)
     else:

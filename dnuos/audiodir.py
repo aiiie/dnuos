@@ -49,6 +49,22 @@ class Dir(object):
         self.modified = self.get_modified()
         self.bad_files = self.get_bad_files()
 
+    def textencode(self, str):
+        try:
+            x = unicode(str, "ascii")
+        except UnicodeError:
+            str = unicode(str, "latin1")
+        except TypeError:
+            pass
+        else:
+            pass
+
+        if Settings().options.output_module == dnuos.output.db:
+            encoding = ('latin1', 'replace')
+        else:
+            encoding = ('utf-8',)
+        return str.encode(*encoding).strip('\0')
+
     def depth_from(self, root):
         """
         Return the relative depth of the directory from the given
@@ -67,13 +83,8 @@ class Dir(object):
         self.bad_files = []
         for child in self.audio_files:
             try:
-                if Settings().options.output_module == dnuos.output.db:
-                    encoding = ('latin1', 'replace')
-                else:
-                    encoding = ('utf-8',)
                 force_old_lame_presets = Settings().options.force_old_lame_presets
                 streams.append(audiotype.openstream(child,
-                                                    encoding,
                                                     force_old_lame_presets))
             except KeyboardInterrupt:
                 raise KeyboardInterrupt
@@ -121,11 +132,13 @@ class Dir(object):
     def _get_artist(self):
         if len(self._artist) == 1:
             keys = self._artist.keys()
+            encoder = lambda x: x
         elif Set(self._artist.keys()) == Set(['id3v1', 'id3v2']):
             if Settings().options.prefer_tag == 1:
                 keys = ['id3v1', 'id3v2']
             elif Settings().options.prefer_tag == 2:
                 keys = ['id3v2', 'id3v1']
+            encoder = self.textencode
         else:
             return None
 
@@ -134,7 +147,7 @@ class Dir(object):
             if len(values) != 1:
                 return None
             elif values != Set([None]):
-                return values.pop()
+                return encoder(values.pop())
             else:
                 pass
     artist = property(_get_artist)
@@ -142,11 +155,13 @@ class Dir(object):
     def _get_album(self):
         if len(self._album) == 1:
             keys = self._album.keys()
+            encoder = lambda x: x
         elif Set(self._album.keys()) == Set(['id3v1', 'id3v2']):
             if Settings().options.prefer_tag == 1:
                 keys = ['id3v1', 'id3v2']
             elif Settings().options.prefer_tag == 2:
                 keys = ['id3v2', 'id3v1']
+            encoder = self.textencode
         else:
             return None
 
@@ -155,7 +170,7 @@ class Dir(object):
             if len(values) != 1:
                 return None
             elif values != Set([None]):
-                return values.pop()
+                return encoder(values.pop())
             else:
                 pass
     album = property(_get_album)
