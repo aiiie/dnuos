@@ -15,6 +15,7 @@
 
 import os, re, string, struct, sys, warnings, codecs
 
+import dnuos.output.db
 import id3
 from conf import Settings
 
@@ -852,7 +853,7 @@ def textencode(str):
     else:
         pass
 
-    if Settings().options.output_format == 'db':
+    if Settings().options.output_module == dnuos.output.db:
         return str.encode('latin1', 'replace').strip('\0')
     else:
         return str.encode('utf-8').strip('\0')
