@@ -58,8 +58,7 @@ class Renderer(AbstractRenderer):
             yield "=" * len(line)
 
         for adir, root in dir_pairs:
-            fields = map(lambda c: c.get_formatted(adir, root),
-                         self.columns)
+            fields = [ c.get_formatted(adir, root) for c in self.columns ]
             yield self.format_string % tuple(fields)
 
     def render_bad_files(self, bad_files):
