@@ -38,6 +38,11 @@ class AudioType(object):
         self._end = None
         self._meta = []
 
+        if Settings().options.output_module == dnuos.output.db:
+            self._encoding = ('latin1', 'replace')
+        else:
+            self._encoding = ('utf-8',)
+
     def name(self):        return os.path.basename(self._filename)
     def path(self):        return os.path.dirname(self._filename)
     def modified(self):    return os.path.getmtime(self._filename)
@@ -113,6 +118,18 @@ class AudioType(object):
         data = table[id]()
         if width != None: data = "%*s" % (width, str(data)[:width])
         return data
+
+    def textencode(self, str):
+        try:
+            x = unicode(str, "ascii")
+        except UnicodeError:
+            str = unicode(str, "latin1")
+        except TypeError:
+            pass
+        else:
+            pass
+
+        return str.encode(*self._encoding).strip('\0')
 
 
 class Ogg(AudioType):
@@ -341,20 +358,20 @@ class MP3(AudioType):
 
     def v1artist(self):
         if self.id3v1 != None and self.id3v1.artist:
-            return textencode(self.id3v1.artist)
+            return self.textencode(self.id3v1.artist)
     def v1album(self):
         if self.id3v1 != None and self.id3v1.album:
-            return textencode(self.id3v1.album)
+            return self.textencode(self.id3v1.album)
     def v2artist(self):
         if self.id3v2 != None:
             for frame in self.id3v2.frames:
                 if frame.id == 'TPE1':
-                    return textencode(frame.value)
+                    return self.textencode(frame.value)
     def v2album(self):
         if self.id3v2 != None:
             for frame in self.id3v2.frames:
                 if frame.id == 'TALB':
-                    return textencode(frame.value)
+                    return self.textencode(frame.value)
 
     def type(self):     return "MP3"
 
@@ -555,20 +572,20 @@ class MPC(AudioType):
 
     def v1artist(self):
         if self.id3v1 != None and self.id3v1.artist:
-            return textencode(self.id3v1.artist)
+            return self.textencode(self.id3v1.artist)
     def v1album(self):
         if self.id3v1 != None and self.id3v1.album:
-            return textencode(self.id3v1.album)
+            return self.textencode(self.id3v1.album)
     def v2artist(self):
         if self.id3v2 != None:
             for frame in self.id3v2.frames:
                 if frame.id == 'TPE1':
-                    return textencode(frame.value)
+                    return self.textencode(frame.value)
     def v2album(self):
         if self.id3v2 != None:
             for frame in self.id3v2.frames:
                 if frame.id == 'TALB':
-                    return textencode(frame.value)
+                    return self.textencode(frame.value)
 
     def type(self):      return "MPC"
     def brtype(self):    return "V"
@@ -842,21 +859,6 @@ def unpack_bits(bits):
         value = value << 7
         value = value | chunk
     return value
-
-def textencode(str):
-    try:
-        x = unicode(str, "ascii")
-    except UnicodeError:
-        str = unicode(str, "latin1")
-    except TypeError:
-        pass
-    else:
-        pass
-
-    if Settings().options.output_module == dnuos.output.db:
-        return str.encode('latin1', 'replace').strip('\0')
-    else:
-        return str.encode('utf-8').strip('\0')
 
 def openstream(filename):
     if has_suffix(filename, ".mp3"):
