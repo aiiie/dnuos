@@ -282,8 +282,10 @@ class MP3(AudioType):
         [44100, 48000, 32000]  #MPEG 1  
         ]
 
-    def __init__(self, file, encoding):
+    def __init__(self, file, encoding, force_old_lame_presets):
         AudioType.__init__(self, file, encoding)
+
+        self._force_old_lame_presets = force_old_lame_presets
 
         self.brtable = [
             [ #MPEG2 & 2.5
@@ -461,7 +463,7 @@ class MP3(AudioType):
             preset = self.mp3header[11] & 2047
 
             if preset > 0:
-                if Settings().options.force_old_lame_presets:
+                if self._force_old_lame_presets:
                     if preset == 320:
                         return "-api"
                     if preset == 460 or preset == 470:
@@ -861,8 +863,9 @@ def openstream(filename):
         encoding = ('latin1', 'replace')
     else:
         encoding = ('utf-8',)
+    force_old_lame_presets = Settings().options.force_old_lame_presets
     if has_suffix(filename, ".mp3"):
-        return MP3(filename, encoding)
+        return MP3(filename, encoding, force_old_lame_presets)
     elif has_suffix(filename, ".mpc") or has_suffix(filename, ".mp+"):
         return MPC(filename, encoding)
     elif has_suffix(filename, ".ogg"):
