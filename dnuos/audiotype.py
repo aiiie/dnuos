@@ -31,17 +31,13 @@ class SpacerError(Exception):
 
 
 class AudioType(object):
-    def __init__(self, file):
+    def __init__(self, file, encoding):
         self._filename = file
         self._f = open(self._filename, 'rb')
         self._begin = None
         self._end = None
         self._meta = []
-
-        if Settings().options.output_module == dnuos.output.db:
-            self._encoding = ('latin1', 'replace')
-        else:
-            self._encoding = ('utf-8',)
+        self._encoding = encoding
 
     def name(self):        return os.path.basename(self._filename)
     def path(self):        return os.path.dirname(self._filename)
@@ -133,8 +129,8 @@ class AudioType(object):
 
 
 class Ogg(AudioType):
-    def __init__(self, file):
-        AudioType.__init__(self, file)
+    def __init__(self, file, encoding):
+        AudioType.__init__(self, file, encoding)
 
         self.header = self.getheader()
         self.version = self.header[1]
@@ -286,8 +282,8 @@ class MP3(AudioType):
         [44100, 48000, 32000]  #MPEG 1  
         ]
 
-    def __init__(self,file):
-        AudioType.__init__(self, file)
+    def __init__(self, file, encoding):
+        AudioType.__init__(self, file, encoding)
 
         self.brtable = [
             [ #MPEG2 & 2.5
@@ -528,8 +524,8 @@ class MP3(AudioType):
 
 
 class MPC(AudioType):
-    def __init__(self,file):
-        AudioType.__init__(self,file)
+    def __init__(self, file, encoding):
+        AudioType.__init__(self, file, encoding)
 
         self.profiletable = [
             'NoProfile',
@@ -639,8 +635,8 @@ class MPC(AudioType):
 
 
 class FLAC(AudioType):
-    def __init__(self, file):
-        AudioType.__init__(self, file)
+    def __init__(self, file, encoding):
+        AudioType.__init__(self, file, encoding)
 
         # [(sample number, byte offset, samples in frame), ...]
         self.seekpoints = []
@@ -734,8 +730,8 @@ class FLAC(AudioType):
         return vendor, list  #, struct.unpack('<B', fd.read(1))
 
 class AAC(AudioType):
-    def __init__(self, file):
-        AudioType.__init__(self, file)
+    def __init__(self, file, encoding):
+        AudioType.__init__(self, file, encoding)
 
         self.header = self.getheader()
         self._artist    = self.header[0]
@@ -861,14 +857,18 @@ def unpack_bits(bits):
     return value
 
 def openstream(filename):
+    if Settings().options.output_module == dnuos.output.db:
+        encoding = ('latin1', 'replace')
+    else:
+        encoding = ('utf-8',)
     if has_suffix(filename, ".mp3"):
-        return MP3(filename)
+        return MP3(filename, encoding)
     elif has_suffix(filename, ".mpc") or has_suffix(filename, ".mp+"):
-        return MPC(filename)
+        return MPC(filename, encoding)
     elif has_suffix(filename, ".ogg"):
-        return Ogg(filename)
+        return Ogg(filename, encoding)
     elif has_suffix(filename, ".flac") or has_suffix(filename, ".fla") or has_suffix(filename, ".flc"):
-        return FLAC(filename)
+        return FLAC(filename, encoding)
     elif has_suffix(filename, ".m4a"):
         return AAC(filename)
     else:
