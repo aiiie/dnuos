@@ -15,9 +15,7 @@
 
 import os, re, string, struct, sys, warnings, codecs
 
-import dnuos.output.db
 import id3
-from conf import Settings
 
 __version__ = "0.94"
 
@@ -858,12 +856,7 @@ def unpack_bits(bits):
         value = value | chunk
     return value
 
-def openstream(filename):
-    if Settings().options.output_module == dnuos.output.db:
-        encoding = ('latin1', 'replace')
-    else:
-        encoding = ('utf-8',)
-    force_old_lame_presets = Settings().options.force_old_lame_presets
+def openstream(filename, encoding, force_old_lame_presets):
     if has_suffix(filename, ".mp3"):
         return MP3(filename, encoding, force_old_lame_presets)
     elif has_suffix(filename, ".mpc") or has_suffix(filename, ".mp+"):
