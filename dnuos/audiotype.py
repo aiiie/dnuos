@@ -413,7 +413,7 @@ class MP3(AudioType):
             start = start + 1024
             self._f.seek(start + overlap)
             chunk = chunk[-overlap:] + self._f.read(1024)
-        if offset == self.filesize:
+        if offset >= self.filesize - 2:
             raise SpacerError("Spacer found %s" % self._f.name)
         self._f.seek(offset)
         tag = struct.unpack(">3s",self._f.read(struct.calcsize(">3s")))
