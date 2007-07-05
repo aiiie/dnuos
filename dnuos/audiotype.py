@@ -153,8 +153,8 @@ class Ogg(AudioType):
         self.audiosamples = self.lastgranule()[-1]
         self.time = float(self.audiosamples) / self._freq
 
-    def artist(self):   return self._artist
-    def album(self):    return self._album
+    def artist(self):   return { 'vorbis': self._artist }
+    def album(self):    return { 'vorbis': self._album }
     def type(self):    return "Ogg"
     def brtype(self):  return "V"
 
@@ -352,22 +352,25 @@ class MP3(AudioType):
         #self.time = (float(1 * 576 * (bool(self.versionindex>>1)+ 1)) / self.freq) * self.framecount
         self.time = self.streamsize() * 8.0 / self._bitrate
 
-    def v1artist(self):
-        if self.id3v1 != None and self.id3v1.artist:
-            return self.textencode(self.id3v1.artist)
-    def v1album(self):
-        if self.id3v1 != None and self.id3v1.album:
-            return self.textencode(self.id3v1.album)
-    def v2artist(self):
-        if self.id3v2 != None:
+    def artist(self):
+        res = { 'id3v1': None, 'id3v2': None }
+        if self.id3v1 and self.id3v1.artist:
+            res['id3v1'] = self.textencode(self.id3v1.artist)
+        if self.id3v2:
             for frame in self.id3v2.frames:
                 if frame.id == 'TPE1':
-                    return self.textencode(frame.value)
-    def v2album(self):
-        if self.id3v2 != None:
+                    res['id3v2'] = self.textencode(frame.value)
+        return res
+
+    def album(self):
+        res = { 'id3v1': None, 'id3v2': None }
+        if self.id3v1 and self.id3v1.album:
+            res['id3v1'] = self.textencode(self.id3v1.album)
+        if self.id3v2:
             for frame in self.id3v2.frames:
                 if frame.id == 'TALB':
-                    return self.textencode(frame.value)
+                    res['id3v2'] = self.textencode(frame.value)
+        return res
 
     def type(self):     return "MP3"
 
@@ -566,22 +569,25 @@ class MPC(AudioType):
         except:
             self.id3v2 = None
 
-    def v1artist(self):
-        if self.id3v1 != None and self.id3v1.artist:
-            return self.textencode(self.id3v1.artist)
-    def v1album(self):
-        if self.id3v1 != None and self.id3v1.album:
-            return self.textencode(self.id3v1.album)
-    def v2artist(self):
-        if self.id3v2 != None:
+    def artist(self):
+        res = {}
+        if self.id3v1 and self.id3v1.artist:
+            res['id3v1'] = self.textencode(self.id3v1.artist)
+        if self.id3v2:
             for frame in self.id3v2.frames:
                 if frame.id == 'TPE1':
-                    return self.textencode(frame.value)
-    def v2album(self):
-        if self.id3v2 != None:
+                    res['id3v2'] = self.textencode(frame.value)
+        return res
+
+    def album(self):
+        res = {}
+        if self.id3v1 and self.id3v1.album:
+            res['id3v1'] = self.textencode(self.id3v1.album)
+        if self.id3v2:
             for frame in self.id3v2.frames:
                 if frame.id == 'TALB':
-                    return self.textencode(frame.value)
+                    res['id3v2'] = self.textencode(frame.value)
+        return res
 
     def type(self):      return "MPC"
     def brtype(self):    return "V"
@@ -664,10 +670,8 @@ class FLAC(AudioType):
         self.compression = self.streamsize() / (self.samples * samplebits * self._channels / 8)
         self.encoding = "%.1f%%" % self.compression
 
-    def v1artist(self): return None
-    def v2artist(self): return None
-    def v1album(self): return None
-    def v2album(self): return None
+    def artist(self): return {'FLAC': None}
+    def album(self): return {'FLAC': None}
 
     def type(self):     return "FLAC"
     def brtype(self):   return "L"
@@ -742,8 +746,8 @@ class AAC(AudioType):
         self._bitrate   = self.header[5]
 
     def type(self):     return "AAC"
-    def artist(self):   return self._artist
-    def album(self):    return self._album
+    def artist(self):   return {'AAC': self._artist }
+    def album(self):    return {'AAC': self._album }
     def bitrate(self):  return self._bitrate
     def length(self):   return self.time
     def brtype(self):   return "C"

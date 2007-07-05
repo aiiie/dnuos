@@ -36,8 +36,8 @@ class Dir(object):
         self.name = self.get_name()
         self.num_files = self.get_num_files()
         self.mediatype = self.get_mediatype()
-        self.artist = self.get_artist()
-        self.album = self.get_album()
+        self._artist = self._parse_artist()
+        self._album = self._parse_album()
         self.size = self.get_size()
         self.sizes = self.get_sizes()
         self.length = self.get_length()
@@ -104,115 +104,61 @@ class Dir(object):
         else:
             return "Mixed"
 
-    def get_artist(self):
-        if self.mediatype in ("Ogg", "AAC"):
-            taint = 0
-            names = map(lambda x: x.artist(), self.streams())
+    def _parse_artist(self):
+        res = {}
+        for stream in self.streams():
+            for tag, artist in stream.artist().items():
+                res.setdefault(tag, Set()).add(artist)
+        return res
 
-            if len(names) != self.num_files:
-                taint = 1
-            namesuniq = uniq(names)
-            namesuniq.sort()
+    def _parse_album(self):
+        res = {}
+        for stream in self.streams():
+            for tag, album in stream.album().items():
+                res.setdefault(tag, Set()).add(album)
+        return res
 
-            if len(namesuniq) != 1 or namesuniq[0] == None:
-                taint = 1
-
-            if taint == 1:
-                return None
-            else:
-                return namesuniq[0]
-
-        v1taint = 0
-        v2taint = 0
-        v1 = map(lambda x: x.v1artist(), self.streams())
-        v2 = map(lambda x: x.v2artist(), self.streams())
-
-        if len(v1) != self.num_files:
-            v1taint = 1
-        if len(v2) != self.num_files:
-            v2taint = 1
-
-        v1uniq = uniq(v1)
-        v1uniq.sort()
-        v2uniq = uniq(v2)
-        v2uniq.sort()
-
-        if len(v1uniq) != 1 or v1uniq[0] == None:
-            v1taint = 1
-        if len(v2uniq) != 1 or v2uniq[0] == None:
-            v2taint = 1
-
-        if v1taint == 1 and v2taint == 1:
+    def _get_artist(self):
+        if len(self._artist) == 1:
+            keys = self._artist.keys()
+        elif Set(self._artist.keys()) == Set(['id3v1', 'id3v2']):
+            if Settings().options.prefer_tag == 1:
+                keys = ['id3v1', 'id3v2']
+            elif Settings().options.prefer_tag == 2:
+                keys = ['id3v2', 'id3v1']
+        else:
             return None
 
-        if Settings().options.prefer_tag == 1:
-            if v1taint != 1:
-                return v1uniq[0]
-            else:
-                return v2uniq[0]
-        elif Settings().options.prefer_tag == 2:
-            if v2taint != 1:
-                return v2uniq[0]
-            else:
-                return v1uniq[0]
-        else:
-            print >> sys.stderr, "Invalid argument to --prefer-tag or -P"
-            sys.exit(1)
-
-    def get_album(self):
-        if self.mediatype in ("Ogg", "AAC"):
-            taint = 0
-            names = map(lambda x: x.album(), self.streams())
-
-            if len(names) != self.num_files:
-                taint = 1
-            namesuniq = uniq(names)
-            namesuniq.sort()
-
-            if len(namesuniq) != 1 or namesuniq[0] == None:
-                taint = 1
-
-            if taint == 1:
+        for key in keys:
+            values = self._artist[key]
+            if len(values) != 1:
                 return None
+            elif values != Set([None]):
+                return values.pop()
             else:
-                return namesuniq[0]
+                pass
+    artist = property(_get_artist)
 
-        v1taint = 0
-        v2taint = 0
-        v1 = map(lambda x: x.v1album(), self.streams())
-        v2 = map(lambda x: x.v2album(), self.streams())
-
-        if len(v1) != self.num_files:
-            v1taint = 1
-        if len(v2) != self.num_files:
-            v2taint = 1
-
-        v1uniq = uniq(v1)
-        v1uniq.sort()
-        v2uniq = uniq(v2)
-        v2uniq.sort()
-
-        if len(v1uniq) != 1 or v1uniq[0] == None:
-            v1taint = 1
-        if len(v2uniq) != 1 or v2uniq[0] == None:
-            v2taint = 1
-
-        if v1taint == 1 and v2taint == 1:
+    def _get_album(self):
+        if len(self._album) == 1:
+            keys = self._album.keys()
+        elif Set(self._album.keys()) == Set(['id3v1', 'id3v2']):
+            if Settings().options.prefer_tag == 1:
+                keys = ['id3v1', 'id3v2']
+            elif Settings().options.prefer_tag == 2:
+                keys = ['id3v2', 'id3v1']
+        else:
             return None
 
-        if Settings().options.prefer_tag == 1:
-            if v1taint != 1:
-                return v1uniq[0]
+        for key in keys:
+            values = self._album[key]
+            if len(values) != 1:
+                return None
+            elif values != Set([None]):
+                return values.pop()
             else:
-                return v2uniq[0]
-        elif Settings().options.prefer_tag == 2:
-            if v2taint != 1:
-                return v2uniq[0]
-            else:
-                return v1uniq[0]
-        else:
-            print >> sys.stderr, "This should never happen"
-            raise
+                pass
+    album = property(_get_album)
 
     def get_size(self, type="all"):
         """report size in bytes
