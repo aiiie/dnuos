@@ -43,9 +43,10 @@ def process_args(args):
     args = args.split()
     opts = [ opt
              for opt in args if opt.startswith('-') ]
-    bases = [ glob(os.path.join(datadir, base))
-              for base in args if not base.startswith('-') ]
-    return opts + _flatten(bases)
+    bases = _flatten([ glob(os.path.join(datadir, base))
+                       for base in args if not base.startswith('-') ])
+    bases.sort()
+    return opts + bases
 
 
 def get_unified_diff(data1, data2):
