@@ -10,6 +10,7 @@ from functest import get_unified_diff
 import dnuos
 
 def test():
+    """Verify output-db with old deprecated option"""
     output = StringIO()
     old = sys.argv, sys.stderr, sys.stdout
     sys.argv = process_args("-q --output-db=/tmp/output aac lame")

@@ -5,6 +5,7 @@
 from functest import write_dnuos_diff
 
 def test():
+    """Verify output tag S"""
     write_dnuos_diff('-q --output=[S] aac', """
 Size
 ====
