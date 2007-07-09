@@ -1,5 +1,6 @@
 import time
 
+from dnuos.conf import Settings
 from dnuos.misc import to_human
 
 class AbstractRenderer(object):
@@ -7,6 +8,13 @@ class AbstractRenderer(object):
     def setup_columns(self, fields, indent):
 
         self.columns = map(lambda x: parse_field(x, indent), fields)
+
+
+def _get_profile(adir):
+    if Settings().options.force_old_lame_presets:
+        return adir.profile_force_old_lame
+    else:
+        return adir.profile
 
 
 class Column(object):
@@ -26,7 +34,7 @@ class Column(object):
         "M": ('Modified', lambda adir: adir.modified),
         "n": ('Album/Artist', lambda adir: adir.name),
         "N": ('Album/Artist', lambda adir: adir.name),
-        "p": ('Profile', lambda adir: adir.profile),
+        "p": ('Profile', _get_profile),
         "P": ('Path', lambda adir: adir.path),
         "q": ('Quality', lambda adir: adir.quality),
         "s": ('Size', lambda adir: adir.size),
