@@ -225,9 +225,9 @@ class Ogg(AudioType):
         gt3 = [128005, 180003, 212003, 244003, 276006, 340017, 519821]
 
         if self.nombitrate in xiph:
-            return "-q" + str(xiph.index(self.nombitrate) + 1)
+            return {"xiph": "-q" + str(xiph.index(self.nombitrate) + 1)}
         if self.nombitrate in gt3:
-            return "-q" + str(gt3.index(self.nombitrate) + 4)
+            return {"gt3": "-q" + str(gt3.index(self.nombitrate) + 4)}
 
 
 class MP3(AudioType):
@@ -424,35 +424,9 @@ class MP3(AudioType):
             ((header>>10 &  3) != 3) and
             ((header     &  3) != 2))
 
-    def old_lame_preset(self):
-
-        if self.mp3header[6][:4] == "LAME":
-            try:
-                version = float(self.mp3header[6][4:8])
-            except ValueError:
-                version = -1
-            vbrmethod = self.mp3header[7] & 15
-            preset = self.mp3header[11] & 2047
-
-            if preset > 0:
-                if preset == 320:
-                    return "-api"
-                if preset == 460 or preset == 470:
-                    if vbrmethod == 4:
-                        return "-apfm"
-                    return "-apm"
-                if preset == 480 or preset == 490:
-                    if vbrmethod == 4:
-                        return "-apfs"
-                    return "-aps"
-                if preset == 500:
-                    if vbrmethod == 4:
-                        return "-apfe"
-                    return "-ape"
-        return None
-
     def profile(self):
 
+        res = {}
         if self.mp3header[6][:4] == "LAME":
             try:
                 version = float(self.mp3header[6][4:8])
@@ -465,61 +439,78 @@ class MP3(AudioType):
 
             if preset > 0:
                 if preset == 320:
-                    return "-b 320"
-                if preset in (410, 420, 430, 440, 450, 460, 470, 480, 490, 500):
+                    res["lame"] = "-b 320"
+                    res["oldlame"] = "-api"
+                elif preset in (410, 420, 430, 440, 450, 460, 470, 480, 490, 500):
                     if vbrmethod == 4:
-                        return "-V%dn" % ((500 - preset) / 10)
-                    return "-V%d" % ((500 - preset) / 10)
+                        res["lame"] = "-V%dn" % ((500 - preset) / 10)
+                    else:
+                        res["lame"] = "-V%d" % ((500 - preset) / 10)
+                    if preset == 460 or preset == 470:
+                        if vbrmethod == 4:
+                            res["oldlame"] = "-apfm"
+                        else:
+                            res["oldlame"] = "-apm"
+                    elif preset == 480 or preset == 490:
+                        if vbrmethod == 4:
+                            res["oldlame"] = "-apfs"
+                        else:
+                            res["oldlame"] = "-aps"
+                    elif preset == 500:
+                        if vbrmethod == 4:
+                            res["oldlame"] = "-apfe"
+                        else:
+                            res["oldlame"] = "-ape"
                 # deprecated values?
-                if preset == 1000:
-                    return "-r3mix"
-                if preset == 1001:
-                    return "-aps"
-                if preset == 1002:
-                    return "-ape"
-                if preset == 1003:
-                    return "-api"
-                if preset == 1004:
-                    return "-apfs"
-                if preset == 1005:
-                    return "-apfe"
-                if preset == 1006:
-                    return "-apm"
-                if preset == 1007:
-                    return "-apfm"
-            if version < 3.90 and version > 0: # lame version
+                elif preset == 1000:
+                    res["lame"] = "-r3mix"
+                elif preset == 1001:
+                    res["lame"] = "-aps"
+                elif preset == 1002:
+                    res["lame"] = "-ape"
+                elif preset == 1003:
+                    res["lame"] = "-api"
+                elif preset == 1004:
+                    res["lame"] = "-apfs"
+                elif preset == 1005:
+                    res["lame"] = "-apfe"
+                elif preset == 1006:
+                    res["lame"] = "-apm"
+                elif preset == 1007:
+                    res["lame"] = "-apfm"
+            elif version < 3.90 and version > 0: # lame version
                 if vbrmethod == 8:  # unknown
                     if lowpass in (97, 98):
                         if ath == 0:
-                            return "-r3mix"
-            if version >= 3.90 and version < 3.97: # lame version
+                            res["lame"] = "-r3mix"
+            elif version >= 3.90 and version < 3.97: # lame version
                 if vbrmethod == 3:  # vbr-old / vbr-rh
                     if lowpass in (195, 196):
                         if ath in (2, 4):
-                            return "-ape"
-                    if lowpass == 190:
+                            res["lame"] = "-ape"
+                    elif lowpass == 190:
                         if ath == 4:
-                            return "-aps"
-                    if lowpass == 180:
+                            res["lame"] = "-aps"
+                    elif lowpass == 180:
                         if ath == 4:
-                            return "-apm"
-                if vbrmethod == 4: # vbr-mtrh
+                            res["lame"] = "-apm"
+                elif vbrmethod == 4: # vbr-mtrh
                     if lowpass in (195, 196):
                         if ath in (2, 4):
-                            return "-apfe"
-                        if ath == 3:
-                            return "-r3mix"
-                    if lowpass == 190:
+                            res["lame"] = "-apfe"
+                        elif ath == 3:
+                            res["lame"] = "-r3mix"
+                    elif lowpass == 190:
                         if ath == 4:
-                            return "-apfs"
-                    if lowpass == 180:
+                            res["lame"] = "-apfs"
+                    elif lowpass == 180:
                         if ath == 4:
-                            return "-apfm"
-                if vbrmethod in (1, 2): # abr
+                            res["lame"] = "-apfm"
+                elif vbrmethod in (1, 2): # abr
                     if lowpass in (205, 206):
                         if ath in (2, 4):
-                            return "-api"
-        return ""
+                            res["lame"] = "-api"
+        return res
 
     def bitrate(self):
 
@@ -641,7 +632,7 @@ class MPC(AudioType):
          
     def profile(self):
 
-        return self.profiletable[self.getheader()[3] >> 20 & 0xF]
+        return {"musepack": self.profiletable[self.getheader()[3] >> 20 & 0xF]}
 
     def bitrate(self):
 
@@ -693,7 +684,7 @@ class FLAC(AudioType):
 
     def profile(self):
 
-        return ""
+        return {}
 
     def parse(self):
 
@@ -781,7 +772,7 @@ class AAC(AudioType):
 
     def profile(self):
 
-        return ""
+        return {}
 
     def getheader(self):
 

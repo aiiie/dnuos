@@ -252,14 +252,11 @@ class Dir(object):
     bitrate = property(_get_bitrate)
 
     def _parse_profile(self, streams):
-        def aux(stream):
-            new = stream.profile()
-            if stream.filetype == 'MP3':
-                old = stream.old_lame_preset()
-            else:
-                old = None
-            return (new, old)
-        return tuple(set([aux(s) for s in streams]))
+        res = {}
+        for s in streams:
+            for key, profile in s.profile().items():
+                res.setdefault(key, set()).add(profile)
+        return res
 
     def _get_profile(self):
         """
@@ -268,13 +265,18 @@ class Dir(object):
         If no or inconsistent profiles are detected, an empty string
         is returned.
         """
-        if Settings().options.force_old_lame_presets:
-            profiles = set([(old or new) for new, old in self._profiles])
+        if len(self._profiles) == 1:
+            profiles = self._profiles.values()[0]
+        elif set(self._profiles.keys()) == set(['lame', 'oldlame']):
+            if Settings().options.force_old_lame_presets:
+                profiles = self._profiles['oldlame']
+            else:
+                profiles = self._profiles['lame']
         else:
-            profiles = set([new for new, old in self._profiles])
+            profiles = set()
 
         if len(profiles) == 1:
-            return profiles.pop()
+            return tuple(profiles)[0]
         else:
             return ""
     profile = property(_get_profile)
