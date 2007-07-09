@@ -10,6 +10,66 @@ class AbstractRenderer(object):
         self.columns = map(lambda x: parse_field(x, indent), fields)
 
 
+def textencode(str_):
+    try:
+        unicode(str_, "ascii")
+    except UnicodeError:
+        str_ = unicode(str_, "latin1")
+    except TypeError:
+        pass
+    else:
+        pass
+
+    if Settings().options.output_module == dnuos.output.db:
+        encoding = ('latin1', 'replace')
+    else:
+        encoding = ('utf-8',)
+    return str_.encode(*encoding).strip('\0')
+
+def _get_tag_keys(data):
+    if len(data) == 1:
+        keys = data.keys()
+        encoder = lambda x: x
+    elif set(data.keys()) == set(['id3v1', 'id3v2']):
+        if Settings().options.prefer_tag == 1:
+            keys = ['id3v1', 'id3v2']
+        elif Settings().options.prefer_tag == 2:
+            keys = ['id3v2', 'id3v1']
+        encoder = textencode
+    else:
+        keys = []
+        encoder = lambda x: x
+    return keys, encoder
+
+def _get_tag_value(data, keys):
+    for key in keys:
+        values = data[key]
+        if len(values) != 1:
+            return None
+        elif values != set([None]):
+            return tuple(values)[0]
+        else:
+            pass
+    return None
+
+def get_artist(adir):
+    data = adir.artists
+    if data is not None:
+        keys, encoder = _get_tag_keys(data)
+        value = _get_tag_value(data, keys)
+        if value is not None:
+            return encoder(value)
+    return None
+
+def get_album(adir):
+    data = adir.albums
+    if data is not None:
+        keys, encoder = _get_tag_keys(data)
+        value = _get_tag_value(data, keys)
+        if value is not None:
+            return encoder(value)
+    return None
+
 def _get_profile(adir):
     if Settings().options.force_old_lame_presets:
         return adir.profile_force_old_lame
@@ -17,14 +77,15 @@ def _get_profile(adir):
         return adir.profile
 
 
+
 class Column(object):
 
     attr_table = {
         "a": ('Bitrate(s)', lambda adir: adir.audiolist_format),
-        "A": ('Artist', lambda adir: adir.artist),
+        "A": ('Artist', get_artist),
         "b": ('Bitrate', lambda adir: adir.bitrate),
         "B": ('Bitrate', lambda adir: adir.bitrate),
-        "C": ('Album', lambda adir: adir.album),
+        "C": ('Album', get_album),
         #"d": "Dir",
         #"D": ('Depth', lambda adir: adir.depth),
         "f": ('Files', lambda adir: adir.num_files),
