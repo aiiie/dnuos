@@ -133,50 +133,48 @@ class Dir(object):
                 res.setdefault(tag, set()).add(album)
         return res
 
-    def _get_artist(self):
-        if len(self._artist) == 1:
-            keys = self._artist.keys()
+    def _get_tag_keys(self, data):
+        if len(data) == 1:
+            keys = data.keys()
             encoder = lambda x: x
-        elif set(self._artist.keys()) == set(['id3v1', 'id3v2']):
+        elif set(data.keys()) == set(['id3v1', 'id3v2']):
             if Settings().options.prefer_tag == 1:
                 keys = ['id3v1', 'id3v2']
             elif Settings().options.prefer_tag == 2:
                 keys = ['id3v2', 'id3v1']
             encoder = self.textencode
         else:
-            return None
+            keys = []
+            encoder = lambda x: x
+        return keys, encoder
 
+    def _get_tag_value(self, data, keys):
         for key in keys:
-            values = self._artist[key]
+            values = data[key]
             if len(values) != 1:
                 return None
             elif values != set([None]):
-                return encoder(tuple(values)[0])
+                return tuple(values)[0]
             else:
                 pass
+        return None
+
+    def _get_artist(self):
+        keys, encoder = self._get_tag_keys(self._artist)
+        value = self._get_tag_value(self._artist, keys)
+        if value is None:
+            return None
+        else:
+            return encoder(value)
     artist = property(_get_artist)
 
     def _get_album(self):
-        if len(self._album) == 1:
-            keys = self._album.keys()
-            encoder = lambda x: x
-        elif set(self._album.keys()) == set(['id3v1', 'id3v2']):
-            if Settings().options.prefer_tag == 1:
-                keys = ['id3v1', 'id3v2']
-            elif Settings().options.prefer_tag == 2:
-                keys = ['id3v2', 'id3v1']
-            encoder = self.textencode
-        else:
+        keys, encoder = self._get_tag_keys(self._album)
+        value = self._get_tag_value(self._album, keys)
+        if value is None:
             return None
-
-        for key in keys:
-            values = self._album[key]
-            if len(values) != 1:
-                return None
-            elif values != set([None]):
-                return encoder(tuple(values)[0])
-            else:
-                pass
+        else:
+            return encoder(value)
     album = property(_get_album)
 
     def _parse_size(self, streams):
