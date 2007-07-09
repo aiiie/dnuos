@@ -9,11 +9,13 @@ import warnings
 from itertools import chain
 from itertools import ifilter
 
-from dnuos import appdata, audiodir, output
+import dnuos.output
+from dnuos import appdata, audiodir
 from dnuos.cache import PersistentDict, memoized
 from dnuos.conf import Settings
 from dnuos.misc import dir_depth, equal_elements, formatwarning
 from dnuos.misc import make_included_pred, merge, to_human
+from dnuos.output.abstract_renderer import get_album, get_artist
 
 class Data(object):
     """Holds data for cache"""
@@ -72,12 +74,12 @@ def prepare_listing(dir_pairs, options, data):
     if options.mp3_min_bit_rate != 0:
         dir_pairs = ifilter(enough_bitrate_mp3(options.mp3_min_bit_rate),
                             dir_pairs)
-    if options.output_module == output.db:
+    if options.output_module == dnuos.output.db:
         dir_pairs = ifilter(output_db_predicate, dir_pairs)
-    if not options.output_module == output.db:
+    if not options.output_module == dnuos.output.db:
         dir_pairs = total_sizes(dir_pairs, data.size)
     if (not options.stripped and
-        options.output_module in [output.plaintext, output.html]):
+        options.output_module in [dnuos.output.plaintext, dnuos.output.html]):
         dir_pairs = add_empty(dir_pairs)
     return dir_pairs
 
@@ -138,7 +140,7 @@ def main():
             adirs = prepare_listing(adirs, options, data)
             result = renderer.render(adirs, options, data)
         elif options.disp_version:
-            result = output.plaintext.render_version(data.version)
+            result = dnuos.output.plaintext.render_version(data.version)
         else:
             raise ValueError("No folders to process.\nType `%s -h' "
                              "for help." % os.path.basename(sys.argv[0]))
@@ -239,8 +241,8 @@ def output_db_predicate((adir, root)):
     """Predicate for whether something should be included in output.db"""
 
     return adir.mediatype != "Mixed" and \
-           adir.artist != None and \
-           adir.album != None
+           get_artist(adir) != None and \
+           get_album(adir) != None
 
 
 def total_sizes(dir_pairs, sizes):

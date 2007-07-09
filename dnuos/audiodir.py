@@ -42,22 +42,6 @@ class Dir(object):
         self._profiles = self._parse_profile(streams)
         self.modified = self._parse_modified()
 
-    def textencode(self, str_):
-        try:
-            unicode(str_, "ascii")
-        except UnicodeError:
-            str_ = unicode(str_, "latin1")
-        except TypeError:
-            pass
-        else:
-            pass
-
-        if Settings().options.output_module == dnuos.output.db:
-            encoding = ('latin1', 'replace')
-        else:
-            encoding = ('utf-8',)
-        return str_.encode(*encoding).strip('\0')
-
     def depth_from(self, root):
         """
         Return the relative depth of the directory from the given
@@ -132,50 +116,6 @@ class Dir(object):
             for tag, album in stream.album().items():
                 res.setdefault(tag, set()).add(album)
         return res
-
-    def _get_tag_keys(self, data):
-        if len(data) == 1:
-            keys = data.keys()
-            encoder = lambda x: x
-        elif set(data.keys()) == set(['id3v1', 'id3v2']):
-            if Settings().options.prefer_tag == 1:
-                keys = ['id3v1', 'id3v2']
-            elif Settings().options.prefer_tag == 2:
-                keys = ['id3v2', 'id3v1']
-            encoder = self.textencode
-        else:
-            keys = []
-            encoder = lambda x: x
-        return keys, encoder
-
-    def _get_tag_value(self, data, keys):
-        for key in keys:
-            values = data[key]
-            if len(values) != 1:
-                return None
-            elif values != set([None]):
-                return tuple(values)[0]
-            else:
-                pass
-        return None
-
-    def _get_artist(self):
-        keys, encoder = self._get_tag_keys(self.artists)
-        value = self._get_tag_value(self.artists, keys)
-        if value is None:
-            return None
-        else:
-            return encoder(value)
-    artist = property(_get_artist)
-
-    def _get_album(self):
-        keys, encoder = self._get_tag_keys(self.albums)
-        value = self._get_tag_value(self.albums, keys)
-        if value is None:
-            return None
-        else:
-            return encoder(value)
-    album = property(_get_album)
 
     def _parse_size(self, streams):
         """report size in bytes
