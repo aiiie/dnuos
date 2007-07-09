@@ -55,7 +55,7 @@ def set_mp3_min_bitrate(option, opt_str, value, parser):
 def set_output_module(option, opt_str, value, parser):
 
     try:
-        module = getattr(output, value)
+        module = getattr(dnuos.output, value)
     except AttributeError:
         raise OptionValueError("Unknown template '%s'" % value)
     parser.values.output_module = module
