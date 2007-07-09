@@ -11,8 +11,6 @@ except ImportError:
     from sets import Set as set
 
 from dnuos import audiotype
-import dnuos.output.db
-from dnuos.conf import Settings
 from dnuos.misc import dir_depth
 
 
