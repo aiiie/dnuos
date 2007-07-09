@@ -21,7 +21,7 @@ class Dir(object):
     audio_file_extRE = re.compile(pattern, re.IGNORECASE)
     del pattern
 
-    __slots__ = tuple('_album _artist _audio_files _bad_files '
+    __slots__ = tuple('albums artists _audio_files _bad_files '
                       '_bitrates _lengths _types modified path '
                       '_profiles _sizes'.split())
     __version__ = '1.0'
@@ -33,8 +33,8 @@ class Dir(object):
 
     def load(self, with_stack_traces):
         streams, self._bad_files = self.get_streams(with_stack_traces)
-        self._artist = self._parse_artist(streams)
-        self._album = self._parse_album(streams)
+        self.artists = self._parse_artist(streams)
+        self.albums = self._parse_album(streams)
         self._sizes = self._parse_size(streams)
         self._lengths = self._parse_length(streams)
         self._types = self._parse_types(streams)
@@ -160,8 +160,8 @@ class Dir(object):
         return None
 
     def _get_artist(self):
-        keys, encoder = self._get_tag_keys(self._artist)
-        value = self._get_tag_value(self._artist, keys)
+        keys, encoder = self._get_tag_keys(self.artists)
+        value = self._get_tag_value(self.artists, keys)
         if value is None:
             return None
         else:
@@ -169,8 +169,8 @@ class Dir(object):
     artist = property(_get_artist)
 
     def _get_album(self):
-        keys, encoder = self._get_tag_keys(self._album)
-        value = self._get_tag_value(self._album, keys)
+        keys, encoder = self._get_tag_keys(self.albums)
+        value = self._get_tag_value(self.albums, keys)
         if value is None:
             return None
         else:
