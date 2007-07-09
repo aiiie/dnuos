@@ -12,27 +12,27 @@ class AbstractRenderer(object):
 class Column(object):
 
     attr_table = {
-        "a": ('audiolist_format', 'Bitrate(s)'),
-        "A": ('artist', 'Artist'),
-        "b": ('bitrate', 'Bitrate'),
-        "B": ('bitrate', 'Bitrate'),
-        "C": ('album', 'Album'),
+        "a": ('Bitrate(s)', lambda adir: adir.audiolist_format),
+        "A": ('Artist', lambda adir: adir.artist),
+        "b": ('Bitrate', lambda adir: adir.bitrate),
+        "B": ('Bitrate', lambda adir: adir.bitrate),
+        "C": ('Album', lambda adir: adir.album),
         #"d": "Dir",
-        #"D": ('depth', 'Depth'),
-        "f": ('num_files', 'Files'),
-        "l": ('length', 'Length'),
-        "L": ('length', 'Length'),
-        "m": ('modified', 'Modified'),
-        "M": ('modified', 'Modified'),
-        "n": ('name', 'Album/Artist'),
-        "N": ('name', 'Album/Artist'),
-        "p": ('profile', 'Profile'),
-        "P": ('path', 'Path'),
-        "q": ('quality', 'Quality'),
-        "s": ('size', 'Size'),
-        "S": ('size', 'Size'),
-        "t": ('mediatype', 'Type'),
-        "T": ('brtype', 'BR Type'),
+        #"D": ('Depth', lambda adir: adir.depth),
+        "f": ('Files', lambda adir: adir.num_files),
+        "l": ('Length', lambda adir: adir.length),
+        "L": ('Length', lambda adir: adir.length),
+        "m": ('Modified', lambda adir: adir.modified),
+        "M": ('Modified', lambda adir: adir.modified),
+        "n": ('Album/Artist', lambda adir: adir.name),
+        "N": ('Album/Artist', lambda adir: adir.name),
+        "p": ('Profile', lambda adir: adir.profile),
+        "P": ('Path', lambda adir: adir.path),
+        "q": ('Quality', lambda adir: adir.quality),
+        "s": ('Size', lambda adir: adir.size),
+        "S": ('Size', lambda adir: adir.size),
+        "t": ('Type', lambda adir: adir.mediatype),
+        "T": ('BR Type', lambda adir: adir.brtype),
     }
 
     def __init__(self, tag, width, suffix):
@@ -51,7 +51,7 @@ class Column(object):
             self.formatter = formatter_table[tag]
         else:
             self.formatter = lambda x, y: x
-        self.attr, self.name = self.attr_table[tag]
+        self.name, self.getter = self.attr_table[tag]
 
     def _format(self, data, suffixes):
 
@@ -70,7 +70,7 @@ class Column(object):
 
     def get(self, adir):
 
-        return getattr(adir, self.attr)
+        return self.getter(adir)
 
     def get_formatted(self, adir, root, suffixes=True):
 
