@@ -242,13 +242,12 @@ class Dir(object):
 
         if self.mediatype == "Mixed":
             return "~"
-        brtype = ""
-        for file in self.streams():
-            type = file.brtype()
-            if brtype == "":
-                brtype = type
-            elif brtype != type:
-                return "~"
+        brtypes = Set([ s.brtype() for s in self.streams() ])
+        if len(brtypes) < 1:
+            return ""
+        if len(brtypes) > 1:
+            return "~"
+        brtype = brtypes.pop()
         if brtype == "C":
             bitrate, brtype = self._constant_bitrate()
         return brtype
