@@ -31,7 +31,7 @@ class Dir(object):
     del pattern
 
     __slots__ = tuple('_album _artist audio_files audiolist_format bad_files '
-                      'bitrate brtype length mediatype modified path profile _size'.split())
+                      'bitrate brtype length types modified path profile _size'.split())
 
     def __init__(self, path):
         self.path = path
@@ -40,7 +40,7 @@ class Dir(object):
         self._album = self._parse_album()
         self._size = self._parse_size()
         self.length = self.get_length()
-        self.mediatype = self.get_mediatype()
+        self.types = self._parse_types()
         self.brtype = self.get_brtype()
         self.bitrate = self.get_bitrate()
         self.profile = self.get_profile()
@@ -102,12 +102,12 @@ class Dir(object):
         return len(self.audio_files)
     num_files = property(_get_num_files)
 
-    def types(self):
+    def _parse_types(self):
         types = list(Set([ s.type() for s in self.streams() ]))
         types.sort()
         return types
 
-    def get_mediatype(self):
+    def _get_mediatype(self):
         """Return the collective media type for the directory
 
         Return values:
@@ -115,12 +115,13 @@ class Dir(object):
             "Mixed" - The directory contains multiple kinds of audiofiles
             other   - The uniform mediatype of all non-broken audiofiles
         """
-        if not self.types():
+        if not self.types:
             return "?"
-        elif len(self.types()) == 1:
-            return self.types()[0]
+        elif len(self.types) == 1:
+            return self.types[0]
         else:
             return "Mixed"
+    mediatype = property(_get_mediatype)
 
     def _parse_artist(self):
         res = {}
