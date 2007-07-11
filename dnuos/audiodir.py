@@ -31,7 +31,7 @@ class Dir(object):
     del pattern
 
     __slots__ = tuple('_album _artist audio_files audiolist_format bad_files '
-                      'bitrate brtype length types modified path profile _size'.split())
+                      'bitrate brtype _length types modified path profile _size'.split())
 
     def __init__(self, path):
         self.path = path
@@ -39,7 +39,7 @@ class Dir(object):
         self._artist = self._parse_artist()
         self._album = self._parse_album()
         self._size = self._parse_size()
-        self.length = self.get_length()
+        self._length = self._parse_length()
         self.types = self._parse_types()
         self.brtype = self.get_brtype()
         self.bitrate = self.get_bitrate()
@@ -205,18 +205,18 @@ class Dir(object):
         return self._size
     sizes = property(_get_sizes)
 
-    def get_length(self, type="all"):
-        tot = 0
+    def _parse_length(self):
         length = {}
-        length["all"] = 0
         for file in self.streams():
             if file.type() in length:
                 length[file.type()] += file.time
             else:
                 length[file.type()] = file.time
-            length["all"] += file.time
-        length = map_dict(int, length)
-        return length[type]
+        return length
+
+    def _get_length(self):
+        return int(sum(self._length.values()))
+    length = property(_get_length)
 
     def _variable_bitrate(self):
         if self.length == 0:
