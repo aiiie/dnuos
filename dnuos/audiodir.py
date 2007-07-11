@@ -103,8 +103,7 @@ class Dir(object):
     num_files = property(_get_num_files)
 
     def types(self):
-        types = map(lambda x: x.type(), self.streams())
-        types = uniq(types)
+        types = list(Set([ s.type() for s in self.streams() ]))
         types.sort()
         return types
 
