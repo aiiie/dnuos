@@ -31,24 +31,19 @@ class Dir(object):
     del pattern
 
     __slots__ = tuple('_album _artist audio_files audiolist_format bad_files '
-                      'bitrate brtype length mediatype modified name num_files '
-                      'path profile quality size sizes'.split())
+                      'bitrate brtype length mediatype modified path profile _size'.split())
 
     def __init__(self, path):
         self.path = path
         self.audio_files = self.get_audio_files()
-        self.name = self.get_name()
-        self.num_files = self.get_num_files()
-        self.mediatype = self.get_mediatype()
         self._artist = self._parse_artist()
         self._album = self._parse_album()
-        self.size = self.get_size()
-        self.sizes = self.get_sizes()
+        self._size = self._parse_size()
         self.length = self.get_length()
+        self.mediatype = self.get_mediatype()
         self.brtype = self.get_brtype()
         self.bitrate = self.get_bitrate()
         self.profile = self.get_profile()
-        self.quality = self.get_quality()
         self.audiolist_format = self.get_audiolist_format()
         self.modified = self.get_modified()
         self.bad_files = self.get_bad_files()
@@ -76,8 +71,9 @@ class Dir(object):
         """
         return dir_depth(self.path) - dir_depth(root) - 1
 
-    def get_name(self):
+    def _get_name(self):
         return os.path.basename(self.path) or self.path
+    name = property(_get_name)
 
     def children(self):
         return [ os.path.join(self.path, f) for f in os.listdir(self.path) ]
@@ -102,8 +98,9 @@ class Dir(object):
         self.streams()
         return self.bad_files
 
-    def get_num_files(self):
+    def _get_num_files(self):
         return len(self.audio_files)
+    num_files = property(_get_num_files)
 
     def types(self):
         types = map(lambda x: x.type(), self.streams())
@@ -179,27 +176,27 @@ class Dir(object):
                 pass
     album = property(_get_album)
 
-    def get_size(self, type="all"):
+    def _parse_size(self):
         """report size in bytes
 
         Note: The size reported is the total audio file size, not the
         total directory size."""
 
         size = {}
-        size["all"] = 0
         for file in self.streams():
             if file.type() in size:
                 size[file.type()] += file.streamsize()
             else:
                 size[file.type()] = file.streamsize()
-            size["all"] += file.streamsize()
-        return size[type]
+        return size
 
-    def get_sizes(self):
-        res = dict.fromkeys(self.types(), 0)
-        for mediatype in self.types():
-            res[mediatype] += self.get_size(mediatype)
-        return res
+    def _get_size(self):
+        return sum(self._size.values())
+    size = property(_get_size)
+
+    def _get_sizes(self):
+        return self._size
+    sizes = property(_get_sizes)
 
     def get_length(self, type="all"):
         tot = 0
@@ -273,9 +270,10 @@ class Dir(object):
         else:
           return profiles.pop()
 
-    def get_quality(self):
+    def _get_quality(self):
         if self.profile: return self.profile
         return "%s %s" % (self.bitrate / 1000, self.brtype)
+    quality = property(_get_quality)
 
     def get_audiolist_format(self):
         if self.brtype == "V": return "VBR"
