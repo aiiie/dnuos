@@ -30,6 +30,10 @@ class Dir(object):
     audio_file_extRE = re.compile(pattern, re.IGNORECASE)
     del pattern
 
+    __slots__ = tuple('_album _artist audio_files audiolist_format bad_files '
+                      'bitrate brtype length mediatype modified name num_files '
+                      'path profile quality size sizes'.split())
+
     def __init__(self, path):
         self.path = path
         self.audio_files = self.get_audio_files()
@@ -315,13 +319,9 @@ class Dir(object):
     is_audio_file = staticmethod(is_audio_file)
 
     def __getstate__(self):
-        # XXX Not sure if this attribute list is necessary now that _root,
-        # _depth and _relpath are gone. Maybe we could just return
-        # self.__dict__ or something.
-        attrs = ('album artist audio_files audiolist_format bad_files bitrate '
-                 'brtype length mediatype modified name num_files path profile '
-                 'quality size sizes').split()
-        res = {}
-        for attr in attrs:
-            res[attr] = getattr(self, attr)
-        return res
+        return [ getattr(self, attrname)
+                 for attrname in Dir.__slots__]
+
+    def __setstate__(self, state):
+        for key, value in zip(Dir.__slots__, state):
+            setattr(self, key, value)
