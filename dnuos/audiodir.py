@@ -108,6 +108,13 @@ class Dir(object):
         return types
 
     def get_mediatype(self):
+        """Return the collective media type for the directory
+
+        Return values:
+            "?"     - The directory contains no non-broken audiofiles
+            "Mixed" - The directory contains multiple kinds of audiofiles
+            other   - The uniform mediatype of all non-broken audiofiles
+        """
         if not self.types():
             return "?"
         elif len(self.types()) == 1:
