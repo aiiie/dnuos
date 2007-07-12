@@ -30,20 +30,20 @@ class Dir(object):
     audio_file_extRE = re.compile(pattern, re.IGNORECASE)
     del pattern
 
-    __slots__ = tuple('_album _artist audio_files audiolist_format bad_files '
-                      'bitrate brtype _length types modified path profile _size'.split())
+    __slots__ = tuple('_album _artist _audio_files audiolist_format bad_files '
+                      '_bitrates _brtypes _length types modified path _profiles _size'.split())
 
     def __init__(self, path):
         self.path = path
-        self.audio_files = self.get_audio_files()
+        self._audio_files = self._parse_audio_files()
         self._artist = self._parse_artist()
         self._album = self._parse_album()
         self._size = self._parse_size()
         self._length = self._parse_length()
         self.types = self._parse_types()
-        self.brtype = self.get_brtype()
-        self.bitrate = self.get_bitrate()
-        self.profile = self.get_profile()
+        self._brtypes = self._parse_brtypes()
+        self._bitrates = self._parse_bitrates()
+        self._profiles = self._parse_profile()
         self.audiolist_format = self.get_audiolist_format()
         self.modified = self.get_modified()
         self.bad_files = self.get_bad_files()
@@ -76,7 +76,7 @@ class Dir(object):
     name = property(_get_name)
 
     def children(self):
-        return [ os.path.join(self.path, f) for f in os.listdir(self.path) ]
+        return [ filename for filename in os.listdir(self.path) ]
 
     def streams(self):
         streams = []
@@ -99,7 +99,7 @@ class Dir(object):
         return self.bad_files
 
     def _get_num_files(self):
-        return len(self.audio_files)
+        return len(self._audio_files)
     num_files = property(_get_num_files)
 
     def _parse_types(self):
@@ -218,23 +218,13 @@ class Dir(object):
         return int(sum(self._length.values()))
     length = property(_get_length)
 
-    def _variable_bitrate(self):
-        if self.length == 0:
-            return 0
-        else:
-            return int(self.size * 8.0 / self.length)
+    def _parse_bitrates(self):
+        return tuple(Set([ s.bitrate() for s in self.streams() ]))
 
-    def _constant_bitrate(self):
-        bitrate = None
-        for file in self.streams():
-            br = file.bitrate()
-            if bitrate == None:
-                bitrate = br
-            elif bitrate != br:
-                return self._variable_bitrate(), "~"
-        return int(bitrate), "C"
+    def _parse_brtypes(self):
+        return tuple(Set([ s.brtype() for s in self.streams() ]))
 
-    def get_brtype(self):
+    def _get_brtype(self):
         """report the bitrate type
 
         If multiple types are found "~" is returned.
@@ -242,39 +232,43 @@ class Dir(object):
 
         if self.mediatype == "Mixed":
             return "~"
-        brtypes = Set([ s.brtype() for s in self.streams() ])
-        if len(brtypes) < 1:
+        if len(self._brtypes) < 1:
             return ""
-        if len(brtypes) > 1:
+        if len(self._brtypes) > 1:
             return "~"
-        brtype = brtypes.pop()
-        if brtype == "C":
-            bitrate, brtype = self._constant_bitrate()
-        return brtype
+        if self._brtypes[0] == "C" and len(self._bitrates) > 1:
+            return "~"
+        return self._brtypes[0]
+    brtype = property(_get_brtype)
 
-    def get_bitrate(self):
+    def _get_bitrate(self):
         """report average bitrate in bits per second
 
         If no audio is found zero is returned."""
 
-        if self.brtype == "C":
-            bitrate, brtype = self._constant_bitrate()
+        if self.brtype == "C" and len(self._bitrates) == 1:
+            return int(self._bitrates[0])
+        if self.length == 0:
+            return 0
         else:
-            bitrate = self._variable_bitrate()
-        return bitrate
+            return int(self.size * 8.0 / self.length)
+    bitrate = property(_get_bitrate)
 
-    def get_profile(self):
+    def _parse_profile(self):
+        return tuple(Set([ file.profile() for file in self.streams() ]))
+
+    def _get_profile(self):
         """
         report encoding profile name
 
         If no or inconsistent profiles are detected, an empty string
         is returned.
         """
-        profiles = Set([ file.profile() for file in self.streams() ])
-        if len(profiles) != 1:
-          return ""
+        if len(self._profiles) == 1:
+            return self._profiles[0]
         else:
-          return profiles.pop()
+            return ""
+    profile = property(_get_profile)
 
     def _get_quality(self):
         if self.profile: return self.profile
@@ -301,13 +295,17 @@ class Dir(object):
         dates = [ os.path.getmtime(f) for f in files ]
         return max(dates)
 
-    def get_audio_files(self):
+    def _parse_audio_files(self):
+        return [ filename for filename in self.children() if self.is_audio_file(os.path.join(self.path, filename)) ]
+
+    def _get_audio_files(self):
         """Return a list of all audio files based on file extensions"""
-        return [ file for file in self.children() if self.is_audio_file(file) ]
+        return [ os.path.join(self.path, filename) for filename in self._audio_files ]
+    audio_files = property(_get_audio_files)
 
     def validate(self):
         if (self.modified != self.get_modified() or
-            self.audio_files != self.get_audio_files()):
+            self._audio_files != self._parse_audio_files()):
             self.__init__(self.path)
 
     def is_audio_file(filename):
