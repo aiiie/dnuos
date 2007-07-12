@@ -44,7 +44,7 @@ class Dir(object):
         self._types = self._parse_types(streams)
         self._bitrates = self._parse_bitrates(streams)
         self._profiles = self._parse_profile(streams)
-        self.modified = self.get_modified()
+        self.modified = self._parse_modified()
 
     def textencode(self, str):
         try:
@@ -290,7 +290,7 @@ class Dir(object):
         return string.join([ str(x) for x in res ], ", ")
     audiolist_format = property(_get_audiolist_format)
 
-    def get_modified(self):
+    def _parse_modified(self):
         files = self.audio_files[:]
         files.append(self.path)
         dates = [ os.path.getmtime(f) for f in files ]
@@ -305,7 +305,7 @@ class Dir(object):
     audio_files = property(_get_audio_files)
 
     def validate(self):
-        if (self.modified != self.get_modified() or
+        if (self.modified != self._parse_modified() or
             self._audio_files != self._parse_audio_files()):
             self.__init__(self.path)
 
