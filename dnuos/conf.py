@@ -27,7 +27,6 @@ import os
 import re
 import string
 import sys
-import time
 
 from singleton import Singleton
 from misc import deprecation
