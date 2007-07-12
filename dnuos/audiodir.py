@@ -29,17 +29,18 @@ class Dir(object):
     audio_file_extRE = re.compile(pattern, re.IGNORECASE)
     del pattern
 
-    __slots__ = tuple('_album _artist _audio_files bad_files '
-                      '_bitrates _length types modified path _profiles _size'.split())
+    __slots__ = tuple('_album _artist _audio_files bad_files _bitrates '
+                      '_lengths _types modified path _profiles '
+                      '_sizes'.split())
 
     def __init__(self, path):
         self.path = path
         self._audio_files = self._parse_audio_files()
         self._artist = self._parse_artist()
         self._album = self._parse_album()
-        self._size = self._parse_size()
-        self._length = self._parse_length()
-        self.types = self._parse_types()
+        self._sizes = self._parse_size()
+        self._lengths = self._parse_length()
+        self._types = self._parse_types()
         self._bitrates = self._parse_bitrates()
         self._profiles = self._parse_profile()
         self.modified = self.get_modified()
@@ -112,10 +113,10 @@ class Dir(object):
             "Mixed" - The directory contains multiple kinds of audiofiles
             other   - The uniform mediatype of all non-broken audiofiles
         """
-        if not self.types:
+        if not self._types:
             return "?"
-        elif len(self.types) == 1:
-            return self.types[0]
+        elif len(self._types) == 1:
+            return self._types[0]
         else:
             return "Mixed"
     mediatype = property(_get_mediatype)
@@ -195,11 +196,11 @@ class Dir(object):
         return size
 
     def _get_size(self):
-        return sum(self._size.values())
+        return sum(self._sizes.values())
     size = property(_get_size)
 
     def _get_sizes(self):
-        return self._size
+        return self._sizes
     sizes = property(_get_sizes)
 
     def _parse_length(self):
@@ -212,7 +213,7 @@ class Dir(object):
         return length
 
     def _get_length(self):
-        return int(sum(self._length.values()))
+        return int(sum(self._lengths.values()))
     length = property(_get_length)
 
     def _parse_bitrates(self):
