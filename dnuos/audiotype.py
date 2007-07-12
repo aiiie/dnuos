@@ -268,10 +268,8 @@ class MP3(AudioType):
         [44100, 48000, 32000]  #MPEG 1  
         ]
 
-    def __init__(self, file, force_old_lame_presets):
+    def __init__(self, file):
         AudioType.__init__(self, file)
-
-        self._force_old_lame_presets = force_old_lame_presets
 
         self.brtable = [
             [ #MPEG2 & 2.5
@@ -440,6 +438,29 @@ class MP3(AudioType):
             ((header>>10 &  3) != 3) and
             ((header     &  3) != 2))
 
+    def old_lame_preset(self):
+        if self.mp3header[6][:4] == "LAME":
+            try:
+                version = string.atof(self.mp3header[6][4:8])
+            except ValueError:
+                version = -1
+            vbrmethod = self.mp3header[7] & 15
+            preset = self.mp3header[11] & 2047
+
+            if preset > 0:
+                if preset == 320:
+                    return "-api"
+                if preset == 460 or preset == 470:
+                    if vbrmethod == 4: return "-apfm"
+                    return "-apm"
+                if preset == 480 or preset == 490:
+                    if vbrmethod == 4: return "-apfs"
+                    return "-aps"
+                if preset == 500:
+                    if vbrmethod == 4: return "-apfe"
+                    return "-ape"
+        return None
+
     def profile(self):
         if self.mp3header[6][:4] == "LAME":
             try:
@@ -452,18 +473,6 @@ class MP3(AudioType):
             preset = self.mp3header[11] & 2047
 
             if preset > 0:
-                if self._force_old_lame_presets:
-                    if preset == 320:
-                        return "-api"
-                    if preset == 460 or preset == 470:
-                        if vbrmethod == 4: return "-apfm"
-                        return "-apm"
-                    if preset == 480 or preset == 490:
-                        if vbrmethod == 4: return "-apfs"
-                        return "-aps"
-                    if preset == 500:
-                        if vbrmethod == 4: return "-apfe"
-                        return "-ape"
                 if preset == 320:
                     return "-b 320"
                 if preset in (410, 420, 430, 440, 450, 460, 470, 480, 490, 500):
@@ -848,9 +857,9 @@ def unpack_bits(bits):
         value = value | chunk
     return value
 
-def openstream(filename, force_old_lame_presets):
+def openstream(filename):
     if has_suffix(filename, ".mp3"):
-        return MP3(filename, force_old_lame_presets)
+        return MP3(filename)
     elif has_suffix(filename, ".mpc") or has_suffix(filename, ".mp+"):
         return MPC(filename)
     elif has_suffix(filename, ".ogg"):

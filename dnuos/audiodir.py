@@ -81,9 +81,7 @@ class Dir(object):
         bad_files = []
         for child in self._audio_files:
             try:
-                force_old_lame_presets = Settings().options.force_old_lame_presets
-                streams.append(audiotype.openstream(os.path.join(self.path, child),
-                                                    force_old_lame_presets))
+                streams.append(audiotype.openstream(os.path.join(self.path, child)))
             except KeyboardInterrupt:
                 raise KeyboardInterrupt
             except audiotype.SpacerError:
@@ -256,7 +254,11 @@ class Dir(object):
     bitrate = property(_get_bitrate)
 
     def _parse_profile(self, streams):
-        return tuple(Set([ file.profile() for file in streams ]))
+        def aux(stream):
+            new = stream.profile()
+            old = (stream.type() == 'MP3') and stream.old_lame_preset() or None
+            return (new, old)
+        return tuple(Set(map(aux, streams)))
 
     def _get_profile(self):
         """
@@ -265,8 +267,13 @@ class Dir(object):
         If no or inconsistent profiles are detected, an empty string
         is returned.
         """
-        if len(self._profiles) == 1:
-            return self._profiles[0]
+        if Settings().options.force_old_lame_presets:
+            profiles = Set([ (old or new) for new, old in self._profiles ])
+        else:
+            profiles = Set([ new          for new, old in self._profiles ])
+
+        if len(profiles) == 1:
+            return profiles.pop()
         else:
             return ""
     profile = property(_get_profile)
