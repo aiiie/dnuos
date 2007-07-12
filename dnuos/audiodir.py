@@ -29,22 +29,22 @@ class Dir(object):
     audio_file_extRE = re.compile(pattern, re.IGNORECASE)
     del pattern
 
-    __slots__ = tuple('_album _artist _audio_files bad_files _bitrates '
-                      '_lengths _types modified path _profiles '
-                      '_sizes'.split())
+    __slots__ = tuple('_album _artist _audio_files _bad_files '
+                      '_bitrates _lengths _types modified path '
+                      '_profiles _sizes'.split())
 
     def __init__(self, path):
         self.path = path
         self._audio_files = self._parse_audio_files()
-        self._artist = self._parse_artist()
-        self._album = self._parse_album()
-        self._sizes = self._parse_size()
-        self._lengths = self._parse_length()
-        self._types = self._parse_types()
-        self._bitrates = self._parse_bitrates()
-        self._profiles = self._parse_profile()
+        streams, self._bad_files = self.get_streams()
+        self._artist = self._parse_artist(streams)
+        self._album = self._parse_album(streams)
+        self._sizes = self._parse_size(streams)
+        self._lengths = self._parse_length(streams)
+        self._types = self._parse_types(streams)
+        self._bitrates = self._parse_bitrates(streams)
+        self._profiles = self._parse_profile(streams)
         self.modified = self.get_modified()
-        self.bad_files = self.get_bad_files()
 
     def textencode(self, str):
         try:
@@ -76,32 +76,32 @@ class Dir(object):
     def children(self):
         return [ filename for filename in os.listdir(self.path) ]
 
-    def streams(self):
+    def get_streams(self):
         streams = []
-        self.bad_files = []
-        for child in self.audio_files:
+        bad_files = []
+        for child in self._audio_files:
             try:
                 force_old_lame_presets = Settings().options.force_old_lame_presets
-                streams.append(audiotype.openstream(child,
+                streams.append(audiotype.openstream(os.path.join(self.path, child),
                                                     force_old_lame_presets))
             except KeyboardInterrupt:
                 raise KeyboardInterrupt
             except audiotype.SpacerError:
                 continue
             except Exception, msg:
-                self.bad_files.append(child)
-        return streams
+                bad_files.append(child)
+        return streams, bad_files
 
-    def get_bad_files(self):
-        self.streams()
-        return self.bad_files
+    def _get_bad_files(self):
+        return [ os.path.join(self.path, filename) for filename in self._bad_files ]
+    bad_files = property(_get_bad_files)
 
     def _get_num_files(self):
         return len(self._audio_files)
     num_files = property(_get_num_files)
 
-    def _parse_types(self):
-        types = list(Set([ s.type() for s in self.streams() ]))
+    def _parse_types(self, streams):
+        types = list(Set([ s.type() for s in streams ]))
         types.sort()
         return types
 
@@ -121,16 +121,16 @@ class Dir(object):
             return "Mixed"
     mediatype = property(_get_mediatype)
 
-    def _parse_artist(self):
+    def _parse_artist(self, streams):
         res = {}
-        for stream in self.streams():
+        for stream in streams:
             for tag, artist in stream.artist().items():
                 res.setdefault(tag, Set()).add(artist)
         return res
 
-    def _parse_album(self):
+    def _parse_album(self, streams):
         res = {}
-        for stream in self.streams():
+        for stream in streams:
             for tag, album in stream.album().items():
                 res.setdefault(tag, Set()).add(album)
         return res
@@ -181,14 +181,14 @@ class Dir(object):
                 pass
     album = property(_get_album)
 
-    def _parse_size(self):
+    def _parse_size(self, streams):
         """report size in bytes
 
         Note: The size reported is the total audio file size, not the
         total directory size."""
 
         size = {}
-        for file in self.streams():
+        for file in streams:
             if file.type() in size:
                 size[file.type()] += file.streamsize()
             else:
@@ -203,9 +203,9 @@ class Dir(object):
         return self._sizes
     sizes = property(_get_sizes)
 
-    def _parse_length(self):
+    def _parse_length(self, streams):
         length = {}
-        for file in self.streams():
+        for file in streams:
             if file.type() in length:
                 length[file.type()] += file.time
             else:
@@ -216,9 +216,9 @@ class Dir(object):
         return int(sum(self._lengths.values()))
     length = property(_get_length)
 
-    def _parse_bitrates(self):
+    def _parse_bitrates(self, streams):
         return tuple(Set([ (s.bitrate(), s.brtype())
-                           for s in self.streams() ]))
+                           for s in streams ]))
 
     def _get_brtype(self):
         """report the bitrate type
@@ -255,8 +255,8 @@ class Dir(object):
             return int(self.size * 8.0 / self.length)
     bitrate = property(_get_bitrate)
 
-    def _parse_profile(self):
-        return tuple(Set([ file.profile() for file in self.streams() ]))
+    def _parse_profile(self, streams):
+        return tuple(Set([ file.profile() for file in streams ]))
 
     def _get_profile(self):
         """
