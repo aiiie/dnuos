@@ -31,7 +31,7 @@ class Dir(object):
     del pattern
 
     __slots__ = tuple('_album _artist _audio_files audiolist_format bad_files '
-                      '_bitrates _brtypes _length types modified path _profiles _size'.split())
+                      '_bitrates _length types modified path _profiles _size'.split())
 
     def __init__(self, path):
         self.path = path
@@ -41,7 +41,6 @@ class Dir(object):
         self._size = self._parse_size()
         self._length = self._parse_length()
         self.types = self._parse_types()
-        self._brtypes = self._parse_brtypes()
         self._bitrates = self._parse_bitrates()
         self._profiles = self._parse_profile()
         self.audiolist_format = self.get_audiolist_format()
@@ -219,10 +218,8 @@ class Dir(object):
     length = property(_get_length)
 
     def _parse_bitrates(self):
-        return tuple(Set([ s.bitrate() for s in self.streams() ]))
-
-    def _parse_brtypes(self):
-        return tuple(Set([ s.brtype() for s in self.streams() ]))
+        return tuple(Set([ (s.bitrate(), s.brtype())
+                           for s in self.streams() ]))
 
     def _get_brtype(self):
         """report the bitrate type
@@ -232,13 +229,13 @@ class Dir(object):
 
         if self.mediatype == "Mixed":
             return "~"
-        if len(self._brtypes) < 1:
+        brtypes = Set([ type for br, type in self._bitrates ])
+        if len(brtypes) < 1:
             return ""
-        if len(self._brtypes) > 1:
+        if len(brtypes) > 1:
             return "~"
-        if self._brtypes[0] == "C" and len(self._bitrates) > 1:
-            return "~"
-        return self._brtypes[0]
+        else:
+            return brtypes.pop()
     brtype = property(_get_brtype)
 
     def _get_bitrate(self):
@@ -246,8 +243,8 @@ class Dir(object):
 
         If no audio is found zero is returned."""
 
-        if self.brtype == "C" and len(self._bitrates) == 1:
-            return int(self._bitrates[0])
+        if len(self._bitrates) == 1 and self.brtype == "C":
+            return int(self._bitrates[0][0])
         if self.length == 0:
             return 0
         else:
