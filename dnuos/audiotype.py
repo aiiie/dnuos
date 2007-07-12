@@ -14,7 +14,10 @@
 # TODO: Implement *.audiosize() that also excludes vorbis comments and such?
 
 
-import os, re, string, struct, sys, warnings, codecs
+import os
+import re
+import string
+import struct
 
 import id3
 
