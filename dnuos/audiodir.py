@@ -30,7 +30,7 @@ class Dir(object):
     audio_file_extRE = re.compile(pattern, re.IGNORECASE)
     del pattern
 
-    __slots__ = tuple('_album _artist _audio_files audiolist_format bad_files '
+    __slots__ = tuple('_album _artist _audio_files bad_files '
                       '_bitrates _length types modified path _profiles _size'.split())
 
     def __init__(self, path):
@@ -43,7 +43,6 @@ class Dir(object):
         self.types = self._parse_types()
         self._bitrates = self._parse_bitrates()
         self._profiles = self._parse_profile()
-        self.audiolist_format = self.get_audiolist_format()
         self.modified = self.get_modified()
         self.bad_files = self.get_bad_files()
 
@@ -272,19 +271,19 @@ class Dir(object):
         return "%s %s" % (self.bitrate / 1000, self.brtype)
     quality = property(_get_quality)
 
-    def get_audiolist_format(self):
-        if self.brtype == "V": return "VBR"
-        list = []
-        for stream in self.streams():
-            if stream.brtype() == "C":
-                br = stream.bitrate() / 1000
+    def _get_audiolist_format(self):
+        table = {"V": "VBR",
+                 "L": "LL"}
+        res = Set()
+        for br, type in self._bitrates:
+            if type == "C":
+                res.add(br / 1000)
             else:
-                table = {"V": "VBR",
-                     "L": "LL"}
-                br = table[stream.brtype()]
-            if br not in list: list.append(br)
-        list.sort()
-        return string.join(map(str, list), ", ")
+                res.add(table[type])
+        res = list(res)
+        res.sort()
+        return string.join([ str(x) for x in res ], ", ")
+    audiolist_format = property(_get_audiolist_format)
 
     def get_modified(self):
         files = self.audio_files[:]
