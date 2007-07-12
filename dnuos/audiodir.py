@@ -228,13 +228,18 @@ class Dir(object):
 
         if self.mediatype == "Mixed":
             return "~"
-        brtypes = Set([ type for br, type in self._bitrates ])
-        if len(brtypes) < 1:
+        types = tuple(Set([ type for br, type in self._bitrates ]))
+        brs = tuple(Set([ br for br, type in self._bitrates ]))
+        if len(types) < 1:
             return ""
-        if len(brtypes) > 1:
+        elif len(types) > 1:
+            return "~"
+        elif len(types) > 1:
+            return "~"
+        elif types[0] == "C" and len(brs) > 1:
             return "~"
         else:
-            return brtypes.pop()
+            return types[0]
     brtype = property(_get_brtype)
 
     def _get_bitrate(self):
