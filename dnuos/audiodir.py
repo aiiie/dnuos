@@ -10,16 +10,15 @@
 # Mattias Päivärinta <pejve@vasteras2.net>
 
 
-import re, os, string, time
+import os
+import re
+import string
 from sets import Set
 
 import audiotype
-import appdata
 import dnuos.output.db
 from conf import Settings
 from misc import dir_depth
-from misc import map_dict
-from misc import uniq
 
 
 __version__ = "0.17.3"
