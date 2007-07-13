@@ -205,9 +205,9 @@ class Dir(object):
         length = {}
         for file in streams:
             if file.type() in length:
-                length[file.type()] += file.time
+                length[file.type()] += file.length()
             else:
-                length[file.type()] = file.time
+                length[file.type()] = file.length()
         return length
 
     def _get_length(self):
