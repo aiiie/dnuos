@@ -35,7 +35,8 @@ class Column(object):
     def __init__(self, tag, width, suffix):
         formatter_table = {
             "b": lambda data, depth: to_human(data, 1000.0),
-            "l": lambda data, depth: to_minutes(data),
+            "l": lambda data, depth: to_minutes(int(data)),
+            "L": lambda data, depth: int(data),
             "m": lambda data, depth: time.ctime(data),
             "n": lambda data, depth: self.indent(data, depth),
             "s": lambda data, depth: to_human(data),

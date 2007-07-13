@@ -211,7 +211,7 @@ class Dir(object):
         return length
 
     def _get_length(self):
-        return int(sum(self._lengths.values()))
+        return sum(self._lengths.values())
     length = property(_get_length)
 
     def _parse_bitrates(self, streams):
