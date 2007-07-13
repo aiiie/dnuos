@@ -304,11 +304,14 @@ class Dir(object):
         return max(dates)
 
     def _parse_audio_files(self):
-        return [ filename for filename in self.children() if self.is_audio_file(os.path.join(self.path, filename)) ]
+        return [ filename
+                 for filename in self.children()
+                 if self.is_audio_file(os.path.join(self.path, filename)) ]
 
     def _get_audio_files(self):
         """Return a list of all audio files based on file extensions"""
-        return [ os.path.join(self.path, filename) for filename in self._audio_files ]
+        return [ os.path.join(self.path, filename)
+                 for filename in self._audio_files ]
     audio_files = property(_get_audio_files)
 
     def validate(self):
