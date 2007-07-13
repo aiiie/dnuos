@@ -188,9 +188,9 @@ class Dir(object):
         size = {}
         for file in streams:
             if file.type() in size:
-                size[file.type()] += file.streamsize()
+                size[file.type()] += file.filesize()
             else:
-                size[file.type()] = file.streamsize()
+                size[file.type()] = file.filesize()
         return size
 
     def _get_size(self):
