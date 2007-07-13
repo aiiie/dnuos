@@ -246,11 +246,11 @@ class Dir(object):
         If no audio is found zero is returned."""
 
         if len(self._bitrates) == 1 and self.brtype == "C":
-            return int(self._bitrates[0][0])
+            return self._bitrates[0][0]
         if self.length == 0:
             return 0
         else:
-            return int(self.size * 8.0 / self.length)
+            return self.size * 8.0 / self.length
     bitrate = property(_get_bitrate)
 
     def _parse_profile(self, streams):
@@ -280,7 +280,7 @@ class Dir(object):
 
     def _get_quality(self):
         if self.profile: return self.profile
-        return "%s %s" % (self.bitrate / 1000, self.brtype)
+        return "%i %s" % (self.bitrate / 1000, self.brtype)
     quality = property(_get_quality)
 
     def _get_audiolist_format(self):
