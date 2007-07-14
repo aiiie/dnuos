@@ -130,7 +130,7 @@ class PersistentDict(UpdateTrackingDict):
         self.clear_written()
         for key, value in self.items():
             if self.keep_pred(key, value):
-                self.wkeys.touch(key)
+                self.touch(key)
 
     def save(self):
         """
