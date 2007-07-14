@@ -116,6 +116,7 @@ class PersistentDict(UpdateTrackingDict):
             try:
                 f = open(self.filename)
                 version = pickle.load(f)
+                self.checksum = pickle.load(f)
                 if version != self.version:
                     raise ValueError()
                 data = pickle.load(f)
@@ -137,13 +138,17 @@ class PersistentDict(UpdateTrackingDict):
 
         Serialize data to file, keeping a copy of the previous version.
         """
-        try:
-            copy2(self.filename, self.filename + '.bak')
-        except IOError:
-            pass
-        f = open(self.filename, 'w')
-        pickle.dump(self.version, f)
-        pickle.dump(self.written(), f)
+        checksum = hash(tuple([ d.modified for d in self.written().values() ]))
+        if checksum != self.checksum:
+            try:
+                copy2(self.filename, self.filename + '.bak')
+            except IOError:
+                pass
+            f = open(self.filename, 'w')
+            pickle.dump(self.version, f)
+            pickle.dump(checksum, f)
+            pickle.dump(self.written(), f)
+            f.close()
 
 
 class memoized(object):
