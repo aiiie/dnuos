@@ -87,6 +87,5 @@ class Renderer(AbstractRenderer):
         yield line[:25]
 
 
-def render_version(versions):
-    yield "dnuos version:     %s" % versions['dnuos']
-    yield "audiotype version: %s" % versions['audiotype']
+def render_version(version):
+    yield "dnuos " + version

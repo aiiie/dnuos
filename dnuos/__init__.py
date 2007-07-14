@@ -29,7 +29,6 @@ import warnings
 sys.path.append(os.path.abspath('.'))
 
 import appdata
-import audiotype
 import audiodir
 from cache import PersistentDict
 from cache import memoized
@@ -59,10 +58,7 @@ class Data(object):
             'start': 0,
             'elapsed_time': 0.0,
         }
-        self.version = {
-            'dnuos': __version__,
-            'audiotype': audiotype.__version__,
-        }
+        self.version = __version__
 
 
 def make_raw_listing(basedirs, exclude_paths, sort_key, use_merge,
