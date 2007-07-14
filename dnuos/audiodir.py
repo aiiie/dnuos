@@ -149,7 +149,7 @@ class Dir(object):
             if len(values) != 1:
                 return None
             elif values != Set([None]):
-                return encoder(values.pop())
+                return encoder(tuple(values)[0])
             else:
                 pass
     artist = property(_get_artist)
@@ -172,7 +172,7 @@ class Dir(object):
             if len(values) != 1:
                 return None
             elif values != Set([None]):
-                return encoder(values.pop())
+                return encoder(tuple(values)[0])
             else:
                 pass
     album = property(_get_album)
