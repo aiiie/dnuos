@@ -31,6 +31,6 @@ class Renderer(AbstractRenderer):
                 adir.profile,
                 adir.num_files,
                 adir.bitrate / 1000,
-                adir.length
+                int(adir.length)
             )
             yield chunk
