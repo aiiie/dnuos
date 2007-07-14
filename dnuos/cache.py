@@ -97,6 +97,7 @@ class PersistentDict(UpdateTrackingDict):
                         will be dropped unless it's been updated.
         """
         super(PersistentDict, self).__init__(*args, **kwargs)
+        self.version = kwargs['version']
         self.filename = filename = os.path.abspath(kwargs['filename'])
         self.default = kwargs.get('default', {})
         self.keep_pred = kwargs.get('keep_pred', lambda k,v: True)
@@ -111,7 +112,9 @@ class PersistentDict(UpdateTrackingDict):
         is used for initialization.
         """
         try:
-            data = pickle.load(open(self.filename))
+            version, data = pickle.load(open(self.filename))
+            if version != self.version:
+                raise
         except:
             data = self.default
         self.clear()
@@ -131,7 +134,8 @@ class PersistentDict(UpdateTrackingDict):
             copy2(self.filename, self.filename + '.bak')
         except IOError:
             pass
-        pickle.dump(self.written(), open(self.filename, 'w'))
+        data = (self.version, self.written())
+        pickle.dump(data, open(self.filename, 'w'))
 
 
 class memoized(object):

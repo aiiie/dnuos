@@ -110,7 +110,8 @@ def setup_cache(cache_filename, basedirs, exclude_paths):
     is_entry_excluded = lambda (path,), value: \
                                not is_path_included(path)
     cache = PersistentDict(filename=cache_filename,
-                           keep_pred=is_entry_excluded)
+                           keep_pred=is_entry_excluded,
+                           version=audiodir.Dir.__version__)
     cache.load()
     return cache
 
