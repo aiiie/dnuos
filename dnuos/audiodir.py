@@ -21,9 +21,6 @@ from conf import Settings
 from misc import dir_depth
 
 
-__version__ = "0.17.3"
-
-
 class Dir(object):
     pattern = r"\.(?:mp3|mpc|mp\+|m4a|ogg|flac|fla|flc)$"
     audio_file_extRE = re.compile(pattern, re.IGNORECASE)
