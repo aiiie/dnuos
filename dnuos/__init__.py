@@ -175,11 +175,6 @@ def main():
         print >> sys.stderr, "Aborted by user"
         return 1
 
-    except IOError, (errno, errstr):
-        print >> sys.stderr, "I/O Error(%s): %s" % (errno, errstr)
-        print >> sys.stderr, "Cannot open '%s' for writing" % options.outfile
-        return 1
-
 
 def indicate_progress(dir_pairs, sizes, outs=sys.stderr):
     """Indicate progress.
