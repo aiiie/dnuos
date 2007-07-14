@@ -5,10 +5,11 @@
 from functest import write_dnuos_diff
 
 def test():
+    testdata_dir = "/home/mspa/share/dnuos/testdata"
     write_dnuos_diff("-q broken", """
 Album/Artist                                        |  Size | Type | Quality
 ============================================================================
 
 Audiotype failed on the following files:
-/home/mattias/share/dnuos/testdata/broken/broken.mp3
-    """)
+%s/broken/broken.mp3
+    """ % testdata_dir)
