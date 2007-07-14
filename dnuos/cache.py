@@ -102,6 +102,8 @@ class PersistentDict(UpdateTrackingDict):
         self.default = kwargs.get('default', {})
         self.keep_pred = kwargs.get('keep_pred', lambda k,v: True)
 
+        self.checksum = None
+
     def load(self):
         """
         Deserialize data from file.
