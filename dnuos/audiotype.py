@@ -591,6 +591,7 @@ class MPC(AudioType):
         return res
 
     def type(self):      return "MPC"
+    def length(self):    return self.time
     def brtype(self):    return "V"
     def channels(self):  return 2
 
@@ -675,6 +676,7 @@ class FLAC(AudioType):
     def album(self): return {'FLAC': None}
 
     def type(self):     return "FLAC"
+    def length(self):   return self.time
     def brtype(self):   return "L"
     def profile(self):  return ""
 
