@@ -32,6 +32,7 @@ class Dir(object):
     __slots__ = tuple('_album _artist _audio_files _bad_files '
                       '_bitrates _lengths _types modified path '
                       '_profiles _sizes'.split())
+    __version__ = 0
 
     def __init__(self, path):
         self.path = path
