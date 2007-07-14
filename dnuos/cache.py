@@ -112,11 +112,18 @@ class PersistentDict(UpdateTrackingDict):
         is used for initialization.
         """
         try:
-            version, data = pickle.load(open(self.filename))
-            if version != self.version:
-                raise
-        except:
-            data = self.default
+            f = None
+            try:
+                f = open(self.filename)
+                version = pickle.load(f)
+                if version != self.version:
+                    raise ValueError()
+                data = pickle.load(f)
+            except StandardError:
+                data = self.default
+        finally:
+            if isinstance(f, file):
+                f.close()
         self.clear()
         self.update(data)
         self.clear_written()
@@ -134,8 +141,9 @@ class PersistentDict(UpdateTrackingDict):
             copy2(self.filename, self.filename + '.bak')
         except IOError:
             pass
-        data = (self.version, self.written())
-        pickle.dump(data, open(self.filename, 'w'))
+        f = open(self.filename, 'w')
+        pickle.dump(self.version, f)
+        pickle.dump(self.written(), f)
 
 
 class memoized(object):
