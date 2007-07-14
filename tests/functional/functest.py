@@ -3,6 +3,9 @@ import difflib
 from glob import glob
 import sys
 import os
+
+sys.path.append(os.path.abspath('..'))
+
 import dnuos
 
 

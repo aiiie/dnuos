@@ -13,7 +13,7 @@ unit_tests() {
 }
 
 func_doctests() {
-    pushd $BASEDIR/test > /dev/null
+    pushd $BASEDIR/tests > /dev/null
     nosetests --with-doctest -v "$BASEDIR/tests/functional"
     RV=$?
     popd > /dev/null
