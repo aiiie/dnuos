@@ -475,8 +475,8 @@ class MP3(AudioType):
                     return "-b 320"
                 if preset in (410, 420, 430, 440, 450, 460, 470, 480, 490, 500):
                     if vbrmethod == 4:
-                        return "-V %d --vbr-new" % ((500 - preset) / 10)
-                    return "-V %d" % ((500 - preset) / 10)
+                        return "-V%dn" % ((500 - preset) / 10)
+                    return "-V%d" % ((500 - preset) / 10)
                 # deprecated values?
                 if preset == 1000: return "-r3mix"
                 if preset == 1001: return "-aps"
