@@ -278,7 +278,7 @@ class Dir(object):
 
     def _get_quality(self):
         if self.profile: return self.profile
-        return "%i %s" % (self.bitrate / 1000, self.brtype)
+        return "%i %s" % (int(self.bitrate) / 1000, self.brtype)
     quality = property(_get_quality)
 
     def _get_audiolist_format(self):
