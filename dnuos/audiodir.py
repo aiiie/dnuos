@@ -13,7 +13,9 @@
 import os
 import re
 import string
+import sys
 from sets import Set
+from traceback import print_exc
 
 import audiotype
 import dnuos.output.db
@@ -78,13 +80,18 @@ class Dir(object):
         streams = []
         bad_files = []
         for child in self._audio_files:
+            filename = os.path.join(self.path, child)
             try:
-                streams.append(audiotype.openstream(os.path.join(self.path, child)))
+                streams.append(audiotype.openstream(filename))
             except KeyboardInterrupt:
                 raise KeyboardInterrupt
             except audiotype.SpacerError:
                 continue
             except Exception, msg:
+                if Settings().options.debug:
+                    print 'Exception in "%s":' % filename
+                    print_exc()
+                    sys.exit(1)
                 bad_files.append(child)
         return streams, bad_files
 
