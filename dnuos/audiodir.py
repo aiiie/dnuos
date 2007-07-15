@@ -97,7 +97,7 @@ class Dir(object):
     num_files = property(_get_num_files)
 
     def _parse_types(self, streams):
-        types = list(Set([ s.type() for s in streams ]))
+        types = list(Set([ s.filetype for s in streams ]))
         types.sort()
         return types
 
@@ -185,10 +185,10 @@ class Dir(object):
 
         size = {}
         for file in streams:
-            if file.type() in size:
-                size[file.type()] += file.filesize()
+            if file.filetype in size:
+                size[file.filetype] += file.filesize
             else:
-                size[file.type()] = file.filesize()
+                size[file.filetype] = file.filesize
         return size
 
     def _get_size(self):
@@ -202,10 +202,10 @@ class Dir(object):
     def _parse_length(self, streams):
         length = {}
         for file in streams:
-            if file.type() in length:
-                length[file.type()] += file.length()
+            if file.filetype in length:
+                length[file.filetype] += file.time
             else:
-                length[file.type()] = file.length()
+                length[file.filetype] = file.time
         return length
 
     def _get_length(self):
@@ -213,7 +213,7 @@ class Dir(object):
     length = property(_get_length)
 
     def _parse_bitrates(self, streams):
-        return tuple(Set([ (s.bitrate(), s.brtype())
+        return tuple(Set([ (s.bitrate, s.brtype)
                            for s in streams ]))
 
     def _get_brtype(self):
@@ -254,7 +254,7 @@ class Dir(object):
     def _parse_profile(self, streams):
         def aux(stream):
             new = stream.profile()
-            old = (stream.type() == 'MP3') and stream.old_lame_preset() or None
+            old = (stream.filetype == 'MP3') and stream.old_lame_preset() or None
             return (new, old)
         return tuple(Set(map(aux, streams)))
 

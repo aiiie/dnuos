@@ -35,17 +35,17 @@ class SpacerError(Exception):
 
 class AudioType(object):
     def __init__(self, file):
-        self._filename = file
-        self._f = open(self._filename, 'rb')
+        self.filename = file
+        self._f = open(self.filename, 'rb')
         self._begin = None
         self._end = None
         self._meta = []
+        self.filesize = os.path.getsize(self.filename)
+        self.bitrate = property(AudioType._get_bitrate)
+        self.vendor = ''
+        self.version = ''
 
-    def name(self):        return os.path.basename(self._filename)
-    def path(self):        return os.path.dirname(self._filename)
-    def modified(self):    return os.path.getmtime(self._filename)
-    def bitrate(self):     return int(self.streamsize() * 8.0 / self.length())
-    def filesize(self):    return os.path.getsize(self._filename)
+    def _get_bitrate(self):     return int(self.streamsize() * 8.0 / self.time)
     def streamsize(self):  return self.stream_end() - self.stream_begin()
 
     def stream_begin(self):
@@ -73,7 +73,7 @@ class AudioType(object):
         if self._end != None: return self._end
 
         mark = self._f.tell()
-        self._end = os.path.getsize(self._filename)
+        self._end = os.path.getsize(self.filename)
 
         # check for ID3v1
         self._f.seek(-128, 2)
@@ -96,17 +96,17 @@ class AudioType(object):
 
     def get(self, id, width=None):
         table = {
-            "n": lambda: self.name(),
-            "p": lambda: self.path(),
-            "t": lambda: self.type(),
-            "d": lambda: self.modified(),
-            "s": lambda: self.filesize(),
+            "n": lambda: os.path.basename(self.filename),
+            "p": lambda: os.path.dirname(self.filename),
+            "t": lambda: self.filetype,
+            "d": lambda: os.path.getmtime(self.filename),
+            "s": lambda: self.filesize,
             "S": lambda: self.streamsize(),
-            "T": lambda: self.brtype(),
+            "T": lambda: self.brtype,
             "P": lambda: self.profile(),
-            "b": lambda: self.bitrate(),
-            "f": lambda: self.freq(),
-            "c": lambda: self.channels(),
+            "b": lambda: self.bitrate,
+            "f": lambda: self.freq,
+            "c": lambda: self.channels,
             "l": lambda: self.time,
             "v": lambda: self.vendor,
             "V": lambda: self.version,
@@ -119,13 +119,16 @@ class AudioType(object):
 
 
 class Ogg(AudioType):
+
+    filetype = "Ogg"
+
     def __init__(self, file):
         AudioType.__init__(self, file)
 
         self.header = self.getheader()
         self.version = self.header[1]
-        self._channels = self.header[2]
-        self._freq = self.header[3]
+        self.channels = self.header[2]
+        self.freq = self.header[3]
         self.maxbitrate = self.header[4]
         self.nombitrate = self.header[5]
         self.minbitrate = self.header[6]
@@ -143,16 +146,11 @@ class Ogg(AudioType):
                 self._album = value
 
         self.audiosamples = self.lastgranule()[-1]
-        self.time = float(self.audiosamples) / self._freq
+        self.time = float(self.audiosamples) / self.freq
+        self.brtype = "V"
 
     def artist(self):   return { 'vorbis': self._artist }
     def album(self):    return { 'vorbis': self._album }
-    def type(self):    return "Ogg"
-    def brtype(self):  return "V"
-
-    def freq(self):      return self._freq
-    def channels(self):  return self._channels
-    def length(self):    return self.time
 
     def getheader(self):
         # Setup header and sync stuff
@@ -252,6 +250,9 @@ class Ogg(AudioType):
 
 
 class MP3(AudioType):
+
+    filetype = "MP3"
+
     brtable = [
         [ #MPEG2 & 2.5
         [0,  8, 16, 24, 32, 40, 48, 56, 64, 80, 96,112,128,144,160,0], #Layer III
@@ -310,7 +311,7 @@ class MP3(AudioType):
 
         #try:
         self.mp3header = self.getheader(self.stream_begin())
-        self._brtype = "CV"[self.mp3header[1]=='Xing']
+        self.brtype = "CV"[self.mp3header[1]=='Xing']
         self.framesync = (self.mp3header[0]>>21 & 2047)
         self.versionindex = (self.mp3header[0]>>19 & 3)
         self.layerindex = (self.mp3header[0]>>17 & 3)
@@ -327,20 +328,20 @@ class MP3(AudioType):
         #self.framecount = (self.mp3header[3])
         self.framesize = (self.mp3header[4])
         self.vendor = self.mp3header[6]
-        self._freq =  self.fqtable[self.versionindex][frequencyindex]
-        self._channels = [2,2,2,1][self.modeindex]
+        self.freq =  self.fqtable[self.versionindex][frequencyindex]
+        self.channels = [2,2,2,1][self.modeindex]
 
-        if self._brtype == "V":
+        if self.brtype == "V":
             if self.framesize <= 0:
                 self.framesize = AudioType.streamsize(self)
             self.framecount = self.mp3header[3] + 1
-            self._bitrate = int(1000.0 * self.framesize * self._freq / float(self.modificator() * self.framecount))
+            self.bitrate = int(1000.0 * self.framesize * self.freq / float(self.modificator() * self.framecount))
         else:
-            self._bitrate = int(1000.0 * self.brtable[self.versionindex & 1][self.layerindex-1][bitrateindex])
-            self.framecount = int(self.streamsize() * self._freq / float(self.modificator() * self._bitrate) * 1000)
+            self.bitrate = int(1000.0 * self.brtable[self.versionindex & 1][self.layerindex-1][bitrateindex])
+            self.framecount = int(self.streamsize() * self.freq / float(self.modificator() * self.bitrate) * 1000)
         #print self.framecount
         #self.time = (float(1 * 576 * (bool(self.versionindex>>1)+ 1)) / self.freq) * self.framecount
-        self.time = self.streamsize() * 8.0 / self._bitrate
+        self.time = self.streamsize() * 8.0 / self.bitrate
 
     def artist(self):
         res = { 'id3v1': None, 'id3v2': None }
@@ -362,15 +363,8 @@ class MP3(AudioType):
                     res['id3v2'] = frame.value
         return res
 
-    def type(self):     return "MP3"
-
-    def freq(self):        return self._freq
-    def brtype(self):      return self._brtype
-    def channels(self):    return self._channels
-    def length(self):      return self.time
-    def bitrate(self):     return self._bitrate
     def streamsize(self):
-        if self.brtype() == "V":
+        if self.brtype == "V":
             return self.framesize
         else:
             return AudioType.streamsize(self)
@@ -420,7 +414,7 @@ class MP3(AudioType):
             start = start + 1024
             self._f.seek(start + overlap)
             chunk = chunk[-overlap:] + self._f.read(1024)
-        if offset == self.filesize():
+        if offset == self.filesize:
             raise SpacerError("Spacer found %s" % self._f.name)
         self._f.seek(offset)
         tag = struct.unpack(">3s",self._f.read(struct.calcsize(">3s")))
@@ -528,6 +522,9 @@ class MP3(AudioType):
 
 
 class MPC(AudioType):
+
+    filetype = "MPC"
+
     def __init__(self, file):
         AudioType.__init__(self, file)
 
@@ -551,10 +548,12 @@ class MPC(AudioType):
             ]
         fqtable = [44100,48000,37800,32000]
     #   self.profile = self.profiletable[self.getheader()[3]>>20 & 15]
-        self._freq = fqtable[self.getheader()[3]>>16 & 4]
+        self.freq = fqtable[self.getheader()[3]>>16 & 4]
         self.framecount= self.getheader()[2]
-        self._bitrate = int(self.streamsize() * 144000.0 / float(self.framecount * self._freq))
+        self.bitrate = int(self.streamsize() * 144000.0 / float(self.framecount * self.freq))
         self.time = (float(self.framecount) * 1.150 / float(44.1) + float(0.5))
+        self.brtype = "V"
+        self.channels = "2"
 
         try:
             self.id3v1 = dnuos.id3.ID3v1(file)
@@ -590,17 +589,9 @@ class MPC(AudioType):
                     res['id3v2'] = frame.value
         return res
 
-    def type(self):      return "MPC"
-    def length(self):    return self.time
-    def brtype(self):    return "V"
-    def channels(self):  return 2
-
-    def freq(self):     return self._freq
-    def bitrate(self):  return self._bitrate
-
     def headerstart(self):
         self._f.seek(0)
-        for x in range(self.filesize() / 1024):
+        for x in range(self.filesize / 1024):
             buffer = self._f.read(1024)
             if re.search('MP+',buffer):
                 return (x * 1024) + string.find(buffer,'MP+')
@@ -643,6 +634,9 @@ class MPC(AudioType):
 
 
 class FLAC(AudioType):
+
+    filetype = "FLAC"
+
     def __init__(self, file):
         AudioType.__init__(self, file)
 
@@ -664,24 +658,19 @@ class FLAC(AudioType):
         self._f.seek(self.stream_begin())
         self.parse()
         self.samples = self.streaminfo[7]
-        self._freq = self.streaminfo[4]
-        self.time = self.samples / self._freq
-        self._bitrate = self.streamsize() * 8 / self.time
-        self._channels = self.streaminfo[5]
+        self.freq = self.streaminfo[4]
+        self.time = self.samples / self.freq
+        self.bitrate = self.streamsize() * 8 / self.time
+        self.channels = self.streaminfo[5]
         samplebits = self.streaminfo[6]
-        self.compression = self.streamsize() / (self.samples * samplebits * self._channels / 8)
+        self.compression = self.streamsize() / (self.samples * samplebits * self.channels / 8)
         self.encoding = "%.1f%%" % self.compression
+        self.brtype = "L"
 
     def artist(self): return {'FLAC': None}
     def album(self): return {'FLAC': None}
 
-    def type(self):     return "FLAC"
-    def length(self):   return self.time
-    def brtype(self):   return "L"
     def profile(self):  return ""
-
-    def freq(self):        return self._freq
-    def channels(self):    return self._channels
 
     def parse(self):
         # STREAM
@@ -737,6 +726,9 @@ class FLAC(AudioType):
         return vendor, list  #, struct.unpack('<B', fd.read(1))
 
 class AAC(AudioType):
+
+    filetype = "AAC"
+
     def __init__(self, file):
         AudioType.__init__(self, file)
 
@@ -744,16 +736,13 @@ class AAC(AudioType):
         self._artist    = self.header[0]
         self._album = self.header[1]
         self.time   = self.header[2]
-        self._frequency = self.header[3]
-        self._channels  = self.header[4]
-        self._bitrate   = self.header[5]
+        self.freq = self.header[3]
+        self.channels  = self.header[4]
+        self.bitrate   = self.header[5]
+        self.brtype = "C"
 
-    def type(self):     return "AAC"
     def artist(self):   return {'AAC': self._artist }
     def album(self):    return {'AAC': self._album }
-    def bitrate(self):  return self._bitrate
-    def length(self):   return self.time
-    def brtype(self):   return "C"
     def profile(self):  return ""
 
     def getheader(self):
