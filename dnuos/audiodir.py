@@ -213,7 +213,7 @@ class Dir(object):
     length = property(_get_length)
 
     def _parse_bitrates(self, streams):
-        return tuple(Set([ (s.bitrate, s.brtype)
+        return tuple(Set([ (s.bitrate(), s.brtype)
                            for s in streams ]))
 
     def _get_brtype(self):
