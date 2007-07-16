@@ -765,6 +765,7 @@ class AAC(AudioType):
         stsdFound   = False
         artistFound = False
         albumFound  = False
+        bitrateFound = False
 
         mvhdPattern = "mvhd"
         stsdPattern = "stsd"
@@ -778,6 +779,7 @@ class AAC(AudioType):
         # this stops things from blowing up if neither are found
         artist  = None
         album   = None
+        fileBitrate = 0.0
 
         while len(chunk) > overlap:
             # Get tracklength info from mvhd atom
@@ -821,29 +823,32 @@ class AAC(AudioType):
                     self._f.seek( start + sync + 20 )
                     format = "<%ds" % (length[0] - 24)
                     album = struct.unpack(format, self._f.read(struct.calcsize(format)))
-            if lengthFound and stsdFound and artistFound and albumFound: break
+            if not bitrateFound:
+                sync = chunk.find("esds")
+                if sync != -1:
+                    sync += 9
+                    self._f.seek(start + sync)
+                    if self._f.read(3) == "\x80\x80\x80":
+                        sync += 3
+                    sync += 4
+                    self._f.seek(start + sync)
+                    if self._f.read(1) == "\x04":
+                        sync += 1
+                        self._f.seek(start + sync)
+                        if self._f.read(3) == "\x80\x80\x80":
+                            sync += 3
+                        sync += 10
+                        self._f.seek(start + sync)
+                        fileBitrate = struct.unpack(">I", self._f.read(struct.calcsize(">I")))[0]
+                        if fileBitrate > 0:
+                            fileBitrate = fileBitrate / 1000 * 1000
+                        fileBitrate = float(fileBitrate)
+                        bitrateFound = True
+            if lengthFound and stsdFound and artistFound and albumFound and bitrateFound: break
 
             start += 1024
             self._f.seek(start + overlap)
             chunk = chunk[-overlap:] + self._f.read(1024)
-
-        # Now calculate the bitrate...
-        # TODO: find a non-hacky way to get the bitrate
-        CBRrates = [16000,  20000,  24000,  28000,  32000,  40000, \
-                48000,  56000,  64000,  80000,  96000, 112000, \
-                128000, 160000, 192000, 224000, 256000, 320000]
-        fileBitrate = int((self.streamsize() *8) / time)
-
-        index = -1
-        for bitrate in CBRrates:
-            index += 1
-            if (fileBitrate % bitrate) == fileBitrate:
-                if fileBitrate * 1.05 < bitrate:  # HACK: check if the bitrate is too high
-                    fileBitrate = CBRrates[index - 1] # if so, go back one :)
-                    break
-                else:
-                    fileBitrate = int(bitrate)
-                    break
 
         return (artist, album, time, frequency, channels, fileBitrate)
 
