@@ -17,32 +17,32 @@ lame                                                |       |      |
     3903-apfs                                       |  125k | MP3  | -apfs
     3903-api                                        |  237k | MP3  | -api
     3903-aps                                        |  101k | MP3  | -aps
-    3961-ape                                        |  116k | MP3  | -V 0
-    3961-apfe                                       |  117k | MP3  | -V 0 --vbr-new
-    3961-apfm                                       | 81.3k | MP3  | -V 4 --vbr-new
-    3961-apfs                                       |  100k | MP3  | -V 2 --vbr-new
+    3961-ape                                        |  116k | MP3  | -V0
+    3961-apfe                                       |  117k | MP3  | -V0n
+    3961-apfm                                       | 81.3k | MP3  | -V4n
+    3961-apfs                                       |  100k | MP3  | -V2n
     3961-api                                        |  237k | MP3  | -b 320
-    3961-apm                                        | 73.0k | MP3  | -V 4
-    3961-aps                                        |  102k | MP3  | -V 2
+    3961-apm                                        | 73.0k | MP3  | -V4
+    3961-aps                                        |  102k | MP3  | -V2
     397b1-b320                                      |  237k | MP3  | -b 320
-    397b1-v0                                        |  106k | MP3  | -V 0
-    397b1-v0-vbrnew                                 |  107k | MP3  | -V 0 --vbr-new
-    397b1-v1                                        | 98.1k | MP3  | -V 1
-    397b1-v1-vbrnew                                 | 95.5k | MP3  | -V 1 --vbr-new
-    397b1-v2                                        | 88.6k | MP3  | -V 2
-    397b1-v2-vbrnew                                 | 83.6k | MP3  | -V 2 --vbr-new
-    397b1-v3                                        | 84.4k | MP3  | -V 3
-    397b1-v3-vbrnew                                 | 79.0k | MP3  | -V 3 --vbr-new
-    397b1-v4                                        | 77.3k | MP3  | -V 4
-    397b1-v4-vbrnew                                 | 73.4k | MP3  | -V 4 --vbr-new
-    397b1-v5                                        | 63.3k | MP3  | -V 5
-    397b1-v5-vbrnew                                 | 60.5k | MP3  | -V 5 --vbr-new
-    397b1-v6                                        | 54.6k | MP3  | -V 6
-    397b1-v6-vbrnew                                 | 51.9k | MP3  | -V 6 --vbr-new
-    397b1-v7                                        | 44.4k | MP3  | -V 7
-    397b1-v7-vbrnew                                 | 41.1k | MP3  | -V 7 --vbr-new
-    397b1-v8                                        | 37.7k | MP3  | -V 8
-    397b1-v8-vbrnew                                 | 34.1k | MP3  | -V 8 --vbr-new
-    397b1-v9                                        | 26.9k | MP3  | -V 9
-    397b1-v9-vbrnew                                 | 23.3k | MP3  | -V 9 --vbr-new
+    397b1-v0                                        |  106k | MP3  | -V0
+    397b1-v0-vbrnew                                 |  107k | MP3  | -V0n
+    397b1-v1                                        | 98.1k | MP3  | -V1
+    397b1-v1-vbrnew                                 | 95.5k | MP3  | -V1n
+    397b1-v2                                        | 88.6k | MP3  | -V2
+    397b1-v2-vbrnew                                 | 83.6k | MP3  | -V2n
+    397b1-v3                                        | 84.4k | MP3  | -V3
+    397b1-v3-vbrnew                                 | 79.0k | MP3  | -V3n
+    397b1-v4                                        | 77.3k | MP3  | -V4
+    397b1-v4-vbrnew                                 | 73.4k | MP3  | -V4n
+    397b1-v5                                        | 63.3k | MP3  | -V5
+    397b1-v5-vbrnew                                 | 60.5k | MP3  | -V5n
+    397b1-v6                                        | 54.6k | MP3  | -V6
+    397b1-v6-vbrnew                                 | 51.9k | MP3  | -V6n
+    397b1-v7                                        | 44.4k | MP3  | -V7
+    397b1-v7-vbrnew                                 | 41.1k | MP3  | -V7n
+    397b1-v8                                        | 37.7k | MP3  | -V8
+    397b1-v8-vbrnew                                 | 34.1k | MP3  | -V8n
+    397b1-v9                                        | 26.9k | MP3  | -V9
+    397b1-v9-vbrnew                                 | 23.3k | MP3  | -V9n
     """)
