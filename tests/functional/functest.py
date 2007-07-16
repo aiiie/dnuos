@@ -49,8 +49,7 @@ def write_unified_diff(a, b):
 def write_dnuos_diff(args, expected):
     output = StringIO()
     old = sys.argv, sys.stderr, sys.stdout
-    sys.argv = process_args(args)
-    sys.argv.insert(0, 'dnuos')
+    sys.argv = ['dnuos', '--disable-cache'] + process_args(args)
     sys.stderr = sys.stdout = output
     dnuos.main()
     sys.argv, sys.stderr, sys.stdout = old
