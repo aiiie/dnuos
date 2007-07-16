@@ -9,8 +9,8 @@ def test():
 Album/Artist                                        |  Size | Type | Quality
 ============================================================================
 aac                                                 |       |      | 
-    test1                                           | 1.55M | AAC  | 320 C
-    test2                                           | 1.55M | AAC  | 320 C
+    test1                                           | 1.55M | AAC  | 96 C
+    test2                                           | 1.55M | AAC  | 96 C
 lame                                                |       |      | 
     3903-ape                                        |  131k | MP3  | -ape
     3903-apfe                                       |  146k | MP3  | -apfe
