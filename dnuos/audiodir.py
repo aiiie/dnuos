@@ -237,8 +237,6 @@ class Dir(object):
             return ""
         elif len(types) > 1:
             return "~"
-        elif len(types) > 1:
-            return "~"
         elif types[0] == "C" and len(brs) > 1:
             return "~"
         else:
