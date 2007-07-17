@@ -20,17 +20,19 @@ from dnuos.output.abstract_renderer import AbstractRenderer
 class Renderer(AbstractRenderer):
     def render(self, dir_pairs, options, data):
         for adir, root in dir_pairs:
-            chunk = "%d:'%s',%d:'%s',%d:'%s',%d:'%s',%d,%.d,%d" % (
-                len(str(adir.album)),
-                str(adir.album),
-                len(str(adir.artist)),
-                str(adir.artist),
-                len(adir.mediatype),
-                adir.mediatype,
-                len(adir.profile),
-                adir.profile,
-                adir.num_files,
-                adir.bitrate / 1000,
-                int(adir.length)
-            )
-            yield chunk
+            artist    = _db_string(adir.artist)
+            album     = _db_string(adir.album)
+            mediatype = _db_string(adir.mediatype)
+            profile   = _db_string(adir.profile)
+            num_files = adir.num_files
+            bitrate   = adir.bitrate / 1000
+            length    = int(adir.length)
+            yield "%s,%s,%s,%s,%d,%.d,%d" % (artist, album, mediatype, profile, num_files, bitrate, length)
+
+
+def _db_string(data):
+    if data is None:
+        return "0:''"
+    else:
+        data = str(data)
+        return "%d:'%s'" % (len(data), data)
