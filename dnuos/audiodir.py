@@ -318,8 +318,11 @@ class Dir(object):
     audio_files = property(_get_audio_files)
 
     def validate(self):
-        if (self.modified != self._parse_modified() or
-            self._audio_files != self._parse_audio_files()):
+        try:
+            valid = self.modified == self._parse_modified() and self._audio_files == self._parse_audio_files()
+        except OSError:
+            valid = False
+        if not valid:
             self.__init__(self.path)
 
     def is_audio_file(filename):
