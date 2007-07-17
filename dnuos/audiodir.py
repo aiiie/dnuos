@@ -297,7 +297,7 @@ class Dir(object):
                 res.add(table[type])
         res = list(res)
         res.sort()
-        return string.join([ str(x) for x in res ], ", ")
+        return string.join([ str(int(x)) for x in res ], ", ")
     audiolist_format = property(_get_audiolist_format)
 
     def _parse_modified(self):
