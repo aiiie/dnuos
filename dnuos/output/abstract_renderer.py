@@ -16,7 +16,7 @@ class Column(object):
         "B": ('bitrate', 'Bitrate'),
         "C": ('album', 'Album'),
         #"d": "Dir",
-        "D": ('depth', 'Depth'),
+        #"D": ('depth', 'Depth'),
         "f": ('num_files', 'Files'),
         "l": ('length', 'Length'),
         "L": ('length', 'Length'),
