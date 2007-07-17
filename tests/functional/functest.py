@@ -43,7 +43,7 @@ def write_unified_diff(a, b):
     b = b.strip().splitlines(1)
     if (a, b) == ([], []):
         return ''
-    sys.stdout.write(''.join(difflib.unified_diff(a, b)))
+    sys.stdout.write('\n'.join([ line.rstrip('\n') for line in difflib.unified_diff(a, b) ]))
 
 
 def write_dnuos_diff(args, expected):
