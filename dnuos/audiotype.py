@@ -20,7 +20,7 @@ import re
 import string
 import struct
 
-import id3
+import dnuos.id3
 
 __version__ = "0.94"
 
