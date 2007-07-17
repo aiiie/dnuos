@@ -1,5 +1,5 @@
-#!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
+# vim: tabstop=4 expandtab shiftwidth=4
 #
 # This program is under GPL license. See COPYING file for details.
 #
