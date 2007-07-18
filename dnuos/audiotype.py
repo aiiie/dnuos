@@ -767,8 +767,6 @@ class AAC(AudioType):
         albumFound  = False
         bitrateFound = False
 
-        mvhdPattern = "mvhd"
-        stsdPattern = "stsd"
         artistPattern   = "\xa9ART"
         albumPattern    = "\xa9alb"
         scsdFormat  = "<2f"
@@ -784,15 +782,23 @@ class AAC(AudioType):
         while len(chunk) > overlap:
             # Get tracklength info from mvhd atom
             if not lengthFound:
-                sync = chunk.find(mvhdPattern)
+                sync = chunk.find("mdhd")
                 if sync != -1:
+                    sync -= 4
                     lengthFound = True
-                    self._f.seek(start + sync + 4 + 12)
-                    sampleCount, sampleDuration = struct.unpack(scsdFormat, self._f.read(scsdFormatSize))
-                    time = sampleDuration / sampleCount
+                    self._f.seek(start + sync + 8)
+                    if self._f.read(1) == "\x00":
+                        sync += 20
+                        format = ">2I"
+                    else:
+                        sync += 28
+                        format = ">IQ"
+                    self._f.seek(start + sync)
+                    unit, length = struct.unpack(format, self._f.read(struct.calcsize(format)))
+                    time = float(length) / unit
             # Get frequency and channel info from stsd atom
             if not stsdFound:
-                sync = chunk.find(stsdPattern)
+                sync = chunk.find("stsd")
                 if sync != -1:
                     stsdFound = True
                     self._f.seek(start + sync + 4 + 30)
