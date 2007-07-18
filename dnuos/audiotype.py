@@ -796,9 +796,9 @@ class AAC(AudioType):
                 if sync != -1:
                     stsdFound = True
                     self._f.seek(start + sync + 4 + 30)
-                    channels = struct.unpack(cflFormat, self._f.read(cflFormatSize))
+                    channels = struct.unpack(cflFormat, self._f.read(cflFormatSize))[0]
                     self._f.seek(start + sync + 4 + 38)
-                    frequency = struct.unpack(cflFormat, self._f.read(cflFormatSize))
+                    frequency = struct.unpack(cflFormat, self._f.read(cflFormatSize))[0]
             # Get artist info from (c)ART atom
             if not artistFound:
                 sync = chunk.find(artistPattern)
@@ -810,7 +810,7 @@ class AAC(AudioType):
                     # Now we can get artist info, but first skip over junk bytes
                     self._f.seek(start + sync + 20)
                     format = "<%ds" % (length[0] - 24)
-                    artist = struct.unpack(format, self._f.read(struct.calcsize(format)))
+                    artist = struct.unpack(format, self._f.read(struct.calcsize(format)))[0]
             # Get album info from (c)album atom
             if not albumFound:
                 sync = chunk.find(albumPattern)
@@ -822,7 +822,7 @@ class AAC(AudioType):
                     # get artist info, but skip over junk bytes
                     self._f.seek( start + sync + 20 )
                     format = "<%ds" % (length[0] - 24)
-                    album = struct.unpack(format, self._f.read(struct.calcsize(format)))
+                    album = struct.unpack(format, self._f.read(struct.calcsize(format)))[0]
             if not bitrateFound:
                 sync = chunk.find("esds")
                 if sync != -1:
