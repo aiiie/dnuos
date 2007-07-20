@@ -321,8 +321,9 @@ def walk(basedir, sort_key=lambda x: x, excluded=[]):
 
     for dirname, subdirs, _ in os.walk(basedir):
         # Give os.walk directions for further traversal
-        subdirs[:] = sort([ sub for sub in subdirs if sub not in excluded ],
-                       sort_key)
+        subdirs[:] = sort([sub for sub in subdirs
+                               if os.path.join(dirname, sub) not in excluded ],
+                          sort_key)
 
         yield dirname[len(root):], root
 
