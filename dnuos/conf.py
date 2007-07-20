@@ -263,6 +263,7 @@ class Settings(Singleton):
         for glob_dir in args:
             options.basedirs += [ path for path in self.expand(glob_dir)
                                        if path not in options.exclude_paths ]
+        options.exclude_paths += options.basedirs
 
         # options overriding eachother
         if options.debug or (not options.outfile and
