@@ -66,7 +66,7 @@ def make_raw_listing(basedirs, exclude_paths, sort_key, use_merge,
     # Make an iterator over all subdirectories of the base directories,
     # including the base directories themselves. The directory trees are
     # sorted either separately or together according to the merge setting.
-    trees = [ walk(basedir, sort_key, exclude_paths)
+    trees = [ walk2(basedir, sort_key, exclude_paths)
               for basedir in basedirs ]
 
     if use_merge:
@@ -310,22 +310,36 @@ def add_empty(dir_pairs):
         yield adir, root
 
 
-def walk(basedir, sort_key=lambda x: x, excluded=[]):
+def walk2(basedir, sort_key=lambda x: x, excluded=[]):
     """Traverse a directory tree in pre-order
 
-    Directories are sorted according to the --ignore-case setting and branches
-    specified by --exclude are ignored.
+    Walk2 is a thin wrapper around walk. It splits each path into a
+    (relpath, root) tuple where root is the parent directory of
+    basedir.
     """
-
     root = os.path.dirname(basedir)
+    for sub in walk(basedir, sort_key, excluded):
+        yield sub[len(root):], root
 
-    for dirname, subdirs, _ in os.walk(basedir):
-        # Give os.walk directions for further traversal
-        subdirs[:] = sort([sub for sub in subdirs
-                               if os.path.join(dirname, sub) not in excluded ],
-                          sort_key)
 
-        yield dirname[len(root):], root
+def walk(dir, sort_key=lambda x: x, excluded=[]):
+    """Traverse a directory tree in pre-order
+
+    Directories are sorted by sort_key and branches specified in
+    exclude are ignored. Symbolic links are followed.
+    """
+    subs = [ os.path.join(dir, sub)
+             for sub in os.listdir(dir) ]
+    subs = [ sub
+             for sub in subs
+             if os.path.isdir(sub)
+                and sub not in excluded ]
+    subs = sort(subs, sort_key)
+
+    yield dir
+    for sub in subs:
+        for res in walk(sub, sort_key, excluded):
+            yield res
 
 
 def to_adir(path_pairs, constructor):
