@@ -23,7 +23,7 @@ DeprecationWarning: The --output-db option is deprecated and will be removed in 
     write_unified_diff(expected_stdout_and_stderr, output.getvalue())
 
     expected_file = """
-9:'('jerk',)',9:'('jerk',)',3:'AAC',0:'',1,320,225807135759696384
+4:'jerk',4:'jerk',3:'AAC',0:'',1,96,225807135759696384
     """
     output = open('/tmp/output').read()
     write_unified_diff(expected_file, output)
