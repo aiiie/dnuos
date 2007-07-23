@@ -2,10 +2,13 @@
 >>> test()
 """
 
+from os import environ
+
 from functest import write_dnuos_diff
 
+
 def test():
-    testdata_dir = "/home/mspa/share/dnuos/testdata"
+    testdata_dir = environ['DATA_DIR']
     write_dnuos_diff("-q broken", """
 Album/Artist                                        |  Size | Type | Quality
 ============================================================================
