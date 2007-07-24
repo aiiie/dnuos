@@ -7,7 +7,7 @@ import sys
 basedir =os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0])))
 print basedir
 
-os.environ['DATA_DIR'] = os.path.join(basedir, 'testdata')
+os.environ['DATA_DIR'] = os.path.join(basedir, 'tests', 'testdata')
 
 
 def unit_tests():
