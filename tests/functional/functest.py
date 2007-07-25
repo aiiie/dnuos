@@ -29,6 +29,11 @@ def _flatten(seq, ltypes=(list, tuple)):
 
 
 def process_args(args):
+    """Expands basedirs
+
+    Basedirs are glob-expanded and prepended with the contents of the $DATA_DIR
+    environment variable.
+    """
     datadir = os.environ.get("DATA_DIR")
     args = args.split()
     opts = [ opt
@@ -39,6 +44,7 @@ def process_args(args):
 
 
 def write_unified_diff(data1, data2):
+    """Calculates a unified diff of two strings"""
     data1 = data1.strip().splitlines(1)
     data2 = data2.strip().splitlines(1)
     if (data1, data2) == ([], []):
@@ -49,6 +55,7 @@ def write_unified_diff(data1, data2):
 
 
 def write_dnuos_diff(args, expected):
+    """Compares an expected result with dnuos output on given parameters"""
     output = StringIO()
     old = sys.argv, sys.stderr, sys.stdout
     sys.argv = ['dnuos', '--disable-cache'] + process_args(args)
