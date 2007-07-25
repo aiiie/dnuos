@@ -5,6 +5,7 @@
 from functest import write_dnuos_diff
 
 def test():
+    """Verifies basedirs are automatically excluded from ancestor basedirs."""
     write_dnuos_diff("-q walk walk/inner", """
 Album/Artist                                        |  Size | Type | Quality
 ============================================================================
