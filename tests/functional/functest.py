@@ -43,15 +43,14 @@ def process_args(args):
     return opts + _flatten(bases)
 
 
-def write_unified_diff(data1, data2):
+def get_unified_diff(data1, data2):
     """Calculates a unified diff of two strings"""
     data1 = data1.strip().splitlines(1)
     data2 = data2.strip().splitlines(1)
     if (data1, data2) == ([], []):
         return ''
-    lines = [ line.rstrip('\n')
-              for line in difflib.unified_diff(data1, data2) ]
-    sys.stdout.write('\n'.join(lines))
+    lines = difflib.unified_diff(data1, data2)
+    return ''.join(lines).rstrip('\n')
 
 
 def write_dnuos_diff(args, expected):
@@ -62,4 +61,5 @@ def write_dnuos_diff(args, expected):
     sys.stderr = sys.stdout = output
     dnuos.main()
     sys.argv, sys.stderr, sys.stdout = old
-    write_unified_diff(expected, output.getvalue())
+    output = get_unified_diff(expected, output.getvalue())
+    sys.stdout.write(output)
