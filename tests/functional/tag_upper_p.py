@@ -2,13 +2,17 @@
 >>> test()
 """
 
+from os import environ
+
 from functest import write_dnuos_diff
 
+
 def test():
+    testdata_dir = environ['DATA_DIR']
     write_dnuos_diff('-q --output=[P] aac', """
 Path
 ====
-/home/mspa/share/dnuos/testdata/aac
-/home/mspa/share/dnuos/testdata/aac/test1
-/home/mspa/share/dnuos/testdata/aac/test2
-    """)
+%s/aac
+%s/aac/test1
+%s/aac/test2
+    """ % ((testdata_dir,)*3))

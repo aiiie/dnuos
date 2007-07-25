@@ -10,5 +10,5 @@ Artist
 ======
 
 
-('jerk',)
+jerk
     """)
