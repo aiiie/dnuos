@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# -*- coding: iso-8859-1 -*-
+# vim: tabstop=4 expandtab shiftwidth=4
 
 import os
 import sys
