@@ -1,3 +1,8 @@
+"""
+A module for printing unified diffs of dnuos execution per specified parameters
+compared to an expected result.
+"""
+
 from cStringIO import StringIO
 import difflib
 from glob import glob
