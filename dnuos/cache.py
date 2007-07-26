@@ -23,50 +23,54 @@ class UpdateTrackingDict(dict):
     through the written-method.
     """
     def __init__(self, *args, **kwargs):
+
         super(UpdateTrackingDict, self).__init__(*args, **kwargs)
         self.wkeys = Set()
 
     def __setitem__(self, key, value):
+
         super(UpdateTrackingDict, self).__setitem__(key, value)
         self.wkeys.add(key)
 
     def __delitem__(self, key):
+
         super(UpdateTrackingDict, self).__delitem__(key)
         del self.wkeys[key]
 
     def clear(self):
+        """Removes all items"""
+
         super(UpdateTrackingDict, self).clear()
         self.wkeys.clear()
 
     def update(self, other):
+        """Updates items from other dict"""
+
         super(UpdateTrackingDict, self).update(other)
         self.wkeys |= Set(other.keys())
 
     def written(self):
-        """
-        Get a dict of all updated items.
+        """Get a dict of all updated items.
 
         The returned dict contains the subset of updated items in
         self.
         """
+
         return dict([ (key, self[key]) for key in self.wkeys ])
 
     def clear_written(self):
-        """
-        Clear the memory of updated entries.
-        """
+        """Clear the memory of updated entries"""
+
         self.wkeys.clear()
 
     def touch(self, key):
-        """
-        Make a dict entry appear updated.
-        """
+        """Make a dict entry appear updated"""
+
         self.wkeys.add(key)
 
 
 class PersistentDict(UpdateTrackingDict):
-    """
-    A dict with persistence.
+    """A dict with persistence.
   
     A wrapper around UpdateTrackingDict that adds the ability to
     pickle written entries to and from a file. A predicate function
@@ -74,8 +78,7 @@ class PersistentDict(UpdateTrackingDict):
     following save.
     """
     def __init__(self, *args, **kwargs):
-        """
-        Construct a new PersistentDict instance.
+        """Construct a new PersistentDict instance.
 
         This just stores the specified arguments. Call the load method
         to initialize.
@@ -96,23 +99,24 @@ class PersistentDict(UpdateTrackingDict):
                         When the predicate returns False, the entry
                         will be dropped unless it's been updated.
         """
+
         super(PersistentDict, self).__init__(*args, **kwargs)
         self.version = kwargs['version']
-        self.filename = filename = os.path.abspath(kwargs['filename'])
+        self.filename = os.path.abspath(kwargs['filename'])
         self.default = kwargs.get('default', {})
         self.keep_pred = kwargs.get('keep_pred', lambda k,v: True)
-
         self.checksum = None
 
+
     def load(self):
-        """
-        Deserialize data from file.
+        """Deserialize data from file.
 
         Clear previous contents, deserialize data from file and update
         written-status according as per the predicate function.
         If deserialisation fails for whatever reason the default dict
         is used for initialization.
         """
+
         try:
             f = None
             try:
@@ -135,11 +139,11 @@ class PersistentDict(UpdateTrackingDict):
                 self.touch(key)
 
     def save(self):
-        """
-        Serialize data to file.
+        """Serialize data to file.
 
         Serialize data to file, keeping a copy of the previous version.
         """
+
         checksum = hash(tuple([ d.modified for d in self.written().values() ]))
         if checksum != self.checksum:
             try:
@@ -154,9 +158,7 @@ class PersistentDict(UpdateTrackingDict):
 
 
 class memoized(object):
-    """
-    Decorator that caches a function's return value each time it is
-    called.
+    """Decorator that caches a function's return value each time it's called.
 
     If called later with the same arguments, the cached value is
     returned, and not re-evaluated.
@@ -166,6 +168,7 @@ class memoized(object):
     It has been changed to take the cache mapping as an argument and
     to store the result on cache misses as well as cache hits.
     """
+
     def __init__(self, func, cache={}):
         self.func = func
         self.cache = cache
@@ -184,4 +187,5 @@ class memoized(object):
 
     def __repr__(self):
         """Return the function's docstring."""
+
         return self.func.__doc__

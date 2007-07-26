@@ -17,7 +17,6 @@
 
 import os
 import re
-import string
 import struct
 
 import dnuos.id3
@@ -26,15 +25,20 @@ __version__ = "0.94"
 
 
 class SpacerError(Exception):
+
     def __init__(self, value):
+
         self.value = value
 
     def __str__(self):
+
         return repr(self.value)
 
 
 class AudioType(object):
+
     def __init__(self, file):
+
         self.filename = file
         self._f = open(self.filename, 'rb')
         self._begin = None
@@ -44,11 +48,18 @@ class AudioType(object):
         self.vendor = ''
         self.version = ''
 
-    def bitrate(self):     return int(self.streamsize() * 8.0 / self.time)
-    def streamsize(self):  return self.stream_end() - self.stream_begin()
+    def bitrate(self):
+        
+        return int(self.streamsize() * 8.0 / self.time)
+
+    def streamsize(self):
+
+        return self.stream_end() - self.stream_begin()
 
     def stream_begin(self):
-        if self._begin != None: return self._begin
+
+        if self._begin != None:
+            return self._begin
 
         mark = self._f.tell()
         self._begin = 0
@@ -69,7 +80,9 @@ class AudioType(object):
         return self._begin
 
     def stream_end(self):
-        if self._end != None: return self._end
+
+        if self._end != None:
+            return self._end
 
         mark = self._f.tell()
         self._end = os.path.getsize(self.filename)
@@ -94,6 +107,7 @@ class AudioType(object):
         return self._end
 
     def get(self, id, width=None):
+
         table = {
             "n": lambda: os.path.basename(self.filename),
             "p": lambda: os.path.dirname(self.filename),
@@ -113,7 +127,8 @@ class AudioType(object):
             "%i %s" % (self.o.bitrate(), self.o.brtype))
         }
         data = table[id]()
-        if width != None: data = "%*s" % (width, str(data)[:width])
+        if width != None:
+            data = "%*s" % (width, str(data)[:width])
         return data
 
 
@@ -122,6 +137,7 @@ class Ogg(AudioType):
     filetype = "Ogg"
 
     def __init__(self, file):
+
         AudioType.__init__(self, file)
 
         self.header = self.getheader()
@@ -139,19 +155,26 @@ class Ogg(AudioType):
         self.comment = self.getcomment()
         for i in self.comment:
             (field, value) = i.split('=')
-            if field.lower() == "artist":
+            field = field.lower()
+            if field == "artist":
                 self._artist = value
-            if field.lower() == "album":
+            elif field == "album":
                 self._album = value
 
         self.audiosamples = self.lastgranule()[-1]
         self.time = float(self.audiosamples) / self.freq
         self.brtype = "V"
 
-    def artist(self):   return { 'vorbis': self._artist }
-    def album(self):    return { 'vorbis': self._album }
+    def artist(self):
+
+        return {'vorbis': self._artist}
+
+    def album(self):
+
+        return {'vorbis': self._album}
 
     def getheader(self):
+
         # Setup header and sync stuff
         syncpattern = '\x01vorbis'
         overlap = len(syncpattern) - 1
@@ -177,6 +200,7 @@ class Ogg(AudioType):
             chunk = chunk[-overlap:] + self._f.read(1024)
 
     def getcomment(self):
+
         # Get Ogg comment
         syncpattern = '\x03vorbis'
         overlap = len(syncpattern) - 1
@@ -201,7 +225,7 @@ class Ogg(AudioType):
                 junk = struct.unpack(format, self._f.read(struct.calcsize(format)))
                 (listlength,) = struct.unpack(llclformat, self._f.read(llclformatsize))
                 comments = []
-                for i in range(listlength):
+                for i in xrange(listlength):
                     (commentlength,) = struct.unpack(llclformat, self._f.read(llclformatsize))
                     format = "<%ds" % commentlength
                     (tmpcomment,) = struct.unpack(format, self._f.read(struct.calcsize(format)))
@@ -213,6 +237,7 @@ class Ogg(AudioType):
             chunk = chunk[-overlap:] + self._f.read(1024)
 
     def lastgranule(self):
+
         # The setup header and sync stuff
         syncpattern = 'OggS'
         overlap = len(syncpattern) - 1
@@ -239,8 +264,9 @@ class Ogg(AudioType):
             chunk = self._f.read(1024) + chunk[:overlap]
 
     def profile(self):
-        xiph = [80001,96001,112001,128003,160003,192003,224003,256006,320017,499821]
-        gt3 = [128005,180003,212003,244003,276006,340017,519821]
+
+        xiph = [80001, 96001, 112001, 128003, 160003, 192003, 224003, 256006, 320017, 499821]
+        gt3 = [128005, 180003, 212003, 244003, 276006, 340017, 519821]
 
         if self.nombitrate in xiph:
             return "-q" + str(xiph.index(self.nombitrate) + 1)
@@ -273,6 +299,7 @@ class MP3(AudioType):
         ]
 
     def __init__(self, file):
+
         AudioType.__init__(self, file)
 
         self.brtable = [
@@ -343,7 +370,8 @@ class MP3(AudioType):
         self.time = self.streamsize() * 8.0 / self._bitrate
 
     def artist(self):
-        res = { 'id3v1': None, 'id3v2': None }
+
+        res = {'id3v1': None, 'id3v2': None}
         if self.id3v1 and self.id3v1.artist:
             res['id3v1'] = self.id3v1.artist
         if self.id3v2:
@@ -353,7 +381,8 @@ class MP3(AudioType):
         return res
 
     def album(self):
-        res = { 'id3v1': None, 'id3v2': None }
+
+        res = {'id3v1': None, 'id3v2': None}
         if self.id3v1 and self.id3v1.album:
             res['id3v1'] = self.id3v1.album
         if self.id3v2:
@@ -363,12 +392,14 @@ class MP3(AudioType):
         return res
 
     def streamsize(self):
+
         if self.brtype == "V":
             return self.framesize
         else:
             return AudioType.streamsize(self)
 
     def getheader(self, offset = 0):
+
         # Setup header and sync stuff
         syncre = re.compile('\xff[\xe0-\xff]')
         infore = re.compile('(Xing|Info|VBRI)')
@@ -421,12 +452,14 @@ class MP3(AudioType):
             raise SpacerError("Spacer found %s" % self._f.name)
     
     def modificator(self):
+
         if self.layerindex == 3:
             return 12000
         else:
             return 144000
 
     def valid(self, header):
+
         return (((header>>21 & 2047) == 2047) and
             ((header>>19 &  3) != 1) and
             ((header>>17 &  3) != 0) and
@@ -436,9 +469,10 @@ class MP3(AudioType):
             ((header     &  3) != 2))
 
     def old_lame_preset(self):
+
         if self.mp3header[6][:4] == "LAME":
             try:
-                version = string.atof(self.mp3header[6][4:8])
+                version = float(self.mp3header[6][4:8])
             except ValueError:
                 version = -1
             vbrmethod = self.mp3header[7] & 15
@@ -448,20 +482,24 @@ class MP3(AudioType):
                 if preset == 320:
                     return "-api"
                 if preset == 460 or preset == 470:
-                    if vbrmethod == 4: return "-apfm"
+                    if vbrmethod == 4:
+                        return "-apfm"
                     return "-apm"
                 if preset == 480 or preset == 490:
-                    if vbrmethod == 4: return "-apfs"
+                    if vbrmethod == 4:
+                        return "-apfs"
                     return "-aps"
                 if preset == 500:
-                    if vbrmethod == 4: return "-apfe"
+                    if vbrmethod == 4:
+                        return "-apfe"
                     return "-ape"
         return None
 
     def profile(self):
+
         if self.mp3header[6][:4] == "LAME":
             try:
-                version = string.atof(self.mp3header[6][4:8])
+                version = float(self.mp3header[6][4:8])
             except ValueError:
                 version = -1
             vbrmethod = self.mp3header[7] & 15
@@ -477,21 +515,29 @@ class MP3(AudioType):
                         return "-V%dn" % ((500 - preset) / 10)
                     return "-V%d" % ((500 - preset) / 10)
                 # deprecated values?
-                if preset == 1000: return "-r3mix"
-                if preset == 1001: return "-aps"
-                if preset == 1002: return "-ape"
-                if preset == 1003: return "-api"
-                if preset == 1004: return "-apfs"
-                if preset == 1005: return "-apfe"
-                if preset == 1006: return "-apm"
-                if preset == 1007: return "-apfm"
-            if version < 3.90 and version > 0:  #lame version
-                if vbrmethod == 8:  #unknown
+                if preset == 1000:
+                    return "-r3mix"
+                if preset == 1001:
+                    return "-aps"
+                if preset == 1002:
+                    return "-ape"
+                if preset == 1003:
+                    return "-api"
+                if preset == 1004:
+                    return "-apfs"
+                if preset == 1005:
+                    return "-apfe"
+                if preset == 1006:
+                    return "-apm"
+                if preset == 1007:
+                    return "-apfm"
+            if version < 3.90 and version > 0: # lame version
+                if vbrmethod == 8:  # unknown
                     if lowpass in (97, 98):
                         if ath == 0:
                             return "-r3mix"
-            if version >= 3.90 and version < 3.97:  #lame version
-                if vbrmethod == 3:  #vbr-old / vbr-rh
+            if version >= 3.90 and version < 3.97: # lame version
+                if vbrmethod == 3:  # vbr-old / vbr-rh
                     if lowpass in (195, 196):
                         if ath in (2, 4):
                             return "-ape"
@@ -501,7 +547,7 @@ class MP3(AudioType):
                     if lowpass == 180:
                         if ath == 4:
                             return "-apm"
-                if vbrmethod == 4:  #vbr-mtrh
+                if vbrmethod == 4: # vbr-mtrh
                     if lowpass in (195, 196):
                         if ath in (2, 4):
                             return "-apfe"
@@ -513,13 +559,14 @@ class MP3(AudioType):
                     if lowpass == 180:
                         if ath == 4:
                             return "-apfm"
-                if vbrmethod in (1, 2):  #abr
+                if vbrmethod in (1, 2): # abr
                     if lowpass in (205, 206):
                         if ath in (2, 4):
                             return "-api"
         return ""
 
     def bitrate(self):
+
         return self._bitrate
 
 
@@ -528,6 +575,7 @@ class MPC(AudioType):
     filetype = "MPC"
 
     def __init__(self, file):
+
         AudioType.__init__(self, file)
 
         self.profiletable = [
@@ -572,6 +620,7 @@ class MPC(AudioType):
             self.id3v2 = None
 
     def artist(self):
+
         res = {}
         if self.id3v1 and self.id3v1.artist:
             res['id3v1'] = self.id3v1.artist
@@ -582,6 +631,7 @@ class MPC(AudioType):
         return res
 
     def album(self):
+
         res = {}
         if self.id3v1 and self.id3v1.album:
             res['id3v1'] = self.id3v1.album
@@ -592,13 +642,15 @@ class MPC(AudioType):
         return res
 
     def headerstart(self):
+
         self._f.seek(0)
-        for x in range(self.filesize / 1024):
+        for x in xrange(self.filesize / 1024):
             buffer = self._f.read(1024)
             if re.search('MP+',buffer):
-                return (x * 1024) + string.find(buffer,'MP+')
+                return (x * 1024) + buffer.find('MP+')
 
     def getheader(self):
+
         # Setup header and sync stuff
         syncre = re.compile('MP+')
         overlap = 1
@@ -632,9 +684,11 @@ class MPC(AudioType):
             chunk = chunk[-overlap:] + self._f.read(1024)
          
     def profile(self):
+
         return self.profiletable[self.getheader()[3] >> 20 & 0xF]
 
     def bitrate(self):
+
         return self._bitrate
 
 
@@ -643,6 +697,7 @@ class FLAC(AudioType):
     filetype = "FLAC"
 
     def __init__(self, file):
+
         AudioType.__init__(self, file)
 
         # [(sample number, byte offset, samples in frame), ...]
@@ -672,12 +727,20 @@ class FLAC(AudioType):
         self.encoding = "%.1f%%" % self.compression
         self.brtype = "L"
 
-    def artist(self): return {'FLAC': None}
-    def album(self): return {'FLAC': None}
+    def artist(self):
 
-    def profile(self):  return ""
+        return {'FLAC': None}
+
+    def album(self):
+
+        return {'FLAC': None}
+
+    def profile(self):
+
+        return ""
 
     def parse(self):
+
         # STREAM
         if struct.unpack('>4s', self._f.read(4))[0] != 'fLaC':
             return
@@ -704,33 +767,35 @@ class FLAC(AudioType):
                    data[4] & 0x0000000FFFFFFFFFL)
             elif type == 3:
                 # Seektable
-                for i in range(length/18):
+                for i in xrange(length / 18):
                     self.seekpoints.append(struct.unpack('<2QH', self._f.read(18)))
             elif type == 4:
                 # Vorbis Comment
-                self.commentvendor, self.comments = self.readOggCommentHeader()
+                self.commentvendor, self.comments = self.read_comment_header()
                 #print "framing", framing
             else:
                 # Padding or unknown
                 self._f.seek(length, 1)
 
-    def readLength(self):
+    def read_length(self):
+
         len = struct.unpack('<I', self._f.read(4))[0]
         if len >= self.streamsize():
             raise ValueError
         return len
 
-    def readString(self):
-        return self._f.read(self.readLength())
+    def read_string(self):
+        return self._f.read(self.read_length())
 
-    def readOggCommentHeader(self):
+    def read_comment_header(self):
         list = []
-        vendor = self.readString()
-        for i in range(self.readLength()):
-            list.append(self.readString())
+        vendor = self.read_string()
+        for i in xrange(self.read_length()):
+            list.append(self.read_string())
         return vendor, list  #, struct.unpack('<B', fd.read(1))
 
     def bitrate(self):
+
         return self._bitrate
 
 
@@ -750,11 +815,20 @@ class AAC(AudioType):
         self._bitrate   = self.header[5]
         self.brtype = "C"
 
-    def artist(self):   return {'AAC': self._artist }
-    def album(self):    return {'AAC': self._album }
-    def profile(self):  return ""
+    def artist(self):
+
+        return {'AAC': self._artist }
+
+    def album(self):
+
+        return {'AAC': self._album }
+
+    def profile(self):
+
+        return ""
 
     def getheader(self):
+
         self._f.seek(0)
 
         start   = self._f.tell()
@@ -859,16 +933,13 @@ class AAC(AudioType):
         return (artist, album, time, frequency, channels, fileBitrate)
 
     def bitrate(self):
+
         return self._bitrate
-
-
-def has_suffix(str, suffix):
-    """check string for suffix"""
-    return suffix == string.lower(str[-len(suffix):])
 
 
 def unpack_bits(bits):
     """Unpack ID3's syncsafe 7bit number format."""
+
     value = 0
     for chunk in bits:
         value = value << 7
@@ -876,15 +947,16 @@ def unpack_bits(bits):
     return value
 
 def openstream(filename):
-    if has_suffix(filename, ".mp3"):
+    lowername = filename.lower()
+    if lowername.endswith(".mp3"):
         return MP3(filename)
-    elif has_suffix(filename, ".mpc") or has_suffix(filename, ".mp+"):
+    elif lowername.endswith(".mpc") or lowername.endswith('.mp+'):
         return MPC(filename)
-    elif has_suffix(filename, ".ogg"):
+    elif lowername.endswith(".ogg"):
         return Ogg(filename)
-    elif has_suffix(filename, ".flac") or has_suffix(filename, ".fla") or has_suffix(filename, ".flc"):
+    elif lowername.endswith(".flac") or lowername.endswith('.fla') or lowername.endswith('.flc'):
         return FLAC(filename)
-    elif has_suffix(filename, ".m4a"):
+    elif lowername.endswith(".m4a"):
         return AAC(filename)
     else:
         return None

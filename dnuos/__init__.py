@@ -28,23 +28,26 @@ import warnings
 # fix for some dumb version of python 2.3
 sys.path.append(os.path.abspath('.'))
 
-import appdata
-import audiodir
-from cache import PersistentDict
-from cache import memoized
-from conf import Settings
-from misc import dir_depth
-from misc import equal_elements
-from misc import formatwarning
-from misc import make_included_pred
-from misc import merge
-from misc import sort
-from misc import to_human
-import output
+from dnuos import appdata
+from dnuos import audiodir
+from dnuos.cache import PersistentDict
+from dnuos.cache import memoized
+from dnuos.conf import Settings
+from dnuos.misc import dir_depth
+from dnuos.misc import equal_elements
+from dnuos.misc import formatwarning
+from dnuos.misc import make_included_pred
+from dnuos.misc import merge
+from dnuos.misc import sort
+from dnuos.misc import to_human
+from dnuos import output
 
 
 class Data(object):
+    """Holds data for cache"""
+
     def __init__(self):
+
         self.bad_files = []
         self.size = {
             "Total": 0.0,
@@ -63,9 +66,11 @@ class Data(object):
 
 def make_raw_listing(basedirs, exclude_paths, sort_key, use_merge,
         adir_class):
-    # Make an iterator over all subdirectories of the base directories,
-    # including the base directories themselves. The directory trees are
-    # sorted either separately or together according to the merge setting.
+    """Make an iterator over all subdirectories of the base directories,
+    including the base directories themselves. The directory trees are
+    sorted either separately or together according to the merge setting.
+    """
+
     trees = [ walk2(basedir, sort_key, exclude_paths)
               for basedir in basedirs ]
 
@@ -78,7 +83,8 @@ def make_raw_listing(basedirs, exclude_paths, sort_key, use_merge,
 
 
 def prepare_listing(dir_pairs, options, data):
-    # Add layers of functionality
+    """Add layers of functionality"""
+
     dir_pairs = timer_wrapper(dir_pairs, data.times)
     if options.show_progress:
         dir_pairs = indicate_progress(dir_pairs, data.size)
@@ -105,6 +111,8 @@ def prepare_listing(dir_pairs, options, data):
 
 
 def setup_cache(cache_filename, basedirs, exclude_paths):
+    """Creates and readies cache"""
+
     is_path_included = make_included_pred(basedirs,
                                           exclude_paths)
     is_entry_excluded = lambda (path,), value: \
@@ -117,6 +125,8 @@ def setup_cache(cache_filename, basedirs, exclude_paths):
 
 
 def setup_renderer(output_module, format_string, fields, indent):
+    """Create and readies renderer"""
+
     renderer = output_module.Renderer()
     renderer.format_string = format_string
     renderer.setup_columns(fields, indent)
@@ -124,6 +134,8 @@ def setup_renderer(output_module, format_string, fields, indent):
 
 
 def main():
+    """Main entry point"""
+
     try:
         warnings.formatwarning = formatwarning
 
@@ -183,6 +195,7 @@ def indicate_progress(dir_pairs, sizes, outs=sys.stderr):
     Total size in sizes is updated to stderr every step
     throughout the iteration.
     """
+
     for adir, root in dir_pairs:
         print >> outs, "%sB processed\r" % to_human(sizes["Total"]),
         yield adir, root 
@@ -196,9 +209,9 @@ def print_bad(dir_pairs):
     After each directory is yielded its bad files are output to
     stderr.
     """
+
     for adir, root in dir_pairs:
         yield adir, root
-
         for badfile in adir.bad_files:
             print >> sys.stderr, "Audiotype failed for:", badfile
 
@@ -210,9 +223,9 @@ def collect_bad(dir_pairs, bad_files):
     After each directory is yielded its bad files are appended to
     bad_files.
     """
+
     for adir, root in dir_pairs:
         yield adir, root
-
         bad_files.extend(adir.bad_files)
 
 
@@ -221,29 +234,35 @@ def non_empty((adir, root)):
 
     Directories are considered empty if they contain no recognized audio files.
     """
+
     return adir.num_files > len(adir.bad_files)
  
 
 def no_cbr_mp3((adir, root)):
     """No CBR MP3 files predicate"""
+
     # This implentation does not consider CBR MP3s in Mixed directories
     return adir.mediatype != "MP3" or adir.brtype not in "C~"
 
 
 def profile_only_mp3((adir, root)):
     """No non-profile MP3 predicate"""
+
     # This implentation does not consider non-profile MP3s in Mixed directories
     return adir.mediatype != "MP3" or adir.profile != ""
 
 
 def enough_bitrate_mp3(mp3_min_bit_rate):
     """Create low-bitrate MP3 predicate"""
+
     # This implentation does not consider low-bitrate MP3s in Mixed directories
     return lambda (adir, root): (adir.mediatype != "MP3" or
                                  adir.bitrate >= mp3_min_bit_rate)
 
 
 def output_db_predicate((adir, root)):
+    """Predicate for whether something should be included in output.db"""
+
     return adir.mediatype != "Mixed" and \
            adir.artist != None and \
            adir.album != None
@@ -256,6 +275,7 @@ def total_sizes(dir_pairs, sizes):
     After each directory is yielded its filesize statistics are
     added to sizes.
     """
+
     for adir, root in dir_pairs:
         yield adir, root
         for mediatype, size in adir.sizes.items():
@@ -269,6 +289,7 @@ def timer_wrapper(dir_pairs, times):
     Yields an unchanged iteration of dirs with an added side effect.
     Time in seconds elapsed over the entire iteration is stored in times.
     """
+
     times['start'] = time.clock()
     for adir, root in dir_pairs:
         yield adir, root
@@ -281,13 +302,17 @@ class EmptyDir(object):
     __slots__ = ['name', 'path']
 
     def __init__(self, path):
+
         self.name = os.path.basename(path)
         self.path = path
 
     def __getattr__(self, attr):
+
         return None
 
     def depth_from(self, root):
+        """Returns the depth from one directory to another"""
+
         return dir_depth(self.path) - dir_depth(root) - 1
 
 
@@ -296,11 +321,10 @@ def add_empty(dir_pairs):
 
     Pre-order directory tree traversal is assumed.
     """
+
     oldpath = []
     for adir, root in dir_pairs:
-
         path = adir.path[len(root)+1:].split(os.path.sep)
-
         start = equal_elements(path, oldpath)
         for depth in range(start, len(path) - 1):
             emptypath = os.path.join(root, *path[:depth+1])
@@ -317,38 +341,40 @@ def walk2(basedir, sort_key=lambda x: x, excluded=[]):
     (relpath, root) tuple where root is the parent directory of
     basedir.
     """
+
     root = os.path.dirname(basedir)
     for sub in walk(basedir, sort_key, excluded):
         yield sub[len(root):], root
 
 
-def walk(dir, sort_key=lambda x: x, excluded=[]):
+def walk(dir_, sort_key=lambda x: x, excluded=[]):
     """Traverse a directory tree in pre-order
 
     Directories are sorted by sort_key and branches specified in
     exclude are ignored. Symbolic links are followed.
     """
-    subs = [ os.path.join(dir, sub)
-             for sub in os.listdir(dir) ]
+
+    subs = [ os.path.join(dir_, sub)
+             for sub in os.listdir(dir_) ]
     subs = [ sub
              for sub in subs
              if os.path.isdir(sub)
                 and sub not in excluded ]
     subs = sort(subs, sort_key)
 
-    yield dir
+    yield dir_
     for sub in subs:
         for res in walk(sub, sort_key, excluded):
             yield res
 
 
 def to_adir(path_pairs, constructor):
-    """
-    Converts a sequence of path pairs into a sequence of dir pairs
+    """Converts a sequence of path pairs into a sequence of dir pairs
 
     A path pair is a tuple (relpath, root). A dir pair is tuple (Dir,
     root). The Dir is validated and root is assigned to it.
     """
+
     for relpath, root in path_pairs:
         adir = constructor(root + relpath)
         adir.validate()

@@ -12,15 +12,14 @@
 
 import os
 import re
-import string
 import sys
 from sets import Set
 from traceback import print_exc
 
 import audiotype
 import dnuos.output.db
-from conf import Settings
-from misc import dir_depth
+from dnuos.conf import Settings
+from dnuos.misc import dir_depth
 
 
 class Dir(object):
@@ -74,7 +73,7 @@ class Dir(object):
     name = property(_get_name)
 
     def children(self):
-        return [ filename for filename in os.listdir(self.path) ]
+        return [f for f in os.listdir(self.path)]
 
     def get_streams(self):
         streams = []
@@ -96,7 +95,7 @@ class Dir(object):
         return streams, bad_files
 
     def _get_bad_files(self):
-        return [ os.path.join(self.path, filename) for filename in self._bad_files ]
+        return [os.path.join(self.path, f) for f in self._bad_files]
     bad_files = property(_get_bad_files)
 
     def _get_num_files(self):
@@ -104,7 +103,7 @@ class Dir(object):
     num_files = property(_get_num_files)
 
     def _parse_types(self, streams):
-        types = list(Set([ s.filetype for s in streams ]))
+        types = list(Set([s.filetype for s in streams]))
         types.sort()
         return types
 
@@ -259,7 +258,10 @@ class Dir(object):
     def _parse_profile(self, streams):
         def aux(stream):
             new = stream.profile()
-            old = (stream.filetype == 'MP3') and stream.old_lame_preset() or None
+            if stream.filetype == 'MP3':
+                old = stream.old_lame_preset()
+            else:
+                old = None
             return (new, old)
         return tuple(Set(map(aux, streams)))
 
@@ -271,9 +273,9 @@ class Dir(object):
         is returned.
         """
         if Settings().options.force_old_lame_presets:
-            profiles = Set([ (old or new) for new, old in self._profiles ])
+            profiles = Set([(old or new) for new, old in self._profiles])
         else:
-            profiles = Set([ new          for new, old in self._profiles ])
+            profiles = Set([new for new, old in self._profiles])
 
         if len(profiles) == 1:
             return profiles.pop()
@@ -297,7 +299,7 @@ class Dir(object):
                 res.add(table[type])
         res = list(res)
         res.sort()
-        return string.join([ str(int(x)) for x in res ], ", ")
+        return ', '.join([str(int(x)) for x in res])
     audiolist_format = property(_get_audiolist_format)
 
     def _parse_modified(self):
@@ -319,7 +321,8 @@ class Dir(object):
 
     def validate(self):
         try:
-            valid = self.modified == self._parse_modified() and self._audio_files == self._parse_audio_files()
+            valid = (self.modified == self._parse_modified() and
+                     self._audio_files == self._parse_audio_files())
         except OSError:
             valid = False
         if not valid:

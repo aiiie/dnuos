@@ -17,7 +17,6 @@ http://mail.python.org/pipermail/python-list/2005-September/341702.html
 """
 
 
-import errno
 import os
 import sys
 
@@ -39,6 +38,7 @@ def user_data_dir(appname, vendor, version=None):
         Mac OS X:   ~/Library/Application Support/<appname>
         Unix:       ~/.<lowercased-appname>
     """
+
     if sys.platform.startswith('win'):
         # Try to make this a unicode path because SHGetFolderPath does
         # not return unicode strings when there is unicode data in the
@@ -71,9 +71,13 @@ USER_DATA_DIR = user_data_dir('Dnuos', 'Dnuos')
 
 
 def create_user_data_dir():
+    """Creates user data directory"""
+
     if not os.path.exists(USER_DATA_DIR):
         os.makedirs(USER_DATA_DIR)
 
 
 def user_data_file(filename):
+    """Gets full path to user data file"""
+
     return os.path.join(USER_DATA_DIR, filename)
