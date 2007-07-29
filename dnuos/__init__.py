@@ -38,7 +38,6 @@ from dnuos.misc import equal_elements
 from dnuos.misc import formatwarning
 from dnuos.misc import make_included_pred
 from dnuos.misc import merge
-from dnuos.misc import sort
 from dnuos.misc import to_human
 from dnuos import output
 
@@ -360,7 +359,7 @@ def walk(dir_, sort_key=lambda x: x, excluded=[]):
              for sub in subs
              if os.path.isdir(sub)
                 and sub not in excluded ]
-    subs = sort(subs, sort_key)
+    subs.sort(sort_key)
 
     yield dir_
     for sub in subs:
