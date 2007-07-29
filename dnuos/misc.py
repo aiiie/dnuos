@@ -203,21 +203,6 @@ def merge(*iterators):
             heappush(heap, (iterator, index))
 
 
-def sort(lst, key=lambda x: x):
-    """Sort a list by an optional key function
-
-    >>> data = [1, 2, 5, 3, 4]
-    >>> sort(data)
-    [1, 2, 3, 4, 5]
-    >>> data = ['a', 'b', 'e', 'C', 'D']
-    >>> sort(data, lambda x: x.lower())
-    ['a', 'b', 'C', 'D', 'e']
-    """
-    deco = [ (key(elem), elem) for elem in lst ]
-    deco.sort()
-    return [ elem for _, elem in deco ]
-
-
 def partition(iterable, func):
     """Partition a set of objects into equivalence classes
 

@@ -30,8 +30,11 @@ import sys
 
 from singleton import Singleton
 from misc import deprecation
-from misc import sort
 import output
+
+
+def stricmp(str1, str2):
+    return cmp(str1.lower(), str2.lower())
 
 
 def set_db_format(option, opt_str, value, parser):
@@ -153,7 +156,7 @@ class Settings(Singleton):
                             output_module=output.plaintext,
                             prefer_tag=2,
                             show_progress=True,
-                            sort_key=lambda x: x,
+                            sort_key=None,
                             stripped=False,
                             text_color="black",
                             use_cache=True,
@@ -182,7 +185,7 @@ class Settings(Singleton):
                          action="callback", nargs=1, callback=add_exclude_dir, type="string",
                          help="Exclude DIR from search", metavar="DIR")
         group.add_option("-i", "--ignore-case",
-                         dest="sort_key", action="store_const", const=string.lower,
+                         dest="sort_key", action="store_const", const=stricmp,
                          help="Case-insensitive directory sorting")
         group.add_option("-m", "--merge",
                          dest="merge", action="store_true",
