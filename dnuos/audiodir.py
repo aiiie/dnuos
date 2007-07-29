@@ -35,7 +35,10 @@ class Dir(object):
     def __init__(self, path):
         self.path = path
         self._audio_files = self._parse_audio_files()
-        streams, self._bad_files = self.get_streams()
+        self.modified = None
+
+    def load(self, with_stack_traces):
+        streams, self._bad_files = self.get_streams(with_stack_traces)
         self._artist = self._parse_artist(streams)
         self._album = self._parse_album(streams)
         self._sizes = self._parse_size(streams)
@@ -75,7 +78,7 @@ class Dir(object):
     def children(self):
         return [f for f in os.listdir(self.path)]
 
-    def get_streams(self):
+    def get_streams(self, with_stack_traces):
         streams = []
         bad_files = []
         for child in self._audio_files:
@@ -87,7 +90,7 @@ class Dir(object):
             except audiotype.SpacerError:
                 continue
             except Exception, msg:
-                if Settings().options.debug:
+                if with_stack_traces:
                     print 'Exception in "%s":' % filename
                     print_exc()
                 bad_files.append(child)
@@ -318,14 +321,13 @@ class Dir(object):
                  for filename in self._audio_files ]
     audio_files = property(_get_audio_files)
 
-    def validate(self):
+    def is_valid(self):
         try:
             valid = (self.modified == self._parse_modified() and
                      self._audio_files == self._parse_audio_files())
         except OSError:
             valid = False
-        if not valid:
-            self.__init__(self.path)
+        return valid
 
     def is_audio_file(filename):
         """Test if a filename has the extension of an audio file
