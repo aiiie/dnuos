@@ -376,5 +376,6 @@ def to_adir(path_pairs, constructor):
 
     for relpath, root in path_pairs:
         adir = constructor(root + relpath)
-        adir.validate()
+        if not adir.is_valid():
+            adir.load(with_stack_traces=Settings().options.debug)
         yield adir, root
