@@ -90,7 +90,6 @@ class Dir(object):
                 if Settings().options.debug:
                     print 'Exception in "%s":' % filename
                     print_exc()
-                    sys.exit(1)
                 bad_files.append(child)
         return streams, bad_files
 
