@@ -1,28 +1,13 @@
-#!/usr/bin/env python
-# -*- coding: iso-8859-1 -*-
-#
-# This program is under GPL license. See COPYING file for details.
-#
-# Copyright 2006
-# Mattias Päivärinta <pejve@vasteras2.net>
-#
-# Authors
-# Mattias Päivärinta <pejve@vasteras2.net>
+"""Plain-text renderer"""
 
-"""
-Module for rendering plain-text output.
-"""
-
+import time
 
 from dnuos.output.abstract_renderer import AbstractRenderer
-from itertools import chain
-from itertools import ifilter
-from itertools import imap
-import dnuos.output
-
 
 class Renderer(AbstractRenderer):
+
     def render(self, dir_pairs, options, data):
+
         """Render directories to a sequence of strings."""
         output = [
             (lambda: options.disp_date,
@@ -48,11 +33,13 @@ class Renderer(AbstractRenderer):
                 first = False
 
     def render_date(self):
+
         yield time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
 
     def render_directories(self, dir_pairs, show_headers=True):
+
         if show_headers:
-            fields = map(lambda c: c.header(), self.columns)
+            fields = [c.header() for c in self.columns]
             line = self.format_string % tuple(fields)
             yield line
             yield "=" * len(line)
@@ -62,13 +49,16 @@ class Renderer(AbstractRenderer):
             yield self.format_string % tuple(fields)
 
     def render_bad_files(self, bad_files):
+
         yield "Audiotype failed on the following files:"
         yield "\n".join(bad_files)
 
     def render_generation_time(self, times):
+
         yield "Generation time:     %8.2f s" % times['elapsed_time']
 
     def render_sizes(self, sizes, times):
+
         line = "+-----------------------+-----------+"
 
         yield line
@@ -88,4 +78,5 @@ class Renderer(AbstractRenderer):
 
 
 def render_version(version):
+
     yield "dnuos " + version

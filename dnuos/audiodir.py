@@ -1,22 +1,16 @@
-# -*- coding: iso-8859-1 -*-
-# vim: tabstop=4 expandtab shiftwidth=4
-#
-# A module for gathering information about a directory of audio files
-#
-# This program is under GPL license. See COPYING file for details.
-#
-# Copyright 2003,2006,2007
-# Sylvester Johansson <sylvestor@telia.com>
-# Mattias Päivärinta <pejve@vasteras2.net>
-
+"""Holds metadata for directories of audio"""
 
 import os
 import re
 import sys
-from sets import Set
 from traceback import print_exc
 
-import audiotype
+try:
+    set
+except ImportError:
+    from sets import Set as set
+
+from dnuos import audiotype
 import dnuos.output.db
 from dnuos.conf import Settings
 from dnuos.misc import dir_depth
@@ -30,7 +24,7 @@ class Dir(object):
     __slots__ = tuple('_album _artist _audio_files _bad_files '
                       '_bitrates _lengths _types modified path '
                       '_profiles _sizes'.split())
-    __version__ = 0
+    __version__ = '1.0'
 
     def __init__(self, path):
         self.path = path
@@ -48,11 +42,11 @@ class Dir(object):
         self._profiles = self._parse_profile(streams)
         self.modified = self._parse_modified()
 
-    def textencode(self, str):
+    def textencode(self, str_):
         try:
-            x = unicode(str, "ascii")
+            unicode(str_, "ascii")
         except UnicodeError:
-            str = unicode(str, "latin1")
+            str_ = unicode(str_, "latin1")
         except TypeError:
             pass
         else:
@@ -62,7 +56,7 @@ class Dir(object):
             encoding = ('latin1', 'replace')
         else:
             encoding = ('utf-8',)
-        return str.encode(*encoding).strip('\0')
+        return str_.encode(*encoding).strip('\0')
 
     def depth_from(self, root):
         """
@@ -105,7 +99,7 @@ class Dir(object):
     num_files = property(_get_num_files)
 
     def _parse_types(self, streams):
-        types = list(Set([s.filetype for s in streams]))
+        types = list(set([s.filetype for s in streams]))
         types.sort()
         return types
 
@@ -129,21 +123,21 @@ class Dir(object):
         res = {}
         for stream in streams:
             for tag, artist in stream.artist().items():
-                res.setdefault(tag, Set()).add(artist)
+                res.setdefault(tag, set()).add(artist)
         return res
 
     def _parse_album(self, streams):
         res = {}
         for stream in streams:
             for tag, album in stream.album().items():
-                res.setdefault(tag, Set()).add(album)
+                res.setdefault(tag, set()).add(album)
         return res
 
     def _get_artist(self):
         if len(self._artist) == 1:
             keys = self._artist.keys()
             encoder = lambda x: x
-        elif Set(self._artist.keys()) == Set(['id3v1', 'id3v2']):
+        elif set(self._artist.keys()) == set(['id3v1', 'id3v2']):
             if Settings().options.prefer_tag == 1:
                 keys = ['id3v1', 'id3v2']
             elif Settings().options.prefer_tag == 2:
@@ -156,7 +150,7 @@ class Dir(object):
             values = self._artist[key]
             if len(values) != 1:
                 return None
-            elif values != Set([None]):
+            elif values != set([None]):
                 return encoder(tuple(values)[0])
             else:
                 pass
@@ -166,7 +160,7 @@ class Dir(object):
         if len(self._album) == 1:
             keys = self._album.keys()
             encoder = lambda x: x
-        elif Set(self._album.keys()) == Set(['id3v1', 'id3v2']):
+        elif set(self._album.keys()) == set(['id3v1', 'id3v2']):
             if Settings().options.prefer_tag == 1:
                 keys = ['id3v1', 'id3v2']
             elif Settings().options.prefer_tag == 2:
@@ -179,7 +173,7 @@ class Dir(object):
             values = self._album[key]
             if len(values) != 1:
                 return None
-            elif values != Set([None]):
+            elif values != set([None]):
                 return encoder(tuple(values)[0])
             else:
                 pass
@@ -192,11 +186,11 @@ class Dir(object):
         total directory size."""
 
         size = {}
-        for file in streams:
-            if file.filetype in size:
-                size[file.filetype] += file.filesize
+        for file_ in streams:
+            if file_.filetype in size:
+                size[file_.filetype] += file_.filesize
             else:
-                size[file.filetype] = file.filesize
+                size[file_.filetype] = file_.filesize
         return size
 
     def _get_size(self):
@@ -221,8 +215,8 @@ class Dir(object):
     length = property(_get_length)
 
     def _parse_bitrates(self, streams):
-        return tuple(Set([ (s.bitrate(), s.brtype)
-                           for s in streams ]))
+        return tuple(set([(s.bitrate(), s.brtype)
+                          for s in streams]))
 
     def _get_brtype(self):
         """report the bitrate type
@@ -232,8 +226,8 @@ class Dir(object):
 
         if self.mediatype == "Mixed":
             return "~"
-        types = tuple(Set([ type for br, type in self._bitrates ]))
-        brs = tuple(Set([ br for br, type in self._bitrates ]))
+        types = tuple(set([type_ for (br, type_) in self._bitrates]))
+        brs = tuple(set([br for (br, type_) in self._bitrates]))
         if len(types) < 1:
             return ""
         elif len(types) > 1:
@@ -265,7 +259,7 @@ class Dir(object):
             else:
                 old = None
             return (new, old)
-        return tuple(Set(map(aux, streams)))
+        return tuple(set([aux(s) for s in streams]))
 
     def _get_profile(self):
         """
@@ -275,9 +269,9 @@ class Dir(object):
         is returned.
         """
         if Settings().options.force_old_lame_presets:
-            profiles = Set([(old or new) for new, old in self._profiles])
+            profiles = set([(old or new) for new, old in self._profiles])
         else:
-            profiles = Set([new for new, old in self._profiles])
+            profiles = set([new for new, old in self._profiles])
 
         if len(profiles) == 1:
             return profiles.pop()
@@ -286,19 +280,20 @@ class Dir(object):
     profile = property(_get_profile)
 
     def _get_quality(self):
-        if self.profile: return self.profile
+        if self.profile:
+            return self.profile
         return "%i %s" % (int(self.bitrate) / 1000, self.brtype)
     quality = property(_get_quality)
 
     def _get_audiolist_format(self):
         table = {"V": "VBR",
                  "L": "LL"}
-        res = Set()
-        for br, type in self._bitrates:
-            if type == "C":
+        res = set()
+        for br, type_ in self._bitrates:
+            if type_ == "C":
                 res.add(br / 1000)
             else:
-                res.add(table[type])
+                res.add(table[type_])
         res = list(res)
         res.sort()
         return ', '.join([str(int(x)) for x in res])
@@ -307,18 +302,18 @@ class Dir(object):
     def _parse_modified(self):
         files = self.audio_files[:]
         files.append(self.path)
-        dates = [ os.path.getmtime(f) for f in files ]
+        dates = [os.path.getmtime(f) for f in files]
         return max(dates)
 
     def _parse_audio_files(self):
-        return [ filename
-                 for filename in self.children()
-                 if self.is_audio_file(os.path.join(self.path, filename)) ]
+        return [filename
+                for filename in self.children()
+                if self.is_audio_file(os.path.join(self.path, filename))]
 
     def _get_audio_files(self):
         """Return a list of all audio files based on file extensions"""
-        return [ os.path.join(self.path, filename)
-                 for filename in self._audio_files ]
+        return [os.path.join(self.path, filename)
+                 for filename in self._audio_files]
     audio_files = property(_get_audio_files)
 
     def is_valid(self):
@@ -342,8 +337,8 @@ class Dir(object):
     is_audio_file = staticmethod(is_audio_file)
 
     def __getstate__(self):
-        return [ getattr(self, attrname)
-                 for attrname in Dir.__slots__]
+        return [getattr(self, attrname)
+                for attrname in Dir.__slots__]
 
     def __setstate__(self, state):
         for key, value in zip(Dir.__slots__, state):

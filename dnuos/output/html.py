@@ -1,32 +1,22 @@
-#!/usr/bin/env python
-# -*- coding: iso-8859-1 -*-
-#
-# This program is under GPL license. See COPYING file for details.
-#
-# Copyright 2006
-# Mattias Päivärinta <pejve@vasteras2.net>
-#
-# Authors
-# Mattias Päivärinta <pejve@vasteras2.net>
-
-"""
-Module for rendering HTML output.
-"""
+"""HTML renderer"""
 
 
+from dnuos.output import plaintext
 from dnuos.output.abstract_renderer import AbstractRenderer
-import dnuos.output
-
 
 class Renderer(AbstractRenderer):
+
     def __init__(self):
-        self.renderer = dnuos.output.plaintext.Renderer()
+
+        self.renderer = plaintext.Renderer()
 
     def __set_format_string(self, format_string):
+
         self.renderer.format_string = format_string
     format_string = property(fset=__set_format_string)
 
     def __set_columns(self, columns):
+
         self.renderer.columns = columns
     columns = property(fset=__set_columns)
 

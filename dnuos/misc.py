@@ -1,30 +1,17 @@
-# -*- coding: iso-8859-1 -*-
-#
-# This program is under GPL license. See COPYING file for details.
-#
-# Copyright 2006
-# Mattias Päivärinta <pejve@vasteras2.net>
-#
-# Authors
-# Mattias Päivärinta <pejve@vasteras2.net>
-
-
-"""
-Miscellaneous module for Dnuos.
+"""Miscellaneous module for Dnuos.
 
 Most of these things are algorithms for various lowlevel things. Not all
 however.
+
 Don't import other Dnuos modules from here.
+
 Feel free to organize this in a better way if you know how. I don't.
 """
 
-
+import os
 from heapq import heappop, heappush
 from itertools import count
-import os
-import sys
 from warnings import warn
-
 
 class Lookahead(object):
     """Wrapper class for adding one element of lookahead to an iterator"""
@@ -32,6 +19,7 @@ class Lookahead(object):
     __slots__ = ['iterator', 'lookahead', 'empty']
 
     def __init__(self, iterator):
+
         self.iterator = iterator
         self.lookahead = None
         self.empty = False
@@ -39,6 +27,7 @@ class Lookahead(object):
 
     def next(self):
         """Get next value"""
+
         result = self.lookahead
         try:
             self.lookahead = self.iterator.next()
@@ -48,24 +37,31 @@ class Lookahead(object):
         return result
 
     def __le__(self, other):
-        """Compare iterator heads for (<=) inequality - as opposed to the entire iterators"""
+        """Compare iterator heads for (<=) inequality - as opposed to the
+        entire iterators.
+        """
+
         # This is a bit sloppy as it never considers the type of the
         # other element
         return self.lookahead <= other.lookahead
 
     def __eq__(self, other):
-        """Compare iterator heads for equality - as opposed to the entire iterators"""
+        """Compare iterator heads for equality - as opposed to the entire
+        iterators.
+        """
+
         # This is a bit sloppy as it never considers the type of the
         # other element
         return self.lookahead == other.lookahead
 
 
 def deprecation(message):
+
     warn(message, DeprecationWarning, stacklevel=2)
 
 
 def dir_depth(path):
-    """Return the subdirectory depth of a path
+    """Return the subdirectory depth of a path.
 
     >>> dir_depth('/')
     0
@@ -76,12 +72,13 @@ def dir_depth(path):
     >>> dir_depth('/usr/local')
     2
     """
+
     parts = os.path.abspath(path).split(os.path.sep)[1:]
     return parts != [''] and len(parts) or 0
 
 
 def equal_elements(seq1, seq2):
-    """Return the largest n such that seq1[:n] == seq2[:n]
+    """Return the largest n such that seq1[:n] == seq2[:n].
 
     >>> equal_elements('', '')
     0
@@ -94,6 +91,7 @@ def equal_elements(seq1, seq2):
     >>> equal_elements('abcdef', 'abcd')
     4
     """
+
     for index in count():
         try:
             if seq1[index] != seq2[index]:
@@ -103,21 +101,23 @@ def equal_elements(seq1, seq2):
 
 
 def fmap(value, funcs):
-    """Feeds the same value to a list of functions
+    """Feeds the same value to a list of functions.
 
     >>> fmap(-5.5, [str, int, abs])
     ['-5.5', -5, 5.5]
     """
-    return [ func(value) for func in funcs ]
+
+    return [func(value) for func in funcs]
 
 
 def formatwarning(message, category, filename, lineno):
     """Custom warning formatting."""
+
     return "%s: %s\n" % (category.__name__, message)
 
 
 def is_subdir(path1, path2):
-    """Returns True if path1 is a subdirectory of path2, otherwise False
+    """Returns True if path1 is a subdirectory of path2, otherwise False.
 
     >>> is_subdir('/home', '/usr')
     False
@@ -126,13 +126,14 @@ def is_subdir(path1, path2):
     >>> is_subdir('/usr', '/usr')
     True
     """
+
     path1 = path1.split(os.path.sep)
     path2 = path2.split(os.path.sep)
     return path2 == path1[:len(path2)]
 
 
 def make_included_pred(included, excluded):
-    """Create predicate for included but not excluded paths
+    """Create predicate for included but not excluded paths.
 
     >>> pred = make_included_pred(['/etc','/usr'], ['/usr/local'])
     >>> pred('/usr/local')
@@ -154,24 +155,26 @@ def make_included_pred(included, excluded):
     >>> pred('/usr/local/share')
     True
     """
-    i_preds = [ lambda path, base=base: is_subdir(path, base)
-                for base in included ]
-    e_preds = [ lambda path, base=base: is_subdir(path, base)
-                for base in excluded ]
+
+    i_preds = [lambda path, base=base: is_subdir(path, base)
+               for base in included ]
+    e_preds = [lambda path, base=base: is_subdir(path, base)
+               for base in excluded ]
 
     # any() is nicer than max(), but only supported by 2.5+
     return lambda path: ((bool(included) and max(fmap(path, i_preds))) and not
                          (bool(excluded) and max(fmap(path, e_preds))))
 
 
-def map_dict(func, dict):
-    for key in dict.keys():
-        dict[key] = func(dict[key])
-    return dict
+def map_dict(func, dict_):
+
+    for key in dict_.keys():
+        dict_[key] = func(dict_[key])
+    return dict_
 
 
 def merge(*iterators):
-    """Merge n ordered iterators into one ordered iterator
+    """Merge n ordered iterators into one ordered iterator.
 
     Merge two ordered iterators
     >>> xs = iter(['a1', 'b1', 'c1'])
@@ -179,6 +182,7 @@ def merge(*iterators):
     >>> list(merge(xs, ys))
     ['a1', 'a2', 'b1', 'b2', 'c1', 'c2']
     """
+
     # Make a heap of the given iterators. The heap is sorted by the
     # iterator head elements, or if those are equal, by the order of
     # insertion. Thats what the index is for.
@@ -206,7 +210,7 @@ def merge(*iterators):
 def partition(iterable, func):
     """Partition a set of objects into equivalence classes
 
-    Returns a dictionary { func(obj): [equivalent objects] }
+    Returns a dictionary {func(obj): [equivalent objects]}
     Object o1 and o2 are equivalent if and only if func(o1) == func(o2)
 
     >>> p = partition(range(0, 10), lambda x: x % 3)
@@ -219,14 +223,15 @@ def partition(iterable, func):
     >>> print p[0], p[1], p[2]
     [0, 3, 6, 9] [1, 4, 7] [2, 5, 8]
     """
-    partitions = { }
+
+    partitions = {}
     for obj in iterable:
         partitions.setdefault(func(obj), []).append(obj)
     return partitions
 
 
 def split_dict(dct, pred):
-    """Split dictionary in two by a predicate function
+    """Split dictionary in two by a predicate function.
 
     >>> dct = {1:'a', 2:'b', 3:'c'}
     >>> pred = lambda (key, value): key % 2 == 0
@@ -236,12 +241,14 @@ def split_dict(dct, pred):
     >>> print len(f), 1 in f, 3 in f
     2 True True
     """
+
     cells = partition(dct.items(), pred)
     return dict(cells.get(True, [])), dict(cells.get(False, []))
 
 
 def to_human(value, radix=1024.0):
     """Convert a value to a string using SI suffixes"""
+
     i = 0
     while value >= radix:
         value /= radix
@@ -255,8 +262,10 @@ def to_human(value, radix=1024.0):
         return "%.1f%s" % (value, suffix)
 
 
-def uniq(list):
+def uniq(list_):
     """make a list with all duplicate elements removed"""
-    if not list: return []
-    list[0] = [ list[0] ]
-    return reduce(lambda A,x: x in A and A or A+[x], list)
+
+    if not list_:
+        return []
+    list_[0] = [list_[0]]
+    return reduce(lambda A, x: x in A and A or A+[x], list_)

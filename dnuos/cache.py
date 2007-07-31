@@ -1,17 +1,14 @@
-# -*- coding: iso-8859-1 -*-
-# vim: tabstop=4 expandtab shiftwidth=4
-#
-# A module for caching.
-#
-# This program is under GPL license. See COPYING file for details.
-#
-# Copyright 2007
-# Mattias Päivärinta <pejve@vasteras2.net>
+"""A module for caching"""
 
 import os
 import pickle
-from sets import Set
 from shutil import copy2
+
+try:
+    set
+except NameError:
+    from sets import Set as set
+
 
 class UpdateTrackingDict(dict):
     """
@@ -25,7 +22,7 @@ class UpdateTrackingDict(dict):
     def __init__(self, *args, **kwargs):
 
         super(UpdateTrackingDict, self).__init__(*args, **kwargs)
-        self.wkeys = Set()
+        self.wkeys = set()
 
     def __setitem__(self, key, value):
 
@@ -47,7 +44,7 @@ class UpdateTrackingDict(dict):
         """Updates items from other dict"""
 
         super(UpdateTrackingDict, self).update(other)
-        self.wkeys |= Set(other.keys())
+        self.wkeys |= set(other.keys())
 
     def written(self):
         """Get a dict of all updated items.
@@ -56,7 +53,7 @@ class UpdateTrackingDict(dict):
         self.
         """
 
-        return dict([ (key, self[key]) for key in self.wkeys ])
+        return dict([(key, self[key]) for key in self.wkeys])
 
     def clear_written(self):
         """Clear the memory of updated entries"""
@@ -144,7 +141,7 @@ class PersistentDict(UpdateTrackingDict):
         Serialize data to file, keeping a copy of the previous version.
         """
 
-        checksum = hash(tuple([ d.modified for d in self.written().values() ]))
+        checksum = hash(tuple([d.modified for d in self.written().values()]))
         if checksum != self.checksum:
             try:
                 copy2(self.filename, self.filename + '.bak')
