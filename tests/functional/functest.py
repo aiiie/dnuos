@@ -36,7 +36,8 @@ def process_args(args):
     Basedirs are glob-expanded and prepended with the contents of the $DATA_DIR
     environment variable.
     """
-    datadir = os.environ.get("DATA_DIR")
+
+    datadir = os.environ['DATA_DIR']
     args = args.split()
     opts = [opt for opt in args if opt.startswith('-')]
     bases = _flatten([glob(os.path.join(datadir, base))
