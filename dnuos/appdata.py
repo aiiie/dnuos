@@ -1,21 +1,8 @@
-# -*- coding: iso-8859-1 -*-
-#
-# A module for gathering information about a directory of audio files
-#
-# This program is under GPL license. See COPYING file for details.
-#
-# Copyright 2005,2007
-# Trent Mick <TrentM at ActiveState.com>
-# Mattias Päivärinta <pejve@vasteras2.net>
-
-
-"""
-Module dealing with application data.
+"""Module dealing with application data.
 
 Most of this comes from
 http://mail.python.org/pipermail/python-list/2005-September/341702.html
 """
-
 
 import os
 import sys

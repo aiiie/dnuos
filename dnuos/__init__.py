@@ -1,46 +1,19 @@
-#!/usr/bin/env python
-# -*- coding: iso-8859-1 -*-
-# vim: tabstop=4 expandtab shiftwidth=4
-#
-# This program is under GPL license. See COPYING file for details.
-#
-# Copyright 2003,2006,2007
-# Sylvester Johansson <sylvestor@telia.com>
-# Mattias Päivärinta <pejve@vasteras2.net>
-#
-# Authors
-# Sylvester Johansson <sylvestor@telia.com>
-# Mattias Päivärinta <pejve@vasteras2.net>
+"""Script gathering information about directory trees of audio files"""
 
-"""
-Script gathering information about directory trees of audio files
-"""
+__version__ = '1.0'
 
-__version__ = "0.93"
-
-from itertools import chain
-from itertools import ifilter
 import os
 import sys
 import time
 import warnings
+from itertools import chain
+from itertools import ifilter
 
-# fix for some dumb version of python 2.3
-sys.path.append(os.path.abspath('.'))
-
-from dnuos import appdata
-from dnuos import audiodir
-from dnuos.cache import PersistentDict
-from dnuos.cache import memoized
+from dnuos import appdata, audiodir, output
+from dnuos.cache import PersistentDict, memoized
 from dnuos.conf import Settings
-from dnuos.misc import dir_depth
-from dnuos.misc import equal_elements
-from dnuos.misc import formatwarning
-from dnuos.misc import make_included_pred
-from dnuos.misc import merge
-from dnuos.misc import to_human
-from dnuos import output
-
+from dnuos.misc import dir_depth, equal_elements, formatwarning
+from dnuos.misc import make_included_pred, merge, to_human
 
 class Data(object):
     """Holds data for cache"""
@@ -70,8 +43,8 @@ def make_raw_listing(basedirs, exclude_paths, sort_key, use_merge,
     sorted either separately or together according to the merge setting.
     """
 
-    trees = [ walk2(basedir, sort_key, exclude_paths)
-              for basedir in basedirs ]
+    trees = [walk2(basedir, sort_key, exclude_paths)
+             for basedir in basedirs]
 
     if use_merge:
         tree = merge(*trees)
@@ -103,8 +76,8 @@ def prepare_listing(dir_pairs, options, data):
         dir_pairs = ifilter(output_db_predicate, dir_pairs)
     if not options.output_module == output.db:
         dir_pairs = total_sizes(dir_pairs, data.size)
-    if not options.stripped and \
-       options.output_module in [output.plaintext, output.html]:
+    if (not options.stripped and
+        options.output_module in [output.plaintext, output.html]):
         dir_pairs = add_empty(dir_pairs)
     return dir_pairs
 
@@ -353,12 +326,11 @@ def walk(dir_, sort_key=lambda x: x, excluded=[]):
     exclude are ignored. Symbolic links are followed.
     """
 
-    subs = [ os.path.join(dir_, sub)
-             for sub in os.listdir(dir_) ]
-    subs = [ sub
-             for sub in subs
-             if os.path.isdir(sub)
-                and sub not in excluded ]
+    subs = [os.path.join(dir_, sub)
+            for sub in os.listdir(dir_)]
+    subs = [sub for sub in subs
+            if os.path.isdir(sub)
+               and sub not in excluded]
     subs.sort(sort_key)
 
     yield dir_

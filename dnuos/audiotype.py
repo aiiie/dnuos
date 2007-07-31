@@ -1,27 +1,8 @@
-# -*- coding: iso-8859-1 -*-
-# vim: tabstop=4 expandtab shiftwidth=4
-#
-# A module for gathering information about an audio file
-#
-# This program is under GPL license. See COPYING file for details.
-#
-# Copyright 2003,2007
-# Sylvester Johansson  (sylvestor@telia.com)
-# Mattias Päivärinta   (pejve@vasteras2.net)
-
-
-# TODO: Finish the API for type classes
-# TODO: Make type classes lazy (later)
-# TODO: Implement *.audiosize() that also excludes vorbis comments and such?
-
-
 import os
 import re
 import struct
 
 import dnuos.id3
-
-__version__ = "0.94"
 
 
 class SpacerError(Exception):
