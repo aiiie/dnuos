@@ -9,5 +9,5 @@ def test():
 
     write_dnuos_diff("", """
 No folders to process.
-Type 'dnuos.py -h' for help.
-    """)
+Type 'dnuos -h' for help.
+""")
