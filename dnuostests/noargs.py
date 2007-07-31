@@ -2,7 +2,10 @@
 >>> test()
 """
 
-from functest import write_dnuos_diff
+import os.path
+import sys
+
+from dnuostests.functest import write_dnuos_diff
 
 def test():
     """Verify no-args-behavoiur"""

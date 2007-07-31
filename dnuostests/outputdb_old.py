@@ -2,12 +2,13 @@
 >>> test()
 """
 
-from cStringIO import StringIO
 import sys
+from cStringIO import StringIO
 
-from functest import process_args
-from functest import get_unified_diff
 import dnuos
+
+from dnuostests.functest import process_args
+from dnuostests.functest import get_unified_diff
 
 def test():
     """Verify output-db with old deprecated option"""
