@@ -138,7 +138,8 @@ def main():
         elif options.disp_version:
             result = output.plaintext.render_version(data.version)
         else:
-            raise ValueError("No folders to process.\nType 'dnuos.py -h' for help.")
+            raise ValueError("No folders to process.\nType `%s -h' "
+                             "for help." % os.path.basename(sys.argv[0]))
 
         # Output
         outfile = options.outfile and open(options.outfile, 'w') \
