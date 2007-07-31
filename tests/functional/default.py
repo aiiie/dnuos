@@ -5,7 +5,8 @@
 from functest import write_dnuos_diff
 
 def test():
-    """Verifies output with default arguments."""
+    """Verifies output with default arguments"""
+
     write_dnuos_diff("-q aac lame", """
 Album/Artist                                        |  Size | Type | Quality
 ============================================================================
