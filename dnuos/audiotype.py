@@ -87,31 +87,6 @@ class AudioType(object):
         self._f.seek(mark)
         return self._end
 
-    def get(self, id, width=None):
-
-        table = {
-            "n": lambda: os.path.basename(self.filename),
-            "p": lambda: os.path.dirname(self.filename),
-            "t": lambda: self.filetype,
-            "d": lambda: os.path.getmtime(self.filename),
-            "s": lambda: self.filesize,
-            "S": lambda: self.streamsize(),
-            "T": lambda: self.brtype,
-            "P": lambda: self.profile(),
-            "b": lambda: self.bitrate(),
-            "f": lambda: self.freq,
-            "c": lambda: self.channels,
-            "l": lambda: self.time,
-            "v": lambda: self.vendor,
-            "V": lambda: self.version,
-            "q": lambda: (self.o.profile() or
-            "%i %s" % (self.o.bitrate(), self.o.brtype))
-        }
-        data = table[id]()
-        if width != None:
-            data = "%*s" % (width, str(data)[:width])
-        return data
-
 
 class Ogg(AudioType):
 
