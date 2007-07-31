@@ -1,5 +1,6 @@
 """HTML renderer"""
 
+from cgi import escape
 
 from dnuos.output import plaintext
 from dnuos.output.abstract_renderer import AbstractRenderer
@@ -42,7 +43,7 @@ body { color: %s; background: %s; }
 <pre>""" % (data.version['dnuos'], options.text_color, options.bg_color)
 
         for chunk in self.renderer.render(dir_pairs, options, data):
-            yield chunk
+            yield escape(chunk)
 
         yield "</pre>"
         yield "</body></html>"
