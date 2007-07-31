@@ -9,6 +9,7 @@ from functest import write_dnuos_diff
 
 def test():
     """Verify output tag P"""
+
     testdata_dir = environ['DATA_DIR']
     write_dnuos_diff('-q --output=[P] aac', """
 Path

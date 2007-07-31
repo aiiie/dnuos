@@ -6,6 +6,7 @@ from functest import write_dnuos_diff
 
 def test():
     """Verify tree merging functionality"""
+
     write_dnuos_diff("-qm merge/*/*", """
 Album/Artist                                        |  Size | Type | Quality
 ============================================================================
