@@ -108,6 +108,8 @@ def setup_renderer(output_module, format_string, fields, indent):
 def main():
     """Main entry point"""
 
+    os.stat_float_times(False)
+
     try:
         warnings.formatwarning = formatwarning
 
