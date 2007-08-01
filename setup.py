@@ -4,7 +4,10 @@ import os
 
 from setuptools import setup, find_packages
 
-os.environ['DATA_DIR'] = './testdata'
+os.environ['DATA_DIR'] = os.environ.get(
+    'DATA_DIR',
+    os.path.abspath('./testdata')
+)
 
 setup(
     author='Mattias Paivarinta, aiiie',
