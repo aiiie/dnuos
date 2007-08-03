@@ -10,15 +10,17 @@ Example outout:
     4:'Beck',15:'The Information',3:'MP3',4:'-aps',15,196,3695
 """
 
-from dnuos.output.abstract_renderer import AbstractRenderer, get_album, get_artist
+from dnuos.output.abstract_renderer import AbstractRenderer, Column
 
 class Renderer(AbstractRenderer):
 
     def render(self, dir_pairs, options, data):
+        artist_column = Column("A", None, None)
+        album_column = Column("C", None, None)
 
         for adir, root in dir_pairs:
-            artist = _db_string(get_artist(adir))
-            album = _db_string(get_album(adir))
+            artist = _db_string(artist_column.get(adir))
+            album = _db_string(album_column.get(adir))
             mediatype = _db_string(adir.mediatype)
             profile = _db_string(adir.profile)
             num_files = adir.num_files
