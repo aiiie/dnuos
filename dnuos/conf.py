@@ -9,9 +9,9 @@ from optparse import OptionGroup
 from optparse import OptionValueError
 from optparse import OptionParser
 
+import dnuos.output
 from dnuos.singleton import Singleton
 from dnuos.misc import deprecation
-from dnuos import output
 
 
 def stricmp(str1, str2):
@@ -21,7 +21,7 @@ def stricmp(str1, str2):
 def set_db_format(option, opt_str, value, parser):
 
     parser.values.outfile = value
-    parser.values.output_module = output.db
+    parser.values.output_module = dnuos.output.db
     deprecation('The %s option is deprecated and will be removed in a '
                 'future version. Use --template=db --file=FILE instead to '
                 'ensure compatibility with future versions.' % opt_str)
@@ -38,7 +38,7 @@ def set_format_string(option, opt_str, value, parser):
 
 def set_html_format(option, opt_str, value, parser):
 
-    parser.values.output_module = output.html
+    parser.values.output_module = dnuos.output.html
     deprecation('The %s option is deprecated and will be removed in a '
                 'future version. Use --template=html instead to ensure '
                 'compatibility with future versions.' % opt_str)
@@ -148,7 +148,7 @@ class Settings(Singleton):
                             no_cbr=False,
                             no_non_profile=False,
                             outfile=None,
-                            output_module=output.plaintext,
+                            output_module=dnuos.output.plaintext,
                             prefer_tag=2,
                             show_progress=True,
                             sort_key=None,
@@ -287,7 +287,7 @@ class Settings(Singleton):
                              isinstance(sys.stdout, file) and
                              sys.stdout.isatty()):
             options.show_progress = False
-        if options.output_module == output.db:
+        if options.output_module == dnuos.output.db:
             options.list_bad = False
 
         return options
