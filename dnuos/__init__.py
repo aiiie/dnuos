@@ -15,7 +15,7 @@ from dnuos.cache import PersistentDict, memoized
 from dnuos.conf import Settings
 from dnuos.misc import dir_depth, equal_elements, formatwarning
 from dnuos.misc import make_included_pred, merge, to_human
-from dnuos.output.abstract_renderer import get_album, get_artist
+from dnuos.output.abstract_renderer import Column
 
 class Data(object):
     """Holds data for cache"""
@@ -240,9 +240,12 @@ def enough_bitrate_mp3(mp3_min_bit_rate):
 def output_db_predicate((adir, root)):
     """Predicate for whether something should be included in output.db"""
 
+    artist_column = Column("A", None, None)
+    album_column = Column("C", None, None)
+
     return adir.mediatype != "Mixed" and \
-           get_artist(adir) != None and \
-           get_album(adir) != None
+           artist_column.get(adir) != None and \
+           album_column.get(adir) != None
 
 
 def total_sizes(dir_pairs, sizes):
