@@ -80,31 +80,31 @@ def _get_profile(adir):
 
 class Column(object):
 
-    attr_table = {
-        "a": ('Bitrate(s)', lambda adir: adir.audiolist_format),
-        "A": ('Artist', get_artist),
-        "b": ('Bitrate', lambda adir: adir.bitrate),
-        "B": ('Bitrate', lambda adir: adir.bitrate),
-        "C": ('Album', get_album),
-        #"d": "Dir",
-        #"D": ('Depth', lambda adir: adir.depth),
-        "f": ('Files', lambda adir: adir.num_files),
-        "l": ('Length', lambda adir: adir.length),
-        "L": ('Length', lambda adir: adir.length),
-        "m": ('Modified', lambda adir: adir.modified),
-        "M": ('Modified', lambda adir: adir.modified),
-        "n": ('Album/Artist', lambda adir: adir.name),
-        "N": ('Album/Artist', lambda adir: adir.name),
-        "p": ('Profile', _get_profile),
-        "P": ('Path', lambda adir: adir.path),
-        "q": ('Quality', lambda adir: adir.quality),
-        "s": ('Size', lambda adir: adir.size),
-        "S": ('Size', lambda adir: adir.size),
-        "t": ('Type', lambda adir: adir.mediatype),
-        "T": ('BR Type', lambda adir: adir.brtype),
-    }
-
     def __init__(self, tag, width, suffix):
+
+        attr_table = {
+            "a": ('Bitrate(s)', lambda adir: adir.audiolist_format),
+            "A": ('Artist', get_artist),
+            "b": ('Bitrate', lambda adir: adir.bitrate),
+            "B": ('Bitrate', lambda adir: adir.bitrate),
+            "C": ('Album', get_album),
+            #"d": "Dir",
+            #"D": ('Depth', lambda adir: adir.depth),
+            "f": ('Files', lambda adir: adir.num_files),
+            "l": ('Length', lambda adir: adir.length),
+            "L": ('Length', lambda adir: adir.length),
+            "m": ('Modified', lambda adir: adir.modified),
+            "M": ('Modified', lambda adir: adir.modified),
+            "n": ('Album/Artist', lambda adir: adir.name),
+            "N": ('Album/Artist', lambda adir: adir.name),
+            "p": ('Profile', _get_profile),
+            "P": ('Path', lambda adir: adir.path),
+            "q": ('Quality', lambda adir: adir.quality),
+            "s": ('Size', lambda adir: adir.size),
+            "S": ('Size', lambda adir: adir.size),
+            "t": ('Type', lambda adir: adir.mediatype),
+            "T": ('BR Type', lambda adir: adir.brtype),
+        }
 
         formatter_table = {
             "b": lambda data, depth: to_human(int(data), 1000.0),
@@ -120,7 +120,7 @@ class Column(object):
             self.formatter = formatter_table[tag]
         else:
             self.formatter = lambda x, y: x
-        self.name, self.getter = self.attr_table[tag]
+        self.name, self.getter = attr_table[tag]
 
     def _format(self, data, suffixes):
 
