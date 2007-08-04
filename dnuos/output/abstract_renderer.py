@@ -1,14 +1,13 @@
 import time
 
 import dnuos.output
-from dnuos.conf import Settings
 from dnuos.misc import to_human
 
 class AbstractRenderer(object):
 
-    def setup_columns(self, fields, indent):
+    def setup_columns(self, fields, options):
 
-        self.columns = map(lambda x: parse_field(x, indent), fields)
+        self.columns = map(lambda x: parse_field(x, options), fields)
 
 
 class Column(object):
@@ -153,16 +152,15 @@ class Column(object):
         return self._format(data, suffixes)
 
 
-def parse_field(field_string, indent):
+def parse_field(field_string, options):
 
     tag, width, suffix = (field_string.split(",") + ["", ""])[:3]
     if width == "":
         width = None
     else:
         width = int(width)
-    options = Settings().options
     column = Column(tag, width, suffix, options)
-    column.indent = (lambda basename, depth, indent=indent:
+    column.indent = (lambda basename, depth, indent=options.indent:
                      " " * indent * depth + basename)
     return column
 
