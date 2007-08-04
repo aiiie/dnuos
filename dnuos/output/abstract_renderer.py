@@ -13,7 +13,7 @@ class AbstractRenderer(object):
 
 class Column(object):
 
-    def __init__(self, tag, width, suffix):
+    def __init__(self, tag, width, suffix, options):
 
         attr_table = {
             "a": ('Bitrate(s)', lambda adir: adir.audiolist_format),
@@ -55,7 +55,6 @@ class Column(object):
             self.formatter = lambda x, y: x
         self.name, self.getter = attr_table[tag]
 
-        options = Settings().options
         if options.output_module == dnuos.output.db:
             self._encoding = ('latin1', 'replace')
         else:
@@ -161,7 +160,8 @@ def parse_field(field_string, indent):
         width = None
     else:
         width = int(width)
-    column = Column(tag, width, suffix)
+    options = Settings().options
+    column = Column(tag, width, suffix, options)
     column.indent = (lambda basename, depth, indent=indent:
                      " " * indent * depth + basename)
     return column
