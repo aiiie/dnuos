@@ -240,8 +240,8 @@ def enough_bitrate_mp3(mp3_min_bit_rate):
 def output_db_predicate((adir, root)):
     """Predicate for whether something should be included in output.db"""
 
-    artist_column = Column("A", None, None)
-    album_column = Column("C", None, None)
+    artist_column = Column("A", None, None, Settings().options)
+    album_column = Column("C", None, None, Settings().options)
 
     return adir.mediatype != "Mixed" and \
            artist_column.get(adir) != None and \
