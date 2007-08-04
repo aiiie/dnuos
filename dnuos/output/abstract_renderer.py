@@ -1,5 +1,6 @@
 import time
 
+import dnuos.output
 from dnuos.conf import Settings
 from dnuos.misc import to_human
 
@@ -54,6 +55,14 @@ class Column(object):
             self.formatter = lambda x, y: x
         self.name, self.getter = attr_table[tag]
 
+        options = Settings().options
+        if options.output_module == dnuos.output.db:
+            self._encoding = ('latin1', 'replace')
+        else:
+            self._encoding = ('utf-8',)
+        self._prefer_tag = options.prefer_tag
+        self._force_old_lame_presets = options.force_old_lame_presets
+
     def _textencode(self, str_):
         try:
             unicode(str_, "ascii")
@@ -64,20 +73,16 @@ class Column(object):
         else:
             pass
 
-        if Settings().options.output_module == dnuos.output.db:
-            encoding = ('latin1', 'replace')
-        else:
-            encoding = ('utf-8',)
-        return str_.encode(*encoding).strip('\0')
+        return str_.encode(*self._encoding).strip('\0')
 
     def _get_tag_keys(self, data):
         if len(data) == 1:
             keys = data.keys()
             encoder = lambda x: x
         elif set(data.keys()) == set(['id3v1', 'id3v2']):
-            if Settings().options.prefer_tag == 1:
+            if self._prefer_tag == 1:
                 keys = ['id3v1', 'id3v2']
-            elif Settings().options.prefer_tag == 2:
+            elif self._prefer_tag == 2:
                 keys = ['id3v2', 'id3v1']
             encoder = self._textencode
         else:
@@ -115,7 +120,7 @@ class Column(object):
         return None
 
     def _get_profile(self, adir):
-        if Settings().options.force_old_lame_presets:
+        if self._force_old_lame_presets:
             return adir.profile_force_old_lame
         else:
             return adir.profile
