@@ -39,7 +39,7 @@ class Data(object):
 
 
 def make_raw_listing(basedirs, exclude_paths, sort_key, use_merge,
-        adir_class):
+        adir_class, with_stack_traces):
     """Make an iterator over all subdirectories of the base directories,
     including the base directories themselves. The directory trees are
     sorted either separately or together according to the merge setting.
@@ -53,7 +53,7 @@ def make_raw_listing(basedirs, exclude_paths, sort_key, use_merge,
     else:
         tree = chain(*trees)
 
-    return to_adir(tree, adir_class)
+    return to_adir(tree, adir_class, with_stack_traces)
 
 
 def prepare_listing(dir_pairs, options, data):
@@ -75,6 +75,7 @@ def prepare_listing(dir_pairs, options, data):
         dir_pairs = ifilter(enough_bitrate_mp3(options.mp3_min_bit_rate),
                             dir_pairs)
     if options.output_module == dnuos.output.db:
+        output_db_predicate = make_output_db_predicate(options)
         dir_pairs = ifilter(output_db_predicate, dir_pairs)
     if not options.output_module == dnuos.output.db:
         dir_pairs = total_sizes(dir_pairs, data.size)
@@ -98,12 +99,12 @@ def setup_cache(cache_filename, basedirs, exclude_paths):
     return cache
 
 
-def setup_renderer(output_module, format_string, fields, indent):
+def setup_renderer(output_module, format_string, fields, options):
     """Create and readies renderer"""
 
     renderer = output_module.Renderer()
     renderer.format_string = format_string
-    renderer.setup_columns(fields, indent)
+    renderer.setup_columns(fields, options)
     return renderer
 
 
@@ -130,13 +131,14 @@ def main():
             renderer = setup_renderer(options.output_module,
                                       options.format_string,
                                       options.fields,
-                                      options.indent)
+                                      options)
 
             adirs = make_raw_listing(options.basedirs,
                                      options.exclude_paths,
                                      options.sort_key,
                                      options.merge,
-                                     adir_class)
+                                     adir_class,
+                                     with_stack_traces=options.debug)
             adirs = prepare_listing(adirs, options, data)
             result = renderer.render(adirs, options, data)
         elif options.disp_version:
@@ -237,15 +239,17 @@ def enough_bitrate_mp3(mp3_min_bit_rate):
                                  adir.bitrate >= mp3_min_bit_rate)
 
 
-def output_db_predicate((adir, root)):
+def make_output_db_predicate(options):
     """Predicate for whether something should be included in output.db"""
 
-    artist_column = Column("A", None, None, Settings().options)
-    album_column = Column("C", None, None, Settings().options)
+    artist_column = Column("A", None, None, options)
+    album_column = Column("C", None, None, options)
 
-    return adir.mediatype != "Mixed" and \
-           artist_column.get(adir) != None and \
-           album_column.get(adir) != None
+    def output_db_predicate((adir, root)):
+        return adir.mediatype != "Mixed" and \
+               artist_column.get(adir) != None and \
+               album_column.get(adir) != None
+    return output_db_predicate
 
 
 def total_sizes(dir_pairs, sizes):
@@ -347,7 +351,7 @@ def walk(dir_, sort_key=lambda x: x, excluded=[]):
             yield res
 
 
-def to_adir(path_pairs, constructor):
+def to_adir(path_pairs, constructor, with_stack_traces):
     """Converts a sequence of path pairs into a sequence of dir pairs
 
     A path pair is a tuple (relpath, root). A dir pair is tuple (Dir,
@@ -357,5 +361,5 @@ def to_adir(path_pairs, constructor):
     for relpath, root in path_pairs:
         adir = constructor(root + relpath)
         if not adir.is_valid():
-            adir.load(with_stack_traces=Settings().options.debug)
+            adir.load(with_stack_traces)
         yield adir, root

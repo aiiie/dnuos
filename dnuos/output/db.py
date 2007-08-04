@@ -10,14 +10,14 @@ Example outout:
     4:'Beck',15:'The Information',3:'MP3',4:'-aps',15,196,3695
 """
 
-from dnuos.conf import Settings
 from dnuos.output.abstract_renderer import AbstractRenderer, Column
 
 class Renderer(AbstractRenderer):
 
     def render(self, dir_pairs, options, data):
-        artist_column = Column("A", None, None, Settings().options)
-        album_column = Column("C", None, None, Settings().options)
+
+        artist_column = Column("A", None, None, options)
+        album_column = Column("C", None, None, options)
 
         for adir, root in dir_pairs:
             artist = _db_string(artist_column.get(adir))
