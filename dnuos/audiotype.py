@@ -226,8 +226,10 @@ class Ogg(AudioType):
 
         if self.nombitrate in xiph:
             return {"xiph": "-q" + str(xiph.index(self.nombitrate) + 1)}
-        if self.nombitrate in gt3:
+        elif self.nombitrate in gt3:
             return {"gt3": "-q" + str(gt3.index(self.nombitrate) + 4)}
+        else:
+            return {}
 
 
 class MP3(AudioType):
