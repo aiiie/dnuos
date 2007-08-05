@@ -21,7 +21,7 @@ class Dir(object):
 
     __slots__ = tuple('albums artists _audio_files _bad_files '
                       '_bitrates _lengths _types modified path '
-                      '_profiles _sizes'.split())
+                      '_profiles sizes'.split())
     __version__ = '1.0'
 
     def __init__(self, path):
@@ -33,7 +33,7 @@ class Dir(object):
         streams, self._bad_files = self.get_streams(with_stack_traces)
         self.artists = self._parse_artist(streams)
         self.albums = self._parse_album(streams)
-        self._sizes = self._parse_size(streams)
+        self.sizes = self._parse_size(streams)
         self._lengths = self._parse_length(streams)
         self._types = self._parse_types(streams)
         self._bitrates = self._parse_bitrates(streams)
@@ -130,12 +130,8 @@ class Dir(object):
         return size
 
     def _get_size(self):
-        return sum(self._sizes.values())
+        return sum(self.sizes.values())
     size = property(_get_size)
-
-    def _get_sizes(self):
-        return self._sizes
-    sizes = property(_get_sizes)
 
     def _parse_length(self, streams):
         length = {}
