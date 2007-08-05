@@ -52,7 +52,7 @@ class Column(object):
             self.formatter = formatter_table[tag]
         else:
             self.formatter = lambda x, y: x
-        self.name, self.getter = attr_table[tag]
+        self.name, self.get = attr_table[tag]
 
         if options.output_module == dnuos.output.db:
             self._encoding = ('latin1', 'replace')
@@ -137,10 +137,6 @@ class Column(object):
     def header(self, suffixes=True):
 
         return self._format(self.name, suffixes)
-
-    def get(self, adir):
-
-        return self.getter(adir)
 
     def get_formatted(self, adir, root, suffixes=True):
 
