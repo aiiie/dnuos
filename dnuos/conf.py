@@ -10,7 +10,6 @@ from optparse import OptionValueError
 from optparse import OptionParser
 
 import dnuos.output
-from dnuos.singleton import Singleton
 from dnuos.misc import deprecation
 
 
@@ -124,7 +123,7 @@ def parse_format_string2(data):
     return unescape(format), [unescape(f) for f in fields]
 
 
-class Settings(Singleton):
+class Settings(object):
 
     def parse_args(self, argv=sys.argv[1:]):
 
