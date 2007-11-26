@@ -59,7 +59,6 @@ class Column(object):
         else:
             self._encoding = ('utf-8',)
         self._prefer_tag = options.prefer_tag
-        self._force_old_lame_presets = options.force_old_lame_presets
 
     def _textencode(self, str_):
         try:
@@ -118,10 +117,7 @@ class Column(object):
         return None
 
     def _get_profile(self, adir):
-        if self._force_old_lame_presets:
-            return adir.profile_force_old_lame
-        else:
-            return adir.profile
+        return adir.profile
 
     def _format(self, data, suffixes):
 

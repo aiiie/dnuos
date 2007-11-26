@@ -442,27 +442,11 @@ class MP3(AudioType):
             if preset > 0:
                 if preset == 320:
                     res["lame"] = "-b 320"
-                    res["oldlame"] = "-api"
                 elif preset in (410, 420, 430, 440, 450, 460, 470, 480, 490, 500):
                     if vbrmethod == 4:
                         res["lame"] = "-V%dn" % ((500 - preset) / 10)
                     else:
                         res["lame"] = "-V%d" % ((500 - preset) / 10)
-                    if preset == 460 or preset == 470:
-                        if vbrmethod == 4:
-                            res["oldlame"] = "-apfm"
-                        else:
-                            res["oldlame"] = "-apm"
-                    elif preset == 480 or preset == 490:
-                        if vbrmethod == 4:
-                            res["oldlame"] = "-apfs"
-                        else:
-                            res["oldlame"] = "-aps"
-                    elif preset == 500:
-                        if vbrmethod == 4:
-                            res["oldlame"] = "-apfe"
-                        else:
-                            res["oldlame"] = "-ape"
                 # deprecated values?
                 elif preset == 1000:
                     res["lame"] = "-r3mix"
