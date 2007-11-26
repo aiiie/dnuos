@@ -190,26 +190,6 @@ class Dir(object):
                 res.setdefault(key, set()).add(profile)
         return res
 
-    def _get_profile_force_old_lame(self):
-        """
-        report encoding profile name
-
-        If no or inconsistent profiles are detected, an empty string
-        is returned.
-        """
-        if len(self._profiles) == 1:
-            profiles = self._profiles.values()[0]
-        elif set(self._profiles.keys()) == set(['lame', 'oldlame']):
-            profiles = self._profiles['oldlame']
-        else:
-            profiles = set()
-
-        if len(profiles) == 1:
-            return tuple(profiles)[0]
-        else:
-            return ""
-    profile_force_old_lame = property(_get_profile_force_old_lame)
-
     def _get_profile(self):
         """
         report encoding profile name
@@ -219,8 +199,6 @@ class Dir(object):
         """
         if len(self._profiles) == 1:
             profiles = self._profiles.values()[0]
-        elif set(self._profiles.keys()) == set(['lame', 'oldlame']):
-            profiles = self._profiles['lame']
         else:
             profiles = set()
 

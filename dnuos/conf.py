@@ -207,10 +207,6 @@ class Settings(object):
         parser.add_option_group(group)
 
         group = OptionGroup(parser, "Parsing")
-        group.add_option("-L", "--lame-old-preset",
-                         dest="force_old_lame_presets", action="store_true",
-                         help='Report "--alt-preset xxx" for "-V x" LAME '
-                         'MP3s where applicable')
         group.add_option("-P", "--prefer-tag",
                          action="callback", nargs=1,
                          callback=set_preferred_tag, type="int",
