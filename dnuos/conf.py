@@ -185,7 +185,7 @@ class Settings(object):
                          help="Case-insensitive directory sorting")
         group.add_option("-m", "--merge",
                          dest="merge", action="store_true",
-                         help="Parse basedirs in parallell as opposed to "
+                         help="Parse basedirs in parallel as opposed to "
                          "one after the other")
         group.add_option("-w", "--wildcards",
                          dest="wildcards", action="store_true",
