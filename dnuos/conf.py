@@ -274,7 +274,8 @@ class Settings(object):
         options.basedirs = []
         for glob_dir in args:
             options.basedirs += [p for p in self.expand(glob_dir)
-                                 if p not in options.exclude_paths]
+                                 if p not in options.exclude_paths
+                                   and os.path.isdir(p)]
         options.exclude_paths += options.basedirs
 
         # options overriding eachother
