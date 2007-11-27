@@ -2,6 +2,7 @@
 
 import os
 import pickle
+import sys
 from shutil import copy2
 
 try:
@@ -145,8 +146,9 @@ class PersistentDict(UpdateTrackingDict):
         if checksum != self.checksum:
             try:
                 copy2(self.filename, self.filename + '.bak')
-            except IOError:
-                pass
+            except IOError, err:
+                print >> sys.stderr, "Could not make backup of old cache data because:"
+                print >> sys.stderr, err
             f = open(self.filename, 'w')
             pickle.dump(self.version, f)
             pickle.dump(checksum, f)

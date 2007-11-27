@@ -156,7 +156,13 @@ def main():
         # Store updated cache
         if options.basedirs and options.use_cache:
             appdata.create_user_data_dir()
-            cache.save()
+            try:
+                cache.save()
+            except IOError, err:
+                print >> sys.stderr, "Failed to save cache data because:"
+                print >> sys.stderr, err
+                print >> sys.stderr, "FYI: There is a --disable-cache switch to disable caching"
+                return 2
 
     except ValueError, err:
         print >> sys.stderr, err
