@@ -276,7 +276,7 @@ class Settings(object):
             options.basedirs += [p for p in self.expand(glob_dir)
                                  if p not in options.exclude_paths
                                    and os.path.isdir(p)]
-        options.exclude_paths += options.basedirs
+        # adding basedirs to exclude_paths here disables cache eviction
 
         # options overriding eachother
         if options.debug or (not options.outfile and
