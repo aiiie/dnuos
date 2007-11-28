@@ -133,8 +133,11 @@ def main():
                                       options.fields,
                                       options)
 
+            # Append basedirs to exclude_paths to avoid traversing nested
+            # basedirs again.
             adirs = make_raw_listing(options.basedirs,
-                                     options.exclude_paths,
+                                     options.exclude_paths
+                                         + options.basedirs,
                                      options.sort_key,
                                      options.merge,
                                      adir_class,
