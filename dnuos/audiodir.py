@@ -26,10 +26,10 @@ class Dir(object):
 
     def __init__(self, path):
         self.path = path
-        self._audio_files = self._parse_audio_files()
         self.modified = None
 
     def load(self, with_stack_traces):
+        self._audio_files = self._parse_audio_files()
         streams, self._bad_files = self.get_streams(with_stack_traces)
         self.artists = self._parse_artist(streams)
         self.albums = self._parse_album(streams)
