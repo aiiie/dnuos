@@ -27,6 +27,7 @@ class Dir(object):
     def __init__(self, path):
         self.path = path
         self.modified = None
+        self._audio_files = []
 
     def load(self, with_stack_traces):
         self._audio_files = self._parse_audio_files()
