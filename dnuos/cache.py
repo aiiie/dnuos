@@ -144,11 +144,6 @@ class PersistentDict(UpdateTrackingDict):
 
         checksum = hash(tuple([d.modified for d in self.written().values()]))
         if checksum != self.checksum:
-            try:
-                copy2(self.filename, self.filename + '.bak')
-            except IOError, err:
-                print >> sys.stderr, "Could not make backup of old cache data because:"
-                print >> sys.stderr, err
             f = open(self.filename, 'w')
             pickle.dump(self.version, f)
             pickle.dump(checksum, f)
