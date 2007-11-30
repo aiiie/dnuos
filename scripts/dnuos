@@ -1,0 +1,4 @@
+#!python
+import sys
+import dnuos
+sys.exit(dnuos.main())
