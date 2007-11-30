@@ -51,7 +51,7 @@ class Renderer(AbstractRenderer):
     def render_bad_files(self, bad_files):
 
         yield "Audiotype failed on the following files:"
-        yield "\n".join(bad_files)
+        yield "\n".join([f[0] for f in bad_files])
 
     def render_generation_time(self, times):
 
