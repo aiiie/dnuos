@@ -39,7 +39,7 @@ class Data(object):
 
 
 def make_raw_listing(basedirs, exclude_paths, sort_key, use_merge,
-        adir_class, with_stack_traces):
+        adir_class):
     """Make an iterator over all subdirectories of the base directories,
     including the base directories themselves. The directory trees are
     sorted either separately or together according to the merge setting.
@@ -53,7 +53,7 @@ def make_raw_listing(basedirs, exclude_paths, sort_key, use_merge,
     else:
         tree = chain(*trees)
 
-    return to_adir(tree, adir_class, with_stack_traces)
+    return to_adir(tree, adir_class)
 
 
 def prepare_listing(dir_pairs, options, data):
@@ -140,8 +140,7 @@ def main():
                                          + options.basedirs,
                                      options.sort_key,
                                      options.merge,
-                                     adir_class,
-                                     with_stack_traces=options.debug)
+                                     adir_class)
             adirs = prepare_listing(adirs, options, data)
             result = renderer.render(adirs, options, data)
         elif options.disp_version:
@@ -200,8 +199,9 @@ def print_bad(dir_pairs):
 
     for adir, root in dir_pairs:
         yield adir, root
-        for badfile in adir.bad_files:
+        for badfile, tb in adir.bad_files:
             print >> sys.stderr, "Audiotype failed for:", badfile
+            print >> sys.stderr, tb
 
 
 def collect_bad(dir_pairs, bad_files):
@@ -360,7 +360,7 @@ def walk(dir_, sort_key=lambda x: x, excluded=[]):
             yield res
 
 
-def to_adir(path_pairs, constructor, with_stack_traces):
+def to_adir(path_pairs, constructor):
     """Converts a sequence of path pairs into a sequence of dir pairs
 
     A path pair is a tuple (relpath, root). A dir pair is tuple (Dir,
@@ -370,5 +370,5 @@ def to_adir(path_pairs, constructor, with_stack_traces):
     for relpath, root in path_pairs:
         adir = constructor(root + relpath)
         if not adir.is_valid():
-            adir.load(with_stack_traces)
+            adir.load()
         yield adir, root

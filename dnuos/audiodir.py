@@ -3,7 +3,7 @@
 import os
 import re
 import sys
-from traceback import print_exc
+from traceback import format_exception
 
 try:
     set
@@ -29,9 +29,9 @@ class Dir(object):
         self.modified = None
         self._audio_files = []
 
-    def load(self, with_stack_traces):
+    def load(self):
         self._audio_files = self._parse_audio_files()
-        streams, self._bad_files = self.get_streams(with_stack_traces)
+        streams, self._bad_files = self.get_streams()
         self.artists = self._parse_artist(streams)
         self.albums = self._parse_album(streams)
         self.sizes = self._parse_size(streams)
@@ -55,7 +55,7 @@ class Dir(object):
     def children(self):
         return [f for f in os.listdir(self.path)]
 
-    def get_streams(self, with_stack_traces):
+    def get_streams(self):
         streams = []
         bad_files = []
         for child in self._audio_files:
@@ -67,14 +67,13 @@ class Dir(object):
             except audiotype.SpacerError:
                 continue
             except Exception, msg:
-                if with_stack_traces:
-                    print 'Exception in "%s":' % filename
-                    print_exc()
-                bad_files.append(child)
+                tb = ''.join(format_exception(*sys.exc_info()))
+                bad_files.append((child, tb))
         return streams, bad_files
 
     def _get_bad_files(self):
-        return [os.path.join(self.path, f) for f in self._bad_files]
+        return [(os.path.join(self.path, f[0]), tb) for (f, tb)
+                in self._bad_files]
     bad_files = property(_get_bad_files)
 
     def _get_num_files(self):
