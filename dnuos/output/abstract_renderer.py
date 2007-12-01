@@ -1,4 +1,5 @@
 import time
+import unicodedata
 
 import dnuos.output
 from dnuos.misc import to_human
@@ -127,7 +128,12 @@ class Column(object):
             else:
                 data = ' ' * len(self.suffix)
         if self.width != None:
-            data = "%*.*s" % (self.width, abs(self.width), data)
+            try:
+                data = unicodedata.normalize('NFC', data.decode('utf-8'))
+                data = u"%*.*s" % (self.width, abs(self.width), data)
+                data = data.encode('utf-8')
+            except UnicodeError:
+                data = "%*.*s" % (self.width, abs(self.width), data)
         return data
 
     def header(self, suffixes=True):
