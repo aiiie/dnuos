@@ -72,7 +72,7 @@ class Dir(object):
         return streams, bad_files
 
     def _get_bad_files(self):
-        return [(os.path.join(self.path, f[0]), tb) for (f, tb)
+        return [(os.path.join(self.path, f), tb) for (f, tb)
                 in self._bad_files]
     bad_files = property(_get_bad_files)
 
