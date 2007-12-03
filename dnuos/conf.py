@@ -258,7 +258,7 @@ class Settings(object):
                          dest="sort_key", action="store_const",
                          const=lambda a, b: cmp(a.lower(), b.lower()),
                          help="Case-insensitive directory sorting")
-        group.add_option("-m", "--merge",
+        group.add_option("-p", "--parallel",
                          dest="merge", action="store_true",
                          help="Parse basedirs in parallel as opposed to "
                          "one after the other")
