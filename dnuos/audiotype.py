@@ -1,5 +1,6 @@
 import os
 import re
+import string
 import struct
 
 import dnuos.id3
@@ -312,6 +313,10 @@ class MP3(AudioType):
         #self.framecount = (self.mp3header[3])
         self.framesize = (self.mp3header[4])
         self.vendor = self.mp3header[6]
+        for c in self.vendor:
+            if c not in string.printable:
+                self.vendor = ''
+                break
         self.freq =  self.fqtable[self.versionindex][frequencyindex]
         self.channels = [2,2,2,1][self.modeindex]
 
