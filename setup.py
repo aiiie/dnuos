@@ -20,7 +20,7 @@ except ImportError:
     )
 
 setup(
-    author='Mattias P\xc3\xa4iv\xc3\xa4rinta, Brodie Rao',
+    author='Mattias Paivarinta, Brodie Rao',
     author_email='pejve@vasteras2.net; me+dnuos@dackz.net',
     classifiers=[
         'Development Status :: 4 - Beta',
