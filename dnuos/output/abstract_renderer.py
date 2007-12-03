@@ -37,6 +37,7 @@ class Column(object):
             "S": ('Size', lambda adir: adir.size),
             "t": ('Type', lambda adir: adir.mediatype),
             "T": ('BR Type', lambda adir: adir.brtype),
+            "V": ('Encoder', lambda adir: adir.vendor),
         }
 
         formatter_table = {
