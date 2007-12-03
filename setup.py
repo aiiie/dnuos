@@ -39,18 +39,18 @@ directory structure.
 
 For example, a list might look like this::
 
-    Album/Artist                                        |  Size | Type | Quality
-    ============================================================================
-    Ambient                                             |       |      | 
-        Alva Noto                                       |       |      | 
-            2001 - Transform                            | 70.9M | MP3  | -V2
-            2004 - Transrapid                           | 30.2M | MP3  | -aps
-            2005 - Transspray                           | 31.7M | MP3  | -aps
-            2005 - Transvision                          | 32.3M | MP3  | -aps
-        Alva Noto and Ryuichi Sakamoto                  |       |      | 
-            2002 - Vrioon                               | 72.6M | MP3  | -aps
-            2005 - Insen                                | 99.1M | MP3  | 320 C
-            2006 - Revep                                | 27.9M | MP3  | -V2n
+    Album/Artist                       |  Size | Type | Quality
+    ===========================================================
+    Ambient                            |       |      | 
+        Alva Noto                      |       |      | 
+            2001 - Transform           | 70.9M | MP3  | -V2
+            2004 - Transrapid          | 30.2M | MP3  | -aps
+            2005 - Transspray          | 31.7M | MP3  | -aps
+            2005 - Transvision         | 32.3M | MP3  | -aps
+        Alva Noto and Ryuichi Sakamoto |       |      | 
+            2002 - Vrioon              | 72.6M | MP3  | -aps
+            2005 - Insen               | 99.1M | MP3  | 320 C
+            2006 - Revep               | 27.9M | MP3  | -V2n
 
 The list format is completely customizable and can be plain text or HTML.
 
