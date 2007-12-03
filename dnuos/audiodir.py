@@ -21,7 +21,7 @@ class Dir(object):
 
     __slots__ = tuple('albums artists _audio_files _bad_files '
                       '_bitrates _lengths _types modified path '
-                      '_profiles sizes'.split())
+                      '_profiles sizes _vendors'.split())
     __version__ = '1.0'
 
     def __init__(self, path):
@@ -39,6 +39,7 @@ class Dir(object):
         self._types = self._parse_types(streams)
         self._bitrates = self._parse_bitrates(streams)
         self._profiles = self._parse_profile(streams)
+        self._vendors = self._parse_vendors(streams)
         self.modified = self._parse_modified()
 
     def depth_from(self, root):
@@ -207,6 +208,15 @@ class Dir(object):
         else:
             return ""
     profile = property(_get_profile)
+
+    def _parse_vendors(self, streams):
+        return tuple(set([s.vendor for s in streams]))
+
+    def _get_vendor(self):
+        if self.mediatype == 'Mixed' or len(self._vendors) > 1:
+            return 'Mixed'
+        return self._vendors[0]
+    vendor = property(_get_vendor)
 
     def _get_quality(self):
         if self.profile:
