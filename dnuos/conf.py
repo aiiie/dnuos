@@ -18,6 +18,63 @@ def stricmp(str1, str2):
     return cmp(str1.lower(), str2.lower())
 
 
+def exit_with_output_help(option, opt_str, value, parser):
+
+    print r"""
+Anything enclosed by brackets is considered a field. A field must have the
+following syntax:
+  [TAG]
+  [TAG,WIDTH]
+  [TAG,WIDTH,SUFFIX]
+  [TAG,,SUFFIX]
+
+TAG is any of the following characters:
+  a  list of bitrates in Audiolist compatible format
+  A  artist name as found in ID3 tags
+  b  bitrate with suffix (e.g. 192k)
+  B  bitrate in bps
+  C  album name as found in ID3 tags
+  d  depth (distance from respective basedir)
+  f  number of audio files (including spacers)
+  l  length in minutes and seconds
+  L  length in seconds
+  m  time of last change
+  M  time of last change in seconds since the epoch
+  n  directory name (indented)
+  N  directory name
+  p  profile
+  P  full path
+  q  quality
+  s  size with suffix (e.g 65.4M)
+  S  size in bytes
+  t  file type
+  T  bitrate type:
+       ~ mixed files
+       C constant bitrate
+       L lossless compression
+       V variable bitrate
+  V  encoder
+
+WIDTH defines the exact width of the field. The output is cropped to this
+width if needed. Negative values will give left aligned output. Cropping is
+always done on the right.
+
+SUFFIX lets you specify a unit to be concatenated to all non-empty data.
+
+Other interpreted sequences are:
+  \[  [
+  \]  ]
+  \n  new line
+  \t  tab character
+
+Unescaped brackets are forbidden unless they define a field.
+
+Note: If you have any whitespace in your output string you must put it inside
+quotes or otherwise it will not get parsed right.
+"""
+    sys.exit(0)
+
+
 def set_db_format(option, opt_str, value, parser):
 
     parser.values.outfile = value
@@ -164,6 +221,11 @@ class Settings(object):
                             cache_dir=appdata.user_data_dir('Dnuos', 'Dnuos'),
                             wildcards=False)
 
+        parser.add_option("--help-output-string",
+                         action="callback", nargs=0,
+                         callback=exit_with_output_help,
+                         help="Show output string help message")
+
         group = OptionGroup(parser, "Application")
         group.add_option("--debug",
                          dest="debug", action="store_true",
@@ -248,7 +310,7 @@ class Settings(object):
                          action="callback", nargs=1,
                          callback=set_format_string, type="string",
                          help="Set output format STRING used in plain-text "
-                         "and HTML output. Refer to documentation for "
+                         "and HTML output. See --help-output-string for "
                          "details on syntax. (default %s)" %
                          default_format_string, metavar="STRING")
         group.add_option("-O", "--output-db",
