@@ -74,7 +74,7 @@ older, has fewer features, and is no longer maintained.
 """,
     name='Dnuos',
     packages=['dnuos', 'dnuos.id3', 'dnuos.output'],
-    url='https://https://github.com/aiiie/dnuos/',
+    url='https://github.com/aiiie/dnuos',
     version='1.0b1',
     **extra_options
 )
