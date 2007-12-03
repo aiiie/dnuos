@@ -21,8 +21,8 @@ except ImportError:
 
 setup(
     author='Mattias P\xc3\xa4iv\xc3\xa4rinta, Brodie Rao',
-    author_email=('Mattias P\xc3\xa4iv\xc3\xa4rinta <pejve@vasteras2.net>;'
-                  ' "Brodie Rao" <me+dnuos@dackz.net>'),
+    author_email='"Mattias P\xc3\xa4iv\xc3\xa4rinta" <pejve@vasteras2.net>; '
+                 '"Brodie Rao" <me+dnuos@dackz.net>',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
