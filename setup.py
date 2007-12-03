@@ -74,7 +74,7 @@ older, has fewer features, and is no longer maintained.
 """,
     name='Dnuos',
     packages=['dnuos', 'dnuos.id3', 'dnuos.output'],
-    url='https://dnuos.tweek.us/',
+    url='http://dnuos.tweek.us/',
     version='1.0b1',
     **extra_options
 )
