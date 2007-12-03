@@ -67,6 +67,8 @@ def prepare_listing(dir_pairs, options, data):
     elif options.list_bad:
         dir_pairs = collect_bad(dir_pairs, data.bad_files)
     dir_pairs = ifilter(non_empty, dir_pairs)
+    if options.no_mixed:
+        dir_pairs = ifilter(no_mixed, dir_pairs)
     if options.no_cbr:
         dir_pairs = ifilter(no_cbr_mp3, dir_pairs)
     if options.no_non_profile:
@@ -224,7 +226,14 @@ def non_empty((adir, root)):
     """
 
     return adir.num_files > len(adir.bad_files)
- 
+
+
+def no_mixed((adir, root)):
+    """No mixed audio directories predicate"""
+
+    return (adir.mediatype != 'Mixed' and adir.brtype != '~' and
+            len(adir.bad_files) == 0)
+
 
 def no_cbr_mp3((adir, root)):
     """No CBR MP3 files predicate"""
