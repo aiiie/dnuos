@@ -1,0 +1,3 @@
+include *.txt scripts/*
+recursive-include dnuostests *.py
+recursive-exclude dnuostests *.pyc *.pyo
