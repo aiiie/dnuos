@@ -10,6 +10,7 @@ from optparse import OptionValueError
 from optparse import OptionParser
 
 import dnuos.output
+from dnuos import appdata
 from dnuos.misc import deprecation
 
 
@@ -66,6 +67,11 @@ def set_preferred_tag(option, opt_str, value, parser):
         parser.values.prefer_tag = value
     else:
         raise OptionValueError("Invalid argument to %s" % opt_str)
+
+
+def set_cache_dir(option, opt_str, value, parser):
+
+    parser.values.cache_dir = os.path.expanduser(value)
 
 
 def add_exclude_dir(option, opt_str, value, parser):
@@ -155,6 +161,7 @@ class Settings(object):
                             stripped=False,
                             text_color="black",
                             use_cache=True,
+                            cache_dir=appdata.user_data_dir('Dnuos', 'Dnuos'),
                             wildcards=False)
 
         group = OptionGroup(parser, "Application")
@@ -176,6 +183,11 @@ class Settings(object):
         group.add_option("--disable-cache",
                          dest="use_cache", action="store_false",
                          help="Disable caching")
+        group.add_option("--cache-dir",
+                         action="callback", nargs=1,
+                         callback=set_cache_dir, type="string",
+                         help="Store cache in DIR (default %default)",
+                         metavar="DIR")
         group.add_option("-e", "--exclude",
                          action="callback", nargs=1,
                          callback=add_exclude_dir, type="string",
