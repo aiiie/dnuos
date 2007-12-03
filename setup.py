@@ -5,7 +5,6 @@ import os
 try:
     from setuptools import setup
     extra_options = dict(
-        entry_points={'console_scripts': ['dnuos = dnuos:main']},
         tests_require=['nose >= 0.9'],
         test_suite='nose.collector',
     )
@@ -15,9 +14,7 @@ try:
     )
 except ImportError:
     from distutils.core import setup
-    extra_options = dict(
-        scripts=['scripts/dnuos'],
-    )
+    extra_options = dict()
 
 setup(
     author='Mattias Paivarinta, aiiie',
@@ -74,6 +71,7 @@ older, has fewer features, and is no longer maintained.
 """,
     name='Dnuos',
     packages=['dnuos', 'dnuos.id3', 'dnuos.output'],
+    scripts=['scripts/dnuos'],
     url='https://github.com/aiiie/dnuos',
     version='1.0b1',
     **extra_options
