@@ -145,6 +145,7 @@ class Settings(object):
                             merge=False,
                             mp3_min_bit_rate=0,
                             no_cbr=False,
+                            no_mixed=False,
                             no_non_profile=False,
                             outfile=None,
                             output_module=dnuos.output.plaintext,
@@ -204,6 +205,9 @@ class Settings(object):
         group.add_option("-v", "--vbr-only",
                          dest="no_cbr", action="store_true",
                          help="Exclude MP3s with constant bitrates")
+        group.add_option("-M", "--no-mixed",
+                         dest="no_mixed", action="store_true",
+                         help="Exclude directories with mixed files")
         parser.add_option_group(group)
 
         group = OptionGroup(parser, "Parsing")
