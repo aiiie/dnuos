@@ -123,9 +123,11 @@ def main():
 
         if options.basedirs:
             if options.use_cache:
-                cache = setup_cache(appdata.user_data_file('dirs.pkl'),
-                                    options.basedirs,
-                                    options.exclude_paths)
+                cache = setup_cache(
+                    appdata.user_data_file('dirs.pkl',
+                        options.cache_dir),
+                    options.basedirs,
+                    options.exclude_paths)
                 adir_class = memoized(audiodir.Dir, cache)
             else:
                 adir_class = audiodir.Dir
@@ -159,7 +161,7 @@ def main():
 
         # Store updated cache
         if options.basedirs and options.use_cache:
-            appdata.create_user_data_dir()
+            appdata.create_user_data_dir(options.cache_dir)
             try:
                 cache.save()
             except IOError, err:

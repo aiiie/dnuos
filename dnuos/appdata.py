@@ -54,17 +54,14 @@ def user_data_dir(appname, vendor, version=None):
     return path
 
 
-USER_DATA_DIR = user_data_dir('Dnuos', 'Dnuos')
-
-
-def create_user_data_dir():
+def create_user_data_dir(dir_):
     """Creates user data directory"""
 
-    if not os.path.exists(USER_DATA_DIR):
-        os.makedirs(USER_DATA_DIR)
+    if not os.path.exists(dir_):
+        os.makedirs(dir_)
 
 
-def user_data_file(filename):
+def user_data_file(filename, dir_):
     """Gets full path to user data file"""
 
-    return os.path.join(USER_DATA_DIR, filename)
+    return os.path.join(dir_, filename)
