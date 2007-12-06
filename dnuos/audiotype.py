@@ -282,16 +282,12 @@ class MP3(AudioType):
 
         try:
             self.id3v1 = dnuos.id3.ID3v1(file)
-        except KeyboardInterrupt:
-            raise KeyboardInterrupt
-        except:
+        except dnuos.id3.Error:
             self.id3v1 = None
 
         try:
             self.id3v2 = dnuos.id3.ID3v2(file)
-        except KeyboardInterrupt:
-            raise KeyboardInterrupt
-        except:
+        except dnuos.id3.Error:
             self.id3v2 = None
 
         #try:
@@ -546,16 +542,12 @@ class MPC(AudioType):
 
         try:
             self.id3v1 = dnuos.id3.ID3v1(file)
-        except KeyboardInterrupt:
-            raise KeyboardInterrupt
-        except:
+        except dnuos.id3.Error:
             self.id3v1 = None
 
         try:
             self.id3v2 = dnuos.id3.ID3v2(file)
-        except KeyboardInterrupt:
-            raise KeyboardInterrupt
-        except:
+        except dnuos.id3.Error:
             self.id3v2 = None
 
     def artist(self):

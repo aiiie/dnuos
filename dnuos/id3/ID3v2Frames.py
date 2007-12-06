@@ -3,8 +3,8 @@ __version__ = "$Revision: 1.5 $"
 
 import sys, re, zlib, warnings, imghdr, struct
 
-from dnuos.id3 import binfuncs
 import dnuos.id3
+from dnuos.id3 import binfuncs
 
 class ID3v2Frame(object):
     def __init__(self, id, version = (2,3,0,), data = None):
@@ -39,7 +39,7 @@ class ID3v2Frame(object):
 
     def set_unsynchronisation(self, value):
         if value and self.version[1] >= 4:
-            raise id3.Error
+            raise dnuos.id3.Error
             self.data_length_indicator = True
         self._unsynchronisation = value
     def get_unsynchronisation(self):
@@ -119,11 +119,11 @@ class ID3v2Frame(object):
             self._parse_frame(data)
         except KeyboardInterrupt:
             raise KeyboardInterrupt
-        except id3.BrokenFrameError:
+        except dnuos.id3.BrokenFrameError:
             raise
         except:
             (exctype, value,) = sys.exc_info()[:2]
-            raise id3.BrokenFrameError, "%s: %s" % (exctype, str(value),)
+            raise dnuos.id3.BrokenFrameError, "%s: %s" % (exctype, str(value),)
 
 
     def _parse_frame(self, data):
@@ -167,7 +167,7 @@ class ID3v2Frame(object):
             self._unsynchronisation = flags[14]
             self.data_length_indicator = flags[15]
             if self._compression and not self.data_length_indicator:
-                raise id3.BrokenFrameError, "The compression flag was set but not the data_length_indicator"
+                raise dnuos.id3.BrokenFrameError, "The compression flag was set but not the data_length_indicator"
         else:
             raise Error("Unsupported tag (how did we not catch this before?)")
 
@@ -239,7 +239,7 @@ class ID3v2Frame(object):
 
                 return (data[:nullindex], data[nullindex+2:],)
         except ValueError, err:
-            raise id3.BrokenFrameError, "Corrupt tag, orig error: " + str(err)
+            raise dnuos.id3.BrokenFrameError, "Corrupt tag, orig error: " + str(err)
 
     def termination(self):
         if self._encoding == '\x00' or self._encoding == '\x03':
@@ -269,7 +269,7 @@ class ID3v2Frame(object):
         # UTF-16
         elif self._encoding == '\x01':
             if value == '':
-                raise id3.BrokenFrameError, "Unicode text doesn't have BOM"
+                raise dnuos.id3.BrokenFrameError, "Unicode text doesn't have BOM"
             value = unicode(value, 'utf-16')
         # UTF-16BE
         elif self._encoding == '\x02' and self.version[1] == 4:
@@ -278,7 +278,7 @@ class ID3v2Frame(object):
         elif self._encoding == '\x03' and self.version[1] == 4:
             value = unicode(value, 'utf-8')
         else:
-            raise id3.BrokenFrameError, "Encoding scheme not in spec (%r). Corrupt tag?" % (self._encoding,)
+            raise dnuos.id3.BrokenFrameError, "Encoding scheme not in spec (%r). Corrupt tag?" % (self._encoding,)
         return value
 
     def encode(self, value):
@@ -295,7 +295,7 @@ class ID3v2Frame(object):
         elif self._encoding == '\x03' and self.version[1] == 4:
             value = value.encode('utf-8')
         else:
-            raise id3.BrokenFrameError, "Encoding scheme not in spec (%r). Corrupt tag?" % (self._encoding,)
+            raise dnuos.id3.BrokenFrameError, "Encoding scheme not in spec (%r). Corrupt tag?" % (self._encoding,)
         return value
 
 class TextInfo(ID3v2Frame):
@@ -315,7 +315,7 @@ class TextInfo(ID3v2Frame):
 
     def parse_data(self):
         if len(self.data) < 1:
-            raise id3.BrokenFrameError("Frame (%s) too short: less than 1" % (self.id,))
+            raise dnuos.id3.BrokenFrameError("Frame (%s) too short: less than 1" % (self.id,))
         self._encoding = self.data[0]
         self._value = self.decode(self.data[1:])
 
@@ -347,7 +347,7 @@ class GenreTextInfo(ID3v2Frame):
         self._value = self.decode(self.data[1:])
         genre_code = re.findall(r'\(([0-9]+)\)', self.value)
         if genre_code:
-            self.name = id3.genres.get(int(genre_code[0]), "Unknown")
+            self.name = dnuos.id3.genres.get(int(genre_code[0]), "Unknown")
 
     def write_data(self):
         return "%s%s" % (self._encoding, self.encode(self._value),)
@@ -473,7 +473,7 @@ class Comment(ID3v2Frame):
 
     def parse_data(self):
         if len(self.data) < 5:
-            raise id3.BrokenFrameError("Frame (%s) too short: less than 5 (raw: %r)" % (self.id, self.data,))
+            raise dnuos.id3.BrokenFrameError("Frame (%s) too short: less than 5 (raw: %r)" % (self.id, self.data,))
         self._encoding = self.data[:1]
         self._language = self.data[1:4]
         (description, value,) = self.split_encoded(self.data[4:])
@@ -531,7 +531,7 @@ class AttachedPicture(ID3v2Frame):
     def set_image(self, value):
         type = imghdr.what(None, value)
         if type != 'png' and type != 'jpeg':
-            raise id3.Error, "Can't accept images of type %r" % (type,)
+            raise dnuos.id3.Error, "Can't accept images of type %r" % (type,)
         self.mimetype = 'image/%s' % (type,)
         self._image = value
     image = property(get_image, set_image)
