@@ -1,4 +1,4 @@
-"""Script gathering information about directory trees of audio files"""
+"""Script for gathering information about directories of audio files"""
 
 __version__ = '1.0'
 
@@ -39,7 +39,7 @@ class Data(object):
 
 
 def make_raw_listing(basedirs, exclude_paths, sort_key, use_merge,
-        adir_class):
+                     adir_class):
     """Make an iterator over all subdirectories of the base directories,
     including the base directories themselves. The directory trees are
     sorted either separately or together according to the merge setting.
@@ -92,8 +92,8 @@ def setup_cache(cache_filename, basedirs, exclude_paths):
 
     is_path_included = make_included_pred(basedirs,
                                           exclude_paths)
-    is_entry_excluded = lambda (path,), value: \
-                               not is_path_included(path)
+    is_entry_excluded = (lambda (path,), value:
+                            not is_path_included(path))
     cache = PersistentDict(filename=cache_filename,
                            keep_pred=is_entry_excluded,
                            version=audiodir.Dir.__version__)
@@ -224,7 +224,7 @@ def collect_bad(dir_pairs, bad_files):
 
 
 def non_empty((adir, root)):
-    """Empty directory predicate
+    """Empty directory predicate.
 
     Directories are considered empty if they contain no recognized audio files.
     """
@@ -242,21 +242,21 @@ def no_mixed((adir, root)):
 def no_cbr_mp3((adir, root)):
     """No CBR MP3 files predicate"""
 
-    # This implentation does not consider CBR MP3s in Mixed directories
+    # This implementation does not consider CBR MP3s in Mixed directories
     return adir.mediatype != "MP3" or adir.brtype not in "C~"
 
 
 def profile_only_mp3((adir, root)):
     """No non-profile MP3 predicate"""
 
-    # This implentation does not consider non-profile MP3s in Mixed directories
+    # This implementation does not consider non-profile MP3s in Mixed directories
     return adir.mediatype != "MP3" or adir.profile != ""
 
 
 def enough_bitrate_mp3(mp3_min_bit_rate):
     """Create low-bitrate MP3 predicate"""
 
-    # This implentation does not consider low-bitrate MP3s in Mixed directories
+    # This implementation does not consider low-bitrate MP3s in Mixed directories
     return lambda (adir, root): (adir.mediatype != "MP3" or
                                  adir.bitrate >= mp3_min_bit_rate)
 
@@ -268,9 +268,9 @@ def make_output_db_predicate(options):
     album_column = Column("C", None, None, options)
 
     def output_db_predicate((adir, root)):
-        return adir.mediatype != "Mixed" and \
-               artist_column.get(adir) != None and \
-               album_column.get(adir) != None
+        return (adir.mediatype != "Mixed" and
+                artist_column.get(adir) != None and
+                album_column.get(adir) != None)
     return output_db_predicate
 
 
@@ -303,7 +303,7 @@ def timer_wrapper(dir_pairs, times):
 
 
 class EmptyDir(object):
-    """Represent a group of merged empty directories."""
+    """Represent a group of merged empty directories"""
 
     __slots__ = ['name', 'path']
 
@@ -354,7 +354,7 @@ def walk2(basedir, sort_key=lambda x: x, excluded=[]):
 
 
 def walk(dir_, sort_key=lambda x: x, excluded=[]):
-    """Traverse a directory tree in pre-order
+    """Traverse a directory tree in pre-order.
 
     Directories are sorted by sort_key and branches specified in
     exclude are ignored. Symbolic links are followed.
@@ -374,7 +374,7 @@ def walk(dir_, sort_key=lambda x: x, excluded=[]):
 
 
 def to_adir(path_pairs, constructor):
-    """Converts a sequence of path pairs into a sequence of dir pairs
+    """Converts a sequence of path pairs into a sequence of dir pairs.
 
     A path pair is a tuple (relpath, root). A dir pair is tuple (Dir,
     root). The Dir is validated and root is assigned to it.
