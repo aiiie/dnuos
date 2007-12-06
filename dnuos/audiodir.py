@@ -277,7 +277,7 @@ class Dir(object):
     is_audio_file = staticmethod(is_audio_file)
 
     def __getstate__(self):
-        return [getattr(self, attrname)
+        return [getattr(self, attrname, None)
                 for attrname in Dir.__slots__]
 
     def __setstate__(self, state):
