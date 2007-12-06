@@ -26,6 +26,7 @@ def user_data_dir(appname, vendor, version=None):
         Unix:       ~/.<lowercased-appname>
     """
 
+    path = None
     if sys.platform.startswith('win'):
         # Try to make this a unicode path because SHGetFolderPath does
         # not return unicode strings when there is unicode data in the
@@ -46,7 +47,7 @@ def user_data_dir(appname, vendor, version=None):
                                    Folders.kApplicationSupportFolderType,
                                    Folders.kDontCreateFolder)
         path = os.path.join(path.FSRefMakePath(), appname)
-    else:
+    if not path:
         path = os.path.expanduser('~/.' + appname.lower())
 
     if version:
