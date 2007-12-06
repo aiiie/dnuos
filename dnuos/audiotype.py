@@ -296,7 +296,7 @@ class MP3(AudioType):
 
         #try:
         self.mp3header = self.getheader(self.stream_begin())
-        self.brtype = "CV"[self.mp3header[1]=='Xing']
+        self.brtype = "CV"[self.mp3header[1] in ('Xing', 'VBRI')]
         self.framesync = (self.mp3header[0]>>21 & 2047)
         self.versionindex = (self.mp3header[0]>>19 & 3)
         self.layerindex = (self.mp3header[0]>>17 & 3)
@@ -396,7 +396,8 @@ class MP3(AudioType):
                         self._f.seek(start + info.start())
                         if info.group() == 'VBRI':
                             data = struct.unpack(pattern3, self._f.read(pattern3size))
-                            return (header[0], data[0], data[2], data[1])
+                            return (header[0], data[0], None, data[2],
+                                    data[1], None, 'Fraunhofer')
                         return (header[0],) + struct.unpack(pattern2, self._f.read(pattern2size))
                     return header
 
