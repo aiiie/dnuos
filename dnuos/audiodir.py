@@ -258,7 +258,8 @@ class Dir(object):
     def is_valid(self):
         try:
             valid = (self.modified == self._parse_modified() and
-                     self._audio_files == self._parse_audio_files())
+                     self._audio_files == self._parse_audio_files() and
+                     len(self._bad_files) == 0)
         except OSError:
             valid = False
         return valid
