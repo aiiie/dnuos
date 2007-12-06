@@ -87,8 +87,8 @@ def set_db_format(option, opt_str, value, parser):
 def set_format_string(option, opt_str, value, parser):
 
     try:
-        parser.values.format_string, parser.values.fields = \
-            parse_format_string2(value)
+        parser.values.format_string, parser.values.fields = (
+            parse_format_string2(value))
     except ValueError:
         raise OptionValueError("Bad format string argument to %s" % opt_str)
 
@@ -162,8 +162,8 @@ def parse_format_string(data):
     ('ab\\\\\\\\%sde', ['c'])
     """
     even_backslashes = r'(?:^|[^\\])(?:\\\\)*'
-    field_re = re.compile(r'(?P<backslashes>%s)\[(?P<field>.*?%s)\]' % \
-                         (even_backslashes, even_backslashes))
+    field_re = re.compile(r'(?P<backslashes>%s)\[(?P<field>.*?%s)\]' %
+                          (even_backslashes, even_backslashes))
 
     fields = []
     match = field_re.search(data)
