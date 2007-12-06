@@ -114,13 +114,11 @@ def main():
     """Main entry point"""
 
     os.stat_float_times(False)
+    warnings.formatwarning = formatwarning
+    data = Data()
+    options = Settings().parse_args(sys.argv[1:])
 
     try:
-        warnings.formatwarning = formatwarning
-
-        data = Data()
-        options = Settings().parse_args(sys.argv[1:])
-
         if options.basedirs:
             if options.use_cache:
                 cache = setup_cache(
@@ -129,6 +127,14 @@ def main():
                     options.basedirs,
                     options.exclude_paths)
                 adir_class = memoized(audiodir.Dir, cache)
+                try:
+                    appdata.create_user_data_dir(options.cache_dir)
+                except IOError, err:
+                    print >> sys.stderr, "Failed to create cache directory:"
+                    if options.debug:
+                        raise
+                    print >> sys.stderr, err
+                    print >> sys.stderr, "Use the --disable-cache switch to disable caching"
             else:
                 adir_class = audiodir.Dir
 
@@ -141,7 +147,7 @@ def main():
             # basedirs again.
             adirs = make_raw_listing(options.basedirs,
                                      options.exclude_paths
-                                         + options.basedirs,
+                                     + options.basedirs,
                                      options.sort_key,
                                      options.merge,
                                      adir_class)
@@ -150,34 +156,30 @@ def main():
         elif options.disp_version:
             result = dnuos.output.plaintext.render_version(data.version)
         else:
-            raise ValueError("No folders to process.\nType `%s -h' "
-                             "for help." % os.path.basename(sys.argv[0]))
+            print >> sys.stderr, ("No folders to process.\nType `%s -h' "
+                                  "for help." % os.path.basename(sys.argv[0]))
+            return 2
 
         # Output
-        outfile = options.outfile and open(options.outfile, 'w') \
-                                  or sys.stdout
-        for chunk in result:
-            print >> outfile, chunk
-
-        # Store updated cache
-        if options.basedirs and options.use_cache:
-            appdata.create_user_data_dir(options.cache_dir)
-            try:
-                cache.save()
-            except IOError, err:
-                print >> sys.stderr, "Failed to save cache data because:"
-                print >> sys.stderr, err
-                print >> sys.stderr, "FYI: There is a --disable-cache switch to disable caching"
-                return 2
-
-    except ValueError, err:
-        print >> sys.stderr, err
-        return 2
-
+        outfile = (options.outfile and open(options.outfile, 'w')
+                                   or sys.stdout)
+        try:
+            for chunk in result:
+                print >> outfile, chunk
+        finally:
+            # Store updated cache
+            if options.basedirs and options.use_cache:
+                try:
+                    cache.save()
+                except IOError, err:
+                    print >> sys.stderr, "Failed to save cache data:"
+                    if options.debug:
+                        raise
+                    print >> sys.stderr, err
+                    print >> sys.stderr, "Use the --disable-cache switch to disable caching"
+                    return 2
     except KeyboardInterrupt:
-        print >> sys.stderr, "Aborted by user"
-        return 1
-
+        print ''
 
 def indicate_progress(dir_pairs, sizes, outs=sys.stderr):
     """Indicate progress.
