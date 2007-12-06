@@ -1,7 +1,10 @@
 """A module for caching"""
 
 import os
-import pickle
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 import sys
 from shutil import copy2
 
@@ -118,7 +121,7 @@ class PersistentDict(UpdateTrackingDict):
         try:
             f = None
             try:
-                f = open(self.filename)
+                f = open(self.filename, 'rb')
                 version = pickle.load(f)
                 self.checksum = pickle.load(f)
                 if version != self.version:
@@ -144,10 +147,10 @@ class PersistentDict(UpdateTrackingDict):
 
         checksum = hash(tuple([d.modified for d in self.written().values()]))
         if checksum != self.checksum:
-            f = open(self.filename, 'w')
-            pickle.dump(self.version, f)
-            pickle.dump(checksum, f)
-            pickle.dump(self.written(), f)
+            f = open(self.filename, 'wb')
+            pickle.dump(self.version, f, 2)
+            pickle.dump(checksum, f, 2)
+            pickle.dump(self.written(), f, 2)
             f.close()
 
 
