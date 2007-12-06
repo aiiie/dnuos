@@ -7,7 +7,7 @@ from traceback import format_exception
 
 try:
     set
-except ImportError:
+except NameError:
     from sets import Set as set
 
 from dnuos import audiotype
