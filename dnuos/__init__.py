@@ -137,14 +137,22 @@ def main(argv=None):
                     if options.debug:
                         raise
                     print >> sys.stderr, err
-                    print >> sys.stderr, "Use the --disable-cache switch to disable caching"
+                    print >> sys.stderr, ("Use the --disable-cache switch to "
+                                          "disable caching")
             else:
                 adir_class = audiodir.Dir
 
-            renderer = setup_renderer(options.output_module,
-                                      options.format_string,
-                                      options.fields,
-                                      options)
+            try:
+                renderer = setup_renderer(options.output_module,
+                                          options.format_string,
+                                          options.fields,
+                                          options)
+            except KeyError:
+                print >> sys.stderr, ("Format string can only contain valid "
+                                      "fields")
+                print >> sys.stderr, ("Use the --help-output-string switch "
+                                      "for more information")
+                return 2
 
             # Append basedirs to exclude_paths to avoid traversing nested
             # basedirs again.
