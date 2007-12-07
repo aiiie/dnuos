@@ -378,7 +378,7 @@ class ID3v2(object):
 
 
 
-class ID3v1:
+class ID3v1(object):
     """
     ID3v1 parsing/writing class
     """
