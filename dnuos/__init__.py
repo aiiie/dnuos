@@ -110,13 +110,16 @@ def setup_renderer(output_module, format_string, fields, options):
     return renderer
 
 
-def main():
+def main(argv=None):
     """Main entry point"""
+    
+    if argv is None:
+        argv = sys.argv
 
     os.stat_float_times(False)
     warnings.formatwarning = formatwarning
     data = Data()
-    options = Settings().parse_args(sys.argv[1:])
+    options = Settings().parse_args(argv[1:])
 
     try:
         if options.basedirs:
@@ -157,7 +160,7 @@ def main():
             result = dnuos.output.plaintext.render_version(data.version)
         else:
             print >> sys.stderr, ("No folders to process.\nType `%s -h' "
-                                  "for help." % os.path.basename(sys.argv[0]))
+                                  "for help." % os.path.basename(argv[0]))
             return 2
 
         # Output
