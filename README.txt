@@ -102,6 +102,29 @@ QtOIDUA_
 News
 ====
 
+Version 1.0b2 (Dec. 7, 2007)
+    Updated and consolidated documentation.
+
+    Fixed ``setup.py sdist`` not including all files.
+
+    Fixed handling of MP3s with VBRI headers (e.g. made by Fraunhofer).
+
+    Fixed serious issues with ID3 code that made it probably never work.
+
+    Fixed an import of ``set()`` (should improve Python 2.3 compatibility).
+
+    Switched from ``pickle`` to ``cPickle`` (when available) and switched to
+    the most efficient pickle format (should speed things up quite a bit).
+
+    Made cache directory finding more robust.
+
+    Added support for saving the cache mid-list, so if you cancel making a
+    list, it'll cache what it already listed.
+
+    Added a friendly error message for output strings with invalid fields.
+
+    Added a Makefile that runs ``setup.py``.
+
 Version 1.0b1 (Dec. 2, 2007)
     Significant code overhaul.
 
