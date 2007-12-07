@@ -72,7 +72,7 @@ older, has fewer features, and is no longer maintained.
 .. _LAME quality preset: http://wiki.hydrogenaudio.org/index.php?title=Lame#Recommended_encoder_settings
 .. _Oidua: http://oidua.suxbad.com/
 """,
-    name='Dnuos',
+    name='dnuos',
     packages=['dnuos', 'dnuos.id3', 'dnuos.output'],
     url='https://github.com/aiiie/dnuos',
     version='1.0b2',
