@@ -8,5 +8,5 @@ def test():
     """Verify version string output"""
 
     write_dnuos_diff("-V", """
-dnuos 1.0
+dnuos 1.0b1
 """)
