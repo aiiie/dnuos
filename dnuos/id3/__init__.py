@@ -32,8 +32,8 @@ class ID3v2(object):
     """
     ID3v2 parsing/writing class
     """
-    def __init__(self, filename = None, broken_frames='error', internal_checks = False):
-        self.filename = None
+    def __init__(self, fh=None, broken_frames='error', internal_checks = False):
+        self.fh = None
         self.internal_checks = internal_checks
         self.version = (2,3,0,)
 
@@ -50,8 +50,8 @@ class ID3v2(object):
 
         self.frames = []
 
-        if filename:
-            self.load(filename)
+        if fh:
+            self.load(fh)
 
     def set_unsync(self, value):
         # need to do this so that silly tags that are read in can
@@ -149,12 +149,14 @@ class ID3v2(object):
         self.frames.append(newframe)
         return newframe
 
-    def load(self, filename):
+    _match_frame = re.compile(r'[A-Z0-9]{4}').match
+
+    def load(self, fh):
         """
         Load a file and extract ID3v2 data
         """
-        self.filename = filename
-        fh = open(self.filename, 'rb')
+        _match_frame = self._match_frame
+        self.fh = fh
         fh.seek(0)
         if fh.read(3) != 'ID3':
             return
@@ -189,7 +191,6 @@ class ID3v2(object):
         if self.version[1] == 3 and self.unsync:
             # print self.tag_size
             tag = fh.read(self.tag_size)
-            fh.close()
             tag = binfuncs.deunsynchstr(tag)
             self.tag_size = len(tag)
             fh = StringIO.StringIO(tag)
@@ -199,7 +200,7 @@ class ID3v2(object):
         # 11 == frame header + 1 byte frame, smallest legal frame
         while sizeleft >= 11:
             frameid = fh.read(4)
-            if re.match(r'[A-Z0-9]{4}', frameid) or ID3v2Frames.frameTypes[self.version[1]].has_key(frameid):
+            if _match_frame(frameid) or ID3v2Frames.frameTypes[self.version[1]].has_key(frameid):
                 rawframesize = fh.read(4)
                 if self.version[1] >= 4 and frameid != 'COM ':
                     framesize = binfuncs.synchsafe2dec(rawframesize)
@@ -249,7 +250,6 @@ class ID3v2(object):
 #           if frameid != 'MP3e' and data != '\x00' * sizeleft:
 #               warnings.warn("Not all padding is NULLed out in %r.  Perhaps this tag was written by buggy software, or I didn't parsed it correctly. padding = %r" % (self.filename, frameid + data,))
             self.padding_size = sizeleft
-        fh.close()
 
     def read_frame(self, fh, sizeleft):
         oldpos = fh.tell()
@@ -262,8 +262,8 @@ class ID3v2(object):
         Save the current set of ID3v2 data to file
         """
         old_tag_size = None
-        if os.path.isfile(self.filename):
-            fh = open(self.filename, 'rb+')
+        if os.path.isfile(self.fh.name):
+            fh = open(self.fh.name, 'rb+')
             fh.seek(0)
             if fh.read(3) == 'ID3':
                 verinfo = fh.read(2)
@@ -283,7 +283,7 @@ class ID3v2(object):
             else:
                 old_tag_size = 0
         else:
-            fh = open(self.filename, 'wb')
+            fh = open(self.fh.name, 'wb')
 
         if self.version[1] == 4 and self.unsync:
             if self._set_data_length:
@@ -335,12 +335,12 @@ class ID3v2(object):
                 fh.seek(old_tag_size + 10)
             else:
                 fh.seek(0)
-            fh2 = open(self.filename + '.temp', 'wb')
+            fh2 = open(self.fh.name + '.temp', 'wb')
             fh2.write(newtag)
             fh2.write(fh.read())
             fh2.close()
             fh.close()
-            os.rename(self.filename + '.temp', self.filename)
+            os.rename(self.fh.name + '.temp', self.fh.name)
         else:
             fh.seek(0)
             fh.write(newtag)
@@ -382,8 +382,8 @@ class ID3v1(object):
     """
     ID3v1 parsing/writing class
     """
-    def __init__(self, filename = None, error_if_no_tag = False):
-        self.filename = None
+    def __init__(self, fh=None, error_if_no_tag = False):
+        self.fh = None
         self.title = ''
         self.artist = ''
         self.album = ''
@@ -393,11 +393,11 @@ class ID3v1(object):
         self.genre_str = ''
         self.track = None
         self.error_if_no_tag = error_if_no_tag
-        if filename:
-            self.load(filename)
+        if fh:
+            self.load(fh)
 
     def remove(self):
-        fh = file(self.filename, 'rb+')
+        fh = self.fh
         fh.seek(0, 2)
         filesize = fh.tell()
         if filesize < 127:
@@ -408,31 +408,31 @@ class ID3v1(object):
             return
         fh.truncate(filesize - 128)
 
-    def load(self, filename):
+    _remove_padding = re.compile('\x00+$').sub
+
+    def load(self, fh):
         """
         Load a file and extract ID3v1 data
 
         """
-        self.filename = filename
-        fh = open(filename, 'rb')
+        _remove_padding = self._remove_padding
+        self.fh = fh
         fh.seek(0, 2)
         if fh.tell() < 127:
             if self.error_if_no_tag:
                 raise NoTagError
-            fh.close()
             return
         fh.seek(-128, 2)
         id3tag = fh.read(128)
         if id3tag[0:3] != 'TAG':
             if self.error_if_no_tag:
                 raise NoTagError
-            fh.close()
             return
-        self.title = re.sub('\x00+$', '', id3tag[3:33].rstrip())
-        self.artist = re.sub('\x00+$', '', id3tag[33:63].rstrip())
-        self.album = re.sub('\x00+$', '', id3tag[63:93].rstrip())
-        self.year = re.sub('\x00+$', '', id3tag[93:97].rstrip())
-        self.comment = re.sub('\x00+$', '', id3tag[97:127].rstrip())
+        self.title = _remove_padding('', id3tag[3:33].rstrip())
+        self.artist = _remove_padding('', id3tag[33:63].rstrip())
+        self.album = _remove_padding('', id3tag[63:93].rstrip())
+        self.year = _remove_padding('', id3tag[93:97].rstrip())
+        self.comment = _remove_padding('', id3tag[97:127].rstrip())
         self.genre = ord(id3tag[127:128])
         if self.genre in genres:
             self.genre_str = "%s (%d)" % (genres[self.genre], self.genre,)
@@ -440,17 +440,15 @@ class ID3v1(object):
             self.genre_str = "unknown (%d)" % self.genre
         if self.comment[28:29] == '\x00':
             self.track = ord(self.comment[29:30])
-            self.comment = re.sub('\x00+$', '', self.comment[0:28].rstrip())
+            self.comment = _remove_padding('', self.comment[0:28].rstrip())
         else:
             self.track = None
-
-        fh.close()
 
     def save(self):
         """
         Save the current set of ID3v1 data to file
         """
-        fh = open(self.filename, 'rb+')
+        fh = open(self.fh.name, 'rb+')
         self.title = self.title[0:30]
         self.artist = self.artist[0:30]
         self.album = self.album[0:30]
