@@ -280,16 +280,6 @@ class MP3(AudioType):
             [44100, 48000, 32000]  #MPEG 1  
             ]
 
-        try:
-            self.id3v1 = dnuos.id3.ID3v1(file)
-        except dnuos.id3.Error:
-            self.id3v1 = None
-
-        try:
-            self.id3v2 = dnuos.id3.ID3v2(file)
-        except dnuos.id3.Error:
-            self.id3v2 = None
-
         #try:
         self.mp3header = self.getheader(self.stream_begin())
         self.brtype = "CV"[self.mp3header[1] in ('Xing', 'VBRI')]
@@ -328,6 +318,16 @@ class MP3(AudioType):
         #self.time = (float(1 * 576 * (bool(self.versionindex>>1)+ 1)) / self.freq) * self.framecount
         self.time = self.streamsize() * 8.0 / self._bitrate
 
+        try:
+            self.id3v1 = dnuos.id3.ID3v1(self._f)
+        except dnuos.id3.Error:
+            self.id3v1 = None
+
+        try:
+            self.id3v2 = dnuos.id3.ID3v2(self._f)
+        except dnuos.id3.Error:
+            self.id3v2 = None
+
     def artist(self):
 
         res = {'id3v1': None, 'id3v2': None}
@@ -357,11 +357,15 @@ class MP3(AudioType):
         else:
             return AudioType.streamsize(self)
 
+    _search_sync = re.compile('\xff[\xe0-\xff]').search
+    _search_info = re.compile('(Xing|Info|VBRI)').search
+
     def getheader(self, offset = 0):
 
+        _search_sync = self._search_sync
+        _search_info = self._search_info
+
         # Setup header and sync stuff
-        syncre = re.compile('\xff[\xe0-\xff]')
-        infore = re.compile('(Xing|Info|VBRI)')
         overlap = 1
         # frame header + presumed padding + xing/info header (oh god)
         pattern1 = '>l32x4s3l100xL9s2B8x2B5xH'
@@ -381,13 +385,13 @@ class MP3(AudioType):
         # Do all file if we have to
         while len(chunk) > overlap:
             # Look for sync
-            sync = syncre.search(chunk)
+            sync = _search_sync(chunk)
             while sync:
                 # Read header
                 self._f.seek(start + sync.start())
                 header = struct.unpack(pattern1, self._f.read(pattern1size))
                 if self.valid(header[0]):
-                    info = infore.search(chunk)
+                    info = _search_info(chunk)
                     while info:
                         self._f.seek(start + info.start())
                         if info.group() == 'VBRI':
@@ -398,7 +402,7 @@ class MP3(AudioType):
                     return header
 
                 # How about next sync in this block?
-                sync = syncre.search(chunk, sync.start() + 1)
+                sync = _search_sync(chunk, sync.start() + 1)
 
             # Read next chunk
             start = start + 1024
@@ -541,12 +545,12 @@ class MPC(AudioType):
         self.channels = "2"
 
         try:
-            self.id3v1 = dnuos.id3.ID3v1(file)
+            self.id3v1 = dnuos.id3.ID3v1(self._f)
         except dnuos.id3.Error:
             self.id3v1 = None
 
         try:
-            self.id3v2 = dnuos.id3.ID3v2(file)
+            self.id3v2 = dnuos.id3.ID3v2(self._f)
         except dnuos.id3.Error:
             self.id3v2 = None
 
@@ -572,18 +576,22 @@ class MPC(AudioType):
                     res['id3v2'] = frame.value
         return res
 
+    _search_header = re.compile('MP+').search
+
     def headerstart(self):
 
+        _search_header = self._search_header
         self._f.seek(0)
         for x in xrange(self.filesize / 1024):
             buffer = self._f.read(1024)
-            if re.search('MP+',buffer):
+            if _search_header(buffer):
                 return (x * 1024) + buffer.find('MP+')
 
     def getheader(self):
 
+        _search_header = self._search_header
+
         # Setup header and sync stuff
-        syncre = re.compile('MP+')
         overlap = 1
         pattern = '<3sb2i4h'
         patternsize = struct.calcsize(pattern)
@@ -596,7 +604,7 @@ class MPC(AudioType):
         # Do all file if we have to
         while len(chunk) > overlap:
             # Look for sync
-            sync = syncre.search(chunk)
+            sync = _search_header(chunk)
             while sync:
                 # Read header
                 self._f.seek(start + sync.start())
@@ -607,7 +615,7 @@ class MPC(AudioType):
                     return header
 
                 # How about next sync in this block?
-                sync = syncre.search(chunk, sync.start() + 1)
+                sync = _search_header(chunk, sync.start() + 1)
                 
             # Read next chunk
             start = start + 1024

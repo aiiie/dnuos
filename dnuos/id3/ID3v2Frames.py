@@ -342,10 +342,12 @@ class GenreTextInfo(ID3v2Frame):
         return self._value
     value = property(get_value, set_value)
 
+    _find_genre = re.compile(r'\(([0-9]+)\)').findall
+
     def parse_data(self):
         self._encoding = self.data[:1]
         self._value = self.decode(self.data[1:])
-        genre_code = re.findall(r'\(([0-9]+)\)', self.value)
+        genre_code = self._find_genre(self.value)
         if genre_code:
             self.name = dnuos.id3.genres.get(int(genre_code[0]), "Unknown")
 
