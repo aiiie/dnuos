@@ -119,19 +119,17 @@ class PersistentDict(UpdateTrackingDict):
         """
 
         try:
-            f = None
+            f = open(self.filename, 'rb')
             try:
-                f = open(self.filename, 'rb')
                 version = pickle.load(f)
                 self.checksum = pickle.load(f)
                 if version != self.version:
                     raise ValueError()
                 data = pickle.load(f)
-            except StandardError:
-                data = self.default
-        finally:
-            if isinstance(f, file):
+            finally:
                 f.close()
+        except StandardError:
+            data = self.default
         self.clear()
         self.update(data)
         self.clear_written()
