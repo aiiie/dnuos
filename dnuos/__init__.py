@@ -187,7 +187,8 @@ def main(argv=None):
                     if options.debug:
                         raise
                     print >> sys.stderr, err
-                    print >> sys.stderr, "Use the --disable-cache switch to disable caching"
+                    print >> sys.stderr, ("Use the --disable-cache switch to "
+                                          "disable caching")
                     return 2
     except KeyboardInterrupt:
         print ''
@@ -260,14 +261,14 @@ def no_cbr_mp3((adir, root)):
 def profile_only_mp3((adir, root)):
     """No non-profile MP3 predicate"""
 
-    # This implementation does not consider non-profile MP3s in Mixed directories
+    # This implementation does not consider non-profile MP3s in Mixed dirs
     return adir.mediatype != "MP3" or adir.profile != ""
 
 
 def enough_bitrate_mp3(mp3_min_bit_rate):
     """Create low-bitrate MP3 predicate"""
 
-    # This implementation does not consider low-bitrate MP3s in Mixed directories
+    # This implementation does not consider low-bitrate MP3s in Mixed dirs
     return lambda (adir, root): (adir.mediatype != "MP3" or
                                  adir.bitrate >= mp3_min_bit_rate)
 
