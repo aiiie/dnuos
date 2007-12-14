@@ -69,6 +69,11 @@ class UpdateTrackingDict(dict):
 
         self.wkeys.add(key)
 
+    def touch_all(self):
+        """Update all dict entries"""
+
+        self.wkeys = self.keys()
+
 
 class PersistentDict(UpdateTrackingDict):
     """A dict with persistence.
@@ -138,10 +143,7 @@ class PersistentDict(UpdateTrackingDict):
                 self.touch(key)
 
     def save(self):
-        """Serialize data to file.
-
-        Serialize data to file, keeping a copy of the previous version.
-        """
+        """Serialize data to file"""
 
         checksum = hash(tuple([d.modified for d in self.written().values()]))
         if checksum != self.checksum:
