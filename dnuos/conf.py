@@ -258,10 +258,9 @@ class Settings(object):
                          dest="sort_key", action="store_const",
                          const=lambda a, b: cmp(a.lower(), b.lower()),
                          help="Case-insensitive directory sorting")
-        group.add_option("-p", "--parallel",
+        group.add_option("-m", "--merge",
                          dest="merge", action="store_true",
-                         help="Parse basedirs in parallel as opposed to "
-                         "one after the other")
+                         help="Parse basedirs in parallel and merge output")
         group.add_option("-w", "--wildcards",
                          dest="wildcards", action="store_true",
                          help="Expand wildcards in basedirs")
