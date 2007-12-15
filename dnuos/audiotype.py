@@ -780,8 +780,6 @@ class AAC(AudioType):
         albumFound  = False
         bitrateFound = False
 
-        artistPattern   = "\xa9ART"
-        albumPattern    = "\xa9alb"
         scsdFormat  = "<2f"
         scsdFormatSize  = struct.calcsize(scsdFormat)
         cflFormat   = ">I"
@@ -820,7 +818,7 @@ class AAC(AudioType):
                     frequency = struct.unpack(cflFormat, self._f.read(cflFormatSize))[0]
             # Get artist info from (c)ART atom
             if not artistFound:
-                sync = chunk.find(artistPattern)
+                sync = chunk.find('\xa9ART')
                 if sync != -1:
                     artistFound = True
                     # Go back & read size of artist atom
@@ -832,7 +830,7 @@ class AAC(AudioType):
                     artist = struct.unpack(format, self._f.read(struct.calcsize(format)))[0]
             # Get album info from (c)album atom
             if not albumFound:
-                sync = chunk.find(albumPattern)
+                sync = chunk.find('\xa9alb')
                 if sync != -1:
                     albumFound = True
                     # Go back and read size of ablum atom
