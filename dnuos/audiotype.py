@@ -1,3 +1,5 @@
+"""Classes for processing audio file metadata"""
+
 import os
 import re
 import string

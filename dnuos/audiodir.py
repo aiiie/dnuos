@@ -15,6 +15,8 @@ from dnuos.misc import dir_depth
 
 
 class Dir(object):
+    """Holds audio metadata about a directory"""
+
     pattern = r"\.(?:mp3|mpc|mp\+|m4a|ogg|flac|fla|flc)$"
     audio_file_extRE = re.compile(pattern, re.IGNORECASE)
     del pattern
@@ -25,11 +27,15 @@ class Dir(object):
     __version__ = '1.0'
 
     def __init__(self, path):
+        """Makes an empty Dir for path"""
+
         self.path = path
         self.modified = None
         self._audio_files = []
 
     def load(self):
+        """Populates information based on audio files in the dir's path"""
+
         self._audio_files = self._parse_audio_files()
         streams, self._bad_files = self.get_streams()
         self.artists = self._parse_artist(streams)
@@ -43,20 +49,24 @@ class Dir(object):
         self.modified = self._parse_modified()
 
     def depth_from(self, root):
-        """
-        Return the relative depth of the directory from the given
-        root.
-        """
+        """Return the relative depth of the directory from the givenroot"""
+
         return dir_depth(self.path) - dir_depth(root) - 1
 
     def _get_name(self):
+        """Returns the base name of the dir's path"""
+
         return os.path.basename(self.path) or self.path
     name = property(_get_name)
 
     def children(self):
+        """Returns a list of files and subdirectories from the dir's path"""
+
         return [f for f in os.listdir(self.path)]
 
     def get_streams(self):
+        """Processes metadata in audio files"""
+
         streams = []
         bad_files = []
         for child in self._audio_files:
@@ -68,32 +78,39 @@ class Dir(object):
             except audiotype.SpacerError:
                 continue
             except Exception, msg:
-                tb = ''.join(format_exception(*sys.exc_info()))
-                bad_files.append((child, tb))
+                traceback = ''.join(format_exception(*sys.exc_info()))
+                bad_files.append((child, traceback))
         return streams, bad_files
 
     def _get_bad_files(self):
+        """Returns a list of audio files that couldn't be parsed"""
+
         return [(os.path.join(self.path, f), tb) for (f, tb)
                 in self._bad_files]
     bad_files = property(_get_bad_files)
 
     def _get_num_files(self):
+        """Returns the number of audio files"""
+
         return len(self._audio_files)
     num_files = property(_get_num_files)
 
     def _parse_types(self, streams):
+        """Determines what audio types are in the directory"""
+
         types = list(set([s.filetype for s in streams]))
         types.sort()
         return types
 
     def _get_mediatype(self):
-        """Return the collective media type for the directory
+        """Return the collective media type for the directory.
 
         Return values:
             "?"     - The directory contains no non-broken audiofiles
             "Mixed" - The directory contains multiple kinds of audiofiles
             other   - The uniform mediatype of all non-broken audiofiles
         """
+
         if not self._types:
             return "?"
         elif len(self._types) == 1:
@@ -103,6 +120,8 @@ class Dir(object):
     mediatype = property(_get_mediatype)
 
     def _parse_artist(self, streams):
+        """Gets the artist for the audio files"""
+
         res = {}
         for stream in streams:
             for tag, artist in stream.artist().items():
@@ -110,6 +129,8 @@ class Dir(object):
         return res
 
     def _parse_album(self, streams):
+        """Gets the album for the audio files"""
+
         res = {}
         for stream in streams:
             for tag, album in stream.album().items():
@@ -117,10 +138,11 @@ class Dir(object):
         return res
 
     def _parse_size(self, streams):
-        """report size in bytes
+        """Determines size in bytes.
 
         Note: The size reported is the total audio file size, not the
-        total directory size."""
+        total directory size.
+        """
 
         size = {}
         for file_ in streams:
@@ -131,10 +153,14 @@ class Dir(object):
         return size
 
     def _get_size(self):
+        """Returns size in bytes"""
+
         return sum(self.sizes.values())
     size = property(_get_size)
 
     def _parse_length(self, streams):
+        """Determines overall length of all audio files"""
+
         length = {}
         for file in streams:
             if file.filetype in length:
@@ -144,18 +170,22 @@ class Dir(object):
         return length
 
     def _get_length(self):
+        """Returns the length of all audio files"""
+
         return sum(self._lengths.values())
     length = property(_get_length)
 
     def _parse_bitrates(self, streams):
+        """Determines the bitrate"""
         return tuple(set([(s.bitrate(), s.brtype)
                           for s in streams]))
 
     def _get_brtype(self):
-        """report the bitrate type
+        """Return the bitrate type.
 
         If multiple types are found "~" is returned.
-        If no audio is found the empty string is returned."""
+        If no audio is found the empty string is returned.
+        """
 
         if self.mediatype == "Mixed":
             return "~"
@@ -172,9 +202,10 @@ class Dir(object):
     brtype = property(_get_brtype)
 
     def _get_bitrate(self):
-        """report average bitrate in bits per second
+        """Return the average bitrate in bits per second.
 
-        If no audio is found zero is returned."""
+        If no audio is found zero is returned.
+        """
 
         if len(self._bitrates) == 1 and self.brtype == "C":
             return self._bitrates[0][0]
@@ -185,15 +216,16 @@ class Dir(object):
     bitrate = property(_get_bitrate)
 
     def _parse_profile(self, streams):
+        """Process audio profile information in audio files"""
+
         res = {}
-        for s in streams:
-            for key, profile in s.profile().items():
+        for stream in streams:
+            for key, profile in stream.profile().items():
                 res.setdefault(key, set()).add(profile)
         return res
 
     def _get_profile(self):
-        """
-        report encoding profile name
+        """Return encoding profile name.
 
         If no or inconsistent profiles are detected, an empty string
         is returned.
@@ -210,15 +242,26 @@ class Dir(object):
     profile = property(_get_profile)
 
     def _parse_vendors(self, streams):
+        """Determine encoder vendor"""
+
         return tuple(set([s.vendor for s in streams]))
 
     def _get_vendor(self):
+        """Return encoder vendor.
+
+        Returns 'Mixed' for mixed dirs.
+        """
+
         if self.mediatype == 'Mixed' or len(self._vendors) > 1:
             return 'Mixed'
         return self._vendors[0]
     vendor = property(_get_vendor)
 
     def _get_quality(self):
+        """Return the encoder quality.
+
+        If profile information is present, it is used instead.
+        """
         if self.profile:
             return self.profile
         return "%i %s" % (int(self.bitrate) / 1000, self.brtype)
@@ -228,9 +271,9 @@ class Dir(object):
         table = {"V": "VBR",
                  "L": "LL"}
         res = set()
-        for br, type_ in self._bitrates:
+        for bitrate, type_ in self._bitrates:
             if type_ == "C":
-                res.add(br / 1000)
+                res.add(bitrate / 1000)
             else:
                 res.add(table[type_])
         res = list(res)
@@ -239,23 +282,29 @@ class Dir(object):
     audiolist_format = property(_get_audiolist_format)
 
     def _parse_modified(self):
+        """Returns newest audio file's mtime"""
+
         files = self.audio_files[:]
         files.append(self.path)
         dates = [os.path.getmtime(f) for f in files]
         return max(dates)
 
     def _parse_audio_files(self):
-        return [filename
-                for filename in self.children()
+        """Returns a list of files in the directory that are audio files"""
+
+        return [filename for filename in self.children()
                 if self.is_audio_file(os.path.join(self.path, filename))]
 
     def _get_audio_files(self):
         """Return a list of all audio files based on file extensions"""
+
         return [os.path.join(self.path, filename)
-                 for filename in self._audio_files]
+                for filename in self._audio_files]
     audio_files = property(_get_audio_files)
 
     def is_valid(self):
+        """Returns whether or not the dir is completely valid"""
+
         try:
             valid = (self.modified == self._parse_modified() and
                      self._audio_files == self._parse_audio_files() and
@@ -272,6 +321,7 @@ class Dir(object):
         >>> Dir.is_audio_file('some.m3u')
         False
         """
+
         return (os.path.isfile(filename) and
                 Dir.audio_file_extRE.search(filename))
     is_audio_file = staticmethod(is_audio_file)

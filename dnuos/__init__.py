@@ -222,9 +222,9 @@ def print_bad(dir_pairs):
 
     for adir, root in dir_pairs:
         yield adir, root
-        for badfile, tb in adir.bad_files:
+        for badfile, traceback in adir.bad_files:
             print >> sys.stderr, "Audiotype failed for:", badfile
-            print >> sys.stderr, tb
+            print >> sys.stderr, traceback
 
 
 def collect_bad(dir_pairs, bad_files):
@@ -357,7 +357,7 @@ def add_empty(dir_pairs):
         yield adir, root
 
 
-def walk2(basedir, sort_key=lambda x: x, excluded=[]):
+def walk2(basedir, sort_key=(lambda x: x), excluded=()):
     """Traverse a directory tree in pre-order
 
     Walk2 is a thin wrapper around walk. It splits each path into a
@@ -370,7 +370,7 @@ def walk2(basedir, sort_key=lambda x: x, excluded=[]):
         yield sub[len(root):], root
 
 
-def walk(dir_, sort_key=lambda x: x, excluded=[]):
+def walk(dir_, sort_key=(lambda x: x), excluded=()):
     """Traverse a directory tree in pre-order.
 
     Directories are sorted by sort_key and branches specified in
