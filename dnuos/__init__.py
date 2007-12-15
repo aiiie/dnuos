@@ -175,13 +175,14 @@ def main(argv=None):
         outfile = (options.outfile and open(options.outfile, 'w')
                                    or sys.stdout)
         try:
-            for chunk in result:
-                print >> outfile, chunk
-        except:
-            # Don't evict any items if interrupted
-            if options.basedirs and options.use_cache:
-                cache.touch_all()
-            raise
+            try:
+                for chunk in result:
+                    print >> outfile, chunk
+            except:
+                # Don't evict any items if interrupted
+                if options.basedirs and options.use_cache:
+                    cache.touch_all()
+                raise
         finally:
             # Store updated cache
             if options.basedirs and options.use_cache:
