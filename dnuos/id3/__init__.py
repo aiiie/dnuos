@@ -1,11 +1,15 @@
 # @(#) $Id: __init__.py,v 1.5 2004/03/02 05:26:07 myers_carpenter Exp $
 __revision__ = "$Revision: 1.5 $"
 
-import sys, re, os, warnings, struct
-import cStringIO as StringIO
+import re, struct
+try:
+    import cStringIO as StringIO
+except ImportError:
+    import StringIO
 import string
 
 from dnuos.id3 import ID3v2Frames
+from dnuos.id3 import binfuncs
 
 DEBUG_LEVEL = 0
 
@@ -252,132 +256,6 @@ class ID3v2(object):
 #               warnings.warn("Not all padding is NULLed out in %r.  Perhaps this tag was written by buggy software, or I didn't parsed it correctly. padding = %r" % (self.filename, frameid + data,))
             self.padding_size = sizeleft
 
-    def read_frame(self, fh, sizeleft):
-        oldpos = fh.tell()
-
-
-
-
-    def save(self):
-        """
-        Save the current set of ID3v2 data to file
-        """
-        old_tag_size = None
-        if os.path.isfile(self.fh.name):
-            fh = open(self.fh.name, 'rb+')
-            fh.seek(0)
-            if fh.read(3) == 'ID3':
-                verinfo = fh.read(2)
-                version_minor = ord(verinfo[0])
-                version_rev = ord(verinfo[1])
-                (
-                  unsync,
-                  extended,
-                  experimental,
-                  footer,
-                  foo,
-                  foo,
-                  foo,
-                  foo
-                ) = binfuncs.byte2bin(fh.read(1), 8)
-                old_tag_size = binfuncs.synchsafe2dec(fh.read(4))
-            else:
-                old_tag_size = 0
-        else:
-            fh = open(self.fh.name, 'wb')
-
-        if self.version[1] == 4 and self.unsync:
-            if self._set_data_length:
-                for ii in self.frames:
-                    ii.unsynchronisation = True
-            else:
-                for ii in self.frames:
-                    ii._unsynchronisation = True
-
-        out = StringIO.StringIO()
-        for ii in self.frames:
-            out.write(ii.write_frame())
-
-        if self.version[1] == 3 and self.unsync:
-            tmp = StringIO.StringIO()
-            tmp.write(binfuncs.unsynchstr(out.getvalue()))
-            out = tmp
-
-        if len(out.getvalue()) > old_tag_size:
-            expand_file = 1
-            # out += '\x00' * 2048
-        else:
-            expand_file = 0
-            out.write('\x00' * (old_tag_size - len(out.getvalue())))
-
-        newheader = 'ID3'
-        # set the version
-        newheader += chr(self.version[1])
-        newheader += chr(self.version[2])
-        # flags
-        newheader += binfuncs.bin2byte([
-            self.unsync,
-            self.extended_header,
-            self.experimental,
-            self.footer,
-            0,
-            0,
-            0,
-            0
-        ])
-
-        tagsize = binfuncs.dec2synchsafe(len(out.getvalue()))
-        newheader += tagsize
-
-        newtag = newheader + out.getvalue()
-
-        if expand_file == 1:
-            if old_tag_size:
-                fh.seek(old_tag_size + 10)
-            else:
-                fh.seek(0)
-            fh2 = open(self.fh.name + '.temp', 'wb')
-            fh2.write(newtag)
-            fh2.write(fh.read())
-            fh2.close()
-            fh.close()
-            os.rename(self.fh.name + '.temp', self.fh.name)
-        else:
-            fh.seek(0)
-            fh.write(newtag)
-            fh.close()
-        return
-
-    def from_id3v1(self, id3v1tag):
-        if (self.version[0], self.version[1],) == (2, 2,):
-            raise NotImplementedError, "Cannot convert id3v1 tags to id3v2.2.x"
-        if not isinstance(id3v1tag, ID3v1):
-            raise TypeError, "Must be a ID3v1 object"
-        if id3v1tag.artist:
-            self.frames = filter(lambda frame: frame.id != 'TPE1', self.frames)
-            f = self.new_frame('TPE1')
-            f.value = id3v1tag.artist
-        if id3v1tag.album:
-            self.frames = filter(lambda frame: frame.id != 'TALB', self.frames)
-            f = self.new_frame('TALB')
-            f.value = id3v1tag.album
-        if id3v1tag.title:
-            self.frames = filter(lambda frame: frame.id != 'TIT2', self.frames)
-            f = self.new_frame('TIT2')
-            f.value = id3v1tag.title
-        if id3v1tag.track:
-            self.frames = filter(lambda frame: frame.id != 'TRCK', self.frames)
-            f = self.new_frame('TRCK')
-            f.value = id3v1tag.track
-        if id3v1tag.comment:
-            f = self.new_frame('COMM')
-            f.comment = id3v1tag.comment
-        if id3v1tag.genre:
-            self.frames = filter(lambda frame: frame.id != 'TCON', self.frames)
-            f = self.new_frame('TCON')
-            f.value = '(%i)' % id3v1tag.genre
-
-
 
 class ID3v1(object):
     """
@@ -396,18 +274,6 @@ class ID3v1(object):
         self.error_if_no_tag = error_if_no_tag
         if fh:
             self.load(fh)
-
-    def remove(self):
-        fh = self.fh
-        fh.seek(0, 2)
-        filesize = fh.tell()
-        if filesize < 127:
-            return
-        fh.seek(-128, 2)
-        id3tag = fh.read(128)
-        if id3tag[0:3] != 'TAG':
-            return
-        fh.truncate(filesize - 128)
 
     def load(self, fh):
         """
@@ -442,44 +308,6 @@ class ID3v1(object):
             self.comment = self.comment[0:28].strip(strip)
         else:
             self.track = None
-
-    def save(self):
-        """
-        Save the current set of ID3v1 data to file
-        """
-        fh = open(self.fh.name, 'rb+')
-        self.title = self.title[0:30]
-        self.artist = self.artist[0:30]
-        self.album = self.album[0:30]
-        self.year = self.year[0:4]
-        if self.track != None:
-            self.comment = self.comment[0:28]
-        else:
-            self.comment = self.comment[0:30]
-        id3tag = 'TAG'
-        id3tag += self.title + ('\x00' * (30 - len(self.title)))
-        id3tag += self.artist + ('\x00' * (30 - len(self.artist)))
-        id3tag += self.album + ('\x00' * (30 - len(self.album)))
-        id3tag += self.year + ('\x00' * (4 - len(self.year)))
-        if self.track != None:
-            id3tag += self.comment + ('\x00' * (29 - len(self.comment)))
-            id3tag += chr(self.track)
-        else:
-            id3tag += self.comment + ('\x00' * (30 - len(self.comment)))
-        id3tag += chr(self.genre)
-        fh.seek(0, 2)
-        if fh.tell() > 127:
-            fh.seek(-128, 2)
-            oldid3tag = fh.read(3)
-            if oldid3tag == 'TAG':
-                fh.seek(-128, 2)
-                fh.write(id3tag)
-            else:
-                fh.seek(0, 2)
-                fh.write(id3tag)
-        else:
-            fh.write(id3tag)
-        fh.close()
 
 genres = (
     'Blues',

@@ -38,32 +38,6 @@ def synchsafe2bin(x):
     assert len(out) == 28
     return out
 
-
-def synchsafe2int(xx):
-    assert len(xx) == 4
-    bytelist = list(xx)
-    val = 0
-    BITSUSED = 7;
-    MAXVAL = mask(BITSUSED * 4);
-    # For each byte of the first 4 bytes in the string...
-    for ii in range(0, 4):
-        # ...append the last 7 bits to the end of the temp integer...
-        val = (val << BITSUSED) | ord(bytelist[ii]) & mask(BITSUSED);
-
-    # We should always parse 4 characters
-    return min(val, MAXVAL)
-
-def fourbytes2int(yy):
-    ll = map(lambda x:x, yy)
-    out = 0
-    for ii in range(len(ll)):
-        out += (pow(256,(3-ii)) * ord(ll[ii]))
-    return out
-
-def int2fourbytes(yy):
-    ary = dec2bin(yy, 32)
-    return bin2byte(ary)
-
 def byte2bin(y, p=0):
     res2 = []
     for x in y:
@@ -119,20 +93,6 @@ def dec2bin(x, p=0):
         res.extend([0] * (p - len(res)))
     res.reverse()
     return res
-
-def byte2bitlist(x):
-    bitlist = []
-    for ii in range(0, 8):
-        bitlist.append(x & (1 << ii))
-    return bitlist
-
-def bitlist2int(x):
-    raise Error
-    return x
-
-def mask(bits):
-    return ((1 << (bits)) - 1)
-
 
 def bin2synchsafe(x):
     assert len(x) == 28

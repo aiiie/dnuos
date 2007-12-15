@@ -5,8 +5,6 @@ try:
     import cPickle as pickle
 except ImportError:
     import pickle
-import sys
-from shutil import copy2
 
 try:
     set
