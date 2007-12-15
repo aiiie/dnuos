@@ -179,7 +179,8 @@ def main(argv=None):
                 print >> outfile, chunk
         except:
             # Don't evict any items if interrupted
-            cache.touch_all()
+            if options.basedirs and options.use_cache:
+                cache.touch_all()
             raise
         finally:
             # Store updated cache
