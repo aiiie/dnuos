@@ -290,7 +290,10 @@ class GenreTextInfo(ID3v2Frame):
         self._value = self.decode(self.data[1:])
         genre_code = self._find_genre(self.value)
         if genre_code:
-            self.name = dnuos.id3.genres.get(int(genre_code[0]), "Unknown")
+            try:
+                self.name = dnuos.id3.genres[int(genre_code[0])]
+            except IndexError:
+                self.name = "Unknown"
 
 
 class URL(ID3v2Frame):
