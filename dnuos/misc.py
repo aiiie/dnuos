@@ -159,9 +159,9 @@ def make_included_pred(included, excluded):
     """
 
     i_preds = [lambda path, base=base: is_subdir(path, base)
-               for base in included ]
+               for base in included]
     e_preds = [lambda path, base=base: is_subdir(path, base)
-               for base in excluded ]
+               for base in excluded]
 
     # any() is nicer than max(), but only supported by 2.5+
     return lambda path: ((bool(included) and max(fmap(path, i_preds))) and not
@@ -169,6 +169,7 @@ def make_included_pred(included, excluded):
 
 
 def map_dict(func, dict_):
+    """Apply func to all items in dict_"""
 
     for key in dict_.keys():
         dict_[key] = func(dict_[key])

@@ -15,10 +15,13 @@ from dnuos.misc import deprecation
 
 
 def stricmp(str1, str2):
+    """Case-insensitive string comparison"""
+
     return cmp(str1.lower(), str2.lower())
 
 
 def exit_with_output_help(option, opt_str, value, parser):
+    """Prints output help and exits program"""
 
     print r"""
 Anything enclosed by brackets is considered a field. A field must have the

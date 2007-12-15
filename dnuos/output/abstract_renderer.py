@@ -8,7 +8,7 @@ class AbstractRenderer(object):
 
     def setup_columns(self, fields, options):
 
-        self.columns = map(lambda x: parse_field(x, options), fields)
+        self.columns = [parse_field(f, options) for f in fields]
 
 
 class Column(object):

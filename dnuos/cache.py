@@ -108,7 +108,7 @@ class PersistentDict(UpdateTrackingDict):
         self.version = kwargs['version']
         self.filename = os.path.abspath(kwargs['filename'])
         self.default = kwargs.get('default', {})
-        self.keep_pred = kwargs.get('keep_pred', lambda k,v: True)
+        self.keep_pred = kwargs.get('keep_pred', lambda k, v: True)
         self.checksum = None
 
 
@@ -122,15 +122,15 @@ class PersistentDict(UpdateTrackingDict):
         """
 
         try:
-            f = open(self.filename, 'rb')
+            file_ = open(self.filename, 'rb')
             try:
-                version = pickle.load(f)
-                self.checksum = pickle.load(f)
+                version = pickle.load(file_)
+                self.checksum = pickle.load(file_)
                 if version != self.version:
                     raise ValueError()
-                data = pickle.load(f)
+                data = pickle.load(file_)
             finally:
-                f.close()
+                file_.close()
         except StandardError:
             data = self.default
         self.clear()
@@ -145,11 +145,11 @@ class PersistentDict(UpdateTrackingDict):
 
         checksum = hash(tuple([d.modified for d in self.written().values()]))
         if checksum != self.checksum:
-            f = open(self.filename, 'wb')
-            pickle.dump(self.version, f, 2)
-            pickle.dump(checksum, f, 2)
-            pickle.dump(self.written(), f, 2)
-            f.close()
+            file_ = open(self.filename, 'wb')
+            pickle.dump(self.version, file_, 2)
+            pickle.dump(checksum, file_, 2)
+            pickle.dump(self.written(), file_, 2)
+            file_.close()
 
 
 class memoized(object):
