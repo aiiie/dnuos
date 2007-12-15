@@ -254,7 +254,10 @@ class Dir(object):
 
         if self.mediatype == 'Mixed' or len(self._vendors) > 1:
             return 'Mixed'
-        return self._vendors[0]
+        elif len(self._vendors) == 1:
+            return self._vendors[0]
+        else:
+            return ""
     vendor = property(_get_vendor)
 
     def _get_quality(self):
