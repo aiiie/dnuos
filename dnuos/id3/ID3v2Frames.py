@@ -1,7 +1,7 @@
 # @(#) $Id: ID3v2Frames.py,v 1.5 2004/03/02 05:26:07 myers_carpenter Exp $
 __version__ = "$Revision: 1.5 $"
 
-import sys, re, zlib, warnings, imghdr, struct
+import sys, re, zlib, imghdr, struct
 
 import dnuos.id3
 from dnuos.id3 import binfuncs
@@ -56,63 +56,6 @@ class ID3v2Frame(object):
 
     def __str__(self):
         return 'not displaying'
-
-    #def __repr__(self):
-    #   return '<ID3v2Frame.%s (%s) compressed: %s dlied: %s encrypted: %s unsynched: %s>' % (self.__class__.__name__, self.id, self.compressed, self.dlied, self.encrypted, self.unsynched)
-
-    def write_frame(self):
-        data = self.write_data()
-
-        # this gets called after the data for the frame is done
-
-        flags = [0] * 16
-        if self.version[1] == 3:
-            # %abc00000 %ijk00000
-            flags[0] = self.tag_alter_preservation
-            flags[1] = self.file_alter_preservation
-            flags[2] = self.read_only
-            flags[8] = self.compression
-            flags[9] = self.encryption
-            flags[10] = self.grouping_id
-        elif self.version[1] == 4:
-            # %0abc0000 %0h00kmnp
-            flags[1] = self.tag_alter_preservation
-            flags[2] = self.file_alter_preservation
-            flags[3] = self.read_only
-            flags[9] = self.grouping_id
-            flags[12] = self._compression
-            flags[13] = self.encryption
-            flags[14] = self._unsynchronisation
-            flags[15] = self.data_length_indicator
-
-        header = binfuncs.bin2byte(flags)
-        ext_header = ''
-        # these add bytes to the header
-        if self.grouping_id:
-            ext_header = ext_header + self.group_id[0]
-        if self.encryption:
-            ext_header = ext_header + self.encryption_method[0]
-        if self.version[1] == 4 and self.data_length_indicator:
-            ext_header = ext_header + binfuncs.dec2synchsafe(len(data))
-
-        if self.compression:
-            if self.version[1] == 4:
-                data = zlib.compress(data)
-            else:
-                oldframesize = struct.pack('!I', len(data))
-                data = oldframesize + zlib.compress(data)
-#       if self.encryption:
-#            warnings.warn("Encrypted frame (method %r, frameid %r" % (self.encryption_method, self.frameid,))
-        if self.unsynchronisation and self.version[1] == 4:
-            data = binfuncs.deunsynchstr(data)
-
-        id = self.id
-        data = ext_header + data
-        if self.version[1] < 4 or self.id == 'COM ':
-            size = struct.pack('!I', len(data))
-        else:
-            size = binfuncs.dec2synchsafe(len(data))
-        return "%(id)s%(size)s%(header)s%(data)s" % locals()
 
     def parse_frame(self, data):
         try:
@@ -169,7 +112,7 @@ class ID3v2Frame(object):
             if self._compression and not self.data_length_indicator:
                 raise dnuos.id3.BrokenFrameError, "The compression flag was set but not the data_length_indicator"
         else:
-            raise Error("Unsupported tag (how did we not catch this before?)")
+            raise dnuos.id3.Error("Unsupported tag (how did we not catch this before?)")
 
         # these add bytes to the header
         if self.grouping_id:
@@ -319,8 +262,6 @@ class TextInfo(ID3v2Frame):
         self._encoding = self.data[0]
         self._value = self.decode(self.data[1:])
 
-    def write_data(self):
-        return "%s%s" % (self._encoding, self.encode(self._value),)
 
 class GenreTextInfo(ID3v2Frame):
     # TODO: make 'name' a property
@@ -351,8 +292,6 @@ class GenreTextInfo(ID3v2Frame):
         if genre_code:
             self.name = dnuos.id3.genres.get(int(genre_code[0]), "Unknown")
 
-    def write_data(self):
-        return "%s%s" % (self._encoding, self.encode(self._value),)
 
 class URL(ID3v2Frame):
     def __init__(self, id, version = (2,3,0,), data = None):
@@ -365,8 +304,6 @@ class URL(ID3v2Frame):
     def parse_data(self):
         self.url = self.data.decode('iso-8859-1')
 
-    def write_data(self):
-        return self.url.encode('iso-8859-1')
 
 class UserURL(ID3v2Frame):
     def __init__(self, id, version = (2,3,0,), data = None):
@@ -390,8 +327,6 @@ class UserURL(ID3v2Frame):
         self._description = self.decode(description)
         self.url = url.decode('iso-8859-1')
 
-    def write_data(self):
-        return "%s%s%s%s" % (self._encoding, self.encode(self._description), self.termination(), self.url.encode('iso-8859-1'),)
 
 class UserTextInfo(ID3v2Frame):
     def __init__(self, id, version = (2,3,0,), data = None):
@@ -430,8 +365,6 @@ class UserTextInfo(ID3v2Frame):
         self._description = self.decode(description)
         self._value = self.decode(value)
 
-    def write_data(self):
-        return "%s%s%s%s" % (self._encoding, self.encode(self.description), self.termination(), self.encode(self.value),)
 
 class Comment(ID3v2Frame):
     def __init__(self, id, version = (2,3,0,), data = None):
@@ -482,8 +415,6 @@ class Comment(ID3v2Frame):
         self._description = self.decode(description)
         self._value = self.decode(value)
 
-    def write_data(self):
-        return "%s%s%s%s%s" % (self._encoding, self._language, self.encode(self._description), self.termination(), self.encode(self._value),)
 
 class AttachedPicture(ID3v2Frame):
     picturetypes = {
@@ -548,8 +479,6 @@ class AttachedPicture(ID3v2Frame):
         (description, self._image,) = self.split_encoded(self.data[mimetype_end+2:])
         self._description = self.decode(description)
 
-    def write_data(self):
-        return "%s%s\x00%s%s%s%s" % (self._encoding, self.mimetype.encode('iso-8859-1'), self.picturetype, self.encode(self.description), self.termination(), self.image,)
 
 class MusicCDIdentifier(ID3v2Frame):
     def __init__(self, id, version = (2,3,0,), data = None):
@@ -559,8 +488,6 @@ class MusicCDIdentifier(ID3v2Frame):
     def parse_data(self):
         self.toc = self.data
 
-    def write_data(self):
-        return self.toc
 
 class UniqueFileIdentifier(ID3v2Frame):
     def __init__(self, id, version = (2,3,0,), data = None):
@@ -576,9 +503,6 @@ class UniqueFileIdentifier(ID3v2Frame):
         self.owner = owner.decode('iso-8859-1')
         self.identifier = identifier.decode('iso-8859-1')
 
-    def write_data(self):
-        return "%s\x00%s" % (self.owner.encode('iso-8859-1'), self.identifier.encode('iso-8859-1'),)
-
 
 class UnknownFrame(ID3v2Frame):
     def __init__(self, id, version = (2,3,0,), data = None):
@@ -588,8 +512,6 @@ class UnknownFrame(ID3v2Frame):
     def parse_data(self):
         self.unknown_data = self.data
 
-    def write_data(self):
-        return self.unknown_data
 
 class CompilationFrame(ID3v2Frame):
     def __init__(self, id, version = (2,3,0,), data = None):
@@ -599,8 +521,6 @@ class CompilationFrame(ID3v2Frame):
     def parse_data(self):
         self.unknown_data = self.data
 
-    def write_data(self):
-        return self.unknown_data
 
 frameTypes = {
     2:   {'BUF': ('Recommended buffer size', UnknownFrame,),
