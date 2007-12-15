@@ -369,7 +369,7 @@ class Settings(object):
         """translate a basedir to a list of absolute paths"""
 
         if self.options.wildcards and re.search("[*?]|(?:\[.*\])", dir_):
-            dirs = sort(glob.glob(dir_), self.options.sort_key)
+            dirs = glob.glob(dir_).sort(self.options.sort_key)
             return [os.path.abspath(d) for d in dirs]
         else:
             return [os.path.abspath(dir_)]

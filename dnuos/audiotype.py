@@ -83,7 +83,7 @@ class AudioType(object):
             if data[0] & 0x40:
                 extsize = struct.unpack("<4B", self._f.read(4))
                 self._end -= unpack_bits(extsize)
-                self._meta.append((end, "ID3v2"))
+                self._meta.append((self._end, "ID3v2"))
     
         self._f.seek(mark)
         return self._end
