@@ -12,7 +12,7 @@ from itertools import ifilter
 import dnuos.output
 from dnuos import appdata, audiodir
 from dnuos.cache import PersistentDict, memoized
-from dnuos.conf import Settings
+from dnuos.conf import parse_args
 from dnuos.misc import dir_depth, equal_elements, formatwarning
 from dnuos.misc import make_included_pred, merge, to_human
 from dnuos.output.abstract_renderer import Column
@@ -119,7 +119,7 @@ def main(argv=None):
     os.stat_float_times(False)
     warnings.formatwarning = formatwarning
     data = Data()
-    options = Settings().parse_args(argv[1:])
+    options = parse_args(argv[1:])
 
     try:
         if options.basedirs:
