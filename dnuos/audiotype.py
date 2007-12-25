@@ -156,6 +156,8 @@ class Ogg(AudioType):
         # Get Ogg comment
         syncpattern = '\x03vorbis'
         overlap = len(syncpattern) - 1
+        jvlformat = "<7xI"
+        jvlformatsize = struct.calcsize(jvlformat)
         llclformat = "<I"
         llclformatsize = struct.calcsize(llclformat)
 
@@ -170,6 +172,11 @@ class Ogg(AudioType):
             sync = chunk.find(syncpattern)
             if sync != -1:
                 self._f.seek(start + sync)
+                vendor_length = struct.unpack(jvlformat, self._f.read(
+                                              jvlformatsize))[0]
+                format = "<%ds" % vendor_length
+                self.vendor = struct.unpack(format, self._f.read(
+                                            struct.calcsize(format)))[0]
                 listlength = struct.unpack(llclformat,
                                            self._f.read(llclformatsize))[0]
                 comments = []
