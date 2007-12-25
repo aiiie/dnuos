@@ -27,7 +27,7 @@ For example, a list might look like this::
 
 The list format is completely customizable and can be plain text or HTML.
 
-Dnuos supports MP3, AAC, Musepack, OGG Vorbis, and FLAC audio files. Quality
+Dnuos supports MP3, AAC, Musepack, Ogg Vorbis, and FLAC audio files. Quality
 profile detection is also supported, including `LAME quality preset`_
 information.
 
