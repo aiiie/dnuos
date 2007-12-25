@@ -19,6 +19,17 @@ except ImportError:
         scripts=['scripts/dnuos'],
     )
 
+try:
+    import py2exe
+    # Command line options normally used: -O2 -c -b 1
+    # -e _ssl,calendar,doctest,email,ftplib,getpass,gettext,gopherlib,httplib,
+    # locale,mimetypes,quopri,unittest
+    extra_options.update(dict(
+        console=['scripts/dnuos'],
+    ))
+except ImportError:
+    pass
+
 setup(
     author='Mattias P\xc3\xa4iv\xc3\xa4rinta, aiiie',
     author_email='pejve@vasteras2.net; aiiie@aiiie.co',
