@@ -102,6 +102,24 @@ QtOIDUA_
 News
 ====
 
+Version 1.0b3 (Dec. 25, 2007)
+    Added support for saving the cache even when Dnuos is interrupted.
+
+    Renamed ``-p``/``--parallel`` back to ``-m``/``--merge``, as it does
+    just that.
+
+    Fixed ``-i``/``--ignore-case`` not working.
+
+    Marginal speed improvements in ``audiotype`` and ``id3`` code.
+
+    Removed a substantial amount of unused code in the ``id3`` package.
+
+    Fixed possible crash with new vendor output field in certain cases.
+
+    Fixed parsing errors with Ogg Vorbis files and added vendor support.
+
+    Reduced win32 package size.
+
 Version 1.0b2 (Dec. 7, 2007)
     Updated and consolidated documentation.
 
