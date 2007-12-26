@@ -10,6 +10,9 @@ from optparse import OptionValueError
 from optparse import OptionParser
 
 import dnuos.output
+import dnuos.output.db
+import dnuos.output.html
+import dnuos.output.plaintext
 from dnuos import appdata
 from dnuos.misc import deprecation
 

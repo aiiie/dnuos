@@ -9,13 +9,15 @@ import warnings
 from itertools import chain
 from itertools import ifilter
 
-import dnuos.output
+import dnuos.output.db
 from dnuos import appdata, audiodir
 from dnuos.cache import PersistentDict, memoized
 from dnuos.conf import parse_args
 from dnuos.misc import dir_depth, equal_elements, formatwarning
 from dnuos.misc import make_included_pred, merge, to_human
-from dnuos.output.abstract_renderer import Column
+from dnuos.output.db import DBColumn
+
+__all__ = ['main']
 
 class Data(object):
     """Holds data for cache"""
@@ -282,8 +284,8 @@ def enough_bitrate_mp3(mp3_min_bit_rate):
 def make_output_db_predicate(options):
     """Predicate for whether something should be included in output.db"""
 
-    artist_column = Column("A", None, None, options)
-    album_column = Column("C", None, None, options)
+    artist_column = DBColumn("A", None, None, options)
+    album_column = DBColumn("C", None, None, options)
 
     def output_db_predicate((adir, root)):
         return (adir.mediatype != "Mixed" and

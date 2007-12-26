@@ -1,7 +1,6 @@
 import time
 import unicodedata
 
-import dnuos.output
 from dnuos.misc import to_human
 
 class AbstractRenderer(object):
@@ -56,10 +55,7 @@ class Column(object):
             self.formatter = lambda x, y: x
         self.name, self.get = attr_table[tag]
 
-        if options.output_module == dnuos.output.db:
-            self._encoding = ('latin1', 'replace')
-        else:
-            self._encoding = ('utf-8',)
+        self._encoding = ('utf-8',)
         self._prefer_tag = options.prefer_tag
 
     def _textencode(self, str_):
