@@ -12,12 +12,19 @@ Example outout:
 
 from dnuos.output.abstract_renderer import AbstractRenderer, Column
 
+class DBColumn(Column):
+
+    def __init__(self, *args, **kwargs):
+
+        super(DBColumn, self).__init__(*args, **kwargs)
+        self._encoding = ('latin1', 'replace')
+
 class Renderer(AbstractRenderer):
 
     def render(self, dir_pairs, options, data):
 
-        artist_column = Column("A", None, None, options)
-        album_column = Column("C", None, None, options)
+        artist_column = DBColumn("A", None, None, options)
+        album_column = DBColumn("C", None, None, options)
 
         for adir, root in dir_pairs:
             artist = _db_string(artist_column.get(adir))
