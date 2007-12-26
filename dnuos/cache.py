@@ -164,8 +164,10 @@ class memoized(object):
     to store the result on cache misses as well as cache hits.
     """
 
-    def __init__(self, func, cache={}):
+    def __init__(self, func, cache=None):
         self.func = func
+        if cache is None:
+            cache = {}
         self.cache = cache
 
     def __call__(self, *args):

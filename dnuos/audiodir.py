@@ -77,7 +77,7 @@ class Dir(object):
                 raise KeyboardInterrupt
             except audiotype.SpacerError:
                 continue
-            except Exception, msg:
+            except Exception:
                 traceback = ''.join(format_exception(*sys.exc_info()))
                 bad_files.append((child, traceback))
         return streams, bad_files
@@ -162,11 +162,11 @@ class Dir(object):
         """Determines overall length of all audio files"""
 
         length = {}
-        for file in streams:
-            if file.filetype in length:
-                length[file.filetype] += file.time
+        for file_ in streams:
+            if file_.filetype in length:
+                length[file_.filetype] += file_.time
             else:
-                length[file.filetype] = file.time
+                length[file_.filetype] = file_.time
         return length
 
     def _get_length(self):
