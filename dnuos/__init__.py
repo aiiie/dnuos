@@ -98,7 +98,6 @@ def setup_cache(cache_filename, basedirs, exclude_paths):
     cache = PersistentDict(filename=cache_filename,
                            keep_pred=is_entry_included,
                            version=audiodir.Dir.__version__)
-    cache.load()
     return cache
 
 

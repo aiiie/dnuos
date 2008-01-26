@@ -91,8 +91,6 @@ class PersistentDict(UpdateTrackingDict):
         Arguments:
             filename  - The persistence data file for loading and
                         saving.
-            default   - Data to be used if the loading of the data
-                        file fails for whatever reason.
             keep_pred - A predicate function (args, result) -> bool.
                         This is used at loading to control what
                         entries are to be presistent through
@@ -105,52 +103,42 @@ class PersistentDict(UpdateTrackingDict):
                         will be dropped unless it's been updated.
         """
 
-        super(PersistentDict, self).__init__(*args, **kwargs)
-        self.version = kwargs['version']
-        self.filename = os.path.abspath(kwargs['filename'])
-        self.default = kwargs.get('default', {})
-        self.keep_pred = kwargs.get('keep_pred', lambda k, v: True)
+        keep_pred = kwargs.pop('keep_pred', (lambda k, v: True))
+        self.filename = kwargs.pop('filename')
+        self.version = kwargs.pop('version')
         self.checksum = None
-
-
-    def load(self):
-        """Deserialize data from file.
-
-        Clear previous contents, deserialize data from file and update
-        written-status according as per the predicate function.
-        If deserialisation fails for whatever reason the default dict
-        is used for initialization.
-        """
+        super(PersistentDict, self).__init__(*args, **kwargs)
 
         try:
             file_ = open(self.filename, 'rb')
             try:
                 version = pickle.load(file_)
                 self.checksum = pickle.load(file_)
-                if version != self.version:
-                    raise ValueError()
-                data = pickle.load(file_)
+                if version == self.version:
+                    self.update(pickle.load(file_))
             finally:
                 file_.close()
-        except StandardError:
-            data = self.default
-        self.clear()
-        self.update(data)
+        except IOError:
+            pass
+
         self.clear_written()
-        for key, value in self.items():
-            if self.keep_pred(key, value):
+        for key, value in self.iteritems():
+            if keep_pred(key, value):
                 self.touch(key)
 
     def save(self):
         """Serialize data to file"""
 
-        checksum = hash(tuple([d.modified for d in self.written().values()]))
+        written = self.written()
+        checksum = hash(tuple([d.modified for d in written.itervalues()]))
         if checksum != self.checksum:
             file_ = open(self.filename, 'wb')
-            pickle.dump(self.version, file_, 2)
-            pickle.dump(checksum, file_, 2)
-            pickle.dump(self.written(), file_, 2)
-            file_.close()
+            try:
+                pickle.dump(self.version, file_, 2)
+                pickle.dump(checksum, file_, 2)
+                pickle.dump(self.written(), file_, 2)
+            finally:
+                file_.close()
 
 
 class memoized(object):
@@ -174,14 +162,15 @@ class memoized(object):
     def __call__(self, *args):
         try:
             value = self.cache[args]
+            return value
         except KeyError:
             value = self.func(*args)
+            self.cache[args] = value
+            return value
         except TypeError:
             # uncachable -- for instance, passing a list as an argument.
             # Better to not cache than to blow up entirely.
             return self.func(*args)
-        self.cache[args] = value
-        return value
 
     def __repr__(self):
         """Return the function's docstring."""
