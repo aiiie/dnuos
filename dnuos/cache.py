@@ -21,6 +21,7 @@ class UpdateTrackingDict(dict):
     not kept, but the subset of written entries can be obtained
     through the written-method.
     """
+
     def __init__(self, *args, **kwargs):
 
         super(UpdateTrackingDict, self).__init__(*args, **kwargs)
@@ -34,7 +35,7 @@ class UpdateTrackingDict(dict):
     def __delitem__(self, key):
 
         super(UpdateTrackingDict, self).__delitem__(key)
-        del self.wkeys[key]
+        self.wkeys.discard(key)
 
     def clear(self):
         """Removes all items"""
@@ -70,7 +71,7 @@ class UpdateTrackingDict(dict):
     def touch_all(self):
         """Update all dict entries"""
 
-        self.wkeys = self.keys()
+        self.wkeys = set(self.keys())
 
 
 class PersistentDict(UpdateTrackingDict):
