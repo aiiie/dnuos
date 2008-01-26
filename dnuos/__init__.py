@@ -348,10 +348,10 @@ def add_empty(dir_pairs):
 
     oldpath = []
     for adir, root in dir_pairs:
-        path = adir.path[len(root)+1:].split(os.path.sep)
+        path = adir.path[len(root) + 1:].split(os.path.sep)
         start = equal_elements(path, oldpath)
         for depth in range(start, len(path) - 1):
-            emptypath = os.path.join(root, *path[:depth+1])
+            emptypath = os.path.join(root, *path[:depth + 1])
             yield EmptyDir(emptypath), root
         oldpath = path
 
