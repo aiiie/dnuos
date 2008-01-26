@@ -379,8 +379,12 @@ def walk(dir_, sort_key=(lambda x: x), excluded=()):
     exclude are ignored. Symbolic links are followed.
     """
 
+    try:
+        subs = os.listdir(dir_)
+    except OSError:
+        return
     subs = [os.path.join(dir_, sub)
-            for sub in os.listdir(dir_)]
+            for sub in subs]
     subs = [sub for sub in subs
             if os.path.isdir(sub)
                and sub not in excluded]
