@@ -32,6 +32,8 @@ class Dir(object):
         self.path = path
         self.modified = None
         self._audio_files = []
+        self._bad_files = []
+        self.load()
 
     def load(self):
         """Populates information based on audio files in the dir's path"""
@@ -330,7 +332,7 @@ class Dir(object):
     is_audio_file = staticmethod(is_audio_file)
 
     def __getstate__(self):
-        return [getattr(self, attrname, None)
+        return [getattr(self, attrname)
                 for attrname in Dir.__slots__]
 
     def __setstate__(self, state):
