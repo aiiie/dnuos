@@ -8,6 +8,7 @@ Don't import other Dnuos modules from here.
 Feel free to organize this in a better way if you know how. I don't.
 """
 
+import locale
 import os
 from heapq import heappop, heappush
 from itertools import count
@@ -258,11 +259,12 @@ def to_human(value, radix=1024.0):
         i += 1
     suffix = " kMG"[i]
     if value > 100:
-        return "%d%s" % (value, suffix)
+        value = locale.format('%d', value)
     elif value < 10:
-        return "%.2f%s" % (value, suffix)
+        value = locale.format('%.2f', value)
     else:
-        return "%.1f%s" % (value, suffix)
+        value = locale.format('%.1f', value)
+    return "%s%s" % (value, suffix)
 
 
 def uniq(list_):

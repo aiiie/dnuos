@@ -2,6 +2,7 @@
 
 
 import glob
+import locale
 import os
 import re
 import sys
@@ -15,12 +16,6 @@ import dnuos.output.html
 import dnuos.output.plaintext
 from dnuos import appdata
 from dnuos.misc import deprecation
-
-
-def stricmp(str1, str2):
-    """Case-insensitive string comparison"""
-
-    return cmp(str1.lower(), str2.lower())
 
 
 def exit_with_output_help(option, opt_str, value, parser):
@@ -260,7 +255,7 @@ def parse_args(argv=sys.argv[1:]):
                      help="Exclude DIR from search", metavar="DIR")
     group.add_option("-i", "--ignore-case",
                      dest="sort_key", action="store_const",
-                     const=lambda a, b: cmp(a.lower(), b.lower()),
+                     const=lambda a, b: locale.strcoll(a.lower(), b.lower()),
                      help="Case-insensitive directory sorting")
     group.add_option("-m", "--merge",
                      dest="merge", action="store_true",
