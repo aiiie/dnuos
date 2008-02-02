@@ -58,7 +58,14 @@ Run ``dnuos --help`` for a full rundown of the available options.
 Linux, Mac OS X, Unix
 ---------------------
 
-Run ``setup.py`` with the version of Python you wish to install Dnuos with::
+If you wish to install Dnuos with setuptools_ (which comes bundled with Mac OS
+X, for instance), download and run `ez_setup.py`_, and simply run the following
+command::
+
+    sudo easy_install dnuos
+
+Otherwise, run ``setup.py`` with the version of Python you wish to install
+Dnuos with::
 
     sudo python2.5 setup.py install
 
@@ -69,6 +76,10 @@ console script named ``dnuos`` (usually in ``/usr/bin/`` or
 Once installed, open up your favorite terminal emulator and run ``dnuos``. On
 Mac OS X, *Terminal* might be a good choice (located in
 ``/Applications/Utilities/``).
+
+
+.. _setuptools: http://peak.telecommunity.com/DevCenter/setuptools
+.. _`ez_setup.py`: http://peak.telecommunity.com/dist/ez_setup.py
 
 
 Windows
@@ -92,7 +103,8 @@ the following graphical front-ends instead:
 Guidua_
     A graphical front-end for Windows.
 QtOIDUA_
-    A graphical front-end for Linux and Mac OS X.
+    A graphical front-end for Linux and Mac OS X. (Note: Versions 0.08 and
+    older have a bug which prevents QtOIDUA from working with Dnuos 1.0)
     
 
 .. _Guidua: http://oidua.suxbad.com/setup_guidua_0.16.exe
