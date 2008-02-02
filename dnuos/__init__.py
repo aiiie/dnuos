@@ -112,6 +112,12 @@ def setup_renderer(output_module, format_string, fields, options):
 
 def main(argv=None):
     """Main entry point"""
+
+    import locale
+    try:
+        locale.setlocale(locale.LC_ALL, '')
+    except locale.Error:
+        pass
     
     if argv is None:
         argv = sys.argv
