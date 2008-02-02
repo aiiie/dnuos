@@ -1,5 +1,6 @@
 """Plain-text renderer"""
 
+import locale
 import time
 
 from dnuos.output.abstract_renderer import AbstractRenderer
@@ -66,14 +67,17 @@ class Renderer(AbstractRenderer):
         yield line
         for mediatype in ["Ogg", "MP3", "MPC", "AAC", "FLAC"]:
             if sizes[mediatype]:
-                yield "| %-8s %12.2f | %9.2f |" % (
-                    mediatype,
-                    sizes[mediatype] / (1024 * 1024),
+                amount = locale.format('%12.2f',
+                    sizes[mediatype] / (1024 * 1024))
+                ratio = locale.format('%9.2f',
                     sizes[mediatype] * 100 / sizes["Total"])
+                yield "| %-8s %s | %s |" % (mediatype, amount, ratio)
         yield line
         total_megs = sizes["Total"] / (1024 * 1024)
-        yield "| Total %10.2f Mb   |" % total_megs
-        yield "| Speed %10.2f Mb/s |" % (total_megs / times['elapsed_time'])
+        total_megs_s = locale.format('%10.2f', total_megs)
+        speed = locale.format('%10.2f', total_megs / timess['elapsed_time'])
+        yield "| Total %s Mb   |" % total_megs_s
+        yield "| Speed %s Mb/s |" % speed
         yield line[:25]
 
 
