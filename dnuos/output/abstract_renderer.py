@@ -1,3 +1,4 @@
+import locale
 import time
 import unicodedata
 
@@ -41,9 +42,9 @@ class Column(object):
 
         formatter_table = {
             "b": lambda data, depth: to_human(int(data), 1000.0),
-            "B": lambda data, depth: int(data),
+            "B": lambda data, depth: locale.format('%d', data),
             "l": lambda data, depth: to_minutes(int(data)),
-            "L": lambda data, depth: int(data),
+            "L": lambda data, depth: locale.format('%d', data),
             "m": lambda data, depth: time.ctime(data),
             "n": lambda data, depth: self.indent(data, depth),
             "s": lambda data, depth: to_human(data),
