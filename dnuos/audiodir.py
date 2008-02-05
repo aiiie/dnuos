@@ -278,12 +278,12 @@ class Dir(object):
         res = set()
         for bitrate, type_ in self._bitrates:
             if type_ == "C":
-                res.add(bitrate / 1000)
+                res.add(int(bitrate / 1000))
             else:
                 res.add(table[type_])
         res = list(res)
         res.sort()
-        return ', '.join([str(int(x)) for x in res])
+        return ', '.join([str(x) for x in res])
     audiolist_format = property(_get_audiolist_format)
 
     def _parse_modified(self):
