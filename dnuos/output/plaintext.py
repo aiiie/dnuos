@@ -75,7 +75,7 @@ class Renderer(AbstractRenderer):
         yield line
         total_megs = sizes["Total"] / (1024 * 1024)
         total_megs_s = locale.format('%10.2f', total_megs)
-        speed = locale.format('%10.2f', total_megs / timess['elapsed_time'])
+        speed = locale.format('%10.2f', total_megs / times['elapsed_time'])
         yield "| Total %s Mb   |" % total_megs_s
         yield "| Speed %s Mb/s |" % speed
         yield line[:25]
