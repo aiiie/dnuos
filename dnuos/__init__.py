@@ -2,6 +2,9 @@
 
 __version__ = '1.0b3'
 
+import gettext
+gettext.install('dnuos')
+
 import os
 import sys
 import time
@@ -139,12 +142,12 @@ def main(argv=None):
                 try:
                     appdata.create_user_data_dir(options.cache_dir)
                 except IOError, err:
-                    print >> sys.stderr, "Failed to create cache directory:"
+                    print >> sys.stderr, _('Failed to create cache directory:')
                     if options.debug:
                         raise
                     print >> sys.stderr, err
-                    print >> sys.stderr, ("Use the --disable-cache switch to "
-                                          "disable caching")
+                    print >> sys.stderr, _('Use the --disable-cache switch '
+                                           'to disable caching')
             else:
                 adir_class = audiodir.Dir
 
@@ -153,11 +156,11 @@ def main(argv=None):
                                           options.format_string,
                                           options.fields,
                                           options)
-            except KeyError:
-                print >> sys.stderr, ("Format string can only contain valid "
-                                      "fields")
-                print >> sys.stderr, ("Use the --help-output-string switch "
-                                      "for more information")
+            except KeyError:    
+                print >> sys.stderr, _('Format string can only contain valid '
+                                       'fields')
+                print >> sys.stderr, _('Use the --help-output-string switch '
+                                       'for more information')
                 return 2
 
             # Append basedirs to exclude_paths to avoid traversing nested
@@ -173,8 +176,8 @@ def main(argv=None):
         elif options.disp_version:
             result = dnuos.output.plaintext.render_version(data.version)
         else:
-            print >> sys.stderr, ("No folders to process.\nType `%s -h' "
-                                  "for help." % os.path.basename(argv[0]))
+            print >> sys.stderr, (_("No folders to process.\nType `%s -h' "
+                                    "for help.") % os.path.basename(argv[0]))
             return 2
 
         # Output
@@ -195,12 +198,12 @@ def main(argv=None):
                 try:
                     cache.save()
                 except IOError, err:
-                    print >> sys.stderr, "Failed to save cache data:"
+                    print >> sys.stderr, _('Failed to save cache data:')
                     if options.debug:
                         raise
                     print >> sys.stderr, err
-                    print >> sys.stderr, ("Use the --disable-cache switch to "
-                                          "disable caching")
+                    print >> sys.stderr, _('Use the --disable-cache switch '
+                                           'to disable caching')
                     return 2
     except KeyboardInterrupt:
         print ''
@@ -214,7 +217,7 @@ def indicate_progress(dir_pairs, sizes, outs=sys.stderr):
     """
 
     for adir, root in dir_pairs:
-        print >> outs, "%sB processed\r" % to_human(sizes["Total"]),
+        print >> outs, _('%sB processed\r') % to_human(sizes["Total"]),
         yield adir, root 
     print >> outs, "\r               \r",
 
@@ -230,7 +233,7 @@ def print_bad(dir_pairs):
     for adir, root in dir_pairs:
         yield adir, root
         for badfile, traceback in adir.bad_files:
-            print >> sys.stderr, "Audiotype failed for:", badfile
+            print >> sys.stderr, _('Audiotype failed for:'), badfile
             print >> sys.stderr, traceback
 
 
