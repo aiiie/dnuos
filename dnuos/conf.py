@@ -21,7 +21,7 @@ from dnuos.misc import deprecation
 def exit_with_output_help(option, opt_str, value, parser):
     """Prints output help and exits program"""
 
-    print r"""
+    print _(r"""
 Anything enclosed by brackets is considered a field. A field must have the
 following syntax:
   [TAG]
@@ -72,7 +72,7 @@ Unescaped brackets are forbidden unless they define a field.
 
 Note: If you have any whitespace in your output string you must put it inside
 quotes or otherwise it will not get parsed right.
-"""
+""")
     sys.exit(0)
 
 
@@ -80,9 +80,9 @@ def set_db_format(option, opt_str, value, parser):
 
     parser.values.outfile = value
     parser.values.output_module = dnuos.output.db
-    deprecation('The %s option is deprecated and will be removed in a '
-                'future version. Use --template=db --file=FILE instead to '
-                'ensure compatibility with future versions.' % opt_str)
+    deprecation(_('The %s option is deprecated and will be removed in a '
+                  'future version. Use --template=db --file=FILE instead to '
+                  'ensure compatibility with future versions.') % opt_str)
 
 
 def set_format_string(option, opt_str, value, parser):
@@ -91,15 +91,16 @@ def set_format_string(option, opt_str, value, parser):
         parser.values.format_string, parser.values.fields = (
             parse_format_string2(value))
     except ValueError:
-        raise OptionValueError("Bad format string argument to %s" % opt_str)
+        raise OptionValueError(_('Bad format string argument to %s')
+                               % opt_str)
 
 
 def set_html_format(option, opt_str, value, parser):
 
     parser.values.output_module = dnuos.output.html
-    deprecation('The %s option is deprecated and will be removed in a '
-                'future version. Use --template=html instead to ensure '
-                'compatibility with future versions.' % opt_str)
+    deprecation(_('The %s option is deprecated and will be removed in a '
+                  'future version. Use --template=html instead to ensure '
+                  'compatibility with future versions.') % opt_str)
 
 
 def set_mp3_min_bitrate(option, opt_str, value, parser):
@@ -107,7 +108,7 @@ def set_mp3_min_bitrate(option, opt_str, value, parser):
     if value >= 0 and value <= 320:
         parser.values.mp3_min_bit_rate = 1000 * value
     else:
-        raise OptionValueError("Bitrate must be 0 or in the range (1..320)")
+        raise OptionValueError(_('Bitrate must be 0 or in the range (1..320)'))
 
 
 def set_output_module(option, opt_str, value, parser):
@@ -115,7 +116,7 @@ def set_output_module(option, opt_str, value, parser):
     try:
         module = getattr(dnuos.output, value)
     except AttributeError:
-        raise OptionValueError("Unknown template '%s'" % value)
+        raise OptionValueError(_("Unknown template '%s'") % value)
     parser.values.output_module = module
 
 
@@ -124,7 +125,7 @@ def set_preferred_tag(option, opt_str, value, parser):
     if value in [1, 2]:
         parser.values.prefer_tag = value
     else:
-        raise OptionValueError("Invalid argument to %s" % opt_str)
+        raise OptionValueError(_("Invalid argument to %s") % opt_str)
 
 
 def set_cache_dir(option, opt_str, value, parser):
@@ -139,7 +140,7 @@ def add_exclude_dir(option, opt_str, value, parser):
     if os.path.isdir(value):
         parser.values.exclude_paths.append(value)
     else:
-        raise OptionValueError("There is no directory '%s'" % value)
+        raise OptionValueError(_("There is no directory '%s'") % value)
 
 
 def parse_format_string(data):
@@ -191,7 +192,7 @@ def parse_args(argv=sys.argv[1:]):
 
     default_format_string = "[n,-52]| [s,5] | [t,-4] | [q]"
     format_string, fields = parse_format_string2(default_format_string)
-    usage = "%prog [options] basedir ..."
+    usage = _('%prog [options] basedir ...')
     parser = OptionParser(usage)
     parser.set_defaults(bg_color="white",
                         debug=False,
@@ -223,124 +224,125 @@ def parse_args(argv=sys.argv[1:]):
     parser.add_option("--help-output-string",
                      action="callback", nargs=0,
                      callback=exit_with_output_help,
-                     help="Show output string help message")
+                     help=_('Show output string help message'))
 
-    group = OptionGroup(parser, "Application")
+    group = OptionGroup(parser, _('Application'))
     group.add_option("--debug",
                      dest="debug", action="store_true",
-                     help="Output debug trace to stderr")
+                     help=_('Output debug trace to stderr'))
     group.add_option("--ignore-bad",
                      dest="list_bad", action="store_false",
-                     help="Don't list files that cause Audiotype failure")
+                     help=_("Don't list files that cause Audiotype failure"))
     group.add_option("-q", "--quiet",
                      dest="show_progress", action="store_false",
-                     help="Omit progress indication")
+                     help=_('Omit progress indication'))
     group.add_option("-V", "--version",
                      dest="disp_version", action="store_true",
-                     help="Display version")
+                     help=_('Display version'))
     parser.add_option_group(group)
 
-    group = OptionGroup(parser, "Directory walking")
+    group = OptionGroup(parser, _('Directory walking'))
     group.add_option("--disable-cache",
                      dest="use_cache", action="store_false",
-                     help="Disable caching")
+                     help=_('Disable caching'))
     group.add_option("--cache-dir",
                      action="callback", nargs=1,
                      callback=set_cache_dir, type="string",
-                     help="Store cache in DIR (default %default)",
-                     metavar="DIR")
+                     help=_('Store cache in DIR (default %default)'),
+                     metavar=_('DIR'))
     group.add_option("-e", "--exclude",
                      action="callback", nargs=1,
                      callback=add_exclude_dir, type="string",
-                     help="Exclude DIR from search", metavar="DIR")
+                     help=_('Exclude DIR from search'), metavar=_('DIR'))
     group.add_option("-i", "--ignore-case",
                      dest="sort_key", action="store_const",
                      const=lambda a, b: locale.strcoll(a.lower(), b.lower()),
-                     help="Case-insensitive directory sorting")
+                     help=_('Case-insensitive directory sorting'))
     group.add_option("-m", "--merge",
                      dest="merge", action="store_true",
-                     help="Parse basedirs in parallel and merge output")
+                     help=_('Parse basedirs in parallel and merge output'))
     group.add_option("-w", "--wildcards",
                      dest="wildcards", action="store_true",
-                     help="Expand wildcards in basedirs")
+                     help=_('Expand wildcards in basedirs'))
     parser.add_option_group(group)
 
-    group = OptionGroup(parser, "Filtering")
+    group = OptionGroup(parser, _('Filtering'))
     group.add_option("-b", "--bitrate",
                      action="callback", nargs=1,
                      callback=set_mp3_min_bitrate, type="int",
-                     help="Exclude MP3s with bitrate lower than MIN "
-                     "(in Kbps)", metavar="MIN")
+                     help=_('Exclude MP3s with bitrate lower than MIN '
+                     '(in Kbps)'), metavar=_('MIN'))
     group.add_option("-l", "--lame-only",
                      dest="no_non_profile", action="store_true",
-                     help="Exclude MP3s with no LAME profile")
+                     help=_('Exclude MP3s with no LAME profile'))
     group.add_option("-v", "--vbr-only",
                      dest="no_cbr", action="store_true",
-                     help="Exclude MP3s with constant bitrates")
+                     help=_('Exclude MP3s with constant bitrates'))
     group.add_option("-M", "--no-mixed",
                      dest="no_mixed", action="store_true",
-                     help="Exclude directories with mixed files")
+                     help=_('Exclude directories with mixed files'))
     parser.add_option_group(group)
 
-    group = OptionGroup(parser, "Parsing")
+    group = OptionGroup(parser, _('Parsing'))
     group.add_option("-P", "--prefer-tag",
                      action="callback", nargs=1,
                      callback=set_preferred_tag, type="int",
-                     help="If both ID3v1 and ID3v2 tags exist, prefer "
-                     "n (1 or 2) (default %default)", metavar="n")
+                     help=_('If both ID3v1 and ID3v2 tags exist, prefer '
+                     'n (1 or 2) (default %default)'), metavar=_('n'))
     parser.add_option_group(group)
 
-    group = OptionGroup(parser, "Output")
+    group = OptionGroup(parser, _('Output'))
     group.add_option("-B", "--bg",
                      dest="bg_color",
-                     help="Set HTML background COLOR (default %default)",
-                     metavar="COLOR")
+                     help=_('Set HTML background COLOR (default %default)'),
+                     metavar=_('COLOR'))
     group.add_option("-f", "--file",
                      dest="outfile",
-                     help="Write output to FILE", metavar="FILE")
+                     help=_('Write output to FILE'), metavar=_('FILE'))
     group.add_option("-H", "--html",
                      action="callback", nargs=0, callback=set_html_format,
-                     help="HTML output (deprecated, use --template html)")
+                     help=_('HTML output (deprecated, use --template html)'))
     group.add_option("-I", "--indent",
                      dest="indent", type="int",
-                     help="Set indent to n (default %default)", metavar="n")
+                     help=_('Set indent to n (default %default)'),
+                     metavar=_('n'))
     group.add_option("-o", "--output",
                      action="callback", nargs=1,
                      callback=set_format_string, type="string",
-                     help="Set output format STRING used in plain-text "
-                     "and HTML output. See --help-output-string for "
-                     "details on syntax. (default %s)" %
-                     default_format_string, metavar="STRING")
+                     help=_('Set output format STRING used in plain-text '
+                     'and HTML output. See --help-output-string for '
+                     'details on syntax. (default %s)') %
+                     default_format_string, metavar=_('STRING'))
     group.add_option("-O", "--output-db",
                      action="callback", nargs=1,
                      callback=set_db_format, type="string",
-                     help="Write list in output.db format to FILE "
-                     "(deprecated, use --template db)", metavar="FILE")
+                     help=_('Write list in output.db format to FILE '
+                     '(deprecated, use --template db)'), metavar=_('FILE'))
     group.add_option("-s", "--strip",
                      dest="stripped", action="store_true",
-                     help="Strip output of field headers and empty "
-                     "directories")
+                     help=_('Strip output of field headers and empty '
+                     'directories'))
     group.add_option("--template",
                      action="callback", nargs=1,
                      callback=set_output_module, type="string",
-                     help="Set output TEMPLATE (default %default)",
-                     metavar="TEMPLATE")
+                     help=_('Set output TEMPLATE (default %default)'),
+                     metavar=_('TEMPLATE'))
     group.add_option("-T", "--text",
                      dest="text_color",
-                     help="Set HTML text COLOR (default %default)",
-                     metavar="COLOR")
+                     help=_('Set HTML text COLOR (default %default)'),
+                     metavar=_('COLOR'))
     parser.add_option_group(group)
 
-    group = OptionGroup(parser, "Statistics")
+    group = OptionGroup(parser, _('Statistics'))
     group.add_option("-D", "--date",
                      dest="disp_date", action="store_true",
-                     help="Display datestamp header")
+                     help=_('Display datestamp header'))
     group.add_option("-S", "--stats",
                      dest="disp_result", action="store_true",
-                     help="Display statistics results")
+                     help=_('Display statistics results'))
     group.add_option("-t", "--time",
                      dest="disp_time", action="store_true",
-                     help="Display elapsed time footer")
+                     help=_('Display elapsed time footer'))
     parser.add_option_group(group)
 
     (options, args) = parser.parse_args(argv)

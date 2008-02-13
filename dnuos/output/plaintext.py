@@ -51,19 +51,20 @@ class Renderer(AbstractRenderer):
 
     def render_bad_files(self, bad_files):
 
-        yield "Audiotype failed on the following files:"
+        yield _('Audiotype failed on the following files:')
         yield "\n".join([f[0] for f in bad_files])
 
     def render_generation_time(self, times):
 
-        yield "Generation time:     %8.2f s" % times['elapsed_time']
+        elapsed_time = locale.format('%8.2f', times['elapsed_time'])
+        yield _('Generation time:     %s s') % elapsed_time
 
     def render_sizes(self, sizes, times):
 
         line = "+-----------------------+-----------+"
 
         yield line
-        yield "| Format    Amount (Mb) | Ratio (%) |"
+        yield _('| Format    Amount (Mb) | Ratio (%) |')
         yield line
         for mediatype in ["Ogg", "MP3", "MPC", "AAC", "FLAC"]:
             if sizes[mediatype]:
@@ -76,8 +77,8 @@ class Renderer(AbstractRenderer):
         total_megs = sizes["Total"] / (1024 * 1024)
         total_megs_s = locale.format('%10.2f', total_megs)
         speed = locale.format('%10.2f', total_megs / times['elapsed_time'])
-        yield "| Total %s Mb   |" % total_megs_s
-        yield "| Speed %s Mb/s |" % speed
+        yield _('| Total %s Mb   |') % total_megs_s
+        yield _('| Speed %s Mb/s |') % speed
         yield line[:25]
 
 
