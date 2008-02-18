@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
@@ -19,19 +18,19 @@ msgstr ""
 
 #: dnuos/__init__.py:145
 msgid "Failed to create cache directory:"
-msgstr ""
+msgstr "Échoué à créer le dossier du cache:"
 
 #: dnuos/__init__.py:149 dnuos/__init__.py:205
 msgid "Use the --disable-cache switch to disable caching"
-msgstr ""
+msgstr "Utilisez l'option --disable-cache pour interdire le cache"
 
 #: dnuos/__init__.py:160
 msgid "Format string can only contain valid fields"
-msgstr ""
+msgstr "Le chaîne de format peut seulement contenir des champs valides"
 
 #: dnuos/__init__.py:162
 msgid "Use the --help-output-string switch for more information"
-msgstr ""
+msgstr "Utilisez l'option --help-output-string pour plus information"
 
 #: dnuos/__init__.py:179
 #, python-format
@@ -39,19 +38,21 @@ msgid ""
 "No folders to process.\n"
 "Type `%s -h' for help."
 msgstr ""
+"Il n'y a aucun dossier pour procéder.\n"
+"Exécutez `%s -h' pour aide."
 
 #: dnuos/__init__.py:201
 msgid "Failed to save cache data:"
-msgstr ""
+msgstr "Échoué à enregistrer les données du cache:"
 
 #: dnuos/__init__.py:220
 #, python-format
 msgid "%sB processed\r"
-msgstr ""
+msgstr "%sB procédés"
 
 #: dnuos/__init__.py:236
 msgid "Audiotype failed for:"
-msgstr ""
+msgstr "Audiotype a échoué avec:"
 
 #: dnuos/conf.py:24
 msgid ""
@@ -119,11 +120,14 @@ msgid ""
 "--template=db --file=FILE instead to ensure compatibility with future "
 "versions."
 msgstr ""
+"L'Option %s est désapprouvée et ce sera supprimée dans une prochaine "
+"version. Utilisez plutôt --template=db --file=FICHIER pour assurer "
+"compatibilité avec de prochaines versions."
 
 #: dnuos/conf.py:94
 #, python-format
 msgid "Bad format string argument to %s"
-msgstr ""
+msgstr "Chaîne de format pour %s est invalide"
 
 #: dnuos/conf.py:101
 #, python-format
@@ -131,20 +135,23 @@ msgid ""
 "The %s option is deprecated and will be removed in a future version. Use "
 "--template=html instead to ensure compatibility with future versions."
 msgstr ""
+"L'Option %s est désapprouvée et ce sera supprimée dans une prochaine "
+"version. Utilisez plutôt --template=html pour assurer "
+"compatibilité avec de prochaines versions."
 
 #: dnuos/conf.py:111
 msgid "Bitrate must be 0 or in the range (1..320)"
-msgstr ""
+msgstr "Bitrate doit être 0 ou dans la plage (1..320)"
 
 #: dnuos/conf.py:119
 #, python-format
 msgid "Unknown template '%s'"
-msgstr ""
+msgstr "Template inconnu '%s'"
 
 #: dnuos/conf.py:128
 #, python-format
 msgid "Invalid argument to %s"
-msgstr ""
+msgstr "Argument pour %s est invalide"
 
 #: dnuos/conf.py:143
 #, python-format
@@ -157,7 +164,7 @@ msgstr ""
 
 #: dnuos/conf.py:227
 msgid "Show output string help message"
-msgstr ""
+msgstr "Afficher l'aide pour la chaîne de rendement"
 
 #: dnuos/conf.py:229
 msgid "Application"
@@ -165,32 +172,32 @@ msgstr ""
 
 #: dnuos/conf.py:232
 msgid "Output debug trace to stderr"
-msgstr ""
+msgstr "Écrire la trace de débouger à stderr"
 
 #: dnuos/conf.py:235
 msgid "Don't list files that cause Audiotype failure"
-msgstr ""
+msgstr "Ne pas afficher de fichiers qui cause des échecs d'Audiotype"
 
 #: dnuos/conf.py:238
 msgid "Omit progress indication"
-msgstr ""
+msgstr "Omettre l'indication de progrès"
 
 #: dnuos/conf.py:241
 msgid "Display version"
 msgstr "Afficher la version"
 
 #: dnuos/conf.py:244
-msgid "Directory walking"
+msgid "Recherche de dossier"
 msgstr ""
 
 #: dnuos/conf.py:247
 msgid "Disable caching"
-msgstr ""
+msgstr "Interdire le cache"
 
 #: dnuos/conf.py:251
 #, python-format
 msgid "Store cache in DIR (default %default)"
-msgstr ""
+msgstr "Enregistrer le cache dans DOSSIER (%default défaut)"
 
 #: dnuos/conf.py:252 dnuos/conf.py:256
 msgid "DIR"
@@ -214,7 +221,7 @@ msgstr ""
 
 #: dnuos/conf.py:269
 msgid "Filtering"
-msgstr ""
+msgstr "Filtrage"
 
 #: dnuos/conf.py:273
 msgid "Exclude MP3s with bitrate lower than MIN (in Kbps)"
@@ -238,7 +245,7 @@ msgstr ""
 
 #: dnuos/conf.py:286
 msgid "Parsing"
-msgstr ""
+msgstr "Analysage"
 
 #: dnuos/conf.py:290
 #, python-format
@@ -251,7 +258,7 @@ msgstr ""
 
 #: dnuos/conf.py:294
 msgid "Output"
-msgstr ""
+msgstr "Rendement"
 
 #: dnuos/conf.py:297
 #, python-format
@@ -260,7 +267,7 @@ msgstr ""
 
 #: dnuos/conf.py:298 dnuos/conf.py:333
 msgid "COLOR"
-msgstr "COLOEUR"
+msgstr "COULEUR"
 
 #: dnuos/conf.py:301
 msgid "Write output to FILE"
@@ -353,7 +360,7 @@ msgid "Length"
 msgstr "Durée"
 
 #: dnuos/output/abstract_renderer.py:27 dnuos/output/abstract_renderer.py:28
-msgid "Modified"
+msgid "Modification"
 msgstr ""
 
 #: dnuos/output/abstract_renderer.py:29 dnuos/output/abstract_renderer.py:30
@@ -366,7 +373,7 @@ msgstr "Profil"
 
 #: dnuos/output/abstract_renderer.py:32
 msgid "Path"
-msgstr ""
+msgstr "Chemin"
 
 #: dnuos/output/abstract_renderer.py:33
 msgid "Quality"
@@ -393,6 +400,20 @@ msgstr "Encodeur"
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"\n"
 "\"http://www.w3.org/TR/html4/strict.dtd\">\n"
+"<html lang=\"en-us\">\n"
+"<head>\n"
+"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n"
+"<meta name=\"generator\" content=\"Dnuos %s\">\n"
+"<title>Music List</title>\n"
+"<style type=\"text/css\">\n"
+"body { color: %s; background: %s; }\n"
+"</style>\n"
+"</head>\n"
+"<body>\n"
+"<pre>"
+msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"\n"
+"\"http://www.w3.org/TR/html4/strict.dtd\">\n"
 "<html lang=\"fr-fr\">\n"
 "<head>\n"
 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n"
@@ -404,11 +425,10 @@ msgid ""
 "</head>\n"
 "<body>\n"
 "<pre>"
-msgstr ""
 
 #: dnuos/output/plaintext.py:54
 msgid "Audiotype failed on the following files:"
-msgstr ""
+msgstr "Audiotype a échoué avec ces fichiers:"
 
 #: dnuos/output/plaintext.py:60
 #, python-format

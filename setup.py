@@ -85,6 +85,7 @@ older, has fewer features, and is no longer maintained.
 """,
     name='dnuos',
     packages=['dnuos', 'dnuos.id3', 'dnuos.output'],
+    package_data={'dnuos': ['locale/*.*', 'locale/*/LC_MESSAGES/*.*']},
     url='http://dnuos.tweek.us/',
     version='1.0b3',
     **extra_options
