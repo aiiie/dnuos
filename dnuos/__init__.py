@@ -116,6 +116,10 @@ def setup_renderer(output_module, format_string, fields, options):
 def main(argv=None):
     """Main entry point"""
 
+    # Set encoding to UTF-8, so multi-byte characters don't raise exceptions
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+
     import locale
     try:
         locale.setlocale(locale.LC_ALL, '')
