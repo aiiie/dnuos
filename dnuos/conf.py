@@ -193,7 +193,7 @@ def parse_args(argv=sys.argv[1:]):
     default_format_string = "[n,-52]| [s,5] | [t,-4] | [q]"
     format_string, fields = parse_format_string2(default_format_string)
     usage = _('%prog [options] basedir ...')
-    parser = OptionParser(usage)
+    parser = OptionParser(usage, add_help_option=False)
     parser.set_defaults(bg_color="white",
                         debug=False,
                         disp_date=False,
@@ -221,10 +221,12 @@ def parse_args(argv=sys.argv[1:]):
                         cache_dir=appdata.user_data_dir('Dnuos', 'Dnuos'),
                         wildcards=False)
 
+    parser.add_option("-h", "--help", action="help",
+                      help=_("Show this help message and exit"))
     parser.add_option("--help-output-string",
-                     action="callback", nargs=0,
-                     callback=exit_with_output_help,
-                     help=_('Show output string help message'))
+                      action="callback", nargs=0,
+                      callback=exit_with_output_help,
+                      help=_('Show output string help message'))
 
     group = OptionGroup(parser, _('Application'))
     group.add_option("--debug",
