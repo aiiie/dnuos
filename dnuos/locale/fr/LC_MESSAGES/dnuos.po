@@ -337,7 +337,7 @@ msgstr "Afficher les résultats statistiques"
 
 #: dnuos/conf.py:345
 msgid "Display elapsed time footer"
-msgstr "Afficher"
+msgstr "Afficher le temps passé dans la bas de page"
 
 #: dnuos/output/abstract_renderer.py:19
 msgid "Bitrate(s)"
@@ -437,7 +437,7 @@ msgstr "Audiotype a échoué avec ces fichiers:"
 #: dnuos/output/plaintext.py:60
 #, python-format
 msgid "Generation time:     %s s"
-msgstr "Durée de temps:      %s s"
+msgstr "Durée de rendement:  %s s"
 
 #: dnuos/output/plaintext.py:67
 msgid "| Format    Amount (Mb) | Ratio (%) |"
