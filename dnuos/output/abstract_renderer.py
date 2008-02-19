@@ -125,7 +125,9 @@ class Column(object):
                 data = ' ' * len(self.suffix)
         if self.width != None:
             try:
-                data = unicodedata.normalize('NFC', data.decode('utf-8'))
+                if not isinstance(data, unicode):
+                    data = data.decode('utf-8')
+                data = unicodedata.normalize('NFC', data)
                 data = u"%*.*s" % (self.width, abs(self.width), data)
                 data = data.encode('utf-8')
             except UnicodeError:
