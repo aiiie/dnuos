@@ -225,7 +225,7 @@ msgstr "Filtrage"
 
 #: dnuos/conf.py:273
 msgid "Exclude MP3s with bitrate lower than MIN (in Kbps)"
-msgstr "Exclure les MP3s avec un bitrate moins que MIN (en Kbps)"
+msgstr "Exclure les MP3s avec un bitrate moins que MIN (en Kops)"
 
 #: dnuos/conf.py:274
 msgid "MIN"
@@ -250,8 +250,9 @@ msgstr "Analysage"
 #: dnuos/conf.py:290
 #, python-format
 msgid "If both ID3v1 and ID3v2 tags exist, prefer n (1 or 2) (default %default)"
-msgstr "Si des balises de ID3v1 ainsi que ID3v2 existent, préférer n "
-"(1 ou 2) (%default par défaut)"
+msgstr ""
+"Si des balises de ID3v1 ainsi que ID3v2 existent, préférer n (1 ou 2) "
+"(%default par défaut)"
 
 #: dnuos/conf.py:291 dnuos/conf.py:308
 msgid "n"
@@ -264,7 +265,7 @@ msgstr "Rendement"
 #: dnuos/conf.py:297
 #, python-format
 msgid "Set HTML background COLOR (default %default)"
-msgstr "Mettre la couleur du arrière-plan de HTML"
+msgstr "Mettre la couleur du arrière-plan de HTML (%default par défaut)"
 
 #: dnuos/conf.py:298 dnuos/conf.py:333
 msgid "COLOR"
@@ -292,9 +293,10 @@ msgstr "Mettre l'alinéa à n (%default par défaut)"
 msgid ""
 "Set output format STRING used in plain-text and HTML output. See --help-"
 "output-string for details on syntax. (default %s)"
-msgstr "Mettre la chaîne de rendement utilisée dans le rendement de texte "
-"brut et texte HTML. Voyez --help-output-string pour plus information à "
-"propos de syntaxe. (%s par défaut)"
+msgstr ""
+"Mettre la chaîne de rendement utilisée dans le rendement de texte brut et "
+"texte HTML. Voyez --help-output-string pour plus information à propos de "
+"syntaxe. (%s par défaut)"
 
 #: dnuos/conf.py:315
 msgid "STRING"
@@ -302,7 +304,8 @@ msgstr "CHAÎNE"
 
 #: dnuos/conf.py:319
 msgid "Write list in output.db format to FILE (deprecated, use --template db)"
-msgstr "Écrire la liste avec le format output.db dans FICHIER (désapprouvé, "
+msgstr ""
+"Écrire la liste avec le format output.db dans FICHIER (désapprouvé, "
 "utilisez --template db)"
 
 #: dnuos/conf.py:323
