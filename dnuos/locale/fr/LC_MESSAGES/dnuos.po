@@ -1,38 +1,39 @@
-# Translations template for PROJECT.
-# Copyright (C) 2008 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
+# French translations for Dnuos.
+# Copyright (C) 2008 aiiie
+# This file is distributed under the same license as the Dnuos project.
+# aiiie <aiiie@aiiie.co>, 2008.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2008-02-13 13:28-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: Dnuos 1.0\n"
+"Report-Msgid-Bugs-To: aiiie@aiiie.co\n"
+"POT-Creation-Date: 2008-02-13 13:28+0500\n"
+"PO-Revision-Date: 2008-02-19 17:45-0500\n"
+"Last-Translator: aiiie <aiiie@aiiie.co>\n"
+"Language-Team: French\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.2\n"
 
-#: dnuos/__init__.py:145
+#: dnuos/__init__.py:153
 msgid "Failed to create cache directory:"
 msgstr "Échoué à créer le dossier du cache:"
 
-#: dnuos/__init__.py:149 dnuos/__init__.py:205
+#: dnuos/__init__.py:157 dnuos/__init__.py:213
 msgid "Use the --disable-cache switch to disable caching"
 msgstr "Utilisez l'option --disable-cache pour interdire le cache"
 
-#: dnuos/__init__.py:160
+#: dnuos/__init__.py:168
 msgid "Format string can only contain valid fields"
 msgstr "La chaîne de rendement peut seulement contenir des champs valides"
 
-#: dnuos/__init__.py:162
+#: dnuos/__init__.py:170
 msgid "Use the --help-output-string switch for more information"
 msgstr "Utilisez l'option --help-output-string pour plus information"
 
-#: dnuos/__init__.py:179
+#: dnuos/__init__.py:187
 #, python-format
 msgid ""
 "No folders to process.\n"
@@ -41,16 +42,16 @@ msgstr ""
 "Il n'y a aucun dossier pour procéder.\n"
 "Exécutez `%s -h' pour aide."
 
-#: dnuos/__init__.py:201
+#: dnuos/__init__.py:209
 msgid "Failed to save cache data:"
 msgstr "Échoué à enregistrer les données du cache:"
 
-#: dnuos/__init__.py:220
+#: dnuos/__init__.py:228
 #, python-format
 msgid "%sB processed\r"
 msgstr "%so procédés"
 
-#: dnuos/__init__.py:236
+#: dnuos/__init__.py:244
 msgid "Audiotype failed for:"
 msgstr "Audiotype a échoué avec:"
 
@@ -103,8 +104,9 @@ msgid ""
 "Other interpreted sequences are:\n"
 "  \\[  [\n"
 "  \\]  ]\n"
-"  \\n  new line\n"
-"  \\t  tab character\n"
+"  \n"
+"  new line\n"
+"  \t  tab character\n"
 "\n"
 "Unescaped brackets are forbidden unless they define a field.\n"
 "\n"
@@ -120,7 +122,7 @@ msgid ""
 "--template=db --file=FILE instead to ensure compatibility with future "
 "versions."
 msgstr ""
-"L'Option %s est désapprouvée et ce sera supprimée dans une prochaine "
+"L'Option %s est désapprouvée et sera supprimée dans une prochaine "
 "version. Utilisez plutôt --template=db --file=FICHIER pour assurer "
 "compatibilité avec de prochaines versions."
 
@@ -135,9 +137,9 @@ msgid ""
 "The %s option is deprecated and will be removed in a future version. Use "
 "--template=html instead to ensure compatibility with future versions."
 msgstr ""
-"L'Option %s est désapprouvée et ce sera supprimée dans une prochaine "
-"version. Utilisez plutôt --template=html pour assurer "
-"compatibilité avec de prochaines versions."
+"L'Option %s est désapprouvée et sera supprimée dans une prochaine "
+"version. Utilisez plutôt --template=html pour assurer compatibilité avec "
+"de prochaines versions."
 
 #: dnuos/conf.py:111
 msgid "Bitrate must be 0 or in the range (1..320)"
@@ -162,183 +164,186 @@ msgstr "Il n'y a pas de dossier '%s'"
 msgid "%prog [options] basedir ..."
 msgstr ""
 
-#: dnuos/conf.py:227
+#: dnuos/conf.py:225
+msgid "Show this help message and exit"
+msgstr "Afficher ce message d'aide et terminer"
+
+#: dnuos/conf.py:229
 msgid "Show output string help message"
 msgstr "Afficher l'aide pour la chaîne de rendement"
 
-#: dnuos/conf.py:229
+#: dnuos/conf.py:231
 msgid "Application"
 msgstr ""
 
-#: dnuos/conf.py:232
+#: dnuos/conf.py:234
 msgid "Output debug trace to stderr"
 msgstr "Écrire la trace de débouger à stderr"
 
-#: dnuos/conf.py:235
+#: dnuos/conf.py:237
 msgid "Don't list files that cause Audiotype failure"
 msgstr "Ne pas afficher de fichiers qui cause des échecs d'Audiotype"
 
-#: dnuos/conf.py:238
+#: dnuos/conf.py:240
 msgid "Omit progress indication"
 msgstr "Omettre l'indication de progrès"
 
-#: dnuos/conf.py:241
+#: dnuos/conf.py:243
 msgid "Display version"
 msgstr "Afficher la version"
 
-#: dnuos/conf.py:244
+#: dnuos/conf.py:246
 msgid "Directory walking"
 msgstr "Recherche de dossier"
 
-#: dnuos/conf.py:247
+#: dnuos/conf.py:249
 msgid "Disable caching"
 msgstr "Interdire le cache"
 
-#: dnuos/conf.py:251
+#: dnuos/conf.py:253
 #, python-format
 msgid "Store cache in DIR (default %default)"
 msgstr "Enregistrer le cache dans DOSSIER (%default par défaut)"
 
-#: dnuos/conf.py:252 dnuos/conf.py:256
+#: dnuos/conf.py:254 dnuos/conf.py:258
 msgid "DIR"
 msgstr "DOSSIER"
 
-#: dnuos/conf.py:256
+#: dnuos/conf.py:258
 msgid "Exclude DIR from search"
 msgstr "Exclure DOSSIER de recherche"
 
-#: dnuos/conf.py:260
+#: dnuos/conf.py:262
 msgid "Case-insensitive directory sorting"
 msgstr "Ranger des dossiers sensiblement à la casse"
 
-#: dnuos/conf.py:263
+#: dnuos/conf.py:265
 msgid "Parse basedirs in parallel and merge output"
 msgstr "Analyser basedirs en parallèle et combiner le rendement"
 
-#: dnuos/conf.py:266
+#: dnuos/conf.py:268
 msgid "Expand wildcards in basedirs"
 msgstr "Développer les caractères génériques dans basedirs"
 
-#: dnuos/conf.py:269
+#: dnuos/conf.py:271
 msgid "Filtering"
 msgstr "Filtrage"
 
-#: dnuos/conf.py:273
+#: dnuos/conf.py:275
 msgid "Exclude MP3s with bitrate lower than MIN (in Kbps)"
 msgstr "Exclure les MP3s avec un bitrate moins que MIN (en Kops)"
 
-#: dnuos/conf.py:274
+#: dnuos/conf.py:276
 msgid "MIN"
 msgstr ""
 
-#: dnuos/conf.py:277
+#: dnuos/conf.py:279
 msgid "Exclude MP3s with no LAME profile"
 msgstr "Exclure les MP3s sans le profil LAME"
 
-#: dnuos/conf.py:280
+#: dnuos/conf.py:282
 msgid "Exclude MP3s with constant bitrates"
 msgstr "Exclure les MP3s avec le bitrate constant"
 
-#: dnuos/conf.py:283
+#: dnuos/conf.py:285
 msgid "Exclude directories with mixed files"
 msgstr "Exclure les dossiers avec des fichiers mélangés"
 
-#: dnuos/conf.py:286
+#: dnuos/conf.py:288
 msgid "Parsing"
 msgstr "Analysage"
 
-#: dnuos/conf.py:290
+#: dnuos/conf.py:292
 #, python-format
 msgid "If both ID3v1 and ID3v2 tags exist, prefer n (1 or 2) (default %default)"
 msgstr ""
 "Si des balises de ID3v1 ainsi que ID3v2 existent, préférer n (1 ou 2) "
 "(%default par défaut)"
 
-#: dnuos/conf.py:291 dnuos/conf.py:308
+#: dnuos/conf.py:293 dnuos/conf.py:310
 msgid "n"
 msgstr ""
 
-#: dnuos/conf.py:294
+#: dnuos/conf.py:296
 msgid "Output"
 msgstr "Rendement"
 
-#: dnuos/conf.py:297
+#: dnuos/conf.py:299
 #, python-format
 msgid "Set HTML background COLOR (default %default)"
 msgstr "Mettre la couleur du arrière-plan de HTML (%default par défaut)"
 
-#: dnuos/conf.py:298 dnuos/conf.py:333
+#: dnuos/conf.py:300 dnuos/conf.py:335
 msgid "COLOR"
 msgstr "COULEUR"
 
-#: dnuos/conf.py:301
+#: dnuos/conf.py:303
 msgid "Write output to FILE"
 msgstr "Écrire rendement dans FICHIER"
 
-#: dnuos/conf.py:301 dnuos/conf.py:320
+#: dnuos/conf.py:303 dnuos/conf.py:322
 msgid "FILE"
 msgstr "FICHIER"
 
-#: dnuos/conf.py:304
+#: dnuos/conf.py:306
 msgid "HTML output (deprecated, use --template html)"
 msgstr "Rendement de HTML (désapprouvé, utilisez --template html)"
 
-#: dnuos/conf.py:307
+#: dnuos/conf.py:309
 #, python-format
 msgid "Set indent to n (default %default)"
 msgstr "Mettre l'alinéa à n (%default par défaut)"
 
-#: dnuos/conf.py:312
+#: dnuos/conf.py:314
 #, python-format
 msgid ""
 "Set output format STRING used in plain-text and HTML output. See --help-"
 "output-string for details on syntax. (default %s)"
 msgstr ""
-"Mettre la chaîne de rendement utilisée dans le rendement de texte brut et "
-"texte HTML. Voyez --help-output-string pour plus information à propos de "
-"syntaxe. (%s par défaut)"
+"Mettre la chaîne de rendement utilisée dans le rendement de texte brut et"
+" texte HTML. Voyez --help-output-string pour plus information à propos de"
+" syntaxe. (%s par défaut)"
 
-#: dnuos/conf.py:315
+#: dnuos/conf.py:317
 msgid "STRING"
 msgstr "CHAÎNE"
 
-#: dnuos/conf.py:319
+#: dnuos/conf.py:321
 msgid "Write list in output.db format to FILE (deprecated, use --template db)"
 msgstr ""
 "Écrire la liste avec le format output.db dans FICHIER (désapprouvé, "
 "utilisez --template db)"
 
-#: dnuos/conf.py:323
+#: dnuos/conf.py:325
 msgid "Strip output of field headers and empty directories"
 msgstr "Supprimer rendement des en-têtes de champ et des dossiers vides"
 
-#: dnuos/conf.py:328
-#, python-format
+#: dnuos/conf.py:330
 msgid "Set output TEMPLATE (default plaintext)"
 msgstr "Mettre le TEMPLATE de rendement (plaintext par défaut)"
 
-#: dnuos/conf.py:329
+#: dnuos/conf.py:331
 msgid "TEMPLATE"
 msgstr ""
 
-#: dnuos/conf.py:332
+#: dnuos/conf.py:334
 #, python-format
 msgid "Set HTML text COLOR (default %default)"
 msgstr "Mettre la couleur du texte HTML (%default par défaut)"
 
-#: dnuos/conf.py:336
+#: dnuos/conf.py:338
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: dnuos/conf.py:339
+#: dnuos/conf.py:341
 msgid "Display datestamp header"
 msgstr "Afficher l'en-tête d'horodate"
 
-#: dnuos/conf.py:342
+#: dnuos/conf.py:344
 msgid "Display statistics results"
 msgstr "Afficher les résultats statistiques"
 
-#: dnuos/conf.py:345
+#: dnuos/conf.py:347
 msgid "Display elapsed time footer"
 msgstr "Afficher le temps passé dans la bas de page"
 
@@ -442,17 +447,46 @@ msgstr "Audiotype a échoué avec ces fichiers:"
 msgid "Generation time:     %s s"
 msgstr "Durée de rendement:  %s s"
 
+#: dnuos/output/plaintext.py:64
+msgid "+-----------------------+-----------+"
+msgstr "+-------------------------+-------------+"
+
 #: dnuos/output/plaintext.py:67
 msgid "| Format    Amount (Mb) | Ratio (%) |"
 msgstr "| Format    Quantité (Mo) | Rapport (%) |"
 
-#: dnuos/output/plaintext.py:80
+#: dnuos/output/plaintext.py:71
+#, python-format
+msgid "%12.2f"
+msgstr ""
+
+#: dnuos/output/plaintext.py:73
+#, python-format
+msgid "%9.2f"
+msgstr "%12.2f"
+
+#: dnuos/output/plaintext.py:75
+#, python-format
+msgid "| %-8s %s | %s |"
+msgstr "| %-10s %s |%s |"
+
+#: dnuos/output/plaintext.py:78 dnuos/output/plaintext.py:80
+#: dnuos/output/plaintext.py:82
+#, python-format
+msgid "%10.2f"
+msgstr ""
+
+#: dnuos/output/plaintext.py:83
 #, python-format
 msgid "| Total %s Mb   |"
-msgstr "| Total %s Mo   |"
+msgstr "| Total %s Mo     |"
 
-#: dnuos/output/plaintext.py:81
+#: dnuos/output/plaintext.py:84
 #, python-format
 msgid "| Speed %s Mb/s |"
 msgstr "| Vitesse %s Mo/s |"
+
+#: dnuos/output/plaintext.py:85
+msgid "+-----------------------+"
+msgstr "+-------------------------+"
 
