@@ -327,7 +327,7 @@ def parse_args(argv=sys.argv[1:]):
     group.add_option("--template",
                      action="callback", nargs=1,
                      callback=set_output_module, type="string",
-                     help=_('Set output TEMPLATE (default %default)'),
+                     help=_('Set output TEMPLATE (default plaintext)'),
                      metavar=_('TEMPLATE'))
     group.add_option("-T", "--text",
                      dest="text_color",

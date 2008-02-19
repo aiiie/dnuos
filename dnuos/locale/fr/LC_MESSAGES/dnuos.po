@@ -314,8 +314,8 @@ msgstr "Supprimer rendement des en-têtes de champ et des dossiers vides"
 
 #: dnuos/conf.py:328
 #, python-format
-msgid "Set output TEMPLATE (default %default)"
-msgstr "Mettre le TEMPLATE de rendement (%default par défaut)"
+msgid "Set output TEMPLATE (default plaintext)"
+msgstr "Mettre le TEMPLATE de rendement (plaintext par défaut)"
 
 #: dnuos/conf.py:329
 msgid "TEMPLATE"
