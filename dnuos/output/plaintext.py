@@ -61,28 +61,28 @@ class Renderer(AbstractRenderer):
 
     def render_sizes(self, sizes, times):
 
-        line = "+-----------------------+-----------+"
+        line = _('+-----------------------+-----------+')
 
         yield line
         yield _('| Format    Amount (Mb) | Ratio (%) |')
         yield line
         for mediatype in ["Ogg", "MP3", "MPC", "AAC", "FLAC"]:
             if sizes[mediatype]:
-                amount = locale.format('%12.2f',
+                amount = locale.format(_('%12.2f'),
                     sizes[mediatype] / (1024 * 1024))
-                ratio = locale.format('%9.2f',
+                ratio = locale.format(_('%9.2f'),
                     sizes[mediatype] * 100 / sizes["Total"])
-                yield "| %-8s %s | %s |" % (mediatype, amount, ratio)
+                yield _('| %-8s %s | %s |') % (mediatype, amount, ratio)
         yield line
         total_megs = sizes["Total"] / (1024 * 1024)
-        total_megs_s = locale.format('%10.2f', total_megs)
+        total_megs_s = locale.format(_('%10.2f'), total_megs)
         if times['elapsed_time']:
-            speed = locale.format('%10.2f', total_megs / times['elapsed_time'])
+            speed = locale.format(_('%10.2f'), total_megs / times['elapsed_time'])
         else:
-            speed = locale.format('%10.2f', 0)
+            speed = locale.format(_('%10.2f'), 0)
         yield _('| Total %s Mb   |') % total_megs_s
         yield _('| Speed %s Mb/s |') % speed
-        yield line[:25]
+        yield _('+-----------------------+')
 
 
 def render_version(version):
