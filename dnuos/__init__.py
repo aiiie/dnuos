@@ -2,15 +2,23 @@
 
 __version__ = '1.0b3'
 
-import gettext
-gettext.install('dnuos')
-
 import os
 import sys
 import time
 import warnings
 from itertools import chain
 from itertools import ifilter
+
+def _find_locale_dir():
+
+    if '__file__' in globals():
+        locale_dir = os.path.join(os.path.split(__file__)[0], 'locale')
+        if os.path.isdir(locale_dir):
+            return locale_dir
+    return None
+
+import gettext
+gettext.install('dnuos', _find_locale_dir(), unicode=True)
 
 import dnuos.output.db
 from dnuos import appdata, audiodir

@@ -4,10 +4,12 @@ import os
 
 try:
     from setuptools import setup
+    from setuptools.command.build_py import build_py
     extra_options = dict(
         entry_points={'console_scripts': ['dnuos = dnuos:main']},
         tests_require=['nose >= 0.9'],
         test_suite='nose.collector',
+        zip_safe=False,
     )
     os.environ['DATA_DIR'] = os.environ.get(
         'DATA_DIR',
@@ -15,6 +17,7 @@ try:
     )
 except ImportError:
     from distutils.core import setup
+    from distutils.command.build_py import build_py
     extra_options = dict(
         scripts=['scripts/dnuos'],
     )
@@ -30,6 +33,17 @@ try:
 except ImportError:
     pass
 
+class LocaleBuildPy(build_py):
+    """Build locale data automatically"""
+
+    def run(self):
+
+        from glob import glob
+        from msgfmt import make
+        for path in glob('./dnuos/locale/*/LC_MESSAGES/*.po'):
+            make(path, None)
+        return build_py.run(self)
+
 setup(
     author='Mattias P\xc3\xa4iv\xc3\xa4rinta, aiiie',
     author_email='pejve@vasteras2.net; aiiie@aiiie.co',
@@ -43,6 +57,7 @@ setup(
         'Topic :: Communications :: File Sharing',
         'Topic :: Multimedia :: Sound/Audio',
     ],
+    cmdclass={'build_py': LocaleBuildPy},
     description='A tool for creating lists of music collections',
     download_url='https://github.com/aiiie/dnuos/archive/refs/tags/1.0b3.tar.gz',
     keywords='music collection list metadata mp3 audiolist oidua',
@@ -85,7 +100,7 @@ older, has fewer features, and is no longer maintained.
 """,
     name='dnuos',
     packages=['dnuos', 'dnuos.id3', 'dnuos.output'],
-    package_data={'dnuos': ['locale/*.*', 'locale/*/LC_MESSAGES/*.*']},
+    package_data={'dnuos': ['locale/*/LC_MESSAGES/*.mo']},
     url='https://github.com/aiiie/dnuos',
     version='1.0b3',
     **extra_options
