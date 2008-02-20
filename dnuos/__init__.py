@@ -133,7 +133,7 @@ def main(argv=None):
         locale.setlocale(locale.LC_ALL, '')
     except locale.Error:
         pass
-    
+
     if argv is None:
         argv = sys.argv
 
@@ -168,7 +168,7 @@ def main(argv=None):
                                           options.format_string,
                                           options.fields,
                                           options)
-            except KeyError:    
+            except KeyError:
                 print >> sys.stderr, _('Format string can only contain valid '
                                        'fields')
                 print >> sys.stderr, _('Use the --help-output-string switch '
