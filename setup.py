@@ -9,7 +9,7 @@ try:
         entry_points={'console_scripts': ['dnuos = dnuos:main']},
         tests_require=['nose >= 0.9'],
         test_suite='nose.collector',
-        zip_safe=False,
+        zip_safe=True,
     )
     os.environ['DATA_DIR'] = os.environ.get(
         'DATA_DIR',

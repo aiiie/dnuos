@@ -11,11 +11,15 @@ from itertools import ifilter
 
 def _find_locale_dir():
 
-    if '__file__' in globals():
-        locale_dir = os.path.join(os.path.split(__file__)[0], 'locale')
-        if os.path.isdir(locale_dir):
-            return locale_dir
-    return None
+    try:
+        from pkg_resources import resource_filename
+        return resource_filename(__name__, 'locale')
+    except ImportError:
+        if '__file__' in globals():
+            locale_dir = os.path.join(os.path.split(__file__)[0], 'locale')
+            if os.path.isdir(locale_dir):
+                return locale_dir
+        return None
 
 import gettext
 gettext.install('dnuos', _find_locale_dir(), unicode=True)
