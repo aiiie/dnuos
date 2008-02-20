@@ -14,6 +14,23 @@ from heapq import heappop, heappush
 from itertools import count
 from warnings import warn
 
+def _find_locale_dir():
+
+    try:
+        from pkg_resources import resource_filename
+        return resource_filename(__name__, 'locale')
+    except ImportError:
+        if '__file__' in globals():
+            locale_dir = os.path.join(os.path.split(__file__)[0], 'locale')
+            if os.path.isdir(locale_dir):
+                return locale_dir
+        return None
+
+import gettext
+_ = gettext.translation('dnuos', _find_locale_dir(), fallback=True).ugettext
+
+
+
 class Lookahead(object):
     """Wrapper class for adding one element of lookahead to an iterator"""
 

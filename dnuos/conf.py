@@ -1,6 +1,5 @@
 """Configuration module for Dnuos"""
 
-
 import glob
 import locale
 import os
@@ -15,7 +14,7 @@ import dnuos.output.db
 import dnuos.output.html
 import dnuos.output.plaintext
 from dnuos import appdata
-from dnuos.misc import deprecation
+from dnuos.misc import deprecation, _
 
 
 def exit_with_output_help(option, opt_str, value, parser):
