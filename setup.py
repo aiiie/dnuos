@@ -40,9 +40,9 @@ class LocaleBuildPy(build_py):
     def run(self):
 
         from glob import glob
-        from msgfmt import make
+        from msgfmt import compile_catalog
         for path in glob('./dnuos/locale/*/LC_MESSAGES/*.po'):
-            make(path, None)
+            compile_catalog(path)
         return build_py.run(self)
 
 setup(
