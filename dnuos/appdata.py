@@ -10,7 +10,7 @@ import sys
 
 def user_data_dir(appname, vendor, version=None):
     """Return full path to the user-specific data dir for this application.
-    
+
         "appname" is the name of application.
         "vendor" (only required and used on Windows) is the name of the
             owner or distributing body for this application. Typically
@@ -19,7 +19,7 @@ def user_data_dir(appname, vendor, version=None):
             path. You might want to use this if you want multiple versions
             of your app to be able to run independently. If used, this
             would typically be "<major>.<minor>".
-    
+
     Typical user data directories are:
         Windows:    C:\Documents and Settings\USER\Application Data\<owner>\<appname>
         Mac OS X:   ~/Library/Application Support/<appname>

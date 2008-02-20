@@ -28,7 +28,7 @@ class AudioType(object):
         self.time = 9
 
     def bitrate(self):
-        
+
         return int(self.streamsize() * 8.0 / self.time)
 
     def streamsize(self):
@@ -81,7 +81,7 @@ class AudioType(object):
                 extsize = struct.unpack("<4B", self._f.read(4))
                 self._end -= unpack_bits(extsize)
                 self._meta.append((self._end, "ID3v2"))
-    
+
         self._f.seek(mark)
         return self._end
 
@@ -411,7 +411,7 @@ class MP3(AudioType):
         tag = struct.unpack(">3s", self._f.read(struct.calcsize(">3s")))
         if tag[0] == "TAG":
             raise SpacerError("Spacer found %s" % self._f.name)
-    
+
     def modificator(self):
 
         if self.layerindex == 3:
@@ -608,19 +608,19 @@ class MPC(AudioType):
                 # Read header
                 self._f.seek(start + sync.start())
                 header = struct.unpack(pattern, self._f.read(patternsize))
-                
+
                 # Return the header if it's valid
                 if header[1] == 7:
                     return header
 
                 # How about next sync in this block?
                 sync = _search_header(chunk, sync.start() + 1)
-                
+
             # Read next chunk
             start = start + 1024
             self._f.seek(start + overlap)
             chunk = chunk[-overlap:] + self._f.read(1024)
-         
+
     def profile(self):
 
         return {"musepack": self.profiletable[self.getheader()[3] >> 20 & 0xF]}
