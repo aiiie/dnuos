@@ -9,27 +9,12 @@ import warnings
 from itertools import chain
 from itertools import ifilter
 
-def _find_locale_dir():
-
-    try:
-        from pkg_resources import resource_filename
-        return resource_filename(__name__, 'locale')
-    except ImportError:
-        if '__file__' in globals():
-            locale_dir = os.path.join(os.path.split(__file__)[0], 'locale')
-            if os.path.isdir(locale_dir):
-                return locale_dir
-        return None
-
-import gettext
-gettext.install('dnuos', _find_locale_dir(), unicode=True)
-
 import dnuos.output.db
 from dnuos import appdata, audiodir
 from dnuos.cache import PersistentDict, memoized
 from dnuos.conf import parse_args
 from dnuos.misc import dir_depth, equal_elements, formatwarning
-from dnuos.misc import make_included_pred, merge, to_human
+from dnuos.misc import make_included_pred, merge, to_human, _
 from dnuos.output.db import DBColumn
 
 __all__ = ['main']

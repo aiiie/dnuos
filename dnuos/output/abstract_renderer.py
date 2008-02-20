@@ -2,7 +2,7 @@ import locale
 import time
 import unicodedata
 
-from dnuos.misc import to_human
+from dnuos.misc import to_human, _
 
 class AbstractRenderer(object):
 

@@ -2,6 +2,7 @@
 
 from cgi import escape
 
+from dnuos.misc import _
 from dnuos.output import plaintext
 from dnuos.output.abstract_renderer import AbstractRenderer
 

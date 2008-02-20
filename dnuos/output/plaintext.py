@@ -3,6 +3,7 @@
 import locale
 import time
 
+from dnuos.misc import _
 from dnuos.output.abstract_renderer import AbstractRenderer
 
 class Renderer(AbstractRenderer):
