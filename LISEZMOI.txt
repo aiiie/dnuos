@@ -28,7 +28,7 @@ Par exemple, une liste pourrait ressembler à ceci::
 Le format de la liste est complètement personnalisable et peut être texte
 brut ou HTML.
 
-Dnuos supporte MP3, AAC, Musepac, Ogg Vorbis, et FLAC. Détection du profil
+Dnuos supporte MP3, AAC, Musepack, Ogg Vorbis, et FLAC. Détection du profil
 de qualité est supporté aussi, y compris l'information du
 `LAME quality preset`_.
 
@@ -119,8 +119,8 @@ News
 ====
 
 Version 1.0b3 (26 Déc. 2007)
-    Ajouté support pour l'enregistrement du cache, même lorsque Dnuos est
-    interrompu.
+    Ajouté le support pour l'enregistrement du cache, même lorsque Dnuos
+    est interrompu.
 
     Renommé ``-p``/``--parallel`` à ``-m``/``--merge``. Il a la même
     fonction.
@@ -130,8 +130,44 @@ Version 1.0b3 (26 Déc. 2007)
     Des améliorations marginales de vitesse avec le code de ``audiotype``
     et de ``id3``.
 
+    Supprimé une grande quantité de code inutilisé dans le paquet ``id3``.
+
+    Réparé un plantage possible avec le nouveau champ de vendeur.
+
+    Réparé des erreurs d'analyse avec les fichiers Ogg Vorbis et ajouté
+    support pour le champ de vendeur.
+
+    Réduit la taille du paquet win32.
 
 Version 1.0b2 (7 Déc. 2007)
+
+    Mis à jour et simplifié la documentation.
+
+    Réparé ``setup.py sdist`` ne pas inclure tous les fichiers.
+
+    Réparé le traitement des MP3 avec des en-têtes VBRI (e.g. fait par
+    Fraunhofer).
+
+    Réparé des problèmes sérieux avec le code ID3 qui probablement le
+    rendent brisé.
+
+    Réparé l'importation de ``set()`` (qui devrait améliorer la
+    compatibilité avec Python 2.3).
+
+    Échangé d'usage de ``pickle`` avec ``cPickle`` (quand il existe) et
+    opté pour le format le plus efficace de ``pickle`` (qui devrait
+    accélérer Dnuos grandement).
+
+    Fait la recherche du dossier de cache plus robuste.
+
+    Ajouté le support pour enregistrer le cache durant exécution, donc si
+    vous terminez de faire d'une liste, il cache ce qui a déjà été
+    énuméré.
+
+    Ajouté un message simple d'erreur pour des chaînes de rendement avec
+    des champs invalides.
+
+    Créé un Makefile qui exécute ``setup.py``.
 
 Version 1.0b1 (2 Déc. 2007)
 
@@ -160,7 +196,7 @@ exécuter les tests avec la commande suivante::
 
     ./setup.py test
 
-Si vous itrouvez aucun de problèmes, soumettez une fiche sur le `site Trac`_.
+Si vous trouvez aucun de problèmes, soumettez une fiche sur le `site Trac`_.
 Ce site est pour le développement, et non pas d'assistance, donc ne soumettez
 pas de fiches d'assistance.
 
