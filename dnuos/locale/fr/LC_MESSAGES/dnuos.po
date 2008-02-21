@@ -19,7 +19,7 @@ msgstr ""
 
 #: dnuos/__init__.py:137
 msgid "Failed to create cache directory:"
-msgstr "Échoué à créer le dossier du cache :"
+msgstr "Échoué à créer le dossier de cache :"
 
 #: dnuos/__init__.py:141 dnuos/__init__.py:191
 msgid "Use the --disable-cache switch to disable caching"
@@ -44,7 +44,7 @@ msgstr ""
 
 #: dnuos/__init__.py:187
 msgid "Failed to save cache data:"
-msgstr "Échoué à enregistrer les données du cache :"
+msgstr "Échoué à enregistrer les données de cache :"
 
 #: dnuos/__init__.py:206
 #, python-format
@@ -288,7 +288,7 @@ msgstr "Filtrage"
 
 #: dnuos/conf.py:274
 msgid "Exclude MP3s with bitrate lower than MIN (in Kbps)"
-msgstr "Exclure les MP3s avec un bitrate moins que MIN (en Kops)"
+msgstr "Exclure les MP3 avec un bitrate moins que MIN (en Kops)"
 
 #: dnuos/conf.py:275
 msgid "MIN"
@@ -296,11 +296,11 @@ msgstr ""
 
 #: dnuos/conf.py:278
 msgid "Exclude MP3s with no LAME profile"
-msgstr "Exclure les MP3s sans le profil LAME"
+msgstr "Exclure les MP3 sans le profil LAME"
 
 #: dnuos/conf.py:281
 msgid "Exclude MP3s with constant bitrates"
-msgstr "Exclure les MP3s avec le bitrate constant"
+msgstr "Exclure les MP3 avec le bitrate constant"
 
 #: dnuos/conf.py:284
 msgid "Exclude directories with mixed files"
