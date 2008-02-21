@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Dnuos 1.0\n"
 "Report-Msgid-Bugs-To: me+dnuos@dackz.net\n"
 "POT-Creation-Date: 2008-02-13 13:28+0500\n"
-"PO-Revision-Date: 2008-02-20 10:42-0500\n"
+"PO-Revision-Date: 2008-02-21 03:21-0500\n"
 "Last-Translator: Brodie Rao <me+dnuos@dackz.net>\n"
 "Language-Team: French\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -17,23 +17,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.2\n"
 
-#: dnuos/__init__.py:142
+#: dnuos/__init__.py:137
 msgid "Failed to create cache directory:"
-msgstr "Échoué à créer le dossier du cache:"
+msgstr "Échoué à créer le dossier du cache :"
 
-#: dnuos/__init__.py:146 dnuos/__init__.py:202
+#: dnuos/__init__.py:141 dnuos/__init__.py:191
 msgid "Use the --disable-cache switch to disable caching"
 msgstr "Utilisez l'option --disable-cache pour interdire le cache"
 
-#: dnuos/__init__.py:157
+#: dnuos/__init__.py:152
 msgid "Format string can only contain valid fields"
 msgstr "La chaîne de rendement peut seulement contenir des champs valides"
 
-#: dnuos/__init__.py:159
+#: dnuos/__init__.py:154
 msgid "Use the --help-output-string switch for more information"
 msgstr "Utilisez l'option --help-output-string pour plus d'information"
 
-#: dnuos/__init__.py:176
+#: dnuos/__init__.py:171
 #, python-format
 msgid ""
 "No folders to process.\n"
@@ -42,18 +42,18 @@ msgstr ""
 "Il n'y a aucun dossier pour traiter.\n"
 "Exécutez `%s -h' pour aide."
 
-#: dnuos/__init__.py:198
+#: dnuos/__init__.py:187
 msgid "Failed to save cache data:"
-msgstr "Échoué à enregistrer les données du cache:"
+msgstr "Échoué à enregistrer les données du cache :"
 
-#: dnuos/__init__.py:217
+#: dnuos/__init__.py:206
 #, python-format
 msgid "%sB processed\r"
 msgstr "%so traités"
 
-#: dnuos/__init__.py:233
+#: dnuos/__init__.py:222
 msgid "Audiotype failed for:"
-msgstr "Audiotype a échoué avec:"
+msgstr "Audiotype a échoué avec :"
 
 #: dnuos/conf.py:23
 msgid ""
@@ -114,6 +114,63 @@ msgid ""
 "inside\n"
 "quotes or otherwise it will not get parsed right.\n"
 msgstr ""
+"\n"
+"Texte entre crochets est considéré comme un field. Un field doit utiliser"
+"\n"
+"le syntaxe suivante :\n"
+"  [BALISE]\n"
+"  [BALISE,LARGEUR]\n"
+"  [BALISE,LARGEUR,SUFFIXE]\n"
+"  [BALISE,,SUFFIXE]\n"
+"\n"
+"BALISE peut être aucune des caractères suivants :\n"
+"  a  une liste de bitrates en format compatiblé avec Audiolist\n"
+"  A  le nom d'artiste spécifié dans les balises ID3\n"
+"  b  le bitrate avec suffixe (e.g. 192k)\n"
+"  B  le bitrate en ops\n"
+"  C  le nom d'album spécifié dans les balises ID3\n"
+"  d  la profondeur (la distance au basedir respectif)\n"
+"  f  le nombre de fichiers audio (incluyant des spaceurs)\n"
+"  l  la durée en minutes et secondes\n"
+"  L  la durée en secondes\n"
+"  m  la date du modification\n"
+"  M  la date du modification en temps UNIX\n"
+"  n  le nom du dossier (mis en alinéa)\n"
+"  N  le nom du dossier\n"
+"  p  le profil\n"
+"  P  le chemin complet du dossier\n"
+"  q  la qualité\n"
+"  s  la taille avec suffixe (e.g 65,4M)\n"
+"  S  la taille en octets\n"
+"  t  le type du fichier\n"
+"  T  le type du bitrate :\n"
+"       ~ fichiers mélangés\n"
+"       C bitrate constant\n"
+"       L compression sans perte\n"
+"       V bitrate variable\n"
+"  V  l'encodeur\n"
+"\n"
+"LARGEUR définit la largeur exacte du champ. Le rendement est rogné à "
+"cette\n"
+"largeur si nécessaire. Les valeurs négatives seraient alignées gauches.\n"
+"Rognage est toujours fait de la droit.\n"
+"\n"
+"SUFFIXE spécifie une chaîne pour adjoindre à toutes données non-vides.\n"
+"\n"
+"D'Autres chaînes interprétées :\n"
+"  \\[  [\n"
+"  \\]  ]\n"
+"  \n"
+"  nouvelle ligne\n"
+"  \t  caractère tab\n"
+"\n"
+"Des crochets qui ne sont pas échappés sont interdits à moins qu'ils\n"
+"définissent un champ.\n"
+"\n"
+"Note : Si vous avez aucun d'escape blanc dans la chaîne de rendement, "
+"vous\n"
+"devez le mettre entre guillemets, sinon il ne serait pas analyser\n"
+"correctement.\n"
 
 #: dnuos/conf.py:82
 #, python-format
@@ -440,12 +497,12 @@ msgstr ""
 
 #: dnuos/output/plaintext.py:55
 msgid "Audiotype failed on the following files:"
-msgstr "Audiotype a échoué avec ces fichiers:"
+msgstr "Audiotype a échoué avec ces fichiers :"
 
 #: dnuos/output/plaintext.py:61
 #, python-format
 msgid "Generation time:     %s s"
-msgstr "Durée de rendement:  %s s"
+msgstr "Durée de rendement : %s s"
 
 #: dnuos/output/plaintext.py:65
 msgid "+-----------------------+-----------+"
