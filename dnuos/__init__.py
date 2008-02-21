@@ -127,7 +127,7 @@ def main(argv=None):
         if options.basedirs:
             if options.use_cache:
                 cache = setup_cache(
-                    appdata.user_data_file('dirs.pkl',
+                    appdata.user_data_file('dirs',
                         options.cache_dir),
                     options.basedirs)
                 adir_class = memoized(audiodir.Dir, cache)
