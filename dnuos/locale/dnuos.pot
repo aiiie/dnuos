@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2008-02-20 10:42-0500\n"
+"POT-Creation-Date: 2008-02-21 03:21-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,39 +17,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.2\n"
 
-#: dnuos/__init__.py:142
+#: dnuos/__init__.py:137
 msgid "Failed to create cache directory:"
 msgstr ""
 
-#: dnuos/__init__.py:146 dnuos/__init__.py:202
+#: dnuos/__init__.py:141 dnuos/__init__.py:191
 msgid "Use the --disable-cache switch to disable caching"
 msgstr ""
 
-#: dnuos/__init__.py:157
+#: dnuos/__init__.py:152
 msgid "Format string can only contain valid fields"
 msgstr ""
 
-#: dnuos/__init__.py:159
+#: dnuos/__init__.py:154
 msgid "Use the --help-output-string switch for more information"
 msgstr ""
 
-#: dnuos/__init__.py:176
+#: dnuos/__init__.py:171
 #, python-format
 msgid ""
 "No folders to process.\n"
 "Type `%s -h' for help."
 msgstr ""
 
-#: dnuos/__init__.py:198
+#: dnuos/__init__.py:187
 msgid "Failed to save cache data:"
 msgstr ""
 
-#: dnuos/__init__.py:217
+#: dnuos/__init__.py:206
 #, python-format
 msgid "%sB processed\r"
 msgstr ""
 
-#: dnuos/__init__.py:233
+#: dnuos/__init__.py:222
 msgid "Audiotype failed for:"
 msgstr ""
 
