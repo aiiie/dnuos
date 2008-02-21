@@ -14,7 +14,7 @@ from dnuos import appdata, audiodir
 from dnuos.cache import PersistentDict, memoized
 from dnuos.conf import parse_args
 from dnuos.misc import dir_depth, equal_elements, formatwarning
-from dnuos.misc import make_included_pred, merge, to_human, _
+from dnuos.misc import merge, to_human, _
 from dnuos.output.db import DBColumn
 
 __all__ = ['main']
@@ -89,14 +89,10 @@ def prepare_listing(dir_pairs, options, data):
     return dir_pairs
 
 
-def setup_cache(cache_filename, basedirs, exclude_paths):
+def setup_cache(cache_filename, basedirs):
     """Creates and readies cache"""
 
-    is_path_included = make_included_pred(basedirs,
-                                          exclude_paths)
-    is_entry_included = (lambda (path,), value: is_path_included(path))
     cache = PersistentDict(filename=cache_filename,
-                           keep_pred=is_entry_included,
                            version=audiodir.Dir.__version__)
     return cache
 
@@ -133,8 +129,7 @@ def main(argv=None):
                 cache = setup_cache(
                     appdata.user_data_file('dirs.pkl',
                         options.cache_dir),
-                    options.basedirs,
-                    options.exclude_paths)
+                    options.basedirs)
                 adir_class = memoized(audiodir.Dir, cache)
                 try:
                     appdata.create_user_data_dir(options.cache_dir)
@@ -181,14 +176,8 @@ def main(argv=None):
         outfile = (options.outfile and open(options.outfile, 'w')
                                    or sys.stdout)
         try:
-            try:
-                for chunk in result:
-                    print >> outfile, chunk
-            except:
-                # Don't evict any items if interrupted
-                if options.basedirs and options.use_cache:
-                    cache.touch_all()
-                raise
+            for chunk in result:
+                print >> outfile, chunk
         finally:
             # Store updated cache
             if options.basedirs and options.use_cache:
