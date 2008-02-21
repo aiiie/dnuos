@@ -201,10 +201,9 @@ Development
 ===========
 
 The official development repository can be found at
-https://github.com/aiiie/dnuosdarcs/. Download the directory recursively, or use
-Darcs_::
+https://github.com/aiiie/dnuos. Download using Git_::
 
-    darcs get https://github.com/aiiie/dnuosdarcs/ my-dnuos-repo
+    git clone https://github.com/aiiie/dnuos.git my-dnuos
 
 Running the test suite requires nose_, and the `test data`_. Once you have
 both, you can run the tests with the following command::
@@ -215,7 +214,7 @@ If you find any problems, please submit a ticket on the `Trac site`_. The
 Trac site is for development, not support, so please don't submit help
 requests there.
 
-.. _Darcs: http://darcs.net/
+.. _Git: https://git-scm.com
 .. _nose: http://somethingaboutorange.com/mrl/projects/nose/
 .. _test data: https://github.com/aiiie/dnuos
 .. _Trac site: https://github.com/aiiie/dnuos
