@@ -1,12 +1,9 @@
 """A module for caching"""
 
 import os
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle
+import shelve
 
-class PersistentDict(dict):
+class PersistentDict(shelve.Shelf, object):
     """A dict with persistence.
 
     A wrapper around UpdateTrackingDict that adds the ability to
@@ -25,21 +22,16 @@ class PersistentDict(dict):
                         saving.
         """
 
-        self.filename = kwargs.pop('filename')
-        self.version = kwargs.pop('version')
-        self.written = []
-        super(PersistentDict, self).__init__(*args, **kwargs)
+        import anydbm
+        super(PersistentDict, self).__init__(
+            anydbm.open(kwargs['filename'], 'c'),
+            protocol=2)
 
-        try:
-            file_ = open(self.filename, 'rb')
-            try:
-                version = pickle.load(file_)
-                if version == self.version:
-                    self.update(pickle.load(file_))
-            finally:
-                file_.close()
-        except IOError:
-            pass
+        self.written = []
+        self.version = kwargs.pop('version')
+        old_version = self.pop('__version__', None)
+        if old_version != self.version:
+            self.clear()
 
     def save(self):
         """Serialize data to file"""
@@ -48,12 +40,8 @@ class PersistentDict(dict):
             if path not in self.written and not os.path.isdir(path):
                 del self[path]
 
-        file_ = open(self.filename, 'wb')
-        try:
-            pickle.dump(self.version, file_, 2)
-            pickle.dump(self, file_, 2)
-        finally:
-            file_.close()
+        self['__version__'] = self.version
+        self.close()
 
 
 class memoized(object):
