@@ -150,42 +150,6 @@ def is_subdir(path1, path2):
     return path2 == path1[:len(path2)]
 
 
-def make_included_pred(included, excluded):
-    """Create predicate for included but not excluded paths.
-
-    >>> pred = make_included_pred(['/etc','/usr'], ['/usr/local'])
-    >>> pred('/usr/local')
-    False
-    >>> pred('/usr/local/share')
-    False
-    >>> pred('/usr')
-    True
-    >>> pred('/usr/doc')
-    True
-    >>> pred('/home')
-    False
-
-    >>> pred = make_included_pred([], ['/usr/local'])
-    >>> pred('/')
-    False
-
-    >>> pred = make_included_pred(['/usr'], [])
-    >>> pred('/usr/local/share')
-    True
-    >>> pred('/home')
-    False
-    """
-
-    i_preds = [lambda path, base=base: is_subdir(path, base)
-               for base in included]
-    e_preds = [lambda path, base=base: is_subdir(path, base)
-               for base in excluded]
-
-    # any() is nicer than max(), but only supported by 2.5+
-    return lambda path: ((bool(included) and max(fmap(path, i_preds))) and not
-                         (bool(excluded) and max(fmap(path, e_preds))))
-
-
 def map_dict(func, dict_):
     """Apply func to all items in dict_"""
 
