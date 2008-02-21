@@ -113,3 +113,68 @@ QtOIDUA_
 
 .. _Guidua: http://oidua.suxbad.com/setup_guidua_0.16.exe
 .. _QtOIDUA: http://www.spoonfedmonkey.com/software/qtoidua/
+
+
+News
+====
+
+Version 1.0b3 (26 Déc. 2007)
+    Ajouté support pour l'enregistrement du cache, même lorsque Dnuos est
+    interrompu.
+
+    Renommé ``-p``/``--parallel`` à ``-m``/``--merge``. Il a la même
+    fonction.
+
+    Réparé ``-i``/``--ignore-case`` ne pas fonctionner.
+
+    Des améliorations marginales de vitesse avec le code de ``audiotype``
+    et de ``id3``.
+
+
+Version 1.0b2 (7 Déc. 2007)
+
+Version 1.0b1 (2 Déc. 2007)
+
+Version 0.94 (16 Jan. 2006)
+
+Version 0.93 (13 Jan. 2006)
+
+Version 0.92 (13 Jan. 2006)
+
+Version 0.91 (12 Jan. 2006)
+
+Version 0.9 (11 Jan. 2006)
+
+
+Development
+===========
+
+Le stockage officiel de développement peut être trouvé à
+http://dnuos.tweek.us/hg/. Avec Mercurial_, exécutez::
+
+    hg clone http://dnuos.tweek.us/hg/
+
+Exécuter l'ensemble des tests unitaires exige nose_ et les
+`données de test`_. Après vous avez les deux, vous pouvez
+exécuter les tests avec la commande suivante::
+
+    ./setup.py test
+
+Si vous itrouvez aucun de problèmes, soumettez une fiche sur le `site Trac`_.
+Ce site est pour le développement, et non pas d'assistance, donc ne soumettez
+pas de fiches d'assistance.
+
+
+.. _Mercurial: http://www.selenic.com/mercurial/
+.. _nose: http://somethingaboutorange.com/mrl/projects/nose/
+.. _données de test: http://dnuos.tweek.us/files/testdata.zip
+.. _site Trac: http://dnuos.tweek.us/trac/
+
+
+Contacter
+=========
+
+`Mattias Päivärinta <pejve at vasteras2 dot net>`_
+    Programmeur principal.
+`Brodie Rao <me+dnuos at dackz dot net>`_
+    Mainteneur du projet.
