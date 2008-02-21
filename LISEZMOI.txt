@@ -144,7 +144,7 @@ Version 1.0b2 (7 Déc. 2007)
 
     Réparé ``setup.py sdist`` ne pas inclure tous les fichiers.
 
-    Réparé le traitement des MP3 avec de l'en-tête VBRI (e.g. fait par
+    Réparé le traitement des MP3 avec l'en-tête VBRI (e.g. fait par
     Fraunhofer).
 
     Réparé des problèmes sérieux avec le code ID3 qui probablement le
