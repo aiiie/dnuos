@@ -201,10 +201,9 @@ Development
 ===========
 
 The official development repository can be found at
-http://dnuos.tweek.us/darcs/. Download the directory recursively, or use
-Darcs_::
+http://dnuos.tweek.us/hg/. Download using Mercurial_::
 
-    darcs get http://dnuos.tweek.us/darcs/ my-dnuos-repo
+    hg clone http://dnuos.tweek.us/hg/ my-dnuos
 
 Running the test suite requires nose_, and the `test data`_. Once you have
 both, you can run the tests with the following command::
@@ -215,7 +214,7 @@ If you find any problems, please submit a ticket on the `Trac site`_. The
 Trac site is for development, not support, so please don't submit help
 requests there.
 
-.. _Darcs: http://darcs.net/
+.. _Mercurial: http://www.selenic.com/mercurial/
 .. _nose: http://somethingaboutorange.com/mrl/projects/nose/
 .. _test data: http://dnuos.tweek.us/files/testdata.zip
 .. _Trac site: http://dnuos.tweek.us/trac/
