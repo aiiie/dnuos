@@ -29,8 +29,87 @@ Le format de la liste est complètement personnalisable et peut être texte
 brut ou HTML.
 
 Dnuos supporte MP3, AAC, Musepac, Ogg Vorbis, et FLAC. Détection du profil
-de qualité est supporté aussi, y compris l'information du `LAME quality preset`_.
+de qualité est supporté aussi, y compris l'information du
+`LAME quality preset`_.
 
-L'Information de fichier audio 
+Informations sur les fichiers audio sont enregistrées sur le disque après
+une liste est initialement faite, ce qui accélère faire de prochaines listes.
+Seulement les fichiers audio et les dossiers qui ont étés modifiés depuis
+la dernière liste a été faite.
+
+Dnuos est basé sur le code d'`Oidua`_. Oidua peut faire des listes
+similaires, mais c'est trop vieux et n'est plus maintenu.
 
 .. _LAME quality preset: http://wiki.hydrogenaudio.org/index.php?title=Lame#Recommended_encoder_settings
+.. _Oidua: http://oidua.suxbad.com/
+
+
+Télécharger
+===========
+
+Les versions peuvent être trouvées à http://dnuos.tweek.us/files/.
+
+
+Installation/Usage
+==================
+
+Exécutez ``dnuos --help`` pour information détaillée sur toutes les options.
+
+
+Linux, Mac OS X, Unix
+---------------------
+
+Si vous souhaitez installer Dnuos avec setuptools_ (qui est empaqueté avec
+Mac OS X, par exemple), téléchargez et exécutez `ez_setup.py`_, et
+simplement rentrez la commande suivante::
+
+    sudo easy_install dnuos
+
+Sinon, exécutez ``setup.py`` avec la version de Python avec qui vous
+souhaitez installer Dnuos::
+
+    sudo easy_install dnuos
+
+Cela installera Dnuos sur votre dossier ``site-packages``, et installera un
+script de terminal qui est nommé ``dnuos`` (généralement dans ``/usr/bin/``
+ou ``/usr/local/bin/``).
+
+Après installation, ouvrez votre terminal préféré et exécutez ``dnuos``.
+Sur Mac OS X, *Terminal* serait un bon choix (situé dans
+``/Applications//Utilities``).
+
+
+.. _setuptools: http://peak.telecommunity.com/DevCenter/setuptools
+.. _`ez_setup.py`: http://peak.telecommunity.com/dist/ez_setup.py
+
+
+Windows
+-------
+
+Il n'y a pas d'installation. Simplement extrayez le fichier zip où vous
+souhaitez l'installer. Vous pouvez exécutez l'application à la ligne de
+commande avec ``dnuos.exe``.
+
+Après vous avez extrait Dnuos, appuyez simultanément sur les touches Windows
+et R pour ouvrir le dialogue *Run*. Tapez *cmd* et appuyez enter pour
+lancer la ligne de commande. Ensuite tapez la lettre de disque où
+l'exécutable est placé, et ``cd`` au dossier avec l'exécutable. Ici,
+simplement exécutez ``dnuos.exe``.
+
+
+Front-ends Graphiques
+---------------------
+
+Si vous détestez la ligne de commande, vous pouvez utilisez l'un des
+front-ends graphiques suivants plutôt:
+
+Guidua_
+    Un front-end graphique pour Windows.
+QtOIDUA_
+    Un front-end graphique pour Linux et Mac OS X. (Note: Les versions 0.08
+    et les anciennes versions ont un bogue qui empêche l'operation QtOIDUA
+    avec Dnuos 1.0.)
+
+
+.. _Guidua: http://oidua.suxbad.com/setup_guidua_0.16.exe
+.. _QtOIDUA: http://www.spoonfedmonkey.com/software/qtoidua/
