@@ -132,20 +132,19 @@ Version 1.0b3 (26 Déc. 2007)
 
     Supprimé une grande quantité de code inutilisé dans le paquet ``id3``.
 
-    Réparé un plantage possible avec le nouveau champ de vendeur.
+    Réparé un plantage possible avec la nouvelle balise de vendeur.
 
     Réparé des erreurs d'analyse avec les fichiers Ogg Vorbis et ajouté
-    support pour le champ de vendeur.
+    le support pour la balise de vendeur.
 
     Réduit la taille du paquet win32.
 
 Version 1.0b2 (7 Déc. 2007)
-
     Mis à jour et simplifié la documentation.
 
     Réparé ``setup.py sdist`` ne pas inclure tous les fichiers.
 
-    Réparé le traitement des MP3 avec des en-têtes VBRI (e.g. fait par
+    Réparé le traitement des MP3 avec de l'en-tête VBRI (e.g. fait par
     Fraunhofer).
 
     Réparé des problèmes sérieux avec le code ID3 qui probablement le
@@ -170,16 +169,48 @@ Version 1.0b2 (7 Déc. 2007)
     Créé un Makefile qui exécute ``setup.py``.
 
 Version 1.0b1 (2 Déc. 2007)
+    Beaucoup d'améliorations du code.
+
+    Ajouté le cachage des métadonnées audio.
+
+    Ajouté la capacité pour filtrer les dossiers avec des fichiers
+    mélangés.
+
+    Ajouté le propre support pour ``distutils``/``setuptools``.
+
+    Ajouté le support pour calculer les bitrates des fichiers AAC.
+
+    Ajouté une balise de rendement ``V`` qui affiche l'information du
+    encodeur (actuellement seulement pour MP3).
+
+    Nettoyé le message d'aide (il utilise ``optparse`` maintenant).
+
+    Supprimé l'option ``-m``/``--merge``.
+
+    Supprimé le support pour Python 2.2.
 
 Version 0.94 (16 Jan. 2006)
+    Réparé les problèmes avec endianness sur les machines utilisées
+    big-endian.
 
 Version 0.93 (13 Jan. 2006)
+    Réparé une régression avec détection de l'en-tête MP3.
+
+    Ajouté le support expérimental de l'en-tête VBRI.
 
 Version 0.92 (13 Jan. 2006)
+    Les options ``-l`` (les MP3 LAME seulement) et ``-v`` (les MP3 VBR
+    seulement) maintenant fonctionnent en le rendement normal.
+
+    Ajouté l'option ``-b`` qui permet filtrer des MP3 avec les bitrates
+    moins que ce qui est spécifié par ``-b``.
 
 Version 0.91 (12 Jan. 2006)
+    Fait la recherche de l'en-tête MP3 plus robuste. Les MP3 encodés
+    à ``-V 9`` avec LAME 3.97b1 ne peuvent plus se confondre.
 
 Version 0.9 (11 Jan. 2006)
+    Finalement branché Oidua ! Ceci est maintenant DNUOS !
 
 
 Development
