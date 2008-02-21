@@ -16,6 +16,11 @@ from warnings import warn
 
 def _find_locale_dir():
 
+    # Avoid unpacking the egg if translation isn't necessary
+    lang = locale.getdefaultlocale()[0]
+    if not lang or lang.split('_')[0] == 'en':
+        return None
+
     try:
         from pkg_resources import resource_filename
         return resource_filename(__name__, 'locale')
