@@ -28,8 +28,8 @@ Par exemple, une liste pourrait ressembler à ceci::
 Le format de la liste est complètement personnalisable et peut être texte
 brut ou HTML.
 
-Dnuos supporte MP3, AAC, Musepack, Ogg Vorbis, et FLAC. Détection du profil
-de qualité est supporté aussi, y compris l'information du
+Dnuos s'appuie MP3, AAC, Musepack, Ogg Vorbis, et FLAC. Détection du profil
+de qualité est appuyé aussi, y compris l'information du
 `LAME quality preset`_.
 
 Informations sur les fichiers audio sont enregistrées sur le disque après
@@ -87,27 +87,27 @@ Windows
 -------
 
 Il n'y a pas d'installation. Simplement extrayez le fichier zip où vous
-souhaitez l'installer. Vous pouvez exécutez l'application à la ligne de
+souhaitez l'installer. Vous pouvez exécuter l'application à la ligne de
 commande avec ``dnuos.exe``.
 
 Après vous avez extrait Dnuos, appuyez simultanément sur les touches Windows
 et R pour ouvrir le dialogue *Run*. Tapez *cmd* et appuyez enter pour
 lancer la ligne de commande. Ensuite tapez la lettre de disque où
-l'exécutable est placé, et ``cd`` au dossier avec l'exécutable. Ici,
+l'exécutable est placé et ``cd`` au dossier avec l'exécutable. Ici,
 simplement exécutez ``dnuos.exe``.
 
 
 Front-ends Graphiques
 ---------------------
 
-Si vous détestez la ligne de commande, vous pouvez utilisez l'un des
+Si vous détestez la ligne de commande, vous pouvez utiliser l'un des
 front-ends graphiques suivants plutôt:
 
 Guidua_
     Un front-end graphique pour Windows.
 QtOIDUA_
     Un front-end graphique pour Linux et Mac OS X. (Note: Les versions 0.08
-    et les anciennes versions ont un bogue qui empêche l'operation QtOIDUA
+    et les anciennes versions ont un bogue qui empêche l'opération QtOIDUA
     avec Dnuos 1.0.)
 
 
@@ -119,7 +119,7 @@ News
 ====
 
 Version 1.0b3 (26 Déc. 2007)
-    Ajouté le support pour l'enregistrement du cache, même lorsque Dnuos
+    Ajouté l'appui pour l'enregistrement du cache, même lorsque Dnuos
     est interrompu.
 
     Renommé ``-p``/``--parallel`` à ``-m``/``--merge``. Il a la même
@@ -135,7 +135,7 @@ Version 1.0b3 (26 Déc. 2007)
     Réparé un plantage possible avec la nouvelle balise de vendeur.
 
     Réparé des erreurs d'analyse avec les fichiers Ogg Vorbis et ajouté
-    le support pour la balise de vendeur.
+    l'appui pour la balise de vendeur.
 
     Réduit la taille du paquet win32.
 
@@ -144,7 +144,7 @@ Version 1.0b2 (7 Déc. 2007)
 
     Réparé ``setup.py sdist`` ne pas inclure tous les fichiers.
 
-    Réparé le traitement des MP3 avec l'en-tête VBRI (e.g. fait par
+    Réparé le traitement des MP3 avec l'en-tête VBRI (par ex. fait par
     Fraunhofer).
 
     Réparé des problèmes sérieux avec le code ID3 qui probablement le
@@ -156,14 +156,14 @@ Version 1.0b2 (7 Déc. 2007)
     Échangé d'usage de ``pickle`` avec ``cPickle`` (quand il existe) et
     opté pour le format le plus efficace de ``pickle`` (qui devrait
     accélérer Dnuos grandement).
-
+,
     Fait la recherche du dossier de cache plus robuste.
 
-    Ajouté le support pour enregistrer le cache durant exécution, donc si
+    Ajouté l'appui pour enregistrer le cache durant exécution, donc si
     vous terminez de faire d'une liste, il cache ce qui a déjà été
     énuméré.
 
-    Ajouté un message simple d'erreur pour des chaînes de rendement avec
+    Ajouté un message simple d'erreur pour des chaînes de sortie avec
     des champs invalides.
 
     Créé un Makefile qui exécute ``setup.py``.
@@ -176,18 +176,18 @@ Version 1.0b1 (2 Déc. 2007)
     Ajouté la capacité pour filtrer les dossiers avec des fichiers
     mélangés.
 
-    Ajouté le propre support pour ``distutils``/``setuptools``.
+    Ajouté le bon appui pour ``distutils``/``setuptools``.
 
-    Ajouté le support pour calculer les bitrates des fichiers AAC.
+    Ajouté l'appui pour calculer les bitrates des fichiers AAC.
 
-    Ajouté une balise de rendement ``V`` qui affiche l'information du
+    Ajouté une balise de sortie ``V`` qui affiche l'information du
     encodeur (actuellement seulement pour MP3).
 
     Nettoyé le message d'aide (il utilise ``optparse`` maintenant).
 
     Supprimé l'option ``-m``/``--merge``.
 
-    Supprimé le support pour Python 2.2.
+    Supprimé l'appui pour Python 2.2.
 
 Version 0.94 (16 Jan. 2006)
     Réparé les problèmes avec endianness sur les machines utilisées
@@ -196,11 +196,11 @@ Version 0.94 (16 Jan. 2006)
 Version 0.93 (13 Jan. 2006)
     Réparé une régression avec détection de l'en-tête MP3.
 
-    Ajouté le support expérimental de l'en-tête VBRI.
+    Ajouté l'appui expérimental de l'en-tête VBRI.
 
 Version 0.92 (13 Jan. 2006)
     Les options ``-l`` (les MP3 LAME seulement) et ``-v`` (les MP3 VBR
-    seulement) maintenant fonctionnent en le rendement normal.
+    seulement) maintenant fonctionnent dans la sortie normale.
 
     Ajouté l'option ``-b`` qui permet filtrer des MP3 avec les bitrates
     moins que ce qui est spécifié par ``-b``.
@@ -222,13 +222,13 @@ http://dnuos.tweek.us/hg/. Avec Mercurial_, exécutez::
     hg clone http://dnuos.tweek.us/hg/
 
 Exécuter l'ensemble des tests unitaires exige nose_ et les
-`données de test`_. Après vous avez les deux, vous pouvez
+`données de test`_. Après que vous avez les deux, vous pouvez
 exécuter les tests avec la commande suivante::
 
     ./setup.py test
 
 Si vous trouvez aucun de problèmes, soumettez une fiche sur le `site Trac`_.
-Ce site est pour le développement, et non pas d'assistance, donc ne soumettez
+Ce site est pour le développement et non pas d'assistance, donc ne soumettez
 pas de fiches d'assistance.
 
 
