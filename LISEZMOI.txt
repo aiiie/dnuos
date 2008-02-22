@@ -234,7 +234,7 @@ pas de fiches d'assistance.
 
 .. _Mercurial: http://www.selenic.com/mercurial/
 .. _nose: http://somethingaboutorange.com/mrl/projects/nose/
-.. _données de test: http://dnuos.tweek.us/files/testdata.zip
+.. _données de test: http://dnuos.tweek.us/files/testdata.tar
 .. _site Trac: http://dnuos.tweek.us/trac/
 
 
