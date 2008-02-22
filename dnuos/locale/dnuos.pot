@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2008-02-21 03:21-0500\n"
+"POT-Creation-Date: 2008-02-22 13:38-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,7 +70,6 @@ msgid ""
 "  b  bitrate with suffix (e.g. 192k)\n"
 "  B  bitrate in bps\n"
 "  C  album name as found in ID3 tags\n"
-"  d  depth (distance from respective basedir)\n"
 "  f  number of audio files (including spacers)\n"
 "  l  length in minutes and seconds\n"
 "  L  length in seconds\n"
@@ -112,7 +111,7 @@ msgid ""
 "quotes or otherwise it will not get parsed right.\n"
 msgstr ""
 
-#: dnuos/conf.py:82
+#: dnuos/conf.py:81
 #, python-format
 msgid ""
 "The %s option is deprecated and will be removed in a future version. Use "
@@ -120,28 +119,28 @@ msgid ""
 "versions."
 msgstr ""
 
-#: dnuos/conf.py:93
+#: dnuos/conf.py:92
 #, python-format
 msgid "Bad format string argument to %s"
 msgstr ""
 
-#: dnuos/conf.py:100
+#: dnuos/conf.py:99
 #, python-format
 msgid ""
 "The %s option is deprecated and will be removed in a future version. Use "
 "--template=html instead to ensure compatibility with future versions."
 msgstr ""
 
-#: dnuos/conf.py:110
+#: dnuos/conf.py:109
 msgid "Bitrate must be 0 or in the range (1..320)"
 msgstr ""
 
-#: dnuos/conf.py:118
+#: dnuos/conf.py:117
 #, python-format
 msgid "Unknown template '%s'"
 msgstr ""
 
-#: dnuos/conf.py:127
+#: dnuos/conf.py:126
 #, python-format
 msgid "Invalid argument to %s"
 msgstr ""
