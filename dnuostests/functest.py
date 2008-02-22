@@ -30,7 +30,7 @@ def _flatten(seq, ltypes=(list, tuple)):
     return seq
 
 
-def process_args(args):
+def process_args(args, no_glob=False):
     """Expands basedirs.
 
     Basedirs are glob-expanded and prepended with the contents of the $DATA_DIR
@@ -40,8 +40,12 @@ def process_args(args):
     datadir = os.environ['DATA_DIR']
     args = args.split()
     opts = [opt for opt in args if opt.startswith('-')]
-    bases = _flatten([glob(os.path.join(datadir, base))
-                      for base in args if not base.startswith('-')])
+    if no_glob:
+        bases = _flatten([os.path.join(datadir, base)
+                          for base in args if not base.startswith('-')])
+    else:
+        bases = _flatten([glob(os.path.join(datadir, base))
+                          for base in args if not base.startswith('-')])
     bases.sort()
     return opts + bases
 
@@ -57,14 +61,19 @@ def get_unified_diff(data1, data2):
     return ''.join(lines).rstrip('\n')
 
 
-def write_dnuos_diff(args, expected):
+def write_dnuos_diff(args, expected, no_glob=False):
     """Compares an expected result with dnuos output on given parameters"""
 
-    output = StringIO()
-    old = sys.argv, sys.stderr, sys.stdout
-    sys.argv = ['dnuos', '--disable-cache'] + process_args(args)
-    sys.stderr = sys.stdout = output
-    dnuos.main()
-    sys.argv, sys.stderr, sys.stdout = old
-    output = get_unified_diff(expected, output.getvalue())
-    sys.stdout.write(output)
+    old_cwd = os.getcwd()
+    os.chdir(os.environ['DATA_DIR'])
+    try:
+        output = StringIO()
+        old = sys.argv, sys.stderr, sys.stdout
+        sys.argv = ['dnuos', '--disable-cache'] + process_args(args, no_glob)
+        sys.stderr = sys.stdout = output
+        dnuos.main()
+        sys.argv, sys.stderr, sys.stdout = old
+        output = get_unified_diff(expected, output.getvalue())
+        sys.stdout.write(output)
+    finally:
+        os.chdir(old_cwd)
