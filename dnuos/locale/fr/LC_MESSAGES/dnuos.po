@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Dnuos 1.0\n"
 "Report-Msgid-Bugs-To: me+dnuos@dackz.net\n"
 "POT-Creation-Date: 2008-02-13 13:28+0500\n"
-"PO-Revision-Date: 2008-02-21 03:21-0500\n"
+"PO-Revision-Date: 2008-02-22 13:38-0500\n"
 "Last-Translator: Brodie Rao <me+dnuos@dackz.net>\n"
 "Language-Team: French\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -72,7 +72,6 @@ msgid ""
 "  b  bitrate with suffix (e.g. 192k)\n"
 "  B  bitrate in bps\n"
 "  C  album name as found in ID3 tags\n"
-"  d  depth (distance from respective basedir)\n"
 "  f  number of audio files (including spacers)\n"
 "  l  length in minutes and seconds\n"
 "  L  length in seconds\n"
@@ -129,7 +128,6 @@ msgstr ""
 "  b  le bitrate avec suffixe (par ex. 192k)\n"
 "  B  le bitrate en ops\n"
 "  C  le nom d'album spécifié dans les balises ID3\n"
-"  d  la profondeur (la distance au basedir respectif)\n"
 "  f  le nombre de fichiers audio (incluant des spaceurs)\n"
 "  l  la durée en minutes et secondes\n"
 "  L  la durée en secondes\n"
@@ -150,8 +148,8 @@ msgstr ""
 "       V bitrate variable\n"
 "  V  l'encodeur\n"
 "\n"
-"LARGEUR définit la largeur exacte du champ. La sortie est alignée à "
-"cette\n"
+"LARGEUR définit la largeur exacte du champ. La sortie est alignée à cette"
+"\n"
 "largeur si nécessaire. Les valeurs négatives seraient alignées vers la "
 "gauche.\n"
 "Alignement est toujours fait du droit.\n"
@@ -173,7 +171,7 @@ msgstr ""
 "devez le mettre entre guillemets, sinon il ne serait pas analysé\n"
 "correctement.\n"
 
-#: dnuos/conf.py:82
+#: dnuos/conf.py:81
 #, python-format
 msgid ""
 "The %s option is deprecated and will be removed in a future version. Use "
@@ -184,12 +182,12 @@ msgstr ""
 "version. Utilisez plutôt --template=db --file=FICHIER pour assurer "
 "compatibilité avec de prochaines versions."
 
-#: dnuos/conf.py:93
+#: dnuos/conf.py:92
 #, python-format
 msgid "Bad format string argument to %s"
 msgstr "La chaîne de sortie pour %s est invalide"
 
-#: dnuos/conf.py:100
+#: dnuos/conf.py:99
 #, python-format
 msgid ""
 "The %s option is deprecated and will be removed in a future version. Use "
@@ -199,16 +197,16 @@ msgstr ""
 "version. Utilisez plutôt --template=html pour assurer compatibilité avec "
 "de prochaines versions."
 
-#: dnuos/conf.py:110
+#: dnuos/conf.py:109
 msgid "Bitrate must be 0 or in the range (1..320)"
 msgstr "Bitrate doit être 0 ou dans la plage (1..320)"
 
-#: dnuos/conf.py:118
+#: dnuos/conf.py:117
 #, python-format
 msgid "Unknown template '%s'"
 msgstr "Template inconnu '%s'"
 
-#: dnuos/conf.py:127
+#: dnuos/conf.py:126
 #, python-format
 msgid "Invalid argument to %s"
 msgstr "Argument pour %s est invalide"
@@ -358,8 +356,8 @@ msgid ""
 "Set output format STRING used in plain-text and HTML output. See --help-"
 "output-string for details on syntax. (default %s)"
 msgstr ""
-"Mettre la chaîne de sortie utilisée dans la sortie de texte brut et "
-"texte HTML. Voyez --help-output-string pour plus information à propos de "
+"Mettre la chaîne de sortie utilisée dans la sortie de texte brut et texte"
+" HTML. Voyez --help-output-string pour plus information à propos de "
 "syntaxe. (%s par défaut)"
 
 #: dnuos/conf.py:316
