@@ -137,6 +137,7 @@ def add_exclude_dir(option, opt_str, value, parser):
     if value[-1] == os.sep:
         value = value[:-1]
     if os.path.isdir(value):
+        value = os.path.abspath(value)
         parser.values.exclude_paths.append(value)
     else:
         raise OptionValueError(_("There is no directory '%s'") % value)
