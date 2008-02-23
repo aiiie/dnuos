@@ -118,7 +118,7 @@ QtOIDUA_
 Quoi de Neuf
 ============
 
-Version 1.0b4 (Feb. 22, 2007)
+Version 1.0b4 (22 Fév. 2007)
     Ajouté l'appui pour le formatage des dombres par les paramètres régionaux.
 
     Corrigé un plantage avec le basile Audiolist et les MP3 VBR.
