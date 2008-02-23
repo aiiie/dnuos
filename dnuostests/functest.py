@@ -71,7 +71,7 @@ def write_dnuos_diff(args, expected, no_glob=False):
         old = sys.argv, sys.stderr, sys.stdout
         sys.argv = ['dnuos', '--disable-cache'] + process_args(args, no_glob)
         sys.stderr = sys.stdout = output
-        dnuos.main()
+        dnuos.main(locale='C')
         sys.argv, sys.stderr, sys.stdout = old
         output = get_unified_diff(expected, output.getvalue())
         sys.stdout.write(output)
