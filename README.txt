@@ -114,6 +114,33 @@ QtOIDUA_
 News
 ====
 
+Version 1.0b4 (Feb. 22, 2007)
+    Added support for locale-specific number formatting.
+
+    Fixed Audiolist tag crashing on VBR MP3s.
+
+    Fixed crashing on inaccessible directories (now ignored).
+
+    Added support for gettext-based translation.
+
+    Added a French translation.
+
+    Fixed theoretically possible zero division error with ``-t``/``--time``.
+
+    Fixed issues with the cache not caching correctly (and non-existent
+    directories now get culled from the cache).
+
+    Improved the cache implementation so it's loaded incrementally instead
+    of all at once before a list is printed.
+
+    Fixed ``-e`` exclude directory switch not working with relative paths.
+
+    Fixed crash with ``-w``/``--wildcards``.
+
+    Fixed ``-m``/``--merge`` not working properly on Windows.
+
+    Improved unit test coverage and fixed Windows portability issues.
+
 Version 1.0b3 (Dec. 25, 2007)
     Added support for saving the cache even when Dnuos is interrupted.
 

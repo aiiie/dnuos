@@ -118,6 +118,37 @@ QtOIDUA_
 News
 ====
 
+Version 1.0b4 (Feb. 22, 2007)
+    Ajouté l'appui pour le formatage des dombres par les paramètres régionaux.
+
+    Corrigé un plantage avec le basile Audiolist et les MP3 VBR.
+
+    Corrigé un plantage avec les dossiers inaccessibles (ils sont ignorés
+    maintenant).
+
+    Ajouté l'appui pour traduction avec gettext.
+
+    Ajouté une traduction française.
+
+    Corrigé une erreur théorique de la division par zéro avec
+    ``-t``/``--time``.
+
+    Corrigé des problèmes du cache ne cache pas correctement (et les dossiers
+    inexistantes sont maintenant cueillis).
+    
+    Amélioré l'implémentation de cache alors qu'il est chargé
+    incrémentalement au lieu de tous ensemble avant la sortie d'une liste.
+
+    Corrigé l'option ``-e`` (exclure des dossiers) ne pas fonctionner avec des
+    chemins relatifs.
+
+    Corrigé un plantage avec ``-w``/``--wildcards``.
+
+    Corrigé ``-m``/``--merge`` ne pas fonctionner correctement sur Windows.
+
+    Amélioré la couverture de code des tests unitaires et corrigé des
+    problèmes avec la portabilité de Windows.
+
 Version 1.0b3 (26 Déc. 2007)
     Ajouté l'appui pour l'enregistrement du cache, même lorsque Dnuos
     est interrompu.
@@ -125,16 +156,16 @@ Version 1.0b3 (26 Déc. 2007)
     Renommé ``-p``/``--parallel`` à ``-m``/``--merge``. Il a la même
     fonction.
 
-    Réparé ``-i``/``--ignore-case`` ne pas fonctionner.
+    Corrigé ``-i``/``--ignore-case`` ne pas fonctionner.
 
     Des améliorations marginales de vitesse avec le code de ``audiotype``
     et de ``id3``.
 
     Supprimé une grande quantité de code inutilisé dans le paquet ``id3``.
 
-    Réparé un plantage possible avec la nouvelle balise de vendeur.
+    Corrigé un plantage possible avec la nouvelle balise de vendeur.
 
-    Réparé des erreurs d'analyse avec les fichiers Ogg Vorbis et ajouté
+    Corrigé des erreurs d'analyse avec les fichiers Ogg Vorbis et ajouté
     l'appui pour la balise de vendeur.
 
     Réduit la taille du paquet win32.
@@ -142,21 +173,21 @@ Version 1.0b3 (26 Déc. 2007)
 Version 1.0b2 (7 Déc. 2007)
     Mis à jour et simplifié la documentation.
 
-    Réparé ``setup.py sdist`` ne pas inclure tous les fichiers.
+    Corrigé ``setup.py sdist`` ne pas inclure tous les fichiers.
 
-    Réparé le traitement des MP3 avec l'en-tête VBRI (par ex. fait par
+    Corrigé le traitement des MP3 avec l'en-tête VBRI (par ex. fait par
     Fraunhofer).
 
-    Réparé des problèmes sérieux avec le code ID3 qui probablement le
+    Corrigé des problèmes sérieux avec le code ID3 qui probablement le
     rendent brisé.
 
-    Réparé l'importation de ``set()`` (qui devrait améliorer la
+    Corrigé l'importation de ``set()`` (qui devrait améliorer la
     compatibilité avec Python 2.3).
 
     Échangé d'usage de ``pickle`` avec ``cPickle`` (quand il existe) et
     opté pour le format le plus efficace de ``pickle`` (qui devrait
     accélérer Dnuos grandement).
-,
+
     Fait la recherche du dossier de cache plus robuste.
 
     Ajouté l'appui pour enregistrer le cache durant exécution, donc si
@@ -190,11 +221,11 @@ Version 1.0b1 (2 Déc. 2007)
     Supprimé l'appui pour Python 2.2.
 
 Version 0.94 (16 Jan. 2006)
-    Réparé les problèmes avec endianness sur les machines utilisées
+    Corrigé les problèmes avec endianness sur les machines utilisées
     big-endian.
 
 Version 0.93 (13 Jan. 2006)
-    Réparé une régression avec détection de l'en-tête MP3.
+    Corrigé une régression avec détection de l'en-tête MP3.
 
     Ajouté l'appui expérimental de l'en-tête VBRI.
 
