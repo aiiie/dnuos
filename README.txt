@@ -216,7 +216,7 @@ requests there.
 
 .. _Git: https://git-scm.com
 .. _nose: http://somethingaboutorange.com/mrl/projects/nose/
-.. _test data: https://github.com/aiiie/dnuostestdata.tar
+.. _test data: https://github.com/aiiie/dnuos
 .. _Trac site: https://github.com/aiiie/dnuos
 
 

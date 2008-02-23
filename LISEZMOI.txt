@@ -234,7 +234,7 @@ pas de fiches d'assistance.
 
 .. _Git: https://git-scm.com
 .. _nose: http://somethingaboutorange.com/mrl/projects/nose/
-.. _données de test: https://github.com/aiiie/dnuostestdata.tar
+.. _données de test: https://github.com/aiiie/dnuos
 .. _site Trac: https://github.com/aiiie/dnuos
 
 
