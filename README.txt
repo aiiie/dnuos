@@ -216,7 +216,7 @@ requests there.
 
 .. _Mercurial: http://www.selenic.com/mercurial/
 .. _nose: http://somethingaboutorange.com/mrl/projects/nose/
-.. _test data: http://dnuos.tweek.us/files/testdata.tar
+.. _test data: http://dnuos.tweek.us/files/testdata.zip
 .. _Trac site: http://dnuos.tweek.us/trac/
 
 
