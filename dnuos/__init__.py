@@ -86,6 +86,8 @@ def prepare_listing(dir_pairs, options, data):
     if (not options.stripped and
         options.output_module in [dnuos.output.plaintext, dnuos.output.html]):
         dir_pairs = add_empty(dir_pairs)
+    if options.list_files:
+        dir_pairs = add_files(dir_pairs)
     return dir_pairs
 
 
@@ -352,6 +354,17 @@ def add_empty(dir_pairs):
         oldpath = path
 
         yield adir, root
+
+
+def add_files(dir_pairs):
+    """Makes individual audiodirs for each audio file"""
+
+    for adir, root in dir_pairs:
+        yield adir, root
+        if adir.num_files < 1:
+            continue
+        for path in adir.audio_files:
+            yield audiodir.Dir(path), root
 
 
 def walk2(basedir, sort_key=(lambda x: x), excluded=()):

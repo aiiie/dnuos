@@ -204,6 +204,7 @@ def parse_args(argv=sys.argv[1:]):
                         format_string=format_string,
                         indent=4,
                         list_bad=True,
+                        list_files=False,
                         merge=False,
                         mp3_min_bit_rate=0,
                         no_cbr=False,
@@ -259,6 +260,9 @@ def parse_args(argv=sys.argv[1:]):
                      dest="sort_key", action="store_const",
                      const=lambda a, b: locale.strcoll(a.lower(), b.lower()),
                      help=_('Case-insensitive directory sorting'))
+    group.add_option('-L', '--list-files',
+                     dest='list_files', action='store_true',
+                     help=_("List audio files in directories (doesn't use caching)"))
     group.add_option("-m", "--merge",
                      dest="merge", action="store_true",
                      help=_('Parse basedirs in parallel and merge output'))
