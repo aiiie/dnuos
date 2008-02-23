@@ -2,7 +2,7 @@
 >>> test()
 """
 
-from os import environ
+import os
 
 from dnuostests.functest import write_dnuos_diff
 
@@ -10,11 +10,15 @@ from dnuostests.functest import write_dnuos_diff
 def test():
     """Verify output tag P"""
 
-    testdata_dir = environ['DATA_DIR']
+    testdata_dir = os.environ['DATA_DIR']
     write_dnuos_diff('-q --output=[P] aac', """
 Path
 ====
-%s/aac
-%s/aac/test1
-%s/aac/test2
-    """ % ((testdata_dir,)*3))
+%s
+%s
+%s
+    """ % (
+    os.path.join(testdata_dir, 'aac'),
+    os.path.join(testdata_dir, 'aac', 'test1'),
+    os.path.join(testdata_dir, 'aac', 'test2'),
+))
