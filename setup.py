@@ -55,6 +55,7 @@ setup(
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Natural Language :: English',
+        'Natural Language :: French',
         'Operating System :: OS Independent',
         'Topic :: Communications :: File Sharing',
         'Topic :: Multimedia :: Sound/Audio',
