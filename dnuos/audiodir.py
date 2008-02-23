@@ -297,8 +297,13 @@ class Dir(object):
     def _parse_audio_files(self):
         """Returns a list of files in the directory that are audio files"""
 
-        return [filename for filename in self.children()
-                if self.is_audio_file(os.path.join(self.path, filename))]
+        if os.path.isdir(self.path):
+            return [filename for filename in self.children()
+                    if self.is_audio_file(os.path.join(self.path, filename))]
+        elif self.is_audio_file(self.path):
+            return [self.path]
+        else:
+            return []
 
     def _get_audio_files(self):
         """Return a list of all audio files based on file extensions"""
