@@ -115,8 +115,8 @@ QtOIDUA_
 .. _QtOIDUA: http://www.spoonfedmonkey.com/software/qtoidua/
 
 
-News
-====
+Quoi de Neuf
+============
 
 Version 1.0b4 (Feb. 22, 2007)
     Ajouté l'appui pour le formatage des dombres par les paramètres régionaux.
@@ -244,8 +244,8 @@ Version 0.9 (11 Jan. 2006)
     Finalement branché Oidua ! Ceci est maintenant DNUOS !
 
 
-Development
-===========
+Développement
+=============
 
 Le stockage officiel de développement peut être trouvé à
 https://github.com/aiiie/dnuos. Avec Git_, exécutez::
