@@ -142,11 +142,14 @@ def formatwarning(message, category, filename, lineno):
 def is_subdir(path1, path2):
     """Returns True if path1 is a subdirectory of path2, otherwise False.
 
-    >>> is_subdir('/home', '/usr')
+    >>> import os
+    >>> os_dir = os.path.dirname(os.__file__)
+    >>> above_os = os.path.dirname(os_dir)
+    >>> is_subdir(above_os, os_dir)
     False
-    >>> is_subdir('/usr/local', '/usr')
+    >>> is_subdir(os_dir, above_os)
     True
-    >>> is_subdir('/usr', '/usr')
+    >>> is_subdir(os_dir, os_dir)
     True
     """
 
