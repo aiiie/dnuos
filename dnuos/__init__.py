@@ -132,13 +132,13 @@ def main(argv=None, locale=None):
     try:
         if options.basedirs:
             if options.use_cache:
-                cache = setup_cache(
-                    appdata.user_data_file('dirs',
-                        options.cache_dir),
-                    options.basedirs)
-                adir_class = memoized(audiodir.Dir, cache)
                 try:
                     appdata.create_user_data_dir(options.cache_dir)
+                    cache = setup_cache(
+                        appdata.user_data_file('dirs',
+                            options.cache_dir),
+                        options.basedirs)
+                    adir_class = memoized(audiodir.Dir, cache)
                 except IOError, err:
                     print >> sys.stderr, _('Failed to create cache directory:')
                     if options.debug:
@@ -146,6 +146,7 @@ def main(argv=None, locale=None):
                     print >> sys.stderr, err
                     print >> sys.stderr, _('Use the --disable-cache switch '
                                            'to disable caching')
+                    adir_class = audiodir.Dir
             else:
                 adir_class = audiodir.Dir
 
