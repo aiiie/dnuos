@@ -5,9 +5,12 @@ import locale
 import os
 import re
 import sys
-from optparse import OptionGroup
-from optparse import OptionValueError
-from optparse import OptionParser
+from optparse import OptionGroup, OptionParser, OptionValueError
+
+try:
+    set
+except NameError:
+    from sets import Set as set
 
 import dnuos.output
 import dnuos.output.db
@@ -129,6 +132,12 @@ def set_preferred_tag(option, opt_str, value, parser):
 def set_cache_dir(option, opt_str, value, parser):
 
     parser.values.cache_dir = os.path.expanduser(value)
+
+
+def set_unknown_types(option, opt_str, value, parser):
+
+    parser.values.unknown_types = tuple(set([v.strip().lower() for v in
+                                             value.split(',') if v.strip()]))
 
 
 def add_exclude_dir(option, opt_str, value, parser):
@@ -266,6 +275,11 @@ def parse_args(argv=sys.argv[1:]):
     group.add_option("-m", "--merge",
                      dest="merge", action="store_true",
                      help=_('Parse basedirs in parallel and merge output'))
+    group.add_option('-u', '--unknown-types',
+                     action='callback', nargs=1,
+                     callback=set_unknown_types, type='string',
+                     help=_('A comma-separated list of unknown audio types '
+                            'to list'), metavar=_('TYPES'))
     group.add_option("-w", "--wildcards",
                      dest="wildcards", action="store_true",
                      help=_('Expand wildcards in basedirs'))

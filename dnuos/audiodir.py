@@ -17,9 +17,7 @@ from dnuos.misc import dir_depth
 class Dir(object):
     """Holds audio metadata about a directory"""
 
-    pattern = r"\.(?:mp3|mpc|mp\+|m4a|ogg|flac|fla|flc)$"
-    audio_file_extRE = re.compile(pattern, re.IGNORECASE)
-    del pattern
+    valid_types = ['mp3', 'mpc', 'mp+', 'm4a', 'ogg', 'flac', 'fla', 'flc']
 
     __slots__ = tuple('albums artists _audio_files _bad_files '
                       '_bitrates _lengths _types modified path '
@@ -333,7 +331,7 @@ class Dir(object):
         """
 
         return (os.path.isfile(filename) and
-                Dir.audio_file_extRE.search(filename))
+                os.path.splitext(filename)[1][1:].lower() in Dir.valid_types)
     is_audio_file = staticmethod(is_audio_file)
 
     def __getstate__(self):
