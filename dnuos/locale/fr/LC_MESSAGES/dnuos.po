@@ -44,7 +44,7 @@ msgstr ""
 
 #: dnuos/__init__.py:189
 msgid "Failed to save cache data:"
-msgstr "L'Enregistrement des données de cache ont échoué :"
+msgstr "L'enregistrement des données de cache ont échoué :"
 
 #: dnuos/__init__.py:208
 #, python-format
@@ -156,7 +156,7 @@ msgstr ""
 "\n"
 "SUFFIXE spécifie une chaîne pour adjoindre à toutes données non-vides.\n"
 "\n"
-"D'Autres chaînes interprétées :\n"
+"D'autres chaînes interprétées :\n"
 "  \\[  [\n"
 "  \\]  ]\n"
 "  \n"
@@ -178,7 +178,7 @@ msgid ""
 "--template=db --file=FILE instead to ensure compatibility with future "
 "versions."
 msgstr ""
-"L'Option %s est désapprouvée et sera supprimée dans une prochaine "
+"L'option %s est désapprouvée et sera supprimée dans une prochaine "
 "version. Utilisez plutôt --template=db --file=FICHIER pour assurer "
 "compatibilité avec de prochaines versions."
 
@@ -193,7 +193,7 @@ msgid ""
 "The %s option is deprecated and will be removed in a future version. Use "
 "--template=html instead to ensure compatibility with future versions."
 msgstr ""
-"L'Option %s est désapprouvée et sera supprimée dans une prochaine "
+"L'option %s est désapprouvée et sera supprimée dans une prochaine "
 "version. Utilisez plutôt --template=html pour assurer compatibilité avec "
 "de prochaines versions."
 

@@ -118,7 +118,17 @@ QtOIDUA_
 Quoi de Neuf
 ============
 
-Version 1.0b4 (22 Fév. 2007)
+Version 1.0b5 (23 Fév. 2008)
+    Ajouté l'option ``-L``/``--list-files`` pour énumérer les fichiers
+    individuels dans des dossiers. Néanmoins, l'information des fichiers
+    individuels n'est pas caché.
+
+    Ajouté l'option ``-u``/``--unknown-types`` pour énumérer les dossiers avec
+    les fichiers non soutenus.
+
+    Corrigé un plantage de la création du cache.
+
+Version 1.0b4 (22 Fév. 2008)
     Ajouté l'appui pour le formatage des dombres par les paramètres régionaux.
 
     Corrigé un plantage avec le basile Audiolist et les MP3 VBR.
