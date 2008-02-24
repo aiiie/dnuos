@@ -68,7 +68,7 @@ simplement rentrez la commande suivante::
 Sinon, exécutez ``setup.py`` avec la version de Python avec qui vous
 souhaitez installer Dnuos::
 
-    sudo easy_install dnuos
+    sudo python2.5 setup.py install
 
 Cela installera Dnuos sur votre dossier ``site-packages``, et installera un
 script de terminal qui est nommé ``dnuos`` (généralement dans ``/usr/bin/``
