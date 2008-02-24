@@ -114,6 +114,9 @@ QtOIDUA_
 News
 ====
 
+Version 1.0b6 (Feb. 24, 2008)
+    Fixed cache creation not working on Windows.
+
 Version 1.0b5 (Feb. 23, 2008)
     Added ``-L``/``--list-files`` for listing individual files in
     directories. Information about individual files isn't cached, however.

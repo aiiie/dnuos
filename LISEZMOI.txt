@@ -118,6 +118,9 @@ QtOIDUA_
 Quoi de Neuf
 ============
 
+Version 1.0b6 (24 Fév. 2008)
+    Corrigé un plantage de la création du cache sous Windows.
+
 Version 1.0b5 (23 Fév. 2008)
     Ajouté l'option ``-L``/``--list-files`` pour énumérer les fichiers
     individuels dans des dossiers. Néanmoins, l'information des fichiers
