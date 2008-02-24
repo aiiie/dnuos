@@ -114,7 +114,16 @@ QtOIDUA_
 News
 ====
 
-Version 1.0b4 (Feb. 22, 2007)
+Version 1.0b5 (Feb. 23, 2008)
+    Added ``-L``/``--list-files`` for listing individual files in
+    directories. Information about individual files isn't cached, however.
+
+    Added ``-u``/``--unknown-types`` for listing directories with unsupported
+    audio types.
+
+    Fixed creation of the cache directory failing.
+
+Version 1.0b4 (Feb. 22, 2008)
     Added support for locale-specific number formatting.
 
     Fixed Audiolist tag crashing on VBR MP3s.
