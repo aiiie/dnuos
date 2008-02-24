@@ -22,7 +22,7 @@ __all__ = ['main']
 class Data(object):
     """Holds data for cache"""
 
-    def __init__(self):
+    def __init__(self, unknown_types=()):
 
         self.bad_files = []
         self.size = {
@@ -32,7 +32,10 @@ class Data(object):
             "MP3": 0.0,
             "MPC": 0.0,
             "AAC": 0.0,
+            'Other': 0.0,
         }
+        if unknown_types:
+            self.size.update(dict([(t, 0.0) for t in unknown_types]))
         self.times = {
             'start': 0,
             'elapsed_time': 0.0,
@@ -122,8 +125,9 @@ def main(argv=None, locale=None):
 
     os.stat_float_times(False)
     warnings.formatwarning = formatwarning
-    data = Data()
     options = parse_args(argv[1:])
+    data = Data(options.unknown_types)
+    audiodir.Dir.valid_types.extend(options.unknown_types or ())
 
     try:
         if options.basedirs:
@@ -300,7 +304,10 @@ def total_sizes(dir_pairs, sizes):
     for adir, root in dir_pairs:
         yield adir, root
         for mediatype, size in adir.sizes.items():
-            sizes[mediatype] += size
+            if mediatype in sizes:
+                sizes[mediatype] += size
+            else:
+                sizes['Other'] += size
         sizes["Total"] += adir.size
 
 

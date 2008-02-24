@@ -12,7 +12,36 @@ class SpacerError(Exception):
     pass
 
 
-class AudioType(object):
+class UnknownType(object):
+
+    def __init__(self, file_):
+
+        self.filename = file_
+        self.filesize = os.path.getsize(self.filename)
+        self.filetype = os.path.splitext(self.filename)[1][1:].lower()
+        self.vendor = ''
+        self.version = ''
+        self.brtype = ''
+        self.time = 0
+
+    def bitrate(self):
+
+        return 0
+
+    def artist(self):
+
+        return {'': None}
+
+    def album(self):
+
+        return {'': None}
+
+    def profile(self):
+
+        return {}
+
+
+class AudioType(UnknownType):
     """Base audio file type"""
 
     def __init__(self, file_):
@@ -911,4 +940,4 @@ def openstream(filename):
     elif lowername.endswith(".m4a"):
         return AAC(filename)
     else:
-        return None
+        return UnknownType(filename)
