@@ -3,7 +3,7 @@ Section: sound
 Priority: optional
 Maintainer: aiiie <aiiie@aiiie.co>
 Build-Depends: cdbs (>= 0.4.48), python-support (>= 0.5.6), python-dev,
- debhelper (>= 5.0.42), docbook-to-man
+ debhelper (>= 5.0.42), perl
 XS-Python-Version: current, >= 2.3
 Standards-Version: 3.7.2
 

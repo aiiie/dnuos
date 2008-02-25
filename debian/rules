@@ -8,7 +8,7 @@ include /usr/share/cdbs/1/class/python-distutils.mk
 DEB_INSTALL_MANPAGES_dnuos=debian/dnuos.1
 
 build/dnuos::
-	docbook-to-man debian/dnuos.1.sgml > debian/dnuos.1
+	pod2man -c '' -n dnuos -r '' debian/dnuos.1.pod > debian/dnuos.1
 
 cleanbuilddir/dnuos::
 	rm -f dnuos.1

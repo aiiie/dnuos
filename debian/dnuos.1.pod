@@ -1,0 +1,384 @@
+=head1 NAME
+
+dnuos - Audio file metadata lister
+
+=head1 SYNOPSIS
+
+B<dnuos> [options] F<basedir> F<...>
+
+=head1 DESCRIPTION
+
+Dnuos is a console program that creates lists of music collections, based on
+directory structure.
+
+For example, a list might look like this:
+
+=begin
+
+    Album/Artist                       |  Size | Type | Quality
+    ===========================================================
+    Ambient                            |       |      | 
+        Alva Noto                      |       |      | 
+            2001 - Transform           | 70.9M | MP3  | -V2
+            2004 - Transrapid          | 30.2M | MP3  | -aps
+            2005 - Transspray          | 31.7M | MP3  | -aps
+            2005 - Transvision         | 32.3M | MP3  | -aps
+        Alva Noto and Ryuichi Sakamoto |       |      | 
+            2002 - Vrioon              | 72.6M | MP3  | -aps
+            2005 - Insen               | 99.1M | MP3  | 320 C
+            2006 - Revep               | 27.9M | MP3  | -V2n
+
+=end
+
+The list format is completely customizable and can be plain text or HTML.
+
+Dnuos supports MP3, AAC, Musepack, Ogg Vorbis, and FLAC audio files. Quality
+profile detection is also supported, including LAME quality preset
+information (see L<http://wiki.hydrogenaudio.org/index.php?title=Lame#Recommended_encoder_settings>).
+
+Audio file information is saved to disk after a list is made for the first
+time, making subsequent lists much faster to generate. Only audio files and
+directories that have been changed since the last list was made are analyzed.
+
+=head1 OPTIONS
+
+=over
+
+=item F<basedir> F<...>
+
+Base directories to search for audio files in.
+
+=item B<-h>
+
+Show the help message and exit.
+
+=item B<--help-output-string>
+
+Show the output string help message.
+
+=back
+
+=head2 APPLICATION
+
+=over
+
+=item B<--debug>
+
+Output debug trace to F<stderr>.
+
+=item B<--ignore-bad>
+
+Don't list files that cause Audiotype failure.
+
+=item B<-q>, B<--quiet>
+
+Omit progress indication.
+
+=item B<-V>, B<--version>
+
+Display version.
+
+=back
+
+=head2 DIRECTORY WALKING
+
+=over
+
+=item B<--disable-cache>
+
+Disable caching.
+
+=item B<--cache-dir>=F<DIR>
+
+Store cache in F<DIR> (default F<~/.dnuos>).
+
+=item B<-e> F<DIR> B<--exclude>=F<DIR>
+
+Exclude F<DIR> from search.
+
+=item B<-i>, B<--ignore-case>
+
+Case-insensitive directory sorting.
+
+=item B<-L>, B<--list-files>
+
+List audio files in directories (doesn't use caching).
+
+=item B<-m>, B<--merge>
+
+Parse F<basedirs> in parallel and merge output.
+
+=item B<-u> I<TYPES>, B<--unknown-types>=I<TYPES>
+
+A comma-separated list of unknown audio types to list.
+
+=item B<-w>, B<--wildcards>
+
+Expand wildcards in F<basedirs>.
+
+=back
+
+=head2 FILTERING
+
+=over
+
+=item B<-b> I<MIN>, B<--bitrate>=I<MIN>
+
+Exclude MP3s with bitrate lower than I<MIN> (in Kbps).
+
+=item B<-l>, B<--lame-only>
+
+Exclude MP3s with no LAME profile.
+
+=item B<-v>, B<--vbr-only>
+
+Exclude MP3s with constant bitrates.
+
+=item B<-M>, B<--no-mixed>
+
+Exclude directories with mixed files.
+
+=back
+
+=head2 PARSING
+
+=over
+
+=item B<-P> I<n>, B<--prefer-tag>=I<n>
+
+if both ID3v1 and ID3v2 tags exist, prefer I<n> (1 or 2) (default I<2>).
+
+=back
+
+=head2 OUTPUT
+
+=over
+
+=item B<-B> I<COLOR>, B<--bg>=I<COLOR>
+
+Set HTML background I<COLOR> (default I<white>).
+
+=item B<-f> F<FILE>, B<--file>=F<FILE>
+
+Write output to F<FILE>.
+
+=item B<-H>, B<--html>
+
+HTML output (deprecated, use B<--template> I<html>).
+
+=item B<-I> I<n>, B<--indent> I<n>
+
+Set indent to I<n> (default I<4>).
+
+=item B<-o> I<STRING>, B<--output>=I<STRING>
+
+Set output format I<STRING> used in plain-text and HTML output. See
+L</"OUTPUT STRING FORMAT"> for details on syntax. (default
+I<[n,-52]| [s,5] | [t,-4] | [q]>).
+
+=item B<-O> F<FILE>, B<--output-db>=F<FILE>
+
+Write list in output.db format to F<FILE> (deprecated, use B<--template>
+I<db>).
+
+=item B<-s>, B<--strip>
+
+Strip output of field headers and empty directories.
+
+=item B<--template>=I<TEMPLATE>
+
+Set output I<TEMPLATE> (default I<plaintext>).
+
+=item B<-T> I<COLOR>, B<--text> I<COLOR>
+
+Set HTML text I<COLOR> (default I<black>).
+
+=back
+
+=head2 STATISTICS
+
+=over
+
+=item B<-D>, B<--date>
+
+Display datestamp header.
+
+=item B<-S>, B<--stats>
+
+Display statistics results.
+
+=item B<-t>, B<--time>
+
+Display elapsed time footer.
+
+=back
+
+=head2 OUTPUT STRING FORMAT
+
+Anything enclosed by brackets is considered a field. A field must have the
+following syntax:
+
+=over
+
+=item C<[TAG]>
+
+=item C<[TAG,WIDTH]>
+
+=item C<[TAG,WIDTH,SUFFIX]>
+
+=item C<[TAG,,SUFFIX]>
+
+=back
+
+C<TAG> is any of the following characters:
+
+=over
+
+=item C<a>
+
+List of bitrates in Audiolist compatible format.
+
+=item C<A>
+
+Artist name as found in ID3 tags.
+
+=item C<b>
+
+Bitrate with suffix (e.g. 192k).
+
+=item C<B>
+
+Bitrate in bps.
+
+=item C<C>
+
+Album name as found in ID3 tags.
+
+=item C<f>
+
+Number of audio files (including spacers).
+
+=item C<l>
+
+Length in minutes and seconds.
+
+=item C<L>
+
+Length in seconds.
+
+=item C<m>
+
+Time of last change.
+
+=item C<M>
+
+Time of last change in seconds since the epoch.
+
+=item C<n>
+
+Directory name (indented).
+
+=item C<N>
+
+Directory name.
+
+=item C<p>
+
+Profile.
+
+=item C<P>
+
+Full path.
+
+=item C<q>
+
+Quality.
+
+=item C<s>
+
+Size with suffix (e.g. 65.4M).
+
+=item C<S>
+
+Size in bytes.
+
+=item C<t>
+
+File type.
+
+=item C<T>
+
+=item Bitrate type
+
+=over 
+
+=item C<~>
+
+Mixed files.
+
+=item C<C>
+
+Constant bitrate.
+
+=item C<L>
+
+Lossless compression.
+
+=item C<V>
+
+Variable bitrate.
+
+=back
+
+=item C<V>
+
+Encoder.
+
+=back
+
+C<WIDTH> defines the exact width of the field. The output is cropped to this
+width if needed. Negative values will give left aligned output. Cropping is
+always done on the right.
+
+C<SUFFIX> lets you specify a unit to be concatenated to all non-empty data.
+
+Other interpreted sequences are:
+
+=over
+
+=item C<\[>
+
+[
+
+=item C<\]>
+
+]
+
+=item C<\n>
+
+New line.
+
+=item C<\t>
+
+Tab character.
+
+=back
+
+Unescaped brackets are forbidden unless they define a field.
+
+Note: If you have any whitespace in your output string you must put it inside
+quotes or otherwise it will not get parsed right.
+
+=head1 AUTHORS
+
+Dnuos is developed and maintained by aiiie and Mattias
+PE<auml>ivE<auml>rinta.
+
+Oidua was originally developed by Sylvester Johansson and Mattias
+PE<auml>ivE<auml>rinta.
+
+=head1 HISTORY
+
+Dnuos is based on code from Oidua (see L<http://oidua.suxbad.com/>). Oidua
+makes similar lists, but is much older, has fewer features, and is no longer
+maintained.
