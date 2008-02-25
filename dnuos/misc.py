@@ -10,11 +10,17 @@ Feel free to organize this in a better way if you know how. I don't.
 
 import locale
 import os
+import sys
 from heapq import heappop, heappush
 from itertools import count
 from warnings import warn
 
 def _find_locale_dir():
+
+    # Check for standard locale dir first
+    locale_dir = os.path.join(sys.prefix, 'share', 'locale', 'dnuos')
+    if os.path.isdir(locale_dir):
+        return locale_dir
 
     # Avoid unpacking the egg if translation isn't necessary
     lang = locale.getdefaultlocale()[0]
@@ -33,7 +39,6 @@ def _find_locale_dir():
 
 import gettext
 _ = gettext.translation('dnuos', _find_locale_dir(), fallback=True).ugettext
-
 
 
 class Lookahead(object):
