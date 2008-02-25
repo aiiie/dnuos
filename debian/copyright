@@ -1,0 +1,32 @@
+This package was debianized by aiiie <aiiie@aiiie.co> on
+Sun, 24 Feb 2008 20:32:58 -0500.
+
+It was downloaded from https://github.com/aiiie/dnuos
+
+Upstream Authors: Mattias Päivärinta, aiiie
+
+Copyright: 2006, 2007, 2008 Mattias Päivärinta
+	   2006, 2007, 2008 aiiie
+
+License:
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License with
+   the Debian GNU/Linux distribution in file /usr/share/common-licenses/GPL;
+   if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+   Suite 330, Boston, MA  02111-1307  USA
+
+On Debian systems, the complete text of the GNU General Public
+License, version 2, can be found in /usr/share/common-licenses/GPL-2.
+
+The Debian packaging is (C) 2008, aiiie <aiiie@aiiie.co> and
+is licensed under the GPL, see above.
