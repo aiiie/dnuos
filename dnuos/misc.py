@@ -17,11 +17,6 @@ from warnings import warn
 
 def _find_locale_dir():
 
-    # Check for standard locale dir first
-    locale_dir = os.path.join(sys.prefix, 'share', 'locale', 'dnuos')
-    if os.path.isdir(locale_dir):
-        return locale_dir
-
     # Avoid unpacking the egg if translation isn't necessary
     lang = locale.getdefaultlocale()[0]
     if not lang or lang.split('_')[0] == 'en':
