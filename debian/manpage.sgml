@@ -60,14 +60,14 @@ manpage.1: manpage.sgml
       <command>&manpackage;</command>
 
       <arg choice="opt">options</arg>
-      <arg rep="repeat" choice="req"><replaceable>basedir</replaceable></arg>
+      <arg rep="repeat" choice="req"><replaceable>basedir</replaceable> <replaceable>...</replaceable></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
   <refsect1>
     <title>DESCRIPTION</title>
 
-    <para><command>&manucpackage;</command> is a console program that creates
-      lists of music collections, based on directory structure.</para>
+    <para>Dnuos is a console program that creates lists of music
+      collections, based on directory structure.</para>
 
     <para>For example, a list might look like this:</para>
 
@@ -75,22 +75,21 @@ manpage.1: manpage.sgml
 Album/Artist                       |  Size | Type | Quality
 ===========================================================
 Ambient                            |       |      | 
-    Alva Noto                      |       |      | 
-        2001 - Transform           | 70.9M | MP3  | -V2
-        2004 - Transrapid          | 30.2M | MP3  | -aps
-        2005 - Transspray          | 31.7M | MP3  | -aps
-        2005 - Transvision         | 32.3M | MP3  | -aps
-    Alva Noto and Ryuichi Sakamoto |       |      | 
-        2002 - Vrioon              | 72.6M | MP3  | -aps
-        2005 - Insen               | 99.1M | MP3  | 320 C
-        2006 - Revep               | 27.9M | MP3  | -V2n</screen>
+&nbsp;   Alva Noto                      |       |      | 
+&nbsp;       2001 - Transform           | 70.9M | MP3  | -V2
+&nbsp;       2004 - Transrapid          | 30.2M | MP3  | -aps
+&nbsp;       2005 - Transspray          | 31.7M | MP3  | -aps
+&nbsp;       2005 - Transvision         | 32.3M | MP3  | -aps
+&nbsp;   Alva Noto and Ryuichi Sakamoto |       |      | 
+&nbsp;       2002 - Vrioon              | 72.6M | MP3  | -aps
+&nbsp;       2005 - Insen               | 99.1M | MP3  | 320 C
+&nbsp;       2006 - Revep               | 27.9M | MP3  | -V2n</screen>
 
     <para>The list format is completely customizable and can be plain text
       or HTML.</para>
 
-    <para><command>&manucpackage;</command> supports MP3, AAC, Musepack,
-      Ogg Vorbis, and FLAC audio files. Quality profile detection is also
-      supported, including
+    <para>Dnuos supports MP3, AAC, Musepack, Ogg Vorbis, and FLAC audio files.
+      Quality profile detection is also supported, including
       <ulink url="http://wiki.hydrogenaudio.org/index.php?title=Lame#Recommended_encoder_settings">LAME
       quality preset information</ulink>.</para>
 
@@ -102,8 +101,6 @@ Ambient                            |       |      |
   </refsect1>
   <refsect1>
     <title>OPTIONS</title>
-
-    <para>Some people make this separate from the description.</para>
 
     <variablelist>
       <varlistentry>
@@ -119,210 +116,180 @@ Ambient                            |       |      |
         <term><option>--help-output-string</option></term>
         <listitem><para>Show the output string help message.</para></listitem>
       </varlistentry>
-      <varlistentry>
-        <term>Application:</term>
-        <listitem>
-          <variablelist>
-            <varlistentry>
-              <term><option>--debug</option></term>
-              <listitem><para>Output debug trace to
-                <filename>STDERR</filename>.</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>--ignore-bad</option></term>
-              <listitem><para>Don't list files that cause Audiotype
-                failure.</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-q</option></term>
-              <term><option>--quiet</option></term>
-              <listitem><para>Omit progress indication.</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-V</option></term>
-              <term><option>--version</option></term>
-              <listitem><para>Display version.</para></listitem>
-            </varlistentry>
-          </variablelist>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>Directory walking:</term>
-        <listitem>
-          <variablelist>
-            <varlistentry>
-              <term><option>--disable-cache</option></term>
-              <listitem><para>Disable caching.</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>--cache-dir</option>=<replaceable>DIR</replaceable></term>
-              <listitem><para>Store cache in <replaceable>DIR</replaceable>
-                (default <filename class="directory">~/.dnuos</filename>).</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-e</option> <replaceable>DIR</replaceable></term>
-              <term><option>--exclude</option>=<replaceable>DIR</replaceable></term>
-              <listitem><para>Exclude <replaceable>DIR</replaceable> from
-                search.</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-i</option></term>
-              <term><option>--ignore-case</option></term>
-              <listitem><para>Case-insensitive directory sorting.</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-L</option></term>
-              <term><option>--list-files</option></term>
-              <listitem><para>List audio files in directories (doesn't use
-                caching).</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-m</option></term>
-              <term><option>--merge</option></term>
-              <listitem><para>Parse <replaceable>basedirs</replaceable> in
-                parallel and merge output.</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-u</option> <replaceable>TYPES</replaceable></term>
-              <term><option>--unknown-types</option>=<replaceable>TYPES</replaceable></term>
-              <listitem><para>A comma-separated list of unknown audio types
-                to list</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-w</option></term>
-              <term><option>--wildcards</option></term>
-              <listitem><para>Expand wildcards in
-                <replaceable>basedirs</replaceable></para></listitem>
-            </varlistentry>
-          </variablelist>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>Filtering:</term>
-        <listitem>
-          <variablelist>
-            <varlistentry>
-              <term><option>-b</option> <replaceable>MIN</replaceable></term>
-              <term><option>--bitrate</option>=<replaceable>MIN</replaceable></term>
-              <listitem><para>Exclude MP3s with bitrate lower than
-                <replaceable>MIN</replaceable> (in Kbps).</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-l</option></term>
-              <term><option>--lame-only</option></term>
-              <listitem><para>Exclude MP3s with no LAME profile.</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-v</option></term>
-              <term><option>--vbr-only</option></term>
-              <listitem><para>Exclude MP3s with constant bitrates.</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-M</option></term>
-              <term><option>--no-mixed</option></term>
-              <listitem><para>Exclude directories with mixed files.</para></listitem>
-            </varlistentry>
-          </variablelist>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>Parsing:</term>
-        <listitem>
-          <variablelist>
-            <varlistentry>
-              <term><option>-P</option> <replaceable>n</replaceable></term>
-              <term><option>--prefer-tag</option>=<replaceable>n</replaceable></term>
-              <listitem><para>if both ID3v1 and ID3v2 tags exist, prefer
-                <replaceable>n</replaceable> (1 or 2) (default 2)</para></listitem>
-            </varlistentry>
-          </variablelist>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>Output:</term>
-        <listitem>
-          <variablelist>
-            <varlistentry>
-              <term><option>-B</option> <replaceable>COLOR</replaceable></term>
-              <term><option>--bg</option>=<replaceable>COLOR</replaceable></term>
-              <listitem><para>Set HTML background
-                <replaceable>COLOR</replaceable> (default white)</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-f</option> <replaceable>FILE</replaceable></term>
-              <term><option>--file</option>=<replaceable>FILE</replaceable></term>
-              <listitem><para>Write output to <replaceable>FILE</replaceable></para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-H</option></term>
-              <term><option>--html</option></term>
-              <listitem><para>HTML output (deprecated, use
-                <option>--template html</option>).</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-I</option> <replaceable>n</replaceable></term>
-              <term><option>--indent</option>=<replaceable>n</replaceable></term>
-              <listitem><para>Set indent to <replaceable>n</replaceable>
-                (default 4)</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-o</option> <replaceable>STRING</replaceable></term>
-              <term><option>--output</option>=<replaceable>STRING</replaceable></term>
-              <listitem><para>Set output format <replaceable>STRING</replaceable>
-                used in plain-text and HTML output. See
-                <option>--help-output-string</option> for details on syntax.
-                (default <code>[n,-52]| [s,5] | [t,-4] | [q]</code>)</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-O</option> <replaceable>FILE</replaceable></term>
-              <term><option>--output-db</option>=<replaceable>FILE</replaceable></term>
-              <listitem><para>Write list in output.db format to
-                <replaceable>FILE</replaceable> (deprecated, use
-                <option>--template db</option>).</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-s</option></term>
-              <term><option>--strip</option></term>
-              <listitem><para>Strip output of field headers and empty
-                directories.</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>--template</option>=<replaceable>TEMPLATE</replaceable></term>
-              <listitem><para>Set output <replaceable>TEMPLATE</replaceable>
-              (default plaintext)</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-T</option> <replaceable>COLOR</replaceable></term>
-              <term><option>--text</option>=<replaceable>COLOR</replaceable></term>
-              <listitem><para>Set HTML text <replacelable>COLOR</replaceable>
-              (default black)</para></listitem>
-            </varlistentry>
-          </variablelist>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>Statistics:</term>
-        <listitem>
-          <variablelist>
-            <varlistentry>
-              <term><option>-D</option></term>
-              <term><option>--date</option></term>
-              <listitem><para>Display datestamp header.</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-S</option></term>
-              <term><option>--stats</option></term>
-              <listitem><para>Display statistics results.</para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><option>-t</option></term>
-              <term><option>--time</option></term>
-              <listitem><para>Display elapsed time footer.</para></listitem>
-            </varlistentry>
-          </variablelist>
-        </listitem>
-      </varlistentry>
     </variablelist>
+    <refsect2>
+      <title>APPLICATION</title>
+      <variablelist>
+        <varlistentry>
+          <term><option>--debug</option></term>
+          <listitem><para>Output debug trace to
+            <filename>STDERR</filename>.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>--ignore-bad</option></term>
+          <listitem><para>Don't list files that cause Audiotype
+            failure.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-q</option>, <option>--quiet</option></term>
+          <listitem><para>Omit progress indication.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-V</option>, <option>--version</option></term>
+          <listitem><para>Display version.</para></listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect2>
+    <refsect2>
+      <title>DIRECTORY WALKING</title>
+      <variablelist>
+        <varlistentry>
+          <term><option>--disable-cache</option></term>
+          <listitem><para>Disable caching.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>--cache-dir</option>=<replaceable>DIR</replaceable></term>
+          <listitem><para>Store cache in <replaceable>DIR</replaceable> (default <filename class="directory">~/.dnuos</filename>).</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-e</option> <replaceable>DIR</replaceable>,
+            <option>--exclude</option>=<replaceable>DIR</replaceable></term>
+          <listitem><para>Exclude <replaceable>DIR</replaceable> from
+            search.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-i</option>, <option>--ignore-case</option></term>
+          <listitem><para>Case-insensitive directory sorting.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-L</option>, <option>--list-files</option></term>
+          <listitem><para>List audio files in directories (doesn't use
+            caching).</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-m</option>, <option>--merge</option></term>
+          <listitem><para>Parse <replaceable>basedirs</replaceable> in
+            parallel and merge output.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-u</option> <replaceable>TYPES</replaceable>,
+            <option>--unknown-types</option>=<replaceable>TYPES</replaceable></term>
+          <listitem><para>A comma-separated list of unknown audio types
+            to list</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-w</option>, <option>--wildcards</option></term>
+          <listitem><para>Expand wildcards in
+            <replaceable>basedirs</replaceable></para></listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect2>
+    <refsect2>
+      <title>FILTERING</title>
+      <variablelist>
+        <varlistentry>
+          <term><option>-b</option> <replaceable>MIN</replaceable>,
+            <option>--bitrate</option>=<replaceable>MIN</replaceable></term>
+          <listitem><para>Exclude MP3s with bitrate lower than
+            <replaceable>MIN</replaceable> (in Kbps).</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-l</option>, <option>--lame-only</option></term>
+          <listitem><para>Exclude MP3s with no LAME profile.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-v</option>, <option>--vbr-only</option></term>
+          <listitem><para>Exclude MP3s with constant bitrates.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-M</option>, <option>--no-mixed</option></term>
+          <listitem><para>Exclude directories with mixed files.</para></listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect2>
+    <refsect2>
+      <title>PARSING</title>
+      <variablelist>
+        <varlistentry>
+          <term><option>-P</option> <replaceable>n</replaceable>,
+            <option>--prefer-tag</option>=<replaceable>n</replaceable></term>
+          <listitem><para>if both ID3v1 and ID3v2 tags exist, prefer
+            <replaceable>n</replaceable> (1 or 2) (default 2).</para></listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect2>
+    <refsect2>
+      <title>OUTPUT</title>
+      <variablelist>
+        <varlistentry>
+          <term><option>-B</option> <replaceable>COLOR</replaceable>,
+            <option>--bg</option>=<replaceable>COLOR</replaceable></term>
+          <listitem><para>Set HTML background
+            <replaceable>COLOR</replaceable> (default white).</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-f</option> <replaceable>FILE</replaceable>,
+            <option>--file</option>=<replaceable>FILE</replaceable></term>
+          <listitem><para>Write output to <replaceable>FILE</replaceable>.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-H</option>, <option>--html</option></term>
+          <listitem><para>HTML output (deprecated, use
+            <option>--template html</option>).</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-I</option> <replaceable>n</replaceable>,
+            <option>--indent</option>=<replaceable>n</replaceable></term>
+          <listitem><para>Set indent to <replaceable>n</replaceable> (default 4).</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-o</option> <replaceable>STRING</replaceable>,
+            <option>--output</option>=<replaceable>STRING</replaceable></term>
+          <listitem><para>Set output format
+            <replaceable>STRING</replaceable> used in plain-text and HTML output. See
+            <option>--help-output-string</option> for details on syntax.
+            (default <literal>[n,-52]| [s,5] | [t,-4] | [q]</literal>)</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-O</option> <replaceable>FILE</replaceable>,
+            <option>--output-db</option>=<replaceable>FILE</replaceable></term>
+          <listitem><para>Write list in output.db format to
+            <replaceable>FILE</replaceable> (deprecated, use
+            <option>--template db</option>).</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-s</option>, <option>--strip</option></term>
+          <listitem><para>Strip output of field headers and empty
+            directories.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>--template</option>=<replaceable>TEMPLATE</replaceable></term>
+          <listitem><para>Set output <replaceable>TEMPLATE</replaceable> (default plaintext).</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-T</option> <replaceable>COLOR</replaceable></term>
+          <term><option>--text</option>=<replaceable>COLOR</replaceable></term>
+          <listitem><para>Set HTML text <replaceable>COLOR</replaceable> (default black).</para></listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect2>
+    <refsect2>
+      <title>STATISTICS</title>
+      <variablelist>
+        <varlistentry>
+          <term><option>-D</option>, <option>--date</option></term>
+          <listitem><para>Display datestamp header.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-S</option>, <option>--stats</option></term>
+          <listitem><para>Display statistics results.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><option>-t</option>, <option>--time</option></term>
+          <listitem><para>Display elapsed time footer.</para></listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect2>
 
     <refsect2>
       <title>OUTPUT STRING FORMAT</title>
@@ -330,142 +297,147 @@ Ambient                            |       |      |
       <para>Anything enclosed by brackets is considered a field. A field must
         have the following syntax:</para>
 
-      <itemizedlist mark="none">
-        <listitem><para><code>[TAG]</code></para></listitem>
-        <listitem><para><code>[TAG,WIDTH]</code></para></listitem>
-        <listitem><para><code>[TAG,WIDTH,SUFFIX]</code></para></listitem>
-        <listitem><para><code>[TAG,,SUFFIX]</code></para></listitem>
+      <itemizedlist>
+        <listitem><para><literal>[TAG]</literal></para></listitem>
+        <listitem><para><literal>[TAG,WIDTH]</literal></para></listitem>
+        <listitem><para><literal>[TAG,WIDTH,SUFFIX]</literal></para></listitem>
+        <listitem><para><literal>[TAG,,SUFFIX]</literal></para></listitem>
       </itemizedlist>
 
+      <para></para>
+
       <variablelist>
-        <title><code>TAG</code> is any of the following characters:</title>
+        <title><literal>TAG</literal> is any of the following characters:</title>
         <varlistentry>
-          <term><code>a</code></term>
+          <term><literal>a</literal></term>
           <listitem><para>List of bitrates in Audiolist compatible
             format.</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>A</code></term>
+          <term><literal>A</literal></term>
           <listitem><para>Artist name as found in ID3 tags</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>b</code></term>
+          <term><literal>b</literal></term>
           <listitem><para>Bitrate with suffix (e.g. 192k)</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>B</code></term>
+          <term><literal>B</literal></term>
           <listitem><para>Bitrate in bps.</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>C</code></term>
+          <term><literal>C</literal></term>
           <listitem><para>Album name as found in ID3 tags.</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>f</code></term>
+          <term><literal>f</literal></term>
           <listitem><para>Number of audio files (including
             spacers).</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>l</code></term>
+          <term><literal>l</literal></term>
           <listitem><para>Length in minutes and seconds.</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>L</code></term>
+          <term><literal>L</literal></term>
           <listitem><para>Length in seconds.</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>m</code></term>
+          <term><literal>m</literal></term>
           <listitem><para>Time of last change.</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>M</code></term>
+          <term><literal>M</literal></term>
           <listitem><para>Time of last change in seconds since the
             epoch.</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>n</code></term>
+          <term><literal>n</literal></term>
           <listitem><para>Directory name (indented).</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>N</code></term>
+          <term><literal>N</literal></term>
           <listitem><para>Directory name.</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>p</code></term>
+          <term><literal>p</literal></term>
           <listitem><para>Profile.</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>P</code></term>
+          <term><literal>P</literal></term>
           <listitem><para>Full path.</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>q</code></term>
+          <term><literal>q</literal></term>
           <listitem><para>Quality.</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>s</code></term>
+          <term><literal>s</literal></term>
           <listitem><para>Size with suffix (e.g. 65.4M).</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>S</code></term>
+          <term><literal>S</literal></term>
           <listitem><para>Size in bytes.</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>t</code></term>
+          <term><literal>t</literal></term>
           <listitem><para>File type.</para></listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>T</code></term>
+          <term><literal>T</literal></term>
           <listitem>
             <variablelist>
               <title>Bitrate type:</title>
               <varlistentry>
-                <term><code>~</code></term>
+                <term><literal>~</literal></term>
                 <listitem><para>Mixed files.</para></listitem>
               </varlistentry>
               <varlistentry>
-                <term><code>C</code></term>
+                <term><literal>C</literal></term>
                 <listitem><para>Constant bitrate.</para></listitem>
               </varlistentry>
               <varlistentry>
-                <term><code>L</code></term>
+                <term><literal>L</literal></term>
                 <listitem><para>Lossless compression.</para></listitem>
               </varlistentry>
               <varlistentry>
-                <term><code>V</code></term>
+                <term><literal>V</literal></term>
                 <listitem><para>Variable bitrate.</para></listitem>
               </varlistentry>
+            </variablelist>
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term><code>V</code></term>
+          <term><literal>V</literal></term>
           <listitem><para>Encoder.</para></listitem>
         </varlistentry>
       </variablelist>
 
-      <para><code>WIDTH</code> defines the exact width of the field. The
+      <para><literal>WIDTH</literal> defines the exact width of the field. The
         output is cropped to this width if needed. Negative values will give
         left aligned output. Cropping is always done on the right.</para>
 
-      <para><code>SUFFIX</code> lets you specify a unit to be concatenated to
+      <para><literal>SUFFIX</literal> lets you specify a unit to be concatenated to
         all non-empty data.</para>
+
+      <para></para>
 
       <variablelist>
         <title>Other interpreted sequences are:</title>
           <varlistentry>
-            <term><code>\[</code></term>
-            <listitem><para><code>[</code></para></listitem>
+            <term><literal>\\\\[</literal></term>
+            <listitem><para><literal>[</literal></para></listitem>
           </varlistentry>
           <varlistentry>
-            <term><code>\]</code></term>
-            <listitem><para><code>]</code></para></listitem>
+            <term><literal>\\\\]</literal></term>
+            <listitem><para><literal>]</literal></para></listitem>
           </varlistentry>
           <varlistentry>
-            <term><code>\n</code></term>
+            <term><literal>\\\\n</literal></term>
             <listitem><para>New line.</para></listitem>
           </varlistentry>
           <varlistentry>
-            <term><code>\t</code></term>
+            <term><literal>\\\\t</literal></term>
             <listitem><para>Tab character.</para></listitem>
           </varlistentry>
       </variablelist>
@@ -480,40 +452,18 @@ Ambient                            |       |      |
     </refsect2>
   </refsect1>
   <refsect1>
-    <title>EXAMPLES</title>
-  </refsect1>
-  <refsect1>
-    <title>FILES</title>
-
-    <para>If the environment's language is not set to English,
-      <command>&manucpackage;</command> will try to access its locale
-      files, which may be located in the following directory:</para>
-
-    <variablelist>
-      <varlistentry>
-        <term><filename>/usr/lib/python2.5/site-packages/dnuos/locale/*/LC_MESSAGES/*.mo</filename></term>
-        <listitem><para><acronym>GNU</acronym> <command>gettext</command>
-          locale files</para></listitem>
-      </varlistentry>
-    </variablelist>
-  </refsect1>
-  <refsect1>
     <title>AUTHORS</title>
 
-    <para>Dnuos is developed and maintained by
-      <author email="aiiie@aiiie.co">aiiie</author> and
-      <author email="pejve@vasteras2.net">Mattias
-      P&auml;iv&auml;rinta</author>.</para>
-    <para>Oidua was originally developed by <othercredit>Sylvester
-      Johansson</othercredit> and
-      <othercredit email="pejve@vasteras2.net">Mattias
-      P&auml;iv&auml;rinta</othercredit>.</para>
+    <para>Dnuos is developed and maintained by aiiie and Mattias
+      P&auml;iv&auml;rinta.</para>
+    <para>Oidua was originally developed by Sylvester Johansson and
+      Mattias P&auml;iv&auml;rinta.</para>
 
   </refsect1>
   <refsect1>
     <title>HISTORY</title>
 
-    <para><command>&manucpackage;</command> is based on code from
+    <para>Dnuos is based on code from
       <ulink url="http://oidua.suxbad.com/">Oidua</ulink>. Oidua makes
       similar lists, but is much older, has fewer features, and is no longer
       maintained.</para>
