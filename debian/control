@@ -2,13 +2,15 @@ Source: dnuos
 Section: sound
 Priority: optional
 Maintainer: aiiie <aiiie@aiiie.co>
-Build-Depends: cdbs (>= 0.4.48), python-all-dev, python-support (>= 0.5.6),
+Build-Depends: cdbs (>= 0.4.48), python-support (>= 0.5.6), python-dev
  debhelper (>= 5.0.42)
+XS-Python-Version: current, >= 2.3
 Standards-Version: 3.7.2
 
 Package: dnuos
-Architecture: any
+Architecture: all
 Depends: ${python:Depends}
+XB-Python-Version: ${python:Versions}
 Description: Audio file metadata lister
  Dnuos is a console program that creates lists of music collections, based on
  directory structure.
