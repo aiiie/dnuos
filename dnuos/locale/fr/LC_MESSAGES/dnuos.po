@@ -283,7 +283,7 @@ msgstr "Analyser basedirs en parallèle et combiner la sortie"
 
 #: dnuos/conf.py:281
 msgid "A comma-separated list of unknown audio types to list"
-msgstr "Une liste des types audio pour lister, séparés par virgule"
+msgstr "Une liste des types audio inconnus pour lister, séparés par virgule"
 
 #: dnuos/conf.py:282
 msgid "TYPES"
