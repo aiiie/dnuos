@@ -1,0 +1,388 @@
+=head1 NOM
+
+dnuos - Lister des métadonnées des fichiers audio
+
+=head1 SYNOPSIS
+
+B<dnuos> [options] F<basedir> F<...>
+
+=head1 DESCRIPTION
+
+Dnuos est un programme de terminal qui fait des listes des collections de la
+musique, par la structure des dossiers.
+
+Par exemple, une liste pourrait ressembler à ceci:
+
+=begin
+
+    Album/Artiste                      | Taill | Type | Qualité
+    ===========================================================
+    Ambient                            |       |      | 
+        Alva Noto                      |       |      | 
+            2001 - Transform           | 70,9M | MP3  | -V2
+            2004 - Transrapid          | 30,2M | MP3  | -aps
+            2005 - Transspray          | 31,7M | MP3  | -aps
+            2005 - Transvision         | 32,3M | MP3  | -aps
+        Alva Noto and Ryuichi Sakamoto |       |      | 
+            2002 - Vrioon              | 72,6M | MP3  | -aps
+            2005 - Insen               | 99,1M | MP3  | 320 C
+            2006 - Revep               | 27,9M | MP3  | -V2n
+
+=end
+
+Le format de la liste est complètement personnalisable et peut être texte
+brut ou HTML.
+
+Dnuos s'appuie MP3, AAC, Musepack, Ogg Vorbis, et FLAC. Détection du profil
+de qualité est appuyé aussi, y compris l'information du LAME quality preset
+(voyez L<http://wiki.hydrogenaudio.org/index.php?title=Lame#Recommended_encoder_settings>).
+
+Informations sur les fichiers audio sont enregistrées sur le disque après
+une liste est initialement faite, ce qui accélère faire de prochaines listes.
+Seulement les fichiers audio et les dossiers qui ont étés modifiés depuis
+la dernière liste a été faite.
+
+=head1 OPTIONS
+
+=over
+
+=item F<basedir> F<...>
+
+Les dossiers bases à rechercher les fichiers audio.
+
+=item B<-h>
+
+Afficher le message d'aide et terminer.
+
+=item B<--help-output-string>
+
+Afficher l'aide pour la chaîne de sortie.
+
+=back
+
+=head2 APPLICATION
+
+=over
+
+=item B<--debug>
+
+Écrire la trace de débogage à F<stderr>.
+
+=item B<--ignore-bad>
+
+Ne pas afficher de fichiers qui cause des échechs d'Audiotype.
+
+=item B<-q>, B<--quiet>
+
+Omettre l'indication de progrès.
+
+=item B<-V>, B<--version>
+
+Afficher la version.
+
+=back
+
+=head2 RECHERCHE DE DOSSIER
+
+=over
+
+=item B<--disable-cache>
+
+Interdire le cache.
+
+=item B<--cache-dir>=F<DOSSIER>
+
+Enregister le cache dans F<DOSSIER> (F<~/.dnuos> par défaut).
+
+=item B<-e> F<DOSSIER> B<--exclude>=F<DOSSIER>
+
+Exclure F<DOSSIER> de recherche.
+
+=item B<-i>, B<--ignore-case>
+
+Ranger des dossiers sensiblement à la casse.
+
+=item B<-L>, B<--list-files>
+
+Lister les fichiers audio dans des dossiers (pas cachés).
+
+=item B<-m>, B<--merge>
+
+Analyser F<basedirs> en parallèle et combiner la sortie.
+
+=item B<-u> I<TYPES>, B<--unknown-types>=I<TYPES>
+
+Une liste des types audio pour lister, séparés par virgule.
+
+=item B<-w>, B<--wildcards>
+
+Développer les caractères génériques dans F<Basedirs>.
+
+=back
+
+=head2 FILTRAGE
+
+=over
+
+=item B<-b> I<MIN>, B<--bitrate>=I<MIN>
+
+Exclure les MP3 avec un bitrate moins que I<MIN> (en Kops).
+
+=item B<-l>, B<--lame-only>
+
+Exclure les MP3 sans profil LAME.
+
+=item B<-v>, B<--vbr-only>
+
+Exclure les MP3 avec le bitrate constant.
+
+=item B<-M>, B<--no-mixed>
+
+Exclure les dossier avec des fichiers mélangés.
+
+=back
+
+=head2 ANALYSAGE
+
+=over
+
+=item B<-P> I<n>, B<--prefer-tag>=I<n>
+
+Si des balises de ID3v1 ainsi que ID3v2 existent, préférer I<n> (1 ou 2)
+(2 par défaut)
+
+=back
+
+=head2 OUTPUT
+
+=over
+
+=item B<-B> I<COULEUR>, B<--bg>=I<COULEUR>
+
+Mettre la I<COULEUR> du arrière-plan de HTML. (I<white> par défaut).
+
+=item B<-f> F<FICHIER>, B<--file>=F<FICHIER>
+
+Écrire la sortie dans F<FICHIER>.
+
+=item B<-H>, B<--html>
+
+La sortie de HTML (désapprouvé, utilisez B<--template> I<html>).
+
+=item B<-I> I<n>, B<--indent> I<n>
+
+Mettre l'alinéa à I<n> (I<4> par défaut).
+
+=item B<-o> I<CHAÎNE>, B<--output>=I<CHAÎNE>
+
+Mettre la chaîne de sortie utilisé dans la sortie de texte brut et texte
+HTML. Voyez L</"FORMAT DE LA CHAÎNE DE SORTIE"> pour plus information à
+propos de syntaxe. (I<[n,-52]| [s,5] | [t,-4] | [q]> par défaut.)
+
+=item B<-O> F<FICHIER>, B<--output-db>=F<FICHIER>
+
+Écrire la liste avec le format F<output.db> dans F<FICHIER> (désapprouvé,
+utilisez B<--template> I<db>).
+
+=item B<-s>, B<--strip>
+
+Supprimer la sortie des en-têtes de champ et des dossiers vides.
+
+=item B<--template>=I<TEMPLATE>
+
+Mettre le I<TEMPLATE> de sortie (I<plaintext> par défaut).
+
+=item B<-T> I<COULEUR>, B<--text> I<COULEUR>
+
+Mettre la I<COULEUR> du texte HTML (I<black> par défaut).
+
+=back
+
+=head2 STATISTIQUES
+
+=over
+
+=item B<-D>, B<--date>
+
+Afficher l'en-tête d'horodaté.
+
+=item B<-S>, B<--stats>
+
+Afficher les résultats statistiques.
+
+=item B<-t>, B<--time>
+
+Afficher le temps passé en bas de la page.
+
+=back
+
+=head2 FORMAT DE LA CHAÎNE DE SORTIE
+
+Le texte entre crochets est considéré comme un champ. Un champ doit être
+utilisé la syntaxe suivante :
+
+=over
+
+=item C<[BALISE]>
+
+=item C<[BALISE,LARGEUR]>
+
+=item C<[BALISE,LARGEUR,SUFFIXE]>
+
+=item C<[BALISE,,SUFFIXE]>
+
+=back
+
+C<BALISE> peut être aucun des caractères suivants :
+
+=over
+
+=item C<a>
+
+Une liste de bitrates en format compatible avec Audiolist.
+
+=item C<A>
+
+Le nom d'artiste spécifié dans les balises ID3.
+
+=item C<b>
+
+Le bitrate avec suffixe (par ex. 192k).
+
+=item C<B>
+
+Le bitrate en ops.
+
+=item C<C>
+
+Le nom d'album spécifié dans les balises ID3.
+
+=item C<f>
+
+Le nombre de fichiers audio (incluant des spaceurs).
+
+=item C<l>
+
+La durée en minutes et secondes.
+
+=item C<L>
+
+La durée en secondes.
+
+=item C<m>
+
+La date de la modification.
+
+=item C<M>
+
+La date de la modification en temps UNIX.
+
+=item C<n>
+
+Le nom du dossier (mis en alinéa).
+
+=item C<N>
+
+Le nom du dossier.
+
+=item C<p>
+
+Le profil.
+
+=item C<P>
+
+Le chemin complet du dossier.
+
+=item C<q>
+
+La qualité.
+
+=item C<s>
+
+La taille avec suffixe (par ex. 65,4M).
+
+=item C<S>
+
+La taille en octets.
+
+=item C<t>
+
+Le type du fichier.
+
+=item C<T>
+
+=item Le type du bitrate :
+
+=over 
+
+=item C<~>
+
+Fichiers mélangés.
+
+=item C<C>
+
+Bitrate constant.
+
+=item C<L>
+
+Compression sans perte.
+
+=item C<V>
+
+Bitrate variable.
+
+=back
+
+=item C<V>
+
+L'encodeur.
+
+=back
+
+C<LARGEUR> définit la largeur exacte du champ. La sorte est alignée à
+cette largeur si nécessaire. Les valeurs négatives seraient alignées vers la
+gauche. Alignement est toujours fait du droit.
+
+C<SUFFIXE> spécifie une chaîne pour adjoindre à toutes données non-vides.
+
+D'autres chaînes interprétées :
+
+=over
+
+=item C<\[>
+
+[
+
+=item C<\]>
+
+]
+
+=item C<\n>
+
+Nouvelle ligne.
+
+=item C<\t>
+
+Caractère tab.
+
+=back
+
+Des crochets qui ne sont pas échapp´s sont interdits à moins qu'ils
+définissent un champ.
+
+Note : Si vous avez aucun des espaces blancs dans la chaîne de sortie, vous
+devez le mettre entre guillements, sinon il ne serait pas analysé correctement.
+
+=head1 AUTEURS
+
+Dnuos est développé et maintenu par Brodie Rao et Mattias
+PE<auml>ivE<auml>rinta.
+
+Oidua a originalement été développé et maintenu par Sylvester Johansson and
+Mattias PE<auml>ivE<auml>rinta.
+
+=head1 HISTOIRE
+
+Dnuos est basé sur le code d'Oidua (voyez L<http://oidua.suxbad.com/>. Oidua
+peut faire des listes similaires, mais c'est trop vieux et n'est plus
+maintenu.
