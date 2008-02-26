@@ -112,7 +112,7 @@ Analyser F<basedirs> en parallèle et combiner la sortie.
 
 =item B<-u> I<TYPES>, B<--unknown-types>=I<TYPES>
 
-Une liste des types audio pour lister, séparés par virgule.
+Une liste des types audio inconnus pour lister, séparés par virgule.
 
 =item B<-w>, B<--wildcards>
 
