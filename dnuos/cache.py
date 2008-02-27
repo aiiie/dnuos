@@ -49,7 +49,7 @@ class memoized(object):
 
     If called later with the same argument, the cached value is
     returned, and not re-evaluated.
-    
+
     The function must only take one argument. This argument is appended to
     the list in cache.written, so persisted and fresh data can be
     differentiated.

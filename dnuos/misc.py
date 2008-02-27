@@ -38,7 +38,7 @@ _ = gettext.translation('dnuos', _find_locale_dir(), fallback=True).ugettext
 
 class Lookahead(object):
     """Wrapper class for adding one element of lookahead to an iterator
-    
+
     Example behavior:
 
     >>> x = Lookahead(iter((0, 1, 2)))
@@ -220,7 +220,7 @@ def to_human(value, radix=1024.0):
     """Convert a value to a string using SI suffixes.
 
     Example output:
-    
+
     >>> to_human(20)
     '20.0 '
     >>> to_human(20 * 1024)

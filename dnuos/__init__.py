@@ -211,7 +211,7 @@ def indicate_progress(dir_pairs, sizes, outs=sys.stderr):
 
     for adir, root in dir_pairs:
         print >> outs, _('%sB processed\r') % to_human(sizes["Total"]),
-        yield adir, root 
+        yield adir, root
     print >> outs, "\r               \r",
 
 
