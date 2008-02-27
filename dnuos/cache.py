@@ -47,13 +47,35 @@ class PersistentDict(shelve.Shelf, object):
 class memoized(object):
     """Decorator that caches a function's return value each time it's called.
 
-    If called later with the same arguments, the cached value is
+    If called later with the same argument, the cached value is
     returned, and not re-evaluated.
+    
+    The function must only take one argument. This argument is appended to
+    the list in cache.written, so persisted and fresh data can be
+    differentiated.
 
-    This a derivate of the memoized decorator in the Python Decorator
-    Library: http://wiki.python.org/moin/PythonDecoratorLibrary
-    It has been changed to take the cache mapping as an argument and
-    to store the result on cache misses as well as cache hits.
+    Example usage and behavior:
+
+    >>> def fake_dir(path):
+    ...     print 'fake_dir()'
+    ...     return '[dir data]'
+    ...
+    >>> class MemoCache(dict):
+    ...     def __init__(self, *args, **kwargs):
+    ...         super(MemoCache, self).__init__(*args, **kwargs)
+    ...         self.written = []
+    ...
+    >>> cache = MemoCache({'/old/dir': '[old dir data]'})
+    >>> fake_dir = memoized(fake_dir, cache)
+    >>> fake_dir('/dev/null')
+    fake_dir()
+    '[dir data]'
+    >>> cache.written
+    ['/dev/null']
+    >>> cache['/old/dir']
+    '[old dir data]'
+    >>> fake_dir('/dev/null')
+    '[dir data]'
     """
 
     def __init__(self, func, cache):
