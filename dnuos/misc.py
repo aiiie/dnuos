@@ -37,7 +37,37 @@ _ = gettext.translation('dnuos', _find_locale_dir(), fallback=True).ugettext
 
 
 class Lookahead(object):
-    """Wrapper class for adding one element of lookahead to an iterator"""
+    """Wrapper class for adding one element of lookahead to an iterator
+    
+    Example behavior:
+
+    >>> x = Lookahead(iter((0, 1, 2)))
+    >>> x.lookahead
+    0
+    >>> x.next()
+    0
+    >>> x.lookahead
+    1
+    >>> x.next()
+    1
+    >>> x.lookahead
+    2
+    >>> y = Lookahead(iter((1, 2, 3)))
+    >>> y.next()
+    1
+    >>> x == y
+    True
+    >>> y.next()
+    2
+    >>> x <= y
+    True
+    >>> x.empty
+    False
+    >>> x.next()
+    2
+    >>> x.empty
+    True
+    """
 
     __slots__ = ['iterator', 'lookahead', 'empty']
 
@@ -47,6 +77,10 @@ class Lookahead(object):
         self.lookahead = None
         self.empty = False
         self.next()
+
+    def __iter__(self):
+
+        return self
 
     def next(self):
         """Get next value"""
@@ -123,16 +157,6 @@ def equal_elements(seq1, seq2):
             return index
 
 
-def fmap(value, funcs):
-    """Feeds the same value to a list of functions.
-
-    >>> fmap(-5.5, [str, int, abs])
-    ['-5.5', -5, 5.5]
-    """
-
-    return [func(value) for func in funcs]
-
-
 def formatwarning(message, category, filename, lineno):
     """Custom warning formatting."""
 
@@ -156,14 +180,6 @@ def is_subdir(path1, path2):
     path1 = path1.split(os.path.sep)
     path2 = path2.split(os.path.sep)
     return path2 == path1[:len(path2)]
-
-
-def map_dict(func, dict_):
-    """Apply func to all items in dict_"""
-
-    for key in dict_.keys():
-        dict_[key] = func(dict_[key])
-    return dict_
 
 
 def merge(*iterators):
@@ -200,50 +216,25 @@ def merge(*iterators):
             heappush(heap, (iterator, index))
 
 
-def partition(iterable, func):
-    """Partition a set of objects into equivalence classes
-
-    Returns a dictionary {func(obj): [equivalent objects]}
-    Object o1 and o2 are equivalent if and only if func(o1) == func(o2)
-
-    >>> p = partition(range(0, 10), lambda x: x % 3)
-
-    >>> classes = p.keys()
-    >>> classes.sort()
-    >>> print classes
-    [0, 1, 2]
-
-    >>> print p[0], p[1], p[2]
-    [0, 3, 6, 9] [1, 4, 7] [2, 5, 8]
-    """
-
-    partitions = {}
-    for obj in iterable:
-        partitions.setdefault(func(obj), []).append(obj)
-    return partitions
-
-
-def split_dict(dct, pred):
-    """Split dictionary in two by a predicate function.
-
-    >>> dct = {1:'a', 2:'b', 3:'c'}
-    >>> pred = lambda (key, value): key % 2 == 0
-    >>> t, f = split_dict(dct, pred)
-    >>> t
-    {2: 'b'}
-    >>> print len(f), 1 in f, 3 in f
-    2 True True
-    """
-
-    cells = partition(dct.items(), pred)
-    return dict(cells.get(True, [])), dict(cells.get(False, []))
-
-
 def to_human(value, radix=1024.0):
-    """Convert a value to a string using SI suffixes"""
+    """Convert a value to a string using SI suffixes.
+
+    Example output:
+    
+    >>> to_human(20)
+    '20.0 '
+    >>> to_human(20 * 1024)
+    '20.0k'
+    >>> to_human(20 * 1024 ** 2)
+    '20.0M'
+    >>> to_human(20 * 1024 ** 3)
+    '20.0G'
+    >>> to_human(20 * 1024 ** 4)
+    '20480G'
+    """
 
     i = 0
-    while value >= radix:
+    while value >= radix and i < 3:
         value /= radix
         i += 1
     suffix = " kMG"[i]
@@ -254,12 +245,3 @@ def to_human(value, radix=1024.0):
     else:
         value = locale.format('%.1f', value)
     return "%s%s" % (value, suffix)
-
-
-def uniq(list_):
-    """make a list with all duplicate elements removed"""
-
-    if not list_:
-        return []
-    list_[0] = [list_[0]]
-    return reduce(lambda A, x: x in A and A or A+[x], list_)
