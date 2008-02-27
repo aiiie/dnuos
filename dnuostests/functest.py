@@ -73,7 +73,10 @@ def write_dnuos_diff(args, expected, no_glob=False):
         sys.stderr = sys.stdout = output
         dnuos.main(locale='C')
         sys.argv, sys.stderr, sys.stdout = old
-        output = get_unified_diff(expected, output.getvalue())
-        sys.stdout.write(output)
+        output = output.getvalue()
+        try:
+            assert output == expected
+        except AssertionError:
+            sys.stdout.write(get_unified_diff(expected, output))
     finally:
         os.chdir(old_cwd)
