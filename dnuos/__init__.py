@@ -94,7 +94,7 @@ def prepare_listing(dir_pairs, options, data):
     return dir_pairs
 
 
-def setup_cache(cache_filename, basedirs):
+def setup_cache(cache_filename):
     """Creates and readies cache"""
 
     cache = PersistentDict(filename=cache_filename,
@@ -136,8 +136,7 @@ def main(argv=None, locale=None):
                     appdata.create_user_data_dir(options.cache_dir)
                     cache = setup_cache(
                         appdata.user_data_file('dirs',
-                            options.cache_dir),
-                        options.basedirs)
+                            options.cache_dir))
                     adir_class = memoized(audiodir.Dir, cache, cache.written)
                 except IOError, err:
                     print >> sys.stderr, _('Failed to create cache directory:')

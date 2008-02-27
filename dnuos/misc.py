@@ -10,7 +10,6 @@ Feel free to organize this in a better way if you know how. I don't.
 
 import locale
 import os
-import sys
 from heapq import heappop, heappush
 from itertools import count
 from warnings import warn
