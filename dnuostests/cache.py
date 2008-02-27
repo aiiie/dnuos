@@ -33,6 +33,8 @@ def test():
             assert adir._bad_files == adir2._bad_files
             assert adir._bitrates == adir2._bitrates
             assert adir._lengths == adir2._lengths
+            assert adir._types == adir2._types
+            assert adir.modified == adir2.modified
             assert adir.path == adir2.path
             assert adir._profiles == adir2._profiles
             assert adir.sizes == adir2.sizes
