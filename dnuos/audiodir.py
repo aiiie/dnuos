@@ -1,7 +1,6 @@
 """Holds metadata for directories of audio"""
 
 import os
-import re
 import sys
 from traceback import format_exception
 

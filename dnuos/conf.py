@@ -271,7 +271,8 @@ def parse_args(argv=sys.argv[1:]):
                      help=_('Case-insensitive directory sorting'))
     group.add_option('-L', '--list-files',
                      dest='list_files', action='store_true',
-                     help=_("List audio files in directories (doesn't use caching)"))
+                     help=_("List audio files in directories (doesn't use "
+                            "caching)"))
     group.add_option("-m", "--merge",
                      dest="merge", action="store_true",
                      help=_('Parse basedirs in parallel and merge output'))

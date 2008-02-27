@@ -22,7 +22,7 @@ def test():
         sys.argv = ['dnuos', '-q', '--cache-dir=.', '.']
         sys.stderr = sys.stdout = output
         dnuos.main(locale='C')
-        cache = dnuos.setup_cache(cache_file, ['.'])
+        cache = dnuos.setup_cache(cache_file)
         assert cache.version == dnuos.audiodir.Dir.__version__
         for path, adir in cache.iteritems():
             assert os.path.isdir(path)
