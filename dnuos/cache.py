@@ -45,14 +45,13 @@ class PersistentDict(shelve.Shelf, object):
 
 
 class memoized(object):
-    """Decorator that caches a function's return value each time it's called.
+    """A decorator that caches a function's return value each time it's called.
 
     If called later with the same argument, the cached value is
     returned, and not re-evaluated.
 
     The function must only take one argument. This argument is appended to
-    the list in cache.written, so persisted and fresh data can be
-    differentiated.
+    the list in written, so persisted and fresh data can be differentiated.
 
     Example usage and behavior:
 
@@ -60,17 +59,13 @@ class memoized(object):
     ...     print 'fake_dir()'
     ...     return '[dir data]'
     ...
-    >>> class MemoCache(dict):
-    ...     def __init__(self, *args, **kwargs):
-    ...         super(MemoCache, self).__init__(*args, **kwargs)
-    ...         self.written = []
-    ...
-    >>> cache = MemoCache({'/old/dir': '[old dir data]'})
-    >>> fake_dir = memoized(fake_dir, cache)
+    >>> cache = {'/old/dir': '[old dir data]'}
+    >>> written = []
+    >>> fake_dir = memoized(fake_dir, cache, written)
     >>> fake_dir('/dev/null')
     fake_dir()
     '[dir data]'
-    >>> cache.written
+    >>> written
     ['/dev/null']
     >>> cache['/old/dir']
     '[old dir data]'
@@ -78,15 +73,18 @@ class memoized(object):
     '[dir data]'
     """
 
-    def __init__(self, func, cache):
+    def __init__(self, func, cache, written):
+
         self.func = func
         self.cache = cache
+        self.written = written
 
     def __call__(self, path):
+
         try:
             value = self.cache[path]
         except KeyError:
             value = self.func(path)
             self.cache[path] = value
-        self.cache.written.append(path)
+        self.written.append(path)
         return value

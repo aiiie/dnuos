@@ -138,7 +138,7 @@ def main(argv=None, locale=None):
                         appdata.user_data_file('dirs',
                             options.cache_dir),
                         options.basedirs)
-                    adir_class = memoized(audiodir.Dir, cache)
+                    adir_class = memoized(audiodir.Dir, cache, cache.written)
                 except IOError, err:
                     print >> sys.stderr, _('Failed to create cache directory:')
                     if options.debug:
