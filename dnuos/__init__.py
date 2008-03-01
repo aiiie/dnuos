@@ -183,8 +183,6 @@ def main(argv=None, locale=None):
                                    or sys.stdout)
         try:
             for chunk in result:
-                if isinstance(chunk, unicode):
-                    chunk = chunk.encode('utf-8')
                 print >> outfile, chunk
         finally:
             # Store updated cache

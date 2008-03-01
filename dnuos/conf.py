@@ -19,6 +19,12 @@ import dnuos.output.plaintext
 from dnuos import appdata
 from dnuos.misc import deprecation, _
 
+def print_help(option, opt_str, value, parser):
+    """Prints help and exits program"""
+
+    print parser.format_help()
+    parser.exit()
+
 
 def exit_with_output_help(option, opt_str, value, parser):
     """Prints output help and exits program"""
@@ -74,7 +80,7 @@ Unescaped brackets are forbidden unless they define a field.
 Note: If you have any whitespace in your output string you must put it inside
 quotes or otherwise it will not get parsed right.
 """)
-    sys.exit(0)
+    parser.exit()
 
 
 def set_db_format(option, opt_str, value, parser):
@@ -230,7 +236,8 @@ def parse_args(argv=sys.argv[1:]):
                         cache_dir=appdata.user_data_dir('Dnuos', 'Dnuos'),
                         wildcards=False)
 
-    parser.add_option("-h", "--help", action="help",
+    parser.add_option("-h", "--help",
+                      action="callback", callback=print_help,
                       help=_("Show this help message and exit"))
     parser.add_option("--help-output-string",
                       action="callback", nargs=0,
