@@ -129,6 +129,7 @@ class Column(object):
                     data = data.decode('utf-8')
                 data = unicodedata.normalize('NFC', data)
                 data = u"%*.*s" % (self.width, abs(self.width), data)
+                data = data.encode('utf-8')
             except UnicodeError:
                 data = "%*.*s" % (self.width, abs(self.width), data)
         return data

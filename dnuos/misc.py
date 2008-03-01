@@ -32,7 +32,7 @@ def _find_locale_dir():
         return None
 
 import gettext
-_ = gettext.translation('dnuos', _find_locale_dir(), fallback=True).ugettext
+_ = gettext.translation('dnuos', _find_locale_dir(), fallback=True).gettext
 
 
 class Lookahead(object):
