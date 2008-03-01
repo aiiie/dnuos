@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Dnuos 1.0\n"
 "Report-Msgid-Bugs-To: aiiie@aiiie.co\n"
 "POT-Creation-Date: 2008-02-13 13:28+0500\n"
-"PO-Revision-Date: 2008-02-27 13:01-0500\n"
+"PO-Revision-Date: 2008-02-29 20:58-0500\n"
 "Last-Translator: aiiie <aiiie@aiiie.co>\n"
 "Language-Team: French\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Failed to create cache directory:"
 msgstr "Création du dossier de cache a échoué :"
 
-#: dnuos/__init__.py:146 dnuos/__init__.py:197
+#: dnuos/__init__.py:146 dnuos/__init__.py:199
 msgid "Use the --disable-cache switch to disable caching"
 msgstr "Utilisez l'option --disable-cache pour interdire le cache"
 
@@ -42,16 +42,16 @@ msgstr ""
 "Il n'y a aucun dossiers à traiter.\n"
 "Exécutez `%s -h' pour aide."
 
-#: dnuos/__init__.py:193
+#: dnuos/__init__.py:195
 msgid "Failed to save cache data:"
 msgstr "L'enregistrement des données de cache ont échoué :"
 
-#: dnuos/__init__.py:212
+#: dnuos/__init__.py:214
 #, python-format
 msgid "%sB processed\r"
-msgstr "%so traités"
+msgstr "%so traités\r"
 
-#: dnuos/__init__.py:228
+#: dnuos/__init__.py:230
 msgid "Audiotype failed for:"
 msgstr "Audiotype a échoué :"
 
