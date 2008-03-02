@@ -29,19 +29,20 @@ class Renderer(AbstractRenderer):
         and footer.
         """
 
-        yield _("""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        yield """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
 "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="en-us">
+<html lang="%s">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="generator" content="Dnuos %s">
-<title>Music List</title>
+<title>%s</title>
 <style type="text/css">
 body { color: %s; background: %s; }
 </style>
 </head>
 <body>
-<pre>""") % (data.version, options.text_color, options.bg_color)
+<pre>""" % (_('en-us'), data.version, _('Music List'),
+            options.text_color, options.bg_color)
 
         for chunk in self.renderer.render(dir_pairs, options, data):
             yield escape(chunk)
