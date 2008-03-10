@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Dnuos 1.0\n"
 "Report-Msgid-Bugs-To: me+dnuos@dackz.net\n"
 "POT-Creation-Date: 2008-02-13 13:28+0500\n"
-"PO-Revision-Date: 2008-03-01 23:01-0500\n"
+"PO-Revision-Date: 2008-03-09 21:48-0400\n"
 "Last-Translator: Brodie Rao <me+dnuos@dackz.net>\n"
 "Language-Team: French\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -476,7 +476,7 @@ msgid "Encoder"
 msgstr "Encodeur"
 
 #: dnuos/output/html.py:44
-msgid "en-us"
+msgid "en"
 msgstr "fr"
 
 #: dnuos/output/html.py:44
@@ -534,3 +534,4 @@ msgstr "| Vitesse %s Mo/s |"
 #: dnuos/output/plaintext.py:87
 msgid "+-----------------------+"
 msgstr "+-------------------------+"
+
