@@ -118,6 +118,15 @@ QtOIDUA_
 Quoi de Neuf
 ============
 
+Version 1.0b7 (10 Mar. 2008)
+    Mis à jour la traduction française avec des corrections.
+
+    Corrigé un plantage avec l'affichage des tailles en téraoctects ou plus
+    grand.
+
+    Corrigé des plantages avec encodage Unicode. L'UTF-8 est maintenant
+    utilisé inconditionnellement.
+
 Version 1.0b6 (24 Fév. 2008)
     Corrigé un plantage de la création du cache sous Windows.
 

@@ -114,6 +114,13 @@ QtOIDUA_
 News
 ====
 
+Version 1.0b7 (Mar. 10, 2008)
+    Updated French translation with corrections.
+
+    Fixed crash on displaying sizes in terabytes or higher.
+
+    Fixed Unicode-related crashes. UTF-8 is now used unconditionally.
+
 Version 1.0b6 (Feb. 24, 2008)
     Fixed cache creation not working on Windows.
 
