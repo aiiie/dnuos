@@ -217,8 +217,6 @@ def main(argv=None, locale=None):
         sys.exit(_main(argv, locale))
     except KeyboardInterrupt:
         print ''
-    except SystemExit:
-        pass
 
 
 def indicate_progress(dir_pairs, sizes, outs=sys.stderr):
