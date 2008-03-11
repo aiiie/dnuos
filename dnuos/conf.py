@@ -209,7 +209,7 @@ def parse_format_string2(data):
     return unescape(format), [unescape(f) for f in fields]
 
 
-def parse_args(argv=sys.argv[1:]):
+def parse_args(argv=sys.argv):
 
     default_format_string = "[n,-52]| [s,5] | [t,-4] | [q]"
     format_string, fields = parse_format_string2(default_format_string)
@@ -389,7 +389,7 @@ def parse_args(argv=sys.argv[1:]):
                      help=_('Display elapsed time footer'))
     parser.add_option_group(group)
 
-    (options, args) = parser.parse_args(argv)
+    (options, args) = parser.parse_args(argv[1:])
 
     # add basedirs
     options.basedirs = []

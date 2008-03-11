@@ -124,7 +124,7 @@ def _main(argv=None, locale=None):
 
     os.stat_float_times(False)
     warnings.formatwarning = formatwarning
-    options = parse_args(argv[1:])
+    options = parse_args(argv)
     data = Data(options.unknown_types)
     audiodir.Dir.valid_types.extend(options.unknown_types or ())
 
