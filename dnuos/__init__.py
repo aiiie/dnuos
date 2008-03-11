@@ -132,7 +132,7 @@ def _main(argv=None, locale=None):
         if not os.path.isdir(options.cache_dir):
             print >> sys.stderr, _('No such directory %s') % options.cache_dir
             return 2
-        cache_file = appdata.user_data_file('dirs.db', options.cache_dir)
+        cache_file = appdata.user_data_file('dirs', options.cache_dir)
         if os.path.exists(cache_file):
             try:
                 os.remove(cache_file)
@@ -153,7 +153,7 @@ def _main(argv=None, locale=None):
     if options.use_cache:
         try:
             appdata.create_user_data_dir(options.cache_dir)
-            cache = setup_cache(appdata.user_data_file('dirs.db',
+            cache = setup_cache(appdata.user_data_file('dirs',
                                 options.cache_dir))
             if options.cull_cache:
                 culled = cache.cull()
