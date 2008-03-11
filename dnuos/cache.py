@@ -4,54 +4,43 @@ import os
 import shelve
 
 class PersistentDict(shelve.Shelf, object):
-    """A dict with persistence.
+    """A dict with persistence, based on shelve.Shelf"""
 
-    A wrapper around UpdateTrackingDict that adds the ability to
-    pickle written entries to and from a file. A predicate function
-    can be specified to control what entries to keep from a load to the
-    following save.
-    """
-    def __init__(self, *args, **kwargs):
-        """Construct a new PersistentDict instance.
-
-        This just stores the specified arguments. Call the load method
-        to initialize.
-
-        Arguments:
-            filename  - The persistence data file for loading and
-                        saving.
-        """
+    def __init__(self, filename, version):
+        """Construct a new PersistentDict instance"""
 
         import anydbm
         super(PersistentDict, self).__init__(
-            anydbm.open(kwargs['filename'], 'c'),
+            anydbm.open(filename, 'c'),
             protocol=2)
 
-        self.written = []
-        self.version = kwargs.pop('version')
+        self.version = version
         old_version = self.pop('__version__', None)
         if old_version != self.version:
             self.clear()
 
-    def save(self):
-        """Serialize data to file"""
+    def cull(self):
+        """Removes bad directories and returns count"""
 
-        for path in self.iterkeys():
-            if path not in self.written and not os.path.isdir(path):
-                del self[path]
+        paths = [p for p in self.iterkeys() if not os.path.isdir(p)]
+        for path in paths:
+            del self[path]
+        return len(paths)
+
+    def save(self):
+        """Serializes data to file"""
 
         self['__version__'] = self.version
         self.close()
 
 
-class memoized(object):
+def memoized(func, cache):
     """A decorator that caches a function's return value each time it's called.
 
     If called later with the same argument, the cached value is
     returned, and not re-evaluated.
 
-    The function must only take one argument. This argument is appended to
-    the list in written, so persisted and fresh data can be differentiated.
+    The function must only take one argument.
 
     Example usage and behavior:
 
@@ -60,31 +49,24 @@ class memoized(object):
     ...     return '[dir data]'
     ...
     >>> cache = {'/old/dir': '[old dir data]'}
-    >>> written = []
-    >>> fake_dir = memoized(fake_dir, cache, written)
+    >>> fake_dir = memoized(fake_dir, cache)
     >>> fake_dir('/dev/null')
     fake_dir()
     '[dir data]'
-    >>> written
-    ['/dev/null']
     >>> cache['/old/dir']
     '[old dir data]'
     >>> fake_dir('/dev/null')
     '[dir data]'
     """
 
-    def __init__(self, func, cache, written):
-
-        self.func = func
-        self.cache = cache
-        self.written = written
-
-    def __call__(self, path):
+    def wrapper(key):
+        """Wrapper function"""
 
         try:
-            value = self.cache[path]
+            return cache[key]
         except KeyError:
-            value = self.func(path)
-            self.cache[path] = value
-        self.written.append(path)
-        return value
+            value = func(key)
+            cache[key] = value
+            return value
+
+    return wrapper

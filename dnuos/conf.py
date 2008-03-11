@@ -83,6 +83,13 @@ quotes or otherwise it will not get parsed right.
     parser.exit()
 
 
+def exit_with_version(option, opt_str, value, parser):
+    """Prints version and exits program"""
+
+    print 'dnuos', dnuos.__version__
+    parser.exit()
+
+
 def set_db_format(option, opt_str, value, parser):
 
     parser.values.outfile = value
@@ -123,7 +130,7 @@ def set_output_module(option, opt_str, value, parser):
     try:
         module = getattr(dnuos.output, value)
     except AttributeError:
-        raise OptionValueError(_("Unknown template '%s'") % value)
+        raise OptionValueError(_("Unknown template %s") % value)
     parser.values.output_module = module
 
 
@@ -154,7 +161,7 @@ def add_exclude_dir(option, opt_str, value, parser):
         value = os.path.abspath(value)
         parser.values.exclude_paths.append(value)
     else:
-        raise OptionValueError(_("There is no directory '%s'") % value)
+        raise OptionValueError(_("No such directory %s") % value)
 
 
 def parse_format_string(data):
@@ -209,7 +216,9 @@ def parse_args(argv=sys.argv[1:]):
     usage = _('%prog [options] basedir ...')
     parser = OptionParser(usage, add_help_option=False)
     parser.set_defaults(bg_color="white",
+                        cull_cache=False,
                         debug=False,
+                        delete_cache=False,
                         disp_date=False,
                         disp_result=False,
                         disp_time=False,
@@ -255,19 +264,30 @@ def parse_args(argv=sys.argv[1:]):
                      dest="show_progress", action="store_false",
                      help=_('Omit progress indication'))
     group.add_option("-V", "--version",
-                     dest="disp_version", action="store_true",
+                     action='callback', nargs=0,
+                     callback=exit_with_version,
                      help=_('Display version'))
     parser.add_option_group(group)
 
-    group = OptionGroup(parser, _('Directory walking'))
-    group.add_option("--disable-cache",
-                     dest="use_cache", action="store_false",
-                     help=_('Disable caching'))
+    group = OptionGroup(parser, _('Caching'))
     group.add_option("--cache-dir",
                      action="callback", nargs=1,
                      callback=set_cache_dir, type="string",
                      help=_('Store cache in DIR (default %default)'),
                      metavar=_('DIR'))
+    group.add_option('--cull-cache',
+                     dest='cull_cache', action='store_true',
+                     help=_('Cull non-existent cached directories and exit'))
+    group.add_option('--delete-cache',
+                     dest='delete_cache', action='store_true',
+                     help=_('Delete the cache directory and exit'))
+    group.add_option("--disable-cache",
+                     dest="use_cache", action="store_false",
+                     help=_('Disable caching'))
+    parser.add_option_group(group)
+
+
+    group = OptionGroup(parser, _('Directory walking'))
     group.add_option("-e", "--exclude",
                      action="callback", nargs=1,
                      callback=add_exclude_dir, type="string",
@@ -310,14 +330,6 @@ def parse_args(argv=sys.argv[1:]):
                      help=_('Exclude directories with mixed files'))
     parser.add_option_group(group)
 
-    group = OptionGroup(parser, _('Parsing'))
-    group.add_option("-P", "--prefer-tag",
-                     action="callback", nargs=1,
-                     callback=set_preferred_tag, type="int",
-                     help=_('If both ID3v1 and ID3v2 tags exist, prefer '
-                     'n (1 or 2) (default %default)'), metavar=_('n'))
-    parser.add_option_group(group)
-
     group = OptionGroup(parser, _('Output'))
     group.add_option("-B", "--bg",
                      dest="bg_color",
@@ -345,6 +357,11 @@ def parse_args(argv=sys.argv[1:]):
                      callback=set_db_format, type="string",
                      help=_('Write list in output.db format to FILE '
                      '(deprecated, use --template db)'), metavar=_('FILE'))
+    group.add_option("-P", "--prefer-tag",
+                     action="callback", nargs=1,
+                     callback=set_preferred_tag, type="int",
+                     help=_('If both ID3v1 and ID3v2 tags exist, prefer '
+                     'n (1 or 2) (default %default)'), metavar=_('n'))
     group.add_option("-s", "--strip",
                      dest="stripped", action="store_true",
                      help=_('Strip output of field headers and empty '
@@ -374,13 +391,16 @@ def parse_args(argv=sys.argv[1:]):
 
     (options, args) = parser.parse_args(argv)
 
-    # add basedirs to self.Folder
+    # add basedirs
     options.basedirs = []
     for glob_dir in args:
         options.basedirs += [p for p in expand(options, glob_dir)
                              if p not in options.exclude_paths
-                               and os.path.isdir(p)]
-    # adding basedirs to exclude_paths here disables cache eviction
+                                and os.path.isdir(p)]
+    if not options.basedirs:
+        print >> sys.stderr, (_("No folders to process.\nType `%s -h' "
+                                "for help.") % os.path.basename(argv[0]))
+        parser.exit(2)
 
     # options overriding eachother
     if options.debug or (not options.outfile and

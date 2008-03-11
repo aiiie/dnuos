@@ -22,8 +22,6 @@ class Renderer(AbstractRenderer):
              self.render_generation_time(data.times)),
             (lambda: options.disp_result,
              self.render_sizes(data.size, data.times)),
-            (lambda: options.disp_version,
-             render_version(data.version)),
         ]
         first = True
         for pred, renderer in output:
@@ -85,8 +83,3 @@ class Renderer(AbstractRenderer):
         yield _('| Total %s Mb   |') % total_megs_s
         yield _('| Speed %s Mb/s |') % speed
         yield _('+-----------------------+')
-
-
-def render_version(version):
-
-    yield "dnuos " + version

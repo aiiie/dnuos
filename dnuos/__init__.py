@@ -40,7 +40,6 @@ class Data(object):
             'start': 0,
             'elapsed_time': 0.0,
         }
-        self.version = __version__
 
 
 def make_raw_listing(basedirs, exclude_paths, sort_key, use_merge,
@@ -111,8 +110,8 @@ def setup_renderer(output_module, format_string, fields, options):
     return renderer
 
 
-def main(argv=None, locale=None):
-    """Main entry point"""
+def _main(argv=None, locale=None):
+    """Real main entry point"""
 
     import locale as locale_
     try:
@@ -129,76 +128,98 @@ def main(argv=None, locale=None):
     data = Data(options.unknown_types)
     audiodir.Dir.valid_types.extend(options.unknown_types or ())
 
-    try:
-        if options.basedirs:
-            if options.use_cache:
-                try:
-                    appdata.create_user_data_dir(options.cache_dir)
-                    cache = setup_cache(
-                        appdata.user_data_file('dirs',
-                            options.cache_dir))
-                    adir_class = memoized(audiodir.Dir, cache, cache.written)
-                except IOError, err:
-                    print >> sys.stderr, _('Failed to create cache directory:')
-                    if options.debug:
-                        raise
-                    print >> sys.stderr, err
-                    print >> sys.stderr, _('Use the --disable-cache switch '
-                                           'to disable caching')
-                    adir_class = audiodir.Dir
-            else:
-                adir_class = audiodir.Dir
-
+    if options.delete_cache:
+        if not os.path.isdir(options.cache_dir):
+            print >> sys.stderr, _('No such directory %s') % options.cache_dir
+            return 2
+        cache_file = appdata.user_data_file('dirs.db', options.cache_dir)
+        if os.path.exists(cache_file):
             try:
-                renderer = setup_renderer(options.output_module,
-                                          options.format_string,
-                                          options.fields,
-                                          options)
-            except KeyError:
-                print >> sys.stderr, _('Format string can only contain valid '
-                                       'fields')
-                print >> sys.stderr, _('Use the --help-output-string switch '
-                                       'for more information')
+                os.remove(cache_file)
+            except OSError, err:
+                print >> sys.stderr, _('Failed to remove cache file: %s') % err
+                return 2
+        if os.listdir(options.cache_dir):
+            print >> sys.stderr, _('Cache directory not empty')
+            return 2
+        try:
+            os.rmdir(options.cache_dir)
+        except OSError, err:
+            print >> sys.stderr, _('Failed to remove cache file: %s') % err
+            return 2
+        print _('Removed cache directory %s') % options.cache_dir
+        return 0
+
+    if options.use_cache:
+        try:
+            appdata.create_user_data_dir(options.cache_dir)
+            cache = setup_cache(appdata.user_data_file('dirs.db',
+                                options.cache_dir))
+            if options.cull_cache:
+                culled = cache.cull()
+                print _('Culled %d non-existent directories') % culled
+                return 0
+            adir_class = memoized(audiodir.Dir, cache)
+        except IOError, err:
+            print >> sys.stderr, _('Failed to create cache directory:')
+            if options.debug:
+                raise
+            print >> sys.stderr, err
+            print >> sys.stderr, _('Use the --disable-cache switch to '
+                                   'disable caching')
+            adir_class = audiodir.Dir
+    else:
+        adir_class = audiodir.Dir
+
+    try:
+        renderer = setup_renderer(options.output_module,
+                                  options.format_string, options.fields,
+                                  options)
+    except KeyError:
+        print >> sys.stderr, _('Format string can only contain valid fields')
+        print >> sys.stderr, _('Use the --help-output-string switch for more '
+                               'information')
+        return 2
+
+    # Append basedirs to exclude_paths to avoid traversing nested
+    # basedirs again.
+    adirs = make_raw_listing(options.basedirs,
+                             options.exclude_paths + options.basedirs,
+                             options.sort_key, options.merge, adir_class)
+    adirs = prepare_listing(adirs, options, data)
+    result = renderer.render(adirs, options, data)
+
+    # Output
+    outfile = (options.outfile and open(options.outfile, 'w')
+                               or sys.stdout)
+    try:
+        for chunk in result:
+            print >> outfile, chunk
+    finally:
+        # Store updated cache
+        if options.basedirs and options.use_cache:
+            try:
+                cache.save()
+            except IOError, err:
+                print >> sys.stderr, _('Failed to save cache data:')
+                if options.debug:
+                    raise
+                print >> sys.stderr, err
+                print >> sys.stderr, _('Use the --disable-cache switch to '
+                                       'disable caching')
                 return 2
 
-            # Append basedirs to exclude_paths to avoid traversing nested
-            # basedirs again.
-            adirs = make_raw_listing(options.basedirs,
-                                     options.exclude_paths
-                                     + options.basedirs,
-                                     options.sort_key,
-                                     options.merge,
-                                     adir_class)
-            adirs = prepare_listing(adirs, options, data)
-            result = renderer.render(adirs, options, data)
-        elif options.disp_version:
-            result = dnuos.output.plaintext.render_version(data.version)
-        else:
-            print >> sys.stderr, (_("No folders to process.\nType `%s -h' "
-                                    "for help.") % os.path.basename(argv[0]))
-            return 2
 
-        # Output
-        outfile = (options.outfile and open(options.outfile, 'w')
-                                   or sys.stdout)
-        try:
-            for chunk in result:
-                print >> outfile, chunk
-        finally:
-            # Store updated cache
-            if options.basedirs and options.use_cache:
-                try:
-                    cache.save()
-                except IOError, err:
-                    print >> sys.stderr, _('Failed to save cache data:')
-                    if options.debug:
-                        raise
-                    print >> sys.stderr, err
-                    print >> sys.stderr, _('Use the --disable-cache switch '
-                                           'to disable caching')
-                    return 2
+def main(argv=None, locale=None):
+    """main() wrapper that catches KeyboardInterrupt and SystemExit"""
+
+    try:
+        sys.exit(_main(argv, locale))
     except KeyboardInterrupt:
         print ''
+    except SystemExit:
+        pass
+
 
 def indicate_progress(dir_pairs, sizes, outs=sys.stderr):
     """Indicate progress.
