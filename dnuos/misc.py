@@ -31,8 +31,11 @@ def _find_locale_dir():
                 return locale_dir
         return None
 
-import gettext
-_ = gettext.translation('dnuos', _find_locale_dir(), fallback=True).gettext
+try:
+    import gettext
+    _ = gettext.translation('dnuos', _find_locale_dir(), fallback=True).gettext
+except ImportError:
+    _ = lambda s: s
 
 
 class Lookahead(object):
