@@ -400,7 +400,8 @@ def parse_args(argv=sys.argv):
         options.basedirs += [p for p in expand(options, glob_dir)
                              if p not in options.exclude_paths
                                 and os.path.isdir(p)]
-    if not options.basedirs:
+    if not options.basedirs and not (options.cull_cache or
+        options.delete_cache):
         print >> sys.stderr, (_("No folders to process.\nType `%s -h' "
                                 "for help.") % os.path.basename(argv[0]))
         parser.exit(2)
