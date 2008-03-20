@@ -80,17 +80,31 @@ Display version.
 
 =back
 
-=head2 DIRECTORY WALKING
+=head2 CACHING
 
 =over
+
+=item B<--cache-dir>=F<DIR>
+
+Store cache in F<DIR> (default F<~/.dnuos>).
+
+=item B<--cull-cache>
+
+Cull non-existent cached direcotires and exit.
+
+=item B<--delete-cache>
+
+Delete the cache directory and exit.
 
 =item B<--disable-cache>
 
 Disable caching.
 
-=item B<--cache-dir>=F<DIR>
+=back
 
-Store cache in F<DIR> (default F<~/.dnuos>).
+=head2 DIRECTORY WALKING
+
+=over
 
 =item B<-e> F<DIR> B<--exclude>=F<DIR>
 
@@ -140,16 +154,6 @@ Exclude directories with mixed files.
 
 =back
 
-=head2 PARSING
-
-=over
-
-=item B<-P> I<n>, B<--prefer-tag>=I<n>
-
-if both ID3v1 and ID3v2 tags exist, prefer I<n> (1 or 2) (default I<2>).
-
-=back
-
 =head2 OUTPUT
 
 =over
@@ -180,6 +184,10 @@ I<[n,-52]| [s,5] | [t,-4] | [q]>).
 
 Write list in output.db format to F<FILE> (deprecated, use B<--template>
 I<db>).
+
+=item B<-P> I<n>, B<--prefer-tag>=I<n>
+
+If both ID3v1 and ID3v2 tags exist, prefer I<n> (1 or 2) (default I<2>).
 
 =item B<-s>, B<--strip>
 

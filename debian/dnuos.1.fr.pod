@@ -82,17 +82,31 @@ Afficher la version.
 
 =back
 
-=head2 RECHERCHE DE DOSSIER
+=head2 CACHAGE
 
 =over
+
+=item B<--cache-dir>=F<DOSSIER>
+
+Enregister le cache dans F<DOSSIER> (F<~/.dnuos> par défaut).
+
+=item B<--cull-cache>
+
+Supprimer des dossiers inexistants cachés et terminer.
+
+=item B<--delete-cache>
+
+Supprimer le dossier de cache et terminer.
 
 =item B<--disable-cache>
 
 Interdire le cache.
 
-=item B<--cache-dir>=F<DOSSIER>
+=back
 
-Enregister le cache dans F<DOSSIER> (F<~/.dnuos> par défaut).
+=head2 RECHERCHE DE DOSSIER
+
+=over
 
 =item B<-e> F<DOSSIER> B<--exclude>=F<DOSSIER>
 
@@ -142,17 +156,6 @@ Exclure les dossier avec des fichiers mélangés.
 
 =back
 
-=head2 ANALYSAGE
-
-=over
-
-=item B<-P> I<n>, B<--prefer-tag>=I<n>
-
-Si des balises de ID3v1 ainsi que ID3v2 existent, préférer I<n> (1 ou 2)
-(2 par défaut)
-
-=back
-
 =head2 OUTPUT
 
 =over
@@ -183,6 +186,11 @@ propos de syntaxe. (I<[n,-52]| [s,5] | [t,-4] | [q]> par défaut.)
 
 Écrire la liste avec le format F<output.db> dans F<FICHIER> (désapprouvé,
 utilisez B<--template> I<db>).
+
+=item B<-P> I<n>, B<--prefer-tag>=I<n>
+
+Si des balises de ID3v1 ainsi que ID3v2 existent, préférer I<n> (1 ou 2)
+(2 par défaut)
 
 =item B<-s>, B<--strip>
 
