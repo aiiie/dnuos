@@ -215,6 +215,8 @@ def main(argv=None, locale=None):
 
     try:
         sys.exit(_main(argv, locale))
+    except SystemExit:
+        pass
     except KeyboardInterrupt:
         print ''
 
