@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2008-03-10 20:25-0400\n"
+"POT-Creation-Date: 2008-03-20 00:31-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 0.9.2\n"
+"Generated-By: Babel 1.0dev-r361\n"
 
 #: dnuos/__init__.py:133 dnuos/conf.py:164
 #, python-format
@@ -61,12 +61,12 @@ msgstr ""
 msgid "Failed to save cache data:"
 msgstr ""
 
-#: dnuos/__init__.py:233
+#: dnuos/__init__.py:231
 #, python-format
 msgid "%sB processed\r"
 msgstr ""
 
-#: dnuos/__init__.py:249
+#: dnuos/__init__.py:247
 msgid "Audiotype failed for:"
 msgstr ""
 
@@ -487,5 +487,83 @@ msgstr ""
 
 #: dnuos/output/plaintext.py:85
 msgid "+-----------------------+"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:134
+#, python-format
+msgid "no such option: %s"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:145
+#, python-format
+msgid "ambiguous option: %s (%s?)"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:368
+#, python-format
+msgid "Usage: %s\n"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:387
+msgid "Usage"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:412
+msgid "integer"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:413
+msgid "long integer"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:414
+msgid "floating-point"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:415
+msgid "complex"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:423
+#, python-format
+msgid "option %s: invalid %s value: %r"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:431
+#, python-format
+msgid "option %s: invalid choice: %r (choose from %s)"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1239
+msgid "show this help message and exit"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1244
+msgid "show program's version number and exit"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1267
+msgid "%prog [options]"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1477
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1516
+#, python-format
+msgid "%s option requires an argument"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1479
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1518
+#, python-format
+msgid "%s option requires %d arguments"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1488
+#, python-format
+msgid "%s option does not take a value"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1605
+msgid "Options"
 msgstr ""
 
