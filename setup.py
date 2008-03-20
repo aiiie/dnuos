@@ -22,6 +22,8 @@ except ImportError:
         scripts=['scripts/dnuos'],
     )
 
+package_data = {'dnuos': ['locale/*/LC_MESSAGES/*.mo']}
+
 try:
     import py2exe
     import sys
@@ -29,6 +31,7 @@ try:
         sys.argv.extend(('-O2 -c -b 1 -e _ssl,calendar,doctest,email,ftplib,'
                          'getpass,gopherlib,httplib,mimetypes,'
                          'quopri,unittest -i dbhash -p bsddb').split(' '))
+        package_data = {}
     extra_options.update(dict(
         console=['scripts/dnuos'],
     ))
@@ -103,7 +106,7 @@ older, has fewer features, and is no longer maintained.
 """,
     name='dnuos',
     packages=['dnuos', 'dnuos.id3', 'dnuos.output'],
-    package_data={'dnuos': ['locale/*/LC_MESSAGES/*.mo']},
+    package_data=package_data,
     url='http://dnuos.tweek.us/',
     version='1.0b7',
     **extra_options
