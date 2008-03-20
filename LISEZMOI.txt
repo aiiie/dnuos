@@ -124,6 +124,12 @@ QtOIDUA_
 Quoi de Neuf
 ============
 
+Version 1.0 (20 Mar. 2008)
+    Ajouté ``--delete-cache`` pour supprimer le dossier du cache et
+    ``--cull-cache`` pour supprimer des dossiers non-existants cachés.
+
+    Mis à jour la traduction française.
+
 Version 1.0b7 (10 Mar. 2008)
     Mis à jour la traduction française avec des corrections.
 

@@ -114,6 +114,12 @@ QtOIDUA_
 News
 ====
 
+Version 1.0 (Mar. 20, 2008)
+    Added ``--delete-cache`` for deleting the cache directory and
+    ``--cull-cache`` for removing non-existent directories from the cache.
+
+    Updated French translation.
+
 Version 1.0b7 (Mar. 10, 2008)
     Updated French translation with corrections.
 
