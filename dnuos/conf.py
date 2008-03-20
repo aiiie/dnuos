@@ -5,6 +5,7 @@ import locale
 import os
 import re
 import sys
+import optparse
 from optparse import OptionGroup, OptionParser, OptionValueError
 
 try:
@@ -18,6 +19,8 @@ import dnuos.output.html
 import dnuos.output.plaintext
 from dnuos import appdata
 from dnuos.misc import deprecation, _
+
+optparse._ = _
 
 def print_help(option, opt_str, value, parser):
     """Prints help and exits program"""

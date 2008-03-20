@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: Dnuos 1.0\n"
 "Report-Msgid-Bugs-To: me+dnuos@dackz.net\n"
 "POT-Creation-Date: 2008-02-13 13:28+0500\n"
-"PO-Revision-Date: 2008-03-10 20:25-0400\n"
+"PO-Revision-Date: 2008-03-20 00:35-0400\n"
 "Last-Translator: Brodie Rao <me+dnuos@dackz.net>\n"
 "Language-Team: French\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 0.9.2\n"
+"Generated-By: Babel 1.0dev-r361\n"
 
 #: dnuos/__init__.py:133 dnuos/conf.py:164
 #, python-format
@@ -39,7 +39,7 @@ msgstr "Supprimé le dossier de cache %s"
 #: dnuos/__init__.py:160
 #, python-format
 msgid "Culled %d non-existent directories"
-msgstr "Cueilli %d dossiers non-existants"
+msgstr "Supprimé %d dossiers inexistants"
 
 #: dnuos/__init__.py:164
 msgid "Failed to create cache directory:"
@@ -61,12 +61,12 @@ msgstr "Utilisez l'option --help-output-string pour plus d'information"
 msgid "Failed to save cache data:"
 msgstr "L'enregistrement des données de cache ont échoué :"
 
-#: dnuos/__init__.py:233
+#: dnuos/__init__.py:231
 #, python-format
 msgid "%sB processed\r"
 msgstr "%so traités\r"
 
-#: dnuos/__init__.py:249
+#: dnuos/__init__.py:247
 msgid "Audiotype failed for:"
 msgstr "Audiotype a échoué :"
 
@@ -240,7 +240,7 @@ msgstr "Afficher l'aide pour la chaîne de sortie"
 
 #: dnuos/conf.py:256
 msgid "Application"
-msgstr ""
+msgstr "Application "
 
 #: dnuos/conf.py:259
 msgid "Output debug trace to stderr"
@@ -260,7 +260,7 @@ msgstr "Afficher la version"
 
 #: dnuos/conf.py:272
 msgid "Caching"
-msgstr "Cachage"
+msgstr "Cachage "
 
 #: dnuos/conf.py:276
 #, python-format
@@ -273,7 +273,7 @@ msgstr "DOSSIER"
 
 #: dnuos/conf.py:280
 msgid "Cull non-existent cached directories and exit"
-msgstr "Cueillir des dossiers non-existants cachés et terminer"
+msgstr "Supprimer des dossiers inexistants cachés et terminer"
 
 #: dnuos/conf.py:283
 msgid "Delete the cache directory and exit"
@@ -285,7 +285,7 @@ msgstr "Interdire le cache"
 
 #: dnuos/conf.py:290
 msgid "Directory walking"
-msgstr "Recherche de dossier"
+msgstr "Recherche de dossier "
 
 #: dnuos/conf.py:294
 msgid "Exclude DIR from search"
@@ -317,7 +317,7 @@ msgstr "Développer les caractères génériques dans basedirs"
 
 #: dnuos/conf.py:316
 msgid "Filtering"
-msgstr "Filtrage"
+msgstr "Filtrage "
 
 #: dnuos/conf.py:320
 msgid "Exclude MP3s with bitrate lower than MIN (in Kbps)"
@@ -341,7 +341,7 @@ msgstr "Exclure les dossiers avec des fichiers mélangés"
 
 #: dnuos/conf.py:333
 msgid "Output"
-msgstr "Sortie"
+msgstr "Sortie "
 
 #: dnuos/conf.py:336
 #, python-format
@@ -419,7 +419,7 @@ msgstr "Mettre la COULEUR du texte HTML (%default par défaut)"
 
 #: dnuos/conf.py:380
 msgid "Statistics"
-msgstr "Statistiques"
+msgstr "Statistiques "
 
 #: dnuos/conf.py:383
 msgid "Display datestamp header"
@@ -561,4 +561,82 @@ msgstr "| Vitesse %s Mo/s |"
 #: dnuos/output/plaintext.py:85
 msgid "+-----------------------+"
 msgstr "+-------------------------+"
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:134
+#, python-format
+msgid "no such option: %s"
+msgstr "option inexistante : %s"
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:145
+#, python-format
+msgid "ambiguous option: %s (%s?)"
+msgstr "option amiguë : %s (%s ?)"
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:368
+#, python-format
+msgid "Usage: %s\n"
+msgstr "Utilisation : %s\n"
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:387
+msgid "Usage"
+msgstr "Utilisation "
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:412
+msgid "integer"
+msgstr "entier"
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:413
+msgid "long integer"
+msgstr "entier long"
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:414
+msgid "floating-point"
+msgstr "virgule flottante"
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:415
+msgid "complex"
+msgstr "complexe"
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:423
+#, python-format
+msgid "option %s: invalid %s value: %r"
+msgstr "option %s : valeur %s invalide : %r"
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:431
+#, python-format
+msgid "option %s: invalid choice: %r (choose from %s)"
+msgstr "option %s : choix invalide : %r (choisir parmir : %s)"
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1239
+msgid "show this help message and exit"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1244
+msgid "show program's version number and exit"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1267
+msgid "%prog [options]"
+msgstr ""
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1477
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1516
+#, python-format
+msgid "%s option requires an argument"
+msgstr "l'option %s requiert un paramètre"
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1479
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1518
+#, python-format
+msgid "%s option requires %d arguments"
+msgstr "l'option %s requiert %d paramètres"
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1488
+#, python-format
+msgid "%s option does not take a value"
+msgstr "l'option %s ne prend pas de valeurs"
+
+#: /System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/optparse.py:1605
+msgid "Options"
+msgstr "Options "
 
