@@ -26,7 +26,7 @@ def print_help(option, opt_str, value, parser):
     """Prints help and exits program"""
 
     print parser.format_help()
-    parser.exit()
+    sys.exit()
 
 
 def exit_with_output_help(option, opt_str, value, parser):
@@ -83,14 +83,14 @@ Unescaped brackets are forbidden unless they define a field.
 Note: If you have any whitespace in your output string you must put it inside
 quotes or otherwise it will not get parsed right.
 """)
-    parser.exit()
+    sys.exit()
 
 
 def exit_with_version(option, opt_str, value, parser):
     """Prints version and exits program"""
 
     print 'dnuos', dnuos.__version__
-    parser.exit()
+    sys.exit()
 
 
 def set_db_format(option, opt_str, value, parser):
@@ -404,7 +404,7 @@ def parse_args(argv=sys.argv):
         options.delete_cache):
         print >> sys.stderr, (_("No folders to process.\nType `%s -h' "
                                 "for help.") % os.path.basename(argv[0]))
-        parser.exit(2)
+        sys.exit(2)
 
     # options overriding eachother
     if options.debug or (not options.outfile and
