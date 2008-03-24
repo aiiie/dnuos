@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Dnuos 1.0\n"
 "Report-Msgid-Bugs-To: aiiie@aiiie.co\n"
 "POT-Creation-Date: 2008-02-13 13:28+0500\n"
-"PO-Revision-Date: 2008-03-20 00:35-0400\n"
+"PO-Revision-Date: 2008-03-24 18:18-0400\n"
 "Last-Translator: aiiie <aiiie@aiiie.co>\n"
 "Language-Team: French\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev-r361\n"
 
-#: dnuos/__init__.py:133 dnuos/conf.py:164
+#: dnuos/__init__.py:133 dnuos/conf.py:167
 #, python-format
 msgid "No such directory %s"
 msgstr "Il n'y a pas de dossier %s"
@@ -61,16 +61,16 @@ msgstr "Utilisez l'option --help-output-string pour plus d'information"
 msgid "Failed to save cache data:"
 msgstr "L'enregistrement des données de cache ont échoué :"
 
-#: dnuos/__init__.py:231
+#: dnuos/__init__.py:233
 #, python-format
 msgid "%sB processed\r"
 msgstr "%so traités\r"
 
-#: dnuos/__init__.py:247
+#: dnuos/__init__.py:249
 msgid "Audiotype failed for:"
 msgstr "Audiotype a échoué :"
 
-#: dnuos/conf.py:32
+#: dnuos/conf.py:35
 msgid ""
 "\n"
 "Anything enclosed by brackets is considered a field. A field must have "
@@ -186,7 +186,7 @@ msgstr ""
 "devez le mettre entre guillemets, sinon il ne serait pas analysé\n"
 "correctement.\n"
 
-#: dnuos/conf.py:97
+#: dnuos/conf.py:100
 #, python-format
 msgid ""
 "The %s option is deprecated and will be removed in a future version. Use "
@@ -197,12 +197,12 @@ msgstr ""
 "version. Utilisez plutôt --template=db --file=FICHIER pour assurer "
 "compatibilité avec de prochaines versions."
 
-#: dnuos/conf.py:108
+#: dnuos/conf.py:111
 #, python-format
 msgid "Bad format string argument to %s"
 msgstr "La chaîne de sortie pour %s est invalide"
 
-#: dnuos/conf.py:115
+#: dnuos/conf.py:118
 #, python-format
 msgid ""
 "The %s option is deprecated and will be removed in a future version. Use "
@@ -212,168 +212,168 @@ msgstr ""
 "version. Utilisez plutôt --template=html pour assurer compatibilité avec "
 "de prochaines versions."
 
-#: dnuos/conf.py:125
+#: dnuos/conf.py:128
 msgid "Bitrate must be 0 or in the range (1..320)"
 msgstr "Bitrate doit être 0 ou dans la plage (1..320)"
 
-#: dnuos/conf.py:133
+#: dnuos/conf.py:136
 #, python-format
 msgid "Unknown template %s"
 msgstr "Template inconnu %s'"
 
-#: dnuos/conf.py:142
+#: dnuos/conf.py:145
 #, python-format
 msgid "Invalid argument to %s"
 msgstr "Argument pour %s est invalide"
 
-#: dnuos/conf.py:216
+#: dnuos/conf.py:219
 msgid "%prog [options] basedir ..."
 msgstr ""
 
-#: dnuos/conf.py:250
+#: dnuos/conf.py:254
 msgid "Show this help message and exit"
 msgstr "Afficher ce message d'aide et terminer"
 
-#: dnuos/conf.py:254
+#: dnuos/conf.py:258
 msgid "Show output string help message"
 msgstr "Afficher l'aide pour la chaîne de sortie"
 
-#: dnuos/conf.py:256
+#: dnuos/conf.py:260
 msgid "Application"
 msgstr "Application "
 
-#: dnuos/conf.py:259
+#: dnuos/conf.py:263
 msgid "Output debug trace to stderr"
 msgstr "Écrire la trace de débogage à stderr"
 
-#: dnuos/conf.py:262
+#: dnuos/conf.py:266
 msgid "Don't list files that cause Audiotype failure"
 msgstr "Ne pas afficher de fichiers qui cause des échecs d'Audiotype"
 
-#: dnuos/conf.py:265
+#: dnuos/conf.py:269
 msgid "Omit progress indication"
 msgstr "Omettre l'indication de progrès"
 
-#: dnuos/conf.py:269
+#: dnuos/conf.py:273
 msgid "Display version"
 msgstr "Afficher la version"
 
-#: dnuos/conf.py:272
+#: dnuos/conf.py:276
 msgid "Caching"
 msgstr "Cachage "
 
-#: dnuos/conf.py:276
+#: dnuos/conf.py:280
 #, python-format
-msgid "Store cache in DIR (default %default)"
-msgstr "Enregistrer le cache dans DOSSIER (%default par défaut)"
+msgid "Store cache in DIR (default %s)"
+msgstr "Enregistrer le cache dans DOSSIER (%s par défaut)"
 
-#: dnuos/conf.py:277 dnuos/conf.py:294
+#: dnuos/conf.py:282 dnuos/conf.py:299
 msgid "DIR"
 msgstr "DOSSIER"
 
-#: dnuos/conf.py:280
+#: dnuos/conf.py:285
 msgid "Cull non-existent cached directories and exit"
 msgstr "Supprimer des dossiers inexistants cachés et terminer"
 
-#: dnuos/conf.py:283
+#: dnuos/conf.py:288
 msgid "Delete the cache directory and exit"
 msgstr "Supprimer le dossier de cache et terminer"
 
-#: dnuos/conf.py:286
+#: dnuos/conf.py:291
 msgid "Disable caching"
 msgstr "Interdire le cache"
 
-#: dnuos/conf.py:290
+#: dnuos/conf.py:295
 msgid "Directory walking"
 msgstr "Recherche de dossier "
 
-#: dnuos/conf.py:294
+#: dnuos/conf.py:299
 msgid "Exclude DIR from search"
 msgstr "Exclure DOSSIER de recherche"
 
-#: dnuos/conf.py:298
+#: dnuos/conf.py:303
 msgid "Case-insensitive directory sorting"
 msgstr "Ranger des dossiers sensiblement à la casse"
 
-#: dnuos/conf.py:301
+#: dnuos/conf.py:306
 msgid "List audio files in directories (doesn't use caching)"
 msgstr "Lister les fichiers audio dans des dossiers (pas cachés)"
 
-#: dnuos/conf.py:305
+#: dnuos/conf.py:310
 msgid "Parse basedirs in parallel and merge output"
 msgstr "Analyser basedirs en parallèle et combiner la sortie"
 
-#: dnuos/conf.py:309
+#: dnuos/conf.py:314
 msgid "A comma-separated list of unknown audio types to list"
 msgstr "Une liste des types audio inconnus pour lister, séparés par virgule"
 
-#: dnuos/conf.py:310
+#: dnuos/conf.py:315
 msgid "TYPES"
 msgstr ""
 
-#: dnuos/conf.py:313
+#: dnuos/conf.py:318
 msgid "Expand wildcards in basedirs"
 msgstr "Développer les caractères génériques dans basedirs"
 
-#: dnuos/conf.py:316
+#: dnuos/conf.py:321
 msgid "Filtering"
 msgstr "Filtrage "
 
-#: dnuos/conf.py:320
+#: dnuos/conf.py:325
 msgid "Exclude MP3s with bitrate lower than MIN (in Kbps)"
 msgstr "Exclure les MP3 avec un bitrate moins que MIN (en Kops)"
 
-#: dnuos/conf.py:321
+#: dnuos/conf.py:326
 msgid "MIN"
 msgstr ""
 
-#: dnuos/conf.py:324
+#: dnuos/conf.py:329
 msgid "Exclude MP3s with no LAME profile"
 msgstr "Exclure les MP3 sans profil LAME"
 
-#: dnuos/conf.py:327
+#: dnuos/conf.py:332
 msgid "Exclude MP3s with constant bitrates"
 msgstr "Exclure les MP3 avec le bitrate constant"
 
-#: dnuos/conf.py:330
+#: dnuos/conf.py:335
 msgid "Exclude directories with mixed files"
 msgstr "Exclure les dossiers avec des fichiers mélangés"
 
-#: dnuos/conf.py:333
+#: dnuos/conf.py:338
 msgid "Output"
 msgstr "Sortie "
 
-#: dnuos/conf.py:336
+#: dnuos/conf.py:341
 #, python-format
-msgid "Set HTML background COLOR (default %default)"
-msgstr "Mettre la COULEUR du arrière-plan de HTML (%default par défaut)"
+msgid "Set HTML background COLOR (default %s)"
+msgstr "Mettre la COULEUR du arrière-plan de HTML (%s par défaut)"
 
-#: dnuos/conf.py:337 dnuos/conf.py:377
+#: dnuos/conf.py:343 dnuos/conf.py:385
 msgid "COLOR"
 msgstr "COULEUR"
 
-#: dnuos/conf.py:340
+#: dnuos/conf.py:346
 msgid "Write output to FILE"
 msgstr "Écrire la sortie dans FICHIER"
 
-#: dnuos/conf.py:340 dnuos/conf.py:359
+#: dnuos/conf.py:346 dnuos/conf.py:365
 msgid "FILE"
 msgstr "FICHIER"
 
-#: dnuos/conf.py:343
+#: dnuos/conf.py:349
 msgid "HTML output (deprecated, use --template html)"
 msgstr "La sortie de HTML (désapprouvé, utilisez --template html)"
 
-#: dnuos/conf.py:346
+#: dnuos/conf.py:352
 #, python-format
-msgid "Set indent to n (default %default)"
-msgstr "Mettre l'alinéa à n (%default par défaut)"
+msgid "Set indent to n (default %s)"
+msgstr "Mettre l'alinéa à n (%s par défaut)"
 
-#: dnuos/conf.py:347 dnuos/conf.py:364
+#: dnuos/conf.py:353 dnuos/conf.py:371
 msgid "n"
 msgstr ""
 
-#: dnuos/conf.py:351
+#: dnuos/conf.py:357
 #, python-format
 msgid ""
 "Set output format STRING used in plain-text and HTML output. See --help-"
@@ -383,57 +383,57 @@ msgstr ""
 " HTML. Voyez --help-output-string pour plus information à propos de "
 "syntaxe. (%s par défaut)"
 
-#: dnuos/conf.py:354
+#: dnuos/conf.py:360
 msgid "STRING"
 msgstr "CHAÎNE"
 
-#: dnuos/conf.py:358
+#: dnuos/conf.py:364
 msgid "Write list in output.db format to FILE (deprecated, use --template db)"
 msgstr ""
 "Écrire la liste avec le format output.db dans FICHIER (désapprouvé, "
 "utilisez --template db)"
 
-#: dnuos/conf.py:363
+#: dnuos/conf.py:369
 #, python-format
-msgid "If both ID3v1 and ID3v2 tags exist, prefer n (1 or 2) (default %default)"
+msgid "If both ID3v1 and ID3v2 tags exist, prefer n (1 or 2) (default %s)"
 msgstr ""
-"Si des balises de ID3v1 ainsi que ID3v2 existent, préférer n (1 ou 2) "
-"(%default par défaut)"
+"Si des balises de ID3v1 ainsi que ID3v2 existent, préférer n (1 ou 2) (%s"
+" par défaut)"
 
-#: dnuos/conf.py:367
+#: dnuos/conf.py:374
 msgid "Strip output of field headers and empty directories"
 msgstr "Supprimer la sortie des en-têtes de champ et des dossiers vides"
 
-#: dnuos/conf.py:372
+#: dnuos/conf.py:379
 msgid "Set output TEMPLATE (default plaintext)"
 msgstr "Mettre le TEMPLATE de sortie (plaintext par défaut)"
 
-#: dnuos/conf.py:373
+#: dnuos/conf.py:380
 msgid "TEMPLATE"
 msgstr ""
 
-#: dnuos/conf.py:376
+#: dnuos/conf.py:383
 #, python-format
-msgid "Set HTML text COLOR (default %default)"
-msgstr "Mettre la COULEUR du texte HTML (%default par défaut)"
+msgid "Set HTML text COLOR (default %s)"
+msgstr "Mettre la COULEUR du texte HTML (%s par défaut)"
 
-#: dnuos/conf.py:380
+#: dnuos/conf.py:388
 msgid "Statistics"
 msgstr "Statistiques "
 
-#: dnuos/conf.py:383
+#: dnuos/conf.py:391
 msgid "Display datestamp header"
 msgstr "Afficher l'en-tête d'horodaté"
 
-#: dnuos/conf.py:386
+#: dnuos/conf.py:394
 msgid "Display statistics results"
 msgstr "Afficher les résultats statistiques"
 
-#: dnuos/conf.py:389
+#: dnuos/conf.py:397
 msgid "Display elapsed time footer"
 msgstr "Afficher le temps passé en bas de la page"
 
-#: dnuos/conf.py:401
+#: dnuos/conf.py:410
 #, python-format
 msgid ""
 "No folders to process.\n"
@@ -442,63 +442,63 @@ msgstr ""
 "Il n'y a aucun dossiers à traiter.\n"
 "Exécutez `%s -h' pour aide."
 
-#: dnuos/output/abstract_renderer.py:19
+#: dnuos/output/abstract_renderer.py:24
 msgid "Bitrate(s)"
 msgstr ""
 
-#: dnuos/output/abstract_renderer.py:20
+#: dnuos/output/abstract_renderer.py:25
 msgid "Artist"
 msgstr "Artiste"
 
-#: dnuos/output/abstract_renderer.py:21 dnuos/output/abstract_renderer.py:22
+#: dnuos/output/abstract_renderer.py:26 dnuos/output/abstract_renderer.py:27
 msgid "Bitrate"
 msgstr ""
 
-#: dnuos/output/abstract_renderer.py:23
+#: dnuos/output/abstract_renderer.py:28
 msgid "Album"
 msgstr ""
 
-#: dnuos/output/abstract_renderer.py:24
+#: dnuos/output/abstract_renderer.py:29
 msgid "Files"
 msgstr "Fichiers"
 
-#: dnuos/output/abstract_renderer.py:25 dnuos/output/abstract_renderer.py:26
+#: dnuos/output/abstract_renderer.py:30 dnuos/output/abstract_renderer.py:31
 msgid "Length"
 msgstr "Durée"
 
-#: dnuos/output/abstract_renderer.py:27 dnuos/output/abstract_renderer.py:28
+#: dnuos/output/abstract_renderer.py:32 dnuos/output/abstract_renderer.py:33
 msgid "Modified"
 msgstr "Modification"
 
-#: dnuos/output/abstract_renderer.py:29 dnuos/output/abstract_renderer.py:30
+#: dnuos/output/abstract_renderer.py:34 dnuos/output/abstract_renderer.py:35
 msgid "Album/Artist"
 msgstr "Album/Artiste"
 
-#: dnuos/output/abstract_renderer.py:31
+#: dnuos/output/abstract_renderer.py:36
 msgid "Profile"
 msgstr "Profil"
 
-#: dnuos/output/abstract_renderer.py:32
+#: dnuos/output/abstract_renderer.py:37
 msgid "Path"
 msgstr "Chemin"
 
-#: dnuos/output/abstract_renderer.py:33
+#: dnuos/output/abstract_renderer.py:38
 msgid "Quality"
 msgstr "Qualité"
 
-#: dnuos/output/abstract_renderer.py:34 dnuos/output/abstract_renderer.py:35
+#: dnuos/output/abstract_renderer.py:39 dnuos/output/abstract_renderer.py:40
 msgid "Size"
 msgstr "Taille"
 
-#: dnuos/output/abstract_renderer.py:36
+#: dnuos/output/abstract_renderer.py:41
 msgid "Type"
 msgstr ""
 
-#: dnuos/output/abstract_renderer.py:37
+#: dnuos/output/abstract_renderer.py:42
 msgid "BR Type"
 msgstr ""
 
-#: dnuos/output/abstract_renderer.py:38
+#: dnuos/output/abstract_renderer.py:43
 msgid "Encoder"
 msgstr "Encodeur"
 

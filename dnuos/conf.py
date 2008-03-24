@@ -277,7 +277,8 @@ def parse_args(argv=sys.argv):
     group.add_option("--cache-dir",
                      action="callback", nargs=1,
                      callback=set_cache_dir, type="string",
-                     help=_('Store cache in DIR (default %default)'),
+                     help=_('Store cache in DIR (default %s)') % (
+                     parser.defaults['cache_dir']),
                      metavar=_('DIR'))
     group.add_option('--cull-cache',
                      dest='cull_cache', action='store_true',
@@ -337,7 +338,8 @@ def parse_args(argv=sys.argv):
     group = OptionGroup(parser, _('Output'))
     group.add_option("-B", "--bg",
                      dest="bg_color",
-                     help=_('Set HTML background COLOR (default %default)'),
+                     help=_('Set HTML background COLOR (default %s)') % (
+                     parser.defaults['bg_color']),
                      metavar=_('COLOR'))
     group.add_option("-f", "--file",
                      dest="outfile",
@@ -347,7 +349,8 @@ def parse_args(argv=sys.argv):
                      help=_('HTML output (deprecated, use --template html)'))
     group.add_option("-I", "--indent",
                      dest="indent", type="int",
-                     help=_('Set indent to n (default %default)'),
+                     help=_('Set indent to n (default %s)') % (
+                     parser.defaults['indent']),
                      metavar=_('n'))
     group.add_option("-o", "--output",
                      action="callback", nargs=1,
@@ -365,7 +368,9 @@ def parse_args(argv=sys.argv):
                      action="callback", nargs=1,
                      callback=set_preferred_tag, type="int",
                      help=_('If both ID3v1 and ID3v2 tags exist, prefer '
-                     'n (1 or 2) (default %default)'), metavar=_('n'))
+                     'n (1 or 2) (default %s)') % (
+                     parser.defaults['prefer_tag']),
+                     metavar=_('n'))
     group.add_option("-s", "--strip",
                      dest="stripped", action="store_true",
                      help=_('Strip output of field headers and empty '
@@ -377,7 +382,8 @@ def parse_args(argv=sys.argv):
                      metavar=_('TEMPLATE'))
     group.add_option("-T", "--text",
                      dest="text_color",
-                     help=_('Set HTML text COLOR (default %default)'),
+                     help=_('Set HTML text COLOR (default %s)') % (
+                     parser.defaults['text_color']),
                      metavar=_('COLOR'))
     parser.add_option_group(group)
 
