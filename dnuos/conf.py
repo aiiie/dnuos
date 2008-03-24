@@ -219,6 +219,7 @@ def parse_args(argv=sys.argv):
     usage = _('%prog [options] basedir ...')
     parser = OptionParser(usage, add_help_option=False)
     parser.set_defaults(bg_color="white",
+                        cache_dir=appdata.user_data_dir('Dnuos', 'Dnuos'),
                         cull_cache=False,
                         debug=False,
                         delete_cache=False,
@@ -245,7 +246,7 @@ def parse_args(argv=sys.argv):
                         stripped=False,
                         text_color="black",
                         use_cache=True,
-                        cache_dir=appdata.user_data_dir('Dnuos', 'Dnuos'),
+                        unknown_types=(),
                         wildcards=False)
 
     parser.add_option("-h", "--help",
