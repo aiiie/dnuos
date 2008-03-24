@@ -55,11 +55,14 @@ def user_data_dir(appname, vendor, version=None):
             pass
         path = os.path.join(path, vendor, appname)
     elif sys.platform == 'darwin':
-        from Carbon import Folder, Folders
-        path = Folder.FSFindFolder(Folders.kUserDomain,
-                                   Folders.kApplicationSupportFolderType,
-                                   Folders.kDontCreateFolder)
-        path = os.path.join(path.FSRefMakePath(), appname)
+        try:
+            from Carbon import Folder, Folders
+            path = Folder.FSFindFolder(Folders.kUserDomain,
+                                       Folders.kApplicationSupportFolderType,
+                                       Folders.kDontCreateFolder)
+            path = os.path.join(path.FSRefMakePath(), appname)
+        except (ImportError, AttributeError):
+            pass
     if not path:
         path = os.path.expanduser('~/.' + appname.lower())
 
