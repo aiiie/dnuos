@@ -2,6 +2,11 @@ import locale
 import time
 import unicodedata
 
+try:
+    set
+except NameError:
+    from sets import Set as set
+
 from dnuos.misc import to_human, _
 
 class AbstractRenderer(object):
