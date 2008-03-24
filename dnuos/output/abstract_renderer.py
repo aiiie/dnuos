@@ -67,7 +67,7 @@ class Column(object):
         else:
             pass
 
-        return str_.encode(*self._encoding).strip('\0')
+        return str_.encode(*self._encoding).split('\0', 1)[0]
 
     def _get_tag_keys(self, data):
         if len(data) == 1:
