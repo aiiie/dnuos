@@ -114,6 +114,9 @@ QtOIDUA_
 News
 ====
 
+Version 1.0.2 (Mar. 29, 2008)
+    Fixed ``-V``/``--version`` not working in regular output.
+
 Version 1.0.1 (Mar. 24, 2008)
     Improved printing of ID3 tags with null bytes.
 

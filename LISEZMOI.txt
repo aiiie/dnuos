@@ -124,6 +124,9 @@ QtOIDUA_
 Quoi de Neuf
 ============
 
+Version 1.0.2 (29 Mar. 2008)
+    Corrigé ``-V``/``--version`` ne fonctionne pas avec la sortie normale.
+
 Version 1.0.1 (24 Mar. 2008)
     Amélioré la sortie des tags ID3 avec des caractères null.
     
