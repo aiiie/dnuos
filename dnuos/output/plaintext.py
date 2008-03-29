@@ -3,14 +3,15 @@
 import locale
 import time
 
+import dnuos
 from dnuos.misc import _
 from dnuos.output.abstract_renderer import AbstractRenderer
 
 class Renderer(AbstractRenderer):
 
     def render(self, dir_pairs, options, data):
-
         """Render directories to a sequence of strings."""
+
         output = [
             (lambda: options.disp_date,
              self.render_date()),
@@ -22,6 +23,8 @@ class Renderer(AbstractRenderer):
              self.render_generation_time(data.times)),
             (lambda: options.disp_result,
              self.render_sizes(data.size, data.times)),
+            (lambda: options.disp_version,
+             render_version(dnuos.__version__)),
         ]
         first = True
         for pred, renderer in output:
@@ -83,3 +86,8 @@ class Renderer(AbstractRenderer):
         yield _('| Total %s Mb   |') % total_megs_s
         yield _('| Speed %s Mb/s |') % speed
         yield _('+-----------------------+')
+
+
+def render_version(version):
+
+    yield 'dnuos ' + version
