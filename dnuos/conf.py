@@ -86,13 +86,6 @@ quotes or otherwise it will not get parsed right.
     sys.exit()
 
 
-def exit_with_version(option, opt_str, value, parser):
-    """Prints version and exits program"""
-
-    print 'dnuos', dnuos.__version__
-    sys.exit()
-
-
 def set_db_format(option, opt_str, value, parser):
 
     parser.values.outfile = value
@@ -268,8 +261,7 @@ def parse_args(argv=sys.argv):
                      dest="show_progress", action="store_false",
                      help=_('Omit progress indication'))
     group.add_option("-V", "--version",
-                     action='callback', nargs=0,
-                     callback=exit_with_version,
+                     dest='disp_version', action='store_true',
                      help=_('Display version'))
     parser.add_option_group(group)
 
@@ -409,6 +401,10 @@ def parse_args(argv=sys.argv):
                                 and os.path.isdir(p)]
     if not options.basedirs and not (options.cull_cache or
         options.delete_cache):
+        if options.disp_version:
+            print ''.join(dnuos.output.plaintext.render_version(
+                dnuos.__version__))
+            sys.exit()
         print >> sys.stderr, (_("No folders to process.\nType `%s -h' "
                                 "for help.") % os.path.basename(argv[0]))
         sys.exit(2)
