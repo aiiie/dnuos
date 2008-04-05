@@ -17,7 +17,10 @@ from warnings import warn
 def _find_locale_dir():
 
     # Avoid unpacking the egg if translation isn't necessary
-    lang = locale.getdefaultlocale()[0]
+    try:
+        lang = locale.getdefaultlocale()[0]
+    except ValueError, e:
+        return None
     if not lang or lang.split('_')[0] == 'en':
         return None
 
