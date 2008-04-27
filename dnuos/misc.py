@@ -19,7 +19,7 @@ def _find_locale_dir():
     # Avoid unpacking the egg if translation isn't necessary
     try:
         lang = locale.getdefaultlocale()[0]
-    except ValueError, e:
+    except ValueError:
         return None
     if not lang or lang.split('_')[0] == 'en':
         return None
