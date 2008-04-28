@@ -1,22 +1,14 @@
 #!/usr/bin/env python
 
-import os
-
 try:
-    from setuptools import setup
+    from setuptools import setup, Command
     from setuptools.command.build_py import build_py
     extra_options = dict(
         entry_points={'console_scripts': ['dnuos = dnuos:main']},
-        tests_require=['nose >= 0.9'],
-        test_suite='nose.collector',
         zip_safe=True,
     )
-    os.environ['DATA_DIR'] = os.environ.get(
-        'DATA_DIR',
-        os.path.abspath('./testdata')
-    )
 except ImportError:
-    from distutils.core import setup
+    from distutils.core import setup, Command
     from distutils.command.build_py import build_py
     extra_options = dict(
         scripts=['scripts/dnuos'],
@@ -38,6 +30,7 @@ try:
 except ImportError:
     pass
 
+
 class LocaleBuildPy(build_py):
     """Build locale data automatically"""
 
@@ -48,6 +41,55 @@ class LocaleBuildPy(build_py):
         for path in glob('./dnuos/locale/*/LC_MESSAGES/*.po'):
             compile_catalog(path)
         return build_py.run(self)
+
+
+def testpkg(path):
+    """Runs doctest on an entire package"""
+
+    import doctest
+    import os
+    from glob import glob
+    modules = glob(os.path.join(path, '*.py'))
+    modules += glob(os.path.join(path, '**/*.py'))
+    total_failures, total_tests = 0, 0
+    for module in modules:
+        if module.endswith('__init__.py'):
+            continue
+            module = module[:-len(os.path.sep + '__init__.py')]
+        module = os.path.splitext(module)[0]
+        module = module.replace(os.path.sep, '.')
+        justmodule = module.split('.', 1)[1]
+        failures, tests = doctest.testmod(__import__(module, {}, {}, [justmodule]))
+        if tests > 0:
+            print '%s: %s/%s passed' % (module, tests + (0 - failures), tests)
+        total_failures += failures
+        total_tests += tests
+
+    print 'Total: %s/%s passed' % (total_tests + (0 - total_failures), total_tests)
+    print ''
+
+
+class RunTests(Command):
+    """Runs test suite"""
+
+    description = 'Runs test suite'
+    user_options = [
+        ('data-dir=', 'd', 'path to test data [default: ./testdata]'),
+    ]
+
+    def initialize_options(self):
+        import os
+        self.data_dir = os.path.abspath('./testdata')
+
+    def finalize_options(self):
+        import os
+        os.environ['DATA_DIR'] = self.data_dir
+
+    def run(self):
+
+        testpkg('dnuos')
+        testpkg('dnuostests')
+
 
 setup(
     author='Mattias P\xc3\xa4iv\xc3\xa4rinta, aiiie',
@@ -63,7 +105,7 @@ setup(
         'Topic :: Communications :: File Sharing',
         'Topic :: Multimedia :: Sound/Audio',
     ],
-    cmdclass={'build_py': LocaleBuildPy},
+    cmdclass={'build_py': LocaleBuildPy, 'test': RunTests},
     description='A tool for creating lists of music collections',
     download_url='https://github.com/aiiie/dnuos/archive/refs/tags/1.0.2.tar.gz',
     keywords='music collection list metadata mp3 audiolist oidua',
