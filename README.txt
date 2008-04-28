@@ -114,6 +114,13 @@ QtOIDUA_
 News
 ====
 
+Version 1.0.3 (Apr. 27, 2008)
+    Fixed a crash with malformed locale environment variables (e.g.
+    ``LANG``, ``LC_ALL``, etc.)
+
+    Fixed incorrect output when scanning root drive folders on Windows
+    (e.g. ``C:\``).
+
 Version 1.0.2 (Mar. 29, 2008)
     Fixed ``-V``/``--version`` not working in regular output.
 

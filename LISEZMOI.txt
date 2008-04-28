@@ -124,6 +124,13 @@ QtOIDUA_
 Quoi de Neuf
 ============
 
+Version 1.0.3 (27 Avr. 2008)
+    Corrigé un plantage avec des variables locales mal formés
+    d'environnement (par ex. ``LANG``, ``LC_ALL``, etc.) 
+
+    Corrigé la sortie incorrecte lorsque scanner des dossiers racines sous
+    Windows (par ex. ``C:\``).
+
 Version 1.0.2 (29 Mar. 2008)
     Corrigé ``-V``/``--version`` ne fonctionne pas avec la sortie normale.
 
