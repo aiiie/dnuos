@@ -124,17 +124,27 @@ QtOIDUA_
 Quoi de Neuf
 ============
 
-Version 1.0.3 (27 Avr. 2008)
+Version 1.0.4 (4 mai 2008)
+    Fortement amélioré l'appui pour les noms de fichiers et dossiers avec
+    des caractères Unicode sous Windows. Dnuos devrais maintenant être
+    capable de scanner des dossiers et ouvrir des fichiers avec des
+    caractères Unicode dans leurs noms, et des caractères Unicode
+    peuvent maintenant être utilisés dans des arguments de ligne de
+    commande.
+
+    Amélioré l'appui du format du cache entre les versions de Python.
+
+Version 1.0.3 (27 avr. 2008)
     Corrigé un plantage avec des variables locales mal formés
     d'environnement (par ex. ``LANG``, ``LC_ALL``, etc.) 
 
     Corrigé la sortie incorrecte lorsque scanner des dossiers racines sous
     Windows (par ex. ``C:\``).
 
-Version 1.0.2 (29 Mar. 2008)
+Version 1.0.2 (29 mar. 2008)
     Corrigé ``-V``/``--version`` ne fonctionne pas avec la sortie normale.
 
-Version 1.0.1 (24 Mar. 2008)
+Version 1.0.1 (24 mar. 2008)
     Amélioré la sortie des tags ID3 avec des caractères null.
     
     Corrigé la compatilibité Python 2.3.
@@ -142,13 +152,13 @@ Version 1.0.1 (24 Mar. 2008)
     Corrigé un plantage possible avec le cache sous certains
     environnements Mac OS X.
 
-Version 1.0 (20 Mar. 2008)
+Version 1.0 (20 mar. 2008)
     Ajouté ``--delete-cache`` pour supprimer le dossier du cache et
     ``--cull-cache`` pour supprimer des dossiers non-existants cachés.
 
     Mis à jour la traduction française.
 
-Version 1.0b7 (10 Mar. 2008)
+Version 1.0b7 (10 mar. 2008)
     Mis à jour la traduction française avec des corrections.
 
     Corrigé un plantage avec l'affichage des tailles en téraoctects ou plus
@@ -157,10 +167,10 @@ Version 1.0b7 (10 Mar. 2008)
     Corrigé des plantages avec encodage Unicode. L'UTF-8 est maintenant
     utilisé inconditionnellement.
 
-Version 1.0b6 (24 Fév. 2008)
+Version 1.0b6 (24 fév. 2008)
     Corrigé un plantage de la création du cache sous Windows.
 
-Version 1.0b5 (23 Fév. 2008)
+Version 1.0b5 (23 fév. 2008)
     Ajouté l'option ``-L``/``--list-files`` pour lister les fichiers
     individuels dans des dossiers. Néanmoins, l'information des fichiers
     individuels n'est pas caché.
@@ -170,7 +180,7 @@ Version 1.0b5 (23 Fév. 2008)
 
     Corrigé un plantage de la création du cache.
 
-Version 1.0b4 (22 Fév. 2008)
+Version 1.0b4 (22 fév. 2008)
     Ajouté l'appui pour le formatage des dombres par les paramètres régionaux.
 
     Corrigé un plantage avec le basile Audiolist et les MP3 VBR.
@@ -201,7 +211,7 @@ Version 1.0b4 (22 Fév. 2008)
     Amélioré la couverture de code des tests unitaires et corrigé des
     problèmes avec la portabilité de Windows.
 
-Version 1.0b3 (26 Déc. 2007)
+Version 1.0b3 (26 déc. 2007)
     Ajouté l'appui pour l'enregistrement du cache, même lorsque Dnuos
     est interrompu.
 
@@ -222,7 +232,7 @@ Version 1.0b3 (26 Déc. 2007)
 
     Réduit la taille du paquet win32.
 
-Version 1.0b2 (7 Déc. 2007)
+Version 1.0b2 (7 déc. 2007)
     Mis à jour et simplifié la documentation.
 
     Corrigé ``setup.py sdist`` ne pas inclure tous les fichiers.
@@ -251,7 +261,7 @@ Version 1.0b2 (7 Déc. 2007)
 
     Créé un Makefile qui exécute ``setup.py``.
 
-Version 1.0b1 (2 Déc. 2007)
+Version 1.0b1 (2 déc. 2007)
     Beaucoup d'améliorations du code.
 
     Ajouté le cachage des métadonnées audio.
@@ -272,27 +282,27 @@ Version 1.0b1 (2 Déc. 2007)
 
     Supprimé l'appui pour Python 2.2.
 
-Version 0.94 (16 Jan. 2006)
+Version 0.94 (16 jan. 2006)
     Corrigé les problèmes avec endianness sur les machines utilisées
     big-endian.
 
-Version 0.93 (13 Jan. 2006)
+Version 0.93 (13 jan. 2006)
     Corrigé une régression avec détection de l'en-tête MP3.
 
     Ajouté l'appui expérimental de l'en-tête VBRI.
 
-Version 0.92 (13 Jan. 2006)
+Version 0.92 (13 jan. 2006)
     Les options ``-l`` (les MP3 LAME seulement) et ``-v`` (les MP3 VBR
     seulement) maintenant fonctionnent dans la sortie normale.
 
     Ajouté l'option ``-b`` qui permet filtrer des MP3 avec les bitrates
     moins que ce qui est spécifié par ``-b``.
 
-Version 0.91 (12 Jan. 2006)
+Version 0.91 (12 jan. 2006)
     Fait la recherche de l'en-tête MP3 plus robuste. Les MP3 encodés
     à ``-V 9`` avec LAME 3.97b1 ne peuvent plus se confondre.
 
-Version 0.9 (11 Jan. 2006)
+Version 0.9 (11 jan. 2006)
     Finalement branché Oidua ! Ceci est maintenant DNUOS !
 
 

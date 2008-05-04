@@ -6,6 +6,7 @@ import string
 import struct
 
 import dnuos.id3
+import dnuos.path
 
 
 class SpacerError(Exception):
@@ -17,7 +18,7 @@ class UnknownType(object):
     def __init__(self, file_):
 
         self.filename = file_
-        self.filesize = os.path.getsize(self.filename)
+        self.filesize = dnuos.path.getsize(self.filename)
         self.filetype = os.path.splitext(self.filename)[1][1:].lower()
         self.vendor = ''
         self.version = ''
@@ -47,11 +48,11 @@ class AudioType(UnknownType):
     def __init__(self, file_):
 
         self.filename = file_
-        self._f = open(self.filename, 'rb')
+        self._f = dnuos.path.open(self.filename, 'rb')
         self._begin = None
         self._end = None
         self._meta = []
-        self.filesize = os.path.getsize(self.filename)
+        self.filesize = dnuos.path.getsize(self.filename)
         self.vendor = ''
         self.version = ''
         self.time = 9
@@ -93,7 +94,7 @@ class AudioType(UnknownType):
             return self._end
 
         mark = self._f.tell()
-        self._end = os.path.getsize(self.filename)
+        self._end = self.filesize
 
         # check for ID3v1
         self._f.seek(-128, 2)

@@ -9,6 +9,7 @@ from cStringIO import StringIO
 import dnuos
 import dnuos.appdata
 import dnuos.audiodir
+import dnuos.path
 
 def test():
     """Verify caching functionality"""
@@ -21,11 +22,14 @@ def test():
         output = StringIO()
         sys.argv = ['dnuos', '-q', '--cache-dir=.', '.']
         sys.stderr = sys.stdout = output
-        dnuos.main(locale='C')
+        try:
+            dnuos.main(locale='C')
+        finally:
+            sys.argv, sys.stderr, sys.stdout = old
         cache = dnuos.setup_cache(cache_file)
         assert cache.version == dnuos.audiodir.Dir.__version__
         for path, adir in cache.iteritems():
-            assert os.path.isdir(path)
+            assert dnuos.path.isdir(path)
             adir2 = dnuos.audiodir.Dir(path)
             assert adir.albums == adir2.albums
             assert adir.artists == adir2.artists
@@ -40,7 +44,6 @@ def test():
             assert adir.sizes == adir2.sizes
             assert adir._vendors == adir2._vendors
     finally:
-        sys.argv, sys.stderr, sys.stdout = old
         try:
             os.remove(cache_file)
         except OSError:

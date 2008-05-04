@@ -114,6 +114,14 @@ QtOIDUA_
 News
 ====
 
+Version 1.0.4 (May 4, 2008)
+    Greatly improved support for file and directory names with Unicode
+    characters on Windows. Dnuos should now be able to scan folders and open
+    audio files with Unicode characters in their paths, and Unicode
+    characters can now be used in command line arguments.
+
+    Improved cache format support between Python versions.
+
 Version 1.0.3 (Apr. 27, 2008)
     Fixed a crash with malformed locale environment variables (e.g.
     ``LANG``, ``LC_ALL``, etc.)

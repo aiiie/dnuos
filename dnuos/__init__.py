@@ -1,6 +1,6 @@
 """Script for gathering information about directories of audio files"""
 
-__version__ = '1.0.2'
+__version__ = '1.0.4'
 
 import os
 import sys
@@ -10,6 +10,7 @@ from itertools import chain
 from itertools import ifilter
 
 import dnuos.output.db
+import dnuos.path
 from dnuos import appdata, audiodir
 from dnuos.cache import PersistentDict, memoized
 from dnuos.conf import parse_args
@@ -171,21 +172,21 @@ def _main(argv=None, locale=None):
     audiodir.Dir.valid_types.extend(options.unknown_types or ())
 
     if options.delete_cache:
-        if not os.path.isdir(options.cache_dir):
+        if not dnuos.path.isdir(options.cache_dir):
             print >> sys.stderr, _('No such directory %s') % options.cache_dir
             return 2
         cache_file = appdata.user_data_file('dirs', options.cache_dir)
-        if os.path.exists(cache_file):
+        if dnuos.path.exists(cache_file):
             try:
-                os.remove(cache_file)
+                dnuos.path.remove(cache_file)
             except OSError, err:
                 print >> sys.stderr, _('Failed to remove cache file: %s') % err
                 return 2
-        if os.listdir(options.cache_dir):
+        if dnuos.path.listdir(options.cache_dir):
             print >> sys.stderr, _('Cache directory not empty')
             return 2
         try:
-            os.rmdir(options.cache_dir)
+            dnuos.path.rmdir(options.cache_dir)
         except OSError, err:
             print >> sys.stderr, _('Failed to remove cache file: %s') % err
             return 2
@@ -232,8 +233,8 @@ def _main(argv=None, locale=None):
     result = renderer.render(adirs, options, data)
 
     # Output
-    outfile = (options.outfile and open(options.outfile, 'w')
-                               or sys.stdout)
+    outfile = (options.outfile and dnuos.path.open(options.outfile, 'w')
+               or sys.stdout)
     try:
         for chunk in result:
             print >> outfile, chunk
@@ -459,13 +460,13 @@ def walk(dir_, sort_key=(lambda x: x), excluded=()):
     """
 
     try:
-        subs = os.listdir(dir_)
+        subs = dnuos.path.listdir(dir_)
     except OSError:
         return
     subs = [os.path.join(dir_, sub)
             for sub in subs]
     subs = [sub for sub in subs
-            if os.path.isdir(sub)
+            if dnuos.path.isdir(sub)
                and sub not in excluded]
     subs.sort(sort_key)
 
