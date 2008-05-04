@@ -110,6 +110,49 @@ def setup_renderer(output_module, format_string, fields, options):
     return renderer
 
 
+def _win32_utf8_argv():
+    """Uses shell32.GetCommandLineArgvW to get sys.argv as a list of UTF-8
+    strings.
+
+    Versions 2.5 and older of Python don't support Unicode in sys.argv on
+    Windows, with the underlying Windows API instead replacing multi-byte
+    characters with '?'.
+
+    Returns None on failure.
+    """
+
+    try:
+        from ctypes import cdll, windll, c_int, POINTER, byref, c_void_p
+        from ctypes.wintypes import LPCWSTR, LPWSTR
+
+        free = cdll.msvcrt.free
+
+        GetCommandLineW = cdll.kernel32.GetCommandLineW
+        GetCommandLineW.argtypes = []
+        GetCommandLineW.restype = LPCWSTR
+
+        CommandLineToArgvW = windll.shell32.CommandLineToArgvW
+        CommandLineToArgvW.argtypes = [LPCWSTR, POINTER(c_int)]
+        CommandLineToArgvW.restype = POINTER(LPWSTR)
+
+        cmd = GetCommandLineW()
+        argc = c_int(0)
+        argv = CommandLineToArgvW(cmd, byref(argc))
+        if argc.value > 0:
+            try:
+                import sys
+                # Remove Python executable if present
+                if argc.value - len(sys.argv) == 1:
+                    start = 1
+                else:
+                    start = 0
+                return [argv[i] for i in xrange(start, argc.value)]
+            finally:
+                free(argv)
+    except Exception:
+        pass
+
+
 def _main(argv=None, locale=None):
     """Real main entry point"""
 
@@ -120,7 +163,7 @@ def _main(argv=None, locale=None):
         pass
 
     if argv is None:
-        argv = sys.argv
+        argv = _win32_utf8_argv() or sys.argv
 
     os.stat_float_times(False)
     warnings.formatwarning = formatwarning
