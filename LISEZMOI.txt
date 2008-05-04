@@ -126,7 +126,7 @@ Quoi de Neuf
 
 Version 1.0.4 (4 mai 2008)
     Fortement amélioré l'appui pour les noms de fichiers et dossiers avec
-    des caractères Unicode sous Windows. Dnuos devrais maintenant être
+    des caractères Unicode sous Windows. Dnuos devrait maintenant être
     capable de scanner des dossiers et ouvrir des fichiers avec des
     caractères Unicode dans leurs noms, et des caractères Unicode
     peuvent maintenant être utilisés dans des arguments de ligne de
