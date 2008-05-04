@@ -2,12 +2,33 @@
 
 import os
 import shelve
+import sys
+
+import dnuos.path
+
+def update_from_1_0(cache):
+    """Updates a 1.0 version cache to the current version"""
+
+    for key, adir in cache.iteritems():
+        adir._types = tuple(adir._types)
+        for attr in ('artists', 'albums', '_profiles'):
+            setattr(adir, attr,
+                    dict([(k, tuple(v)) for (k, v) in
+                          getattr(adir, attr).iteritems()]))
+        cache[key] = adir
+
+
+updates = {'1.0': update_from_1_0}
+
 
 class PersistentDict(shelve.Shelf, object):
     """A dict with persistence, based on shelve.Shelf"""
 
     def __init__(self, filename, version):
         """Construct a new PersistentDict instance"""
+
+        filename = filename.decode('utf-8')
+        filename = filename.encode(sys.getfilesystemencoding())
 
         import anydbm
         super(PersistentDict, self).__init__(
@@ -17,12 +38,16 @@ class PersistentDict(shelve.Shelf, object):
         self.version = version
         old_version = self.pop('__version__', None)
         if old_version != self.version:
-            self.clear()
+            if old_version in updates:
+                updates[old_version](self)
+            else:
+                self.clear()
 
     def cull(self):
         """Removes bad directories and returns count"""
 
-        paths = [p for p in self.iterkeys() if not os.path.isdir(p)]
+        paths = [p.decode('utf-8') for p in self.iterkeys()
+                 if not dnuos.path.isdir(p)]
         for path in paths:
             del self[path]
         return len(paths)
@@ -40,7 +65,7 @@ def memoized(func, cache):
     If called later with the same argument, the cached value is
     returned, and not re-evaluated.
 
-    The function must only take one argument.
+    The function must only take one argument: a string.
 
     Example usage and behavior:
 

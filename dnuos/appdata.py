@@ -7,6 +7,7 @@ http://mail.python.org/pipermail/python-list/2005-September/341702.html
 import os
 import sys
 
+import dnuos.path
 
 def user_data_dir(appname, vendor, version=None):
     """Return full path to the user-specific data dir for this application.
@@ -41,19 +42,11 @@ def user_data_dir(appname, vendor, version=None):
 
     path = None
     if sys.platform.startswith('win'):
-        # Try to make this a unicode path because SHGetFolderPath does
-        # not return unicode strings when there is unicode data in the
-        # path.
-        try:
-            from win32com.shell import shellcon, shell
-            path = shell.SHGetFolderPath(0, shellcon.CSIDL_APPDATA, 0, 0)
-        except ImportError:
-            path = os.environ['APPDATA']
-        try:
-            path = unicode(path)
-        except UnicodeError:
-            pass
-        path = os.path.join(path, vendor, appname)
+        appdata = os.environ.get('APPDATA')
+        if appdata:
+            appdata = appdata.decode(sys.getfilesystemencoding())
+            appdata = appdata.encode('utf-8')
+            path = os.path.join(appdata, vendor, appname)
     elif sys.platform == 'darwin':
         try:
             from Carbon import Folder, Folders
@@ -65,6 +58,7 @@ def user_data_dir(appname, vendor, version=None):
             pass
     if not path:
         path = os.path.expanduser('~/.' + appname.lower())
+        path = path.decode(sys.getfilesystemencoding()).encode('utf-8')
 
     if version:
         path = os.path.join(path, version)
@@ -74,8 +68,8 @@ def user_data_dir(appname, vendor, version=None):
 def create_user_data_dir(dir_):
     """Creates user data directory"""
 
-    if not os.path.exists(dir_):
-        os.makedirs(dir_)
+    if not dnuos.path.exists(dir_):
+        dnuos.path.makedirs(dir_)
 
 
 def user_data_file(filename, dir_):

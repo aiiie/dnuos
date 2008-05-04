@@ -13,6 +13,7 @@ try:
 except NameError:
     from sets import Set as set
 
+import dnuos.path
 import dnuos.output
 import dnuos.output.db
 import dnuos.output.html
@@ -151,9 +152,8 @@ def set_unknown_types(option, opt_str, value, parser):
 
 def add_exclude_dir(option, opt_str, value, parser):
 
-    if value[-1] == os.sep:
-        value = value[:-1]
-    if os.path.isdir(value):
+    value.rstrip(os.path.sep)
+    if dnuos.path.isdir(value):
         value = os.path.abspath(value)
         parser.values.exclude_paths.append(value)
     else:
@@ -398,7 +398,7 @@ def parse_args(argv=sys.argv):
     for glob_dir in args:
         options.basedirs += [p for p in expand(options, glob_dir)
                              if p not in options.exclude_paths
-                                and os.path.isdir(p)]
+                                and dnuos.path.isdir(p)]
     if not options.basedirs and not (options.cull_cache or
         options.delete_cache):
         if options.disp_version:

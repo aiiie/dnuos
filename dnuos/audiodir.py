@@ -9,6 +9,7 @@ try:
 except NameError:
     from sets import Set as set
 
+import dnuos.path
 from dnuos import audiotype
 from dnuos.misc import dir_depth
 
@@ -21,7 +22,7 @@ class Dir(object):
     __slots__ = tuple('albums artists _audio_files _bad_files '
                       '_bitrates _lengths _types modified path '
                       '_profiles sizes _vendors'.split())
-    __version__ = '1.0'
+    __version__ = '1.0.4'
 
     def __init__(self, path):
         """Makes an empty Dir for path"""
@@ -61,7 +62,7 @@ class Dir(object):
     def children(self):
         """Returns a list of files and subdirectories from the dir's path"""
 
-        return [f for f in os.listdir(self.path)]
+        return [f for f in dnuos.path.listdir(self.path)]
 
     def get_streams(self):
         """Processes metadata in audio files"""
@@ -99,7 +100,7 @@ class Dir(object):
 
         types = list(set([s.filetype for s in streams]))
         types.sort()
-        return types
+        return tuple(types)
 
     def _get_mediatype(self):
         """Return the collective media type for the directory.
@@ -125,7 +126,7 @@ class Dir(object):
         for stream in streams:
             for tag, artist in stream.artist().items():
                 res.setdefault(tag, set()).add(artist)
-        return res
+        return dict([(k, tuple(v)) for (k, v) in res.iteritems()])
 
     def _parse_album(self, streams):
         """Gets the album for the audio files"""
@@ -134,7 +135,7 @@ class Dir(object):
         for stream in streams:
             for tag, album in stream.album().items():
                 res.setdefault(tag, set()).add(album)
-        return res
+        return dict([(k, tuple(v)) for (k, v) in res.iteritems()])
 
     def _parse_size(self, streams):
         """Determines size in bytes.
@@ -221,7 +222,8 @@ class Dir(object):
         for stream in streams:
             for key, profile in stream.profile().items():
                 res.setdefault(key, set()).add(profile)
-        return res
+        return dict([(k, tuple(v)) for (k, v) in res.iteritems()])
+
 
     def _get_profile(self):
         """Return encoding profile name.
@@ -288,13 +290,13 @@ class Dir(object):
 
         files = self.audio_files[:]
         files.append(self.path)
-        dates = [os.path.getmtime(f) for f in files]
+        dates = [dnuos.path.getmtime(f) for f in files]
         return max(dates)
 
     def _parse_audio_files(self):
         """Returns a list of files in the directory that are audio files"""
 
-        if os.path.isdir(self.path):
+        if dnuos.path.isdir(self.path):
             return [filename for filename in self.children()
                     if self.is_audio_file(os.path.join(self.path, filename))]
         elif self.is_audio_file(self.path):
@@ -329,7 +331,7 @@ class Dir(object):
         False
         """
 
-        return (os.path.isfile(filename) and
+        return (dnuos.path.isfile(filename) and
                 os.path.splitext(filename)[1][1:].lower() in Dir.valid_types)
     is_audio_file = staticmethod(is_audio_file)
 
