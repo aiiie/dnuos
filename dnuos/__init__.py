@@ -122,7 +122,7 @@ def _win32_utf8_argv():
     """
 
     try:
-        from ctypes import cdll, windll, c_int, POINTER, byref, c_void_p
+        from ctypes import POINTER, byref, cdll, c_int, windll
         from ctypes.wintypes import LPCWSTR, LPWSTR
 
         free = cdll.msvcrt.free
@@ -140,7 +140,6 @@ def _win32_utf8_argv():
         argv = CommandLineToArgvW(cmd, byref(argc))
         if argc.value > 0:
             try:
-                import sys
                 # Remove Python executable if present
                 if argc.value - len(sys.argv) == 1:
                     start = 1
