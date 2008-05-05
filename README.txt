@@ -14,13 +14,13 @@ For example, a list might look like this::
 
     Album/Artist                       |  Size | Type | Quality
     ===========================================================
-    Ambient                            |       |      | 
-        Alva Noto                      |       |      | 
+    Ambient                            |       |      |
+        Alva Noto                      |       |      |
             2001 - Transform           | 70.9M | MP3  | -V2
             2004 - Transrapid          | 30.2M | MP3  | -aps
             2005 - Transspray          | 31.7M | MP3  | -aps
             2005 - Transvision         | 32.3M | MP3  | -aps
-        Alva Noto and Ryuichi Sakamoto |       |      | 
+        Alva Noto and Ryuichi Sakamoto |       |      |
             2002 - Vrioon              | 72.6M | MP3  | -aps
             2005 - Insen               | 99.1M | MP3  | 320 C
             2006 - Revep               | 27.9M | MP3  | -V2n
@@ -105,7 +105,7 @@ Guidua_
 QtOIDUA_
     A graphical front-end for Linux and Mac OS X. (Note: Versions 0.08 and
     older have a bug which prevents QtOIDUA from working with Dnuos 1.0)
-    
+
 
 .. _Guidua: http://oidua.suxbad.com/setup_guidua_0.16.exe
 .. _QtOIDUA: http://www.spoonfedmonkey.com/software/qtoidua/
@@ -113,6 +113,10 @@ QtOIDUA_
 
 News
 ====
+
+Version 1.0.5 (May 5, 2008)
+    Fixed potential Unicode error crashes due to UTF-8 cache format
+    transition.
 
 Version 1.0.4 (May 4, 2008)
     Greatly improved support for file and directory names with Unicode
@@ -282,10 +286,11 @@ https://github.com/aiiie/dnuos. Download using Git_::
 
     git clone https://github.com/aiiie/dnuos.git my-dnuos
 
-Running the test suite requires nose_, and the `test data`_. Once you have
-both, you can run the tests with the following command::
+Running the test suite requires the `test data`_ (in the same directory as
+``setup.py``). Once you have it, you can run the tests with the following
+command::
 
-    ./setup.py test
+    python setup.py test
 
 If you find any problems, please submit a ticket on the `Trac site`_. The
 Trac site is for development, not support, so please don't submit help
