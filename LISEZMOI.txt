@@ -125,7 +125,7 @@ Quoi de Neuf
 ============
 
 Version 1.0.5 (5 mai 2008)
-    Corrigé des plantages possibles du passage à l'UTF-8 du format cache.
+    Corrigé des plantages possibles du passage à l'UTF-8 du format du cache.
 
 Version 1.0.4 (4 mai 2008)
     Fortement amélioré l'appui pour les noms de fichiers et dossiers avec
