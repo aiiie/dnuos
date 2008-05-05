@@ -1,6 +1,5 @@
 """A module for caching"""
 
-import itertools
 import shelve
 import sys
 
@@ -47,6 +46,7 @@ def update_from_1_0_4(cache):
     if fsenc == 'utf-8':
         return
 
+    import itertools
     bad_items = []
 
     for key, adir in cache.iteritems():
