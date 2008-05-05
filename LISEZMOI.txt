@@ -16,13 +16,13 @@ Par exemple, une liste pourrait ressembler à ceci :
 
     Album/Artiste                      | Taill | Type | Qualité
     ===========================================================
-    Ambient                            |       |      | 
-        Alva Noto                      |       |      | 
+    Ambient                            |       |      |
+        Alva Noto                      |       |      |
             2001 - Transform           | 70,9M | MP3  | -V2
             2004 - Transrapid          | 30,2M | MP3  | -aps
             2005 - Transspray          | 31,7M | MP3  | -aps
             2005 - Transvision         | 32,3M | MP3  | -aps
-        Alva Noto and Ryuichi Sakamoto |       |      | 
+        Alva Noto and Ryuichi Sakamoto |       |      |
             2002 - Vrioon              | 72,6M | MP3  | -aps
             2005 - Insen               | 99,1M | MP3  | 320 C
             2006 - Revep               | 27,9M | MP3  | -V2n
@@ -124,6 +124,9 @@ QtOIDUA_
 Quoi de Neuf
 ============
 
+Version 1.0.5 (5 mai 2008)
+    Corrigé des plantages possibles du passage à l'UTF-8 du format cache.
+
 Version 1.0.4 (4 mai 2008)
     Fortement amélioré l'appui pour les noms de fichiers et dossiers avec
     des caractères Unicode sous Windows. Dnuos devrait maintenant être
@@ -136,7 +139,7 @@ Version 1.0.4 (4 mai 2008)
 
 Version 1.0.3 (27 avr. 2008)
     Corrigé un plantage avec des variables locales mal formés
-    d'environnement (par ex. ``LANG``, ``LC_ALL``, etc.) 
+    d'environnement (par ex. ``LANG``, ``LC_ALL``, etc.)
 
     Corrigé la sortie incorrecte lorsque scanner des dossiers racines sous
     Windows (par ex. ``C:\``).
@@ -146,7 +149,7 @@ Version 1.0.2 (29 mar. 2008)
 
 Version 1.0.1 (24 mar. 2008)
     Amélioré la sortie des tags ID3 avec des caractères null.
-    
+
     Corrigé la compatilibité Python 2.3.
 
     Corrigé un plantage possible avec le cache sous certains
@@ -197,7 +200,7 @@ Version 1.0b4 (22 fév. 2008)
 
     Corrigé des problèmes du cache ne cache pas correctement (et les dossiers
     inexistantes sont maintenant cueillis).
-    
+
     Amélioré l'implémentation de cache alors qu'il est chargé
     incrémentalement au lieu de tous ensemble avant la sortie d'une liste.
 
@@ -316,13 +319,13 @@ http://dnuos.tweek.us/hg/. Avec Mercurial_, exécutez :
 
     hg clone http://dnuos.tweek.us/hg/
 
-Exécuter l'ensemble des tests unitaires exige nose_ et les
-`données de test`_. Après que vous avez les deux, vous pouvez
+Exécuter l'ensemble des tests unitaires exige les `données de test`_ (dans
+le même dossier que ``setup.py``). Après que vous l'avez, vous pouvez
 exécuter les tests avec la commande suivante :
 
 ::
 
-    ./setup.py test
+    python setup.py test
 
 Si vous trouvez aucun de problèmes, soumettez une fiche sur le `site Trac`_.
 Ce site est pour le développement et non pas d'assistance, donc ne soumettez

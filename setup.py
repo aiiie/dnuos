@@ -107,7 +107,7 @@ setup(
     ],
     cmdclass={'build_py': LocaleBuildPy, 'test': RunTests},
     description='A tool for creating lists of music collections',
-    download_url='http://dnuos.tweek.us/files/dnuos-1.0.4.tar.gz',
+    download_url='http://dnuos.tweek.us/files/dnuos-1.0.5.tar.gz',
     keywords='music collection list metadata mp3 audiolist oidua',
     license='GNU GPL',
     long_description="""
@@ -118,13 +118,13 @@ For example, a list might look like this::
 
     Album/Artist                       |  Size | Type | Quality
     ===========================================================
-    Ambient                            |       |      | 
-        Alva Noto                      |       |      | 
+    Ambient                            |       |      |
+        Alva Noto                      |       |      |
             2001 - Transform           | 70.9M | MP3  | -V2
             2004 - Transrapid          | 30.2M | MP3  | -aps
             2005 - Transspray          | 31.7M | MP3  | -aps
             2005 - Transvision         | 32.3M | MP3  | -aps
-        Alva Noto and Ryuichi Sakamoto |       |      | 
+        Alva Noto and Ryuichi Sakamoto |       |      |
             2002 - Vrioon              | 72.6M | MP3  | -aps
             2005 - Insen               | 99.1M | MP3  | 320 C
             2006 - Revep               | 27.9M | MP3  | -V2n
@@ -150,6 +150,6 @@ older, has fewer features, and is no longer maintained.
     packages=['dnuos', 'dnuos.id3', 'dnuos.output'],
     package_data=package_data,
     url='http://dnuos.tweek.us/',
-    version='1.0.4',
+    version='1.0.5',
     **extra_options
 )
