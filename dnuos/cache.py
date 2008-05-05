@@ -18,8 +18,8 @@ def update_from_1_0(cache):
                 adir.path = adir.decode(fsenc).encode('utf-8')
                 adir._audio_files = [p.decode(fsenc).encode('utf-8') for p in
                                      adir._audio_files]
-                adir._bad_files = [p.decode(fsenc).encode('utf-8') for p in
-                                   adir._bad_files]
+                adir._bad_files = [(p.decode(fsenc).encode('utf-8'), tb)
+                                   for (p, tb) in adir._bad_files]
             except UnicodeError:
                 bad_items.append(key)
                 continue
@@ -55,7 +55,7 @@ def update_from_1_0_4(cache):
             path = adir.path.decode(fsenc).encode('utf-8')
             audio_files = [p.decode(fsenc).encode('utf-8') for p in
                            adir._audio_files]
-            bad_files = [p.decode(fsenc).encode('utf-8') for p in
+            bad_files = [(p.decode(fsenc).encode('utf-8'), tb) for (p, tb) in∑
                          adir._bad_files]
             if (path != adir.path or audio_files != adir._audio_files or
                 bad_files != adir._bad_files):
