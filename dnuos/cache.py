@@ -15,7 +15,7 @@ def update_from_1_0(cache):
         # Convert paths to UTF-8
         if fsenc != 'utf-8':
             try:
-                adir.path = adir.decode(fsenc).encode('utf-8')
+                adir.path = adir.path.decode(fsenc).encode('utf-8')
                 adir._audio_files = [p.decode(fsenc).encode('utf-8') for p in
                                      adir._audio_files]
                 adir._bad_files = [(p.decode(fsenc).encode('utf-8'), tb)
