@@ -11,7 +11,6 @@ a different encoding, due to decoding to unicode beforehand.
 """
 
 import os
-import sys
 
 
 def listdir(path):
