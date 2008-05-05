@@ -106,8 +106,7 @@ class PersistentDict(shelve.Shelf, object):
     def cull(self):
         """Removes bad directories and returns count"""
 
-        paths = [p.decode('utf-8') for p in self.iterkeys()
-                 if not dnuos.path.isdir(p)]
+        paths = [p for p in self.iterkeys() if not dnuos.path.isdir(p)]
         for path in paths:
             del self[path]
         return len(paths)
