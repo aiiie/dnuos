@@ -15,7 +15,16 @@ import os
 
 def listdir(path):
 
-    return [p.encode('utf-8') for p in os.listdir(path.decode('utf-8'))]
+    paths = []
+    for p in os.listdir(path.decode('utf-8')):
+        # Don't encode paths that aren't Unicode. os.listdir will return str
+        # objects for any paths it couldn't decode to unicode objects (see
+        # http://bugs.python.org/issue683592).
+        if isinstance(p, unicode):
+            paths.append(p.encode('utf-8'))
+        else:
+            paths.append(p)
+    return paths
 
 
 def _wrap(func):
