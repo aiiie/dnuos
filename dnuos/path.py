@@ -29,7 +29,12 @@ def listdir(path):
 
 def _wrap(func):
 
-    return lambda path, *args, **kw: func(path.decode('utf-8'), *args, **kw)
+    def wrapper(path, *args, **kw):
+        try:
+            return func(path.decode('utf-8'), *args, **kw)
+        except UnicodeError:
+            return func(path, *args, **kw)
+    return wrapper
 
 
 exists = _wrap(os.path.exists)
