@@ -673,6 +673,8 @@ class FLAC(AudioType):
         # vorbis comments
         self.commentvendor = None
         self.comments = []
+        self._artist = None
+        self._album = None
         self.streaminfo = None
         # 0 minimum blocksize
         # 1 maximum blocksize
@@ -697,13 +699,21 @@ class FLAC(AudioType):
         self.encoding = "%.1f%%" % self.compression
         self.brtype = "L"
 
+        for pair in self.comments:
+            field, value = pair.split('=')
+            field = field.lower()
+            if field == 'artist':
+                self._artist = value
+            elif field == 'album':
+                self._album = value
+
     def artist(self):
 
-        return {'FLAC': None}
+        return {'FLAC': self._artist}
 
     def album(self):
 
-        return {'FLAC': None}
+        return {'FLAC': self._album}
 
     def profile(self):
 
