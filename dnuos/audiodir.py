@@ -22,7 +22,7 @@ class Dir(object):
     __slots__ = ('albums', 'artists', '_audio_files', '_bad_files',
                  '_bitrates', '_lengths', '_types', 'modified', 'path',
                  '_profiles', 'sizes', '_vendors')
-    __version__ = '1.0.5'
+    __version__ = '1.0.6'
 
     def __init__(self, path):
         """Makes an empty Dir for path"""

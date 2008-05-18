@@ -5,6 +5,16 @@ import sys
 
 import dnuos.path
 
+def has_flac(adir):
+    """Returns whether or not an audiodir has FLAC files.
+
+    FLAC files scanned prior to 1.0.6 don't have album/artist set, so they
+    need to be invalidated from the cache to get scanned again.
+    """
+
+    return 'FLAC' in adir._types
+
+
 def update_from_1_0(cache):
     """Updates a 1.0 version cache to the current version"""
 
@@ -12,6 +22,11 @@ def update_from_1_0(cache):
     bad_items = []
 
     for key, adir in cache.iteritems():
+        # Invalidate FLAC audiodirs
+        if has_flac(adir):
+            bad_items.append(key)
+            continue
+
         # Convert paths to UTF-8
         if fsenc != 'utf-8':
             try:
@@ -50,6 +65,11 @@ def update_from_1_0_4(cache):
     bad_items = []
 
     for key, adir in cache.iteritems():
+        # Invalidate FLAC audiodirs
+        if has_flac(adir):
+            bad_items.append(key)
+            continue
+
         try:
             # Try re-encoding from the native encoding to UTF-8
             path = adir.path.decode(fsenc).encode('utf-8')
@@ -77,8 +97,24 @@ def update_from_1_0_4(cache):
         del cache[key]
 
 
+def update_from_1_0_5(cache):
+    """Updates a 1.0.5 version cache to the current version"""
+
+    bad_items = []
+
+    for key, adir in cache.iteritems():
+        # Invalidate FLAC audiodirs
+        if has_flac(adir):
+            bad_items.append(key)
+            continue
+
+    for key in bad_items:
+        del cache[key]
+
+
 updates = {'1.0': update_from_1_0,
-           '1.0.4': update_from_1_0_4}
+           '1.0.4': update_from_1_0_4,
+           '1.0.5': update_from_1_0_5}
 
 
 class PersistentDict(shelve.Shelf, object):
