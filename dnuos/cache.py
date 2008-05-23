@@ -100,15 +100,8 @@ def update_from_1_0_4(cache):
 def update_from_1_0_5(cache):
     """Updates a 1.0.5 version cache to the current version"""
 
-    bad_items = []
-
-    for key, adir in cache.iteritems():
-        # Invalidate FLAC audiodirs
-        if has_flac(adir):
-            bad_items.append(key)
-            continue
-
-    for key in bad_items:
+    # Invalidate FLAC audiodirs
+    for key in [key for (key, adir) in cache.iteritems() if has_flac(adir)]:
         del cache[key]
 
 
