@@ -59,13 +59,15 @@ def testpkg(path):
         module = os.path.splitext(module)[0]
         module = module.replace(os.path.sep, '.')
         justmodule = module.split('.', 1)[1]
-        failures, tests = doctest.testmod(__import__(module, {}, {}, [justmodule]))
+        failures, tests = doctest.testmod(__import__(module, {}, {},
+                                                     [justmodule]))
         if tests > 0:
             print '%s: %s/%s passed' % (module, tests + (0 - failures), tests)
         total_failures += failures
         total_tests += tests
 
-    print 'Total: %s/%s passed' % (total_tests + (0 - total_failures), total_tests)
+    print 'Total: %s/%s passed' % (total_tests + (0 - total_failures),
+                                   total_tests)
     print ''
 
 
