@@ -117,6 +117,13 @@ QtOIDUA_
 News
 ====
 
+Version 1.0.6 (May 18, 2008)
+    Fixed album and artist information not being populated for FLAC files.
+    (Cached directories with FLAC files will be rescanned.)
+
+    Fixed potential Unicode error crashes with file names that aren't
+    properly encoded with the file system's character encoding.
+
 Version 1.0.5 (May 5, 2008)
     Fixed potential Unicode error crashes due to UTF-8 cache format
     transition.
