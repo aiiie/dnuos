@@ -109,6 +109,8 @@ Front-ends Graphiques
 Si vous détestez la ligne de commande, vous pouvez utiliser l'un des
 front-ends graphiques suivants plutôt :
 
+dnuOSX_
+    Un front-end graphique pour Mac OS X.
 Guidua_
     Un front-end graphique pour Windows.
 QtOIDUA_
@@ -117,6 +119,7 @@ QtOIDUA_
     avec Dnuos 1.0.)
 
 
+.. _dnuOSX: http://www.facepwn.com/MacRequest/dnuOSX.html
 .. _Guidua: http://oidua.suxbad.com/setup_guidua_0.16.exe
 .. _QtOIDUA: http://www.spoonfedmonkey.com/software/qtoidua/
 
