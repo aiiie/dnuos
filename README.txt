@@ -100,6 +100,8 @@ Graphical Front-ends
 If terminals and command prompts aren't to your liking, you can try one of
 the following graphical front-ends instead:
 
+dnuOSX_
+    A native front-end for Mac OS X.
 Guidua_
     A graphical front-end for Windows.
 QtOIDUA_
@@ -107,6 +109,7 @@ QtOIDUA_
     older have a bug which prevents QtOIDUA from working with Dnuos 1.0)
 
 
+.. _dnuOSX: http://www.facepwn.com/MacRequest/dnuOSX.html
 .. _Guidua: http://oidua.suxbad.com/setup_guidua_0.16.exe
 .. _QtOIDUA: http://www.spoonfedmonkey.com/software/qtoidua/
 
