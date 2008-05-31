@@ -24,7 +24,7 @@ def user_data_dir(appname, vendor, version=None):
     Typical user data directories are:
         Windows:    C:\Documents and Settings\USER\Application Data\<owner>\<appname>
         Mac OS X:   ~/Library/Application Support/<appname>
-        Unix:       ~/.<lowercased-appname>
+        Unix:       ~/.config/<lowercased-appname>
 
     >>> import os
     >>> dir_ = user_data_dir('Dnuos', 'Dnuos')
@@ -57,16 +57,37 @@ def user_data_dir(appname, vendor, version=None):
         except (ImportError, AttributeError):
             pass
     if not path:
-        path = os.path.expanduser('~/.' + appname.lower())
+        path = os.environ.get('XDG_CACHE_HOME')
+        if path:
+            path = os.path.normpath(path)
+        else:
+            path = os.path.expanduser('~/.config')
+        path = os.path.join(path, appname.lower())
         path = path.decode(sys.getfilesystemencoding()).encode('utf-8')
-
     if version:
-        path = os.path.join(path, version)
+        path = os.path.join(path, '-' + version)
     return path
 
 
 def create_user_data_dir(dir_):
     """Creates user data directory"""
+
+    cache = os.environ.get('XDG_CACHE_HOME')
+    if cache:
+        cache = dnuos.path.normpath(cache)
+        if not dir_.startswith(cache):
+            cache = None
+
+    cache = dnuos.path.expanduser('~/.config')
+    if not dir_.startswith(cache):
+        cache = None
+
+    if cache and not dnuos.path.exists(cache):
+        dnuos.path.mkdir(cache, 0700)
+
+        old_cache = dnuos.path.expanduser('~/.dnuos')
+        if dnuos.path.exists(old_cache):
+            dnuos.path.rename(old_cache, dir_)
 
     if not dnuos.path.exists(dir_):
         dnuos.path.makedirs(dir_)

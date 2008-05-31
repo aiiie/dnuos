@@ -38,11 +38,15 @@ def _wrap(func):
 
 
 exists = _wrap(os.path.exists)
+expanduser = _wrap(os.path.expanduser)
 getmtime = _wrap(os.path.getmtime)
 getsize = _wrap(os.path.getsize)
 isdir = _wrap(os.path.isdir)
 isfile = _wrap(os.path.isfile)
+mkdir = _wrap(os.mkdir)
 makedirs = _wrap(os.makedirs)
+normpath = _wrap(os.path.normpath)
+rename = _wrap(os.rename)
 remove = _wrap(os.remove)
 rmdir = _wrap(os.rmdir)
 open = _wrap(open)
