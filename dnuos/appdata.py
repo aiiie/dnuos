@@ -78,13 +78,14 @@ def create_user_data_dir(dir_):
         if not dir_.startswith(cache):
             cache = None
 
-    cache = dnuos.path.expanduser('~/.config')
-    if not dir_.startswith(cache):
-        cache = None
+    if not cache:
+        cache = dnuos.path.expanduser('~/.config')
+        if not dir_.startswith(cache):
+            cache = None
 
-    if cache and not dnuos.path.exists(cache):
-        dnuos.path.mkdir(cache, 0700)
-
+    if cache:
+        if not dnuos.path.exists(cache):
+            dnuos.path.mkdir(cache, 0700)
         old_cache = dnuos.path.expanduser('~/.dnuos')
         if dnuos.path.exists(old_cache):
             dnuos.path.rename(old_cache, dir_)
