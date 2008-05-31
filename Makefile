@@ -1,6 +1,9 @@
-PREFIX=/usr/local
-export PREFIX
 PYTHON=python
+
+NONLOCAL=$(shell $(PYTHON) -c 'from distutils.sysconfig import get_python_lib; print get_python_lib().startswith("/usr/lib")')
+ifeq "$(NONLOCAL)" 'True'
+	PREFIX_ARG=--prefix=/usr/local
+endif
 
 all: build
 
@@ -12,4 +15,4 @@ clean:
 	find ./dnuos/locale -name '*.mo' -exec rm -f "{}" ';'
 	rm -rf build dist dnuos.egg-info temp
 install:
-	$(PYTHON) setup.py install --prefix="$(PREFIX)"
+	$(PYTHON) setup.py install $(PREFIX_ARG)
