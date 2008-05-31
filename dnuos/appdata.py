@@ -24,7 +24,7 @@ def user_data_dir(appname, vendor, version=None):
     Typical user data directories are:
         Windows:    C:\Documents and Settings\USER\Application Data\<owner>\<appname>
         Mac OS X:   ~/Library/Application Support/<appname>
-        Unix:       ~/.config/<lowercased-appname>
+        Unix:       ~/.cache/<lowercased-appname>
 
     >>> import os
     >>> dir_ = user_data_dir('Dnuos', 'Dnuos')
@@ -61,7 +61,7 @@ def user_data_dir(appname, vendor, version=None):
         if path:
             path = os.path.normpath(path)
         else:
-            path = os.path.expanduser('~/.config')
+            path = os.path.expanduser('~/.cache')
         path = os.path.join(path, appname.lower())
         path = path.decode(sys.getfilesystemencoding()).encode('utf-8')
     if version:
@@ -79,7 +79,7 @@ def create_user_data_dir(dir_):
             cache = None
 
     if not cache:
-        cache = dnuos.path.expanduser('~/.config')
+        cache = dnuos.path.expanduser('~/.cache')
         if not dir_.startswith(cache):
             cache = None
 
