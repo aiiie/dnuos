@@ -109,7 +109,7 @@ News
 ====
 
 Version 1.0.6 (May 31, 2008)
-    Made the Makefile more consistent across platforms. This now the
+    Made the Makefile more consistent across platforms. This is now the
     recommended way to install Dnuos.
 
     Fixed album and artist information not being populated for FLAC files.
