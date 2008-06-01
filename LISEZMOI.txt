@@ -61,32 +61,19 @@ Exécutez ``dnuos --help`` pour information détaillée sur toutes les options.
 Linux, Mac OS X, Unix
 ---------------------
 
-Si vous souhaitez installer Dnuos avec setuptools_ (qui est empaqueté avec
-Mac OS X, par exemple), téléchargez et exécutez `ez_setup.py`_, et
-simplement rentrez la commande suivante :
+Extrayez l'archive et exécutez ``make`` pour l'installer::
 
-::
+    tar zxvf dnuos-*.tar.gz
+    cd dnuos-*
+    sudo make install
 
-    sudo easy_install dnuos
-
-Sinon, exécutez ``setup.py`` avec la version de Python avec qui vous
-souhaitez installer Dnuos :
-
-::
-
-    sudo python2.5 setup.py install
-
-Cela installera Dnuos sur votre dossier ``site-packages``, et installera un
-script de terminal qui est nommé ``dnuos`` (généralement dans ``/usr/bin/``
-ou ``/usr/local/bin/``).
+Cela installera un script de terminal nommé ``dnuos`` dans
+``/usr/local/bin``. (Sous Mac OS X 10.4 et les anciennes versions, il peut
+être mis dans ``/Library/Frameworks/Python.framework/Versions/Current/bin``.)
 
 Après installation, ouvrez votre terminal préféré et exécutez ``dnuos``.
 Sur Mac OS X, *Terminal* serait un bon choix (situé dans
 ``/Applications//Utilities``).
-
-
-.. _setuptools: http://peak.telecommunity.com/DevCenter/setuptools
-.. _`ez_setup.py`: http://peak.telecommunity.com/dist/ez_setup.py
 
 
 Windows
@@ -110,7 +97,7 @@ Si vous détestez la ligne de commande, vous pouvez utiliser l'un des
 front-ends graphiques suivants plutôt :
 
 dnuOSX_
-    Un front-end graphique pour Mac OS X.
+    Un front-end natif pour Mac OS X.
 Guidua_
     Un front-end graphique pour Windows.
 QtOIDUA_
@@ -126,6 +113,16 @@ QtOIDUA_
 
 Quoi de Neuf
 ============
+
+Version 1.0.6 (31 mai 2008)
+    Amélioré la portabilité du Makefile. C'est maintenant le moyen
+    recommandé pour installer Dnuos.
+
+    Corrigé l'information d'album et d'artiste pas étant rempli avec
+    les fichiers FLAC.
+
+    Corrigé des plantages possibles d'UTF-8 avec des noms de fichiers qui
+    ne sont pas encodés avec l'encodage du système de fichiers.
 
 Version 1.0.5 (5 mai 2008)
     Corrigé des plantages possibles du passage à l'UTF-8 du format du cache.
