@@ -13,6 +13,7 @@ build/dnuos::
 
 cleanbuilddir/dnuos::
 	rm -f dnuos.1
+	rm -f dnuos.fr.1
 
 clean::
 	find ./dnuos/locale -name '*.mo' -exec rm -f "{}" ';'
