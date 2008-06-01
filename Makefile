@@ -1,8 +1,14 @@
 PYTHON=python
 
+ifdef PREFIX
+PREFIX_ARG=--prefix=$(PREFIX)
+else
+
 NONLOCAL=$(shell $(PYTHON) -c 'from distutils.sysconfig import get_python_lib; print get_python_lib().startswith("/usr/lib")')
 ifeq "$(NONLOCAL)" 'True'
-	PREFIX_ARG=--prefix=/usr/local
+PREFIX_ARG=--prefix=/usr/local
+endif
+
 endif
 
 all: build
