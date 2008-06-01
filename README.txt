@@ -58,28 +58,19 @@ Run ``dnuos --help`` for a full rundown of the available options.
 Linux, Mac OS X, Unix
 ---------------------
 
-If you wish to install Dnuos with setuptools_ (which comes bundled with Mac OS
-X, for instance), download and run `ez_setup.py`_, and simply run the following
-command::
+Extract the archive and run ``make`` to install it::
 
-    sudo easy_install dnuos
+    tar zxvf dnuos-*.tar.gz
+    cd dnuos-*
+    sudo make install
 
-Otherwise, run ``setup.py`` with the version of Python you wish to install
-Dnuos with::
-
-    sudo python2.5 setup.py install
-
-This will install Dnuos into your ``site-packages`` folder, and will add a
-console script named ``dnuos`` (usually in ``/usr/bin/`` or
-``/usr/local/bin/``).
+This will install a console script named ``dnuos`` into ``/usr/local/bin``.
+(On Mac OS X 10.4 and earlier, it may get installed into
+``/Library/Frameworks/Python.framework/Versions/Current/bin``.)
 
 Once installed, open up your favorite terminal emulator and run ``dnuos``. On
 Mac OS X, *Terminal* might be a good choice (located in
 ``/Applications/Utilities/``).
-
-
-.. _setuptools: http://peak.telecommunity.com/DevCenter/setuptools
-.. _`ez_setup.py`: http://peak.telecommunity.com/dist/ez_setup.py
 
 
 Windows
@@ -117,7 +108,10 @@ QtOIDUA_
 News
 ====
 
-Version 1.0.6 (May 18, 2008)
+Version 1.0.6 (May 31, 2008)
+    Made the Makefile more consistent across platforms. This now the
+    recommended way to install Dnuos.
+
     Fixed album and artist information not being populated for FLAC files.
     (Cached directories with FLAC files will be rescanned.)
 
