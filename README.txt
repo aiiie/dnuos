@@ -58,11 +58,11 @@ Run ``dnuos --help`` for a full rundown of the available options.
 Linux, Mac OS X, Unix
 ---------------------
 
-Extract the archive and run ``make`` to install it::
+Extract the archive and run ``setup.py`` to install it::
 
     tar zxvf dnuos-*.tar.gz
     cd dnuos-*
-    sudo make install
+    sudo python setup.py install
 
 This will install a console script named ``dnuos`` into ``/usr/local/bin``.
 (On Mac OS X 10.4 and earlier, it may get installed into
@@ -108,7 +108,15 @@ QtOIDUA_
 News
 ====
 
+Version 1.0.7 (Jun. 3, 2008)
+    Added consistency improvements from the Makefile to ``setup.py``. ``make``
+    isn't always available, so ``setup.py`` is now the recommended way of
+    installing Dnuos.
+
 Version 1.0.6 (May 31, 2008)
+    Moved cache location on Linux from ``~/.dnuos`` to ``~/.cache/dnuos``
+    (``$XDG_CACHE_HOME/dnuos``).
+
     Made the Makefile more consistent across platforms. This is now the
     recommended way to install Dnuos.
 
