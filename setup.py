@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
 try:
+    raise ImportError
     from setuptools import setup, Command
     from setuptools.command.build_py import build_py
+    from setuptools.command.install import install
     extra_options = dict(
         entry_points={'console_scripts': ['dnuos = dnuos:main']},
         zip_safe=True,
@@ -10,6 +12,7 @@ try:
 except ImportError:
     from distutils.core import setup, Command
     from distutils.command.build_py import build_py
+    from distutils.command.install import install
     extra_options = dict(
         scripts=['scripts/dnuos'],
     )
@@ -93,6 +96,21 @@ class RunTests(Command):
         testpkg('dnuostests')
 
 
+class InstallLocal(install):
+    """Installs Dnuos locally"""
+
+    def finalize_options(self):
+        from distutils.sysconfig import get_config_vars
+        prefix, exec_prefix = get_config_vars('prefix', 'exec_prefix')
+        print self.prefix, prefix
+        print self.exec_prefix, exec_prefix
+        if not self.prefix and prefix == '/usr':
+            self.prefix = '/usr/local'
+        if not self.exec_prefix and exec_prefix == '/usr':
+            self.exec_prefix = '/usr/local'
+        return install.finalize_options(self)
+
+
 setup(
     author='Mattias P\xc3\xa4iv\xc3\xa4rinta, aiiie',
     author_email='pejve@vasteras2.net; aiiie@aiiie.co',
@@ -107,7 +125,8 @@ setup(
         'Topic :: Communications :: File Sharing',
         'Topic :: Multimedia :: Sound/Audio',
     ],
-    cmdclass={'build_py': LocaleBuildPy, 'test': RunTests},
+    cmdclass={'build_py': LocaleBuildPy, 'install': InstallLocal,
+              'test': RunTests},
     description='A tool for creating lists of music collections',
     download_url='https://github.com/aiiie/dnuos/archive/refs/tags/1.0.6.tar.gz',
     keywords='music collection list metadata mp3 audiolist oidua',
