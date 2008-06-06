@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 try:
-    raise ImportError
     from setuptools import setup, Command
     from setuptools.command.build_py import build_py
     from setuptools.command.install import install
