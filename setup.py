@@ -101,8 +101,6 @@ class InstallLocal(install):
     def finalize_options(self):
         from distutils.sysconfig import get_config_vars
         prefix, exec_prefix = get_config_vars('prefix', 'exec_prefix')
-        print self.prefix, prefix
-        print self.exec_prefix, exec_prefix
         if not self.prefix and prefix == '/usr':
             self.prefix = '/usr/local'
         if not self.exec_prefix and exec_prefix == '/usr':
