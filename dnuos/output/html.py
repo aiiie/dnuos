@@ -2,6 +2,7 @@
 
 from cgi import escape
 
+import dnuos
 from dnuos.misc import _
 from dnuos.output import plaintext
 from dnuos.output.abstract_renderer import AbstractRenderer
@@ -41,7 +42,7 @@ body { color: %s; background: %s; }
 </style>
 </head>
 <body>
-<pre>""" % (_('en'), data.version, _('Music List'),
+<pre>""" % (_('en'), dnuos.__version__, _('Music List'),
             options.text_color, options.bg_color)
 
         for chunk in self.renderer.render(dir_pairs, options, data):
