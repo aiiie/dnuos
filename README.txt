@@ -108,6 +108,10 @@ QtOIDUA_
 News
 ====
 
+Version 1.0.8 (Jun. 16, 2008)
+    Fixed crashes on Unix platforms with directory names that have
+    characters that aren't valid for the file system's character encoding.
+
 Version 1.0.7 (Jun. 3, 2008)
     Added consistency improvements from the Makefile to ``setup.py``. ``make``
     isn't always available, so ``setup.py`` is now the recommended way of

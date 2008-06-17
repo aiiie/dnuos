@@ -114,6 +114,11 @@ QtOIDUA_
 Quoi de Neuf
 ============
 
+Version 1.0.8 (16 jui. 2008)
+    Corrigé des plantages sous les environnements Unix avec les noms de
+    dossiers qui ont des caractères qui ne sont pas compatibles avec
+    l'encodage du système de fichiers.
+
 Version 1.0.7 (3 jui. 2008)
     Ajouté les améliorations de portabilité du Makefile à ``setup.py``.
     ``make`` n'est pas toujours disponible, donc ``setup.py`` est maintenant

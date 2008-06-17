@@ -1,6 +1,6 @@
 """Script for gathering information about directories of audio files"""
 
-__version__ = '1.0.7'
+__version__ = '1.0.8'
 
 import os
 import sys
