@@ -11,12 +11,30 @@ a different encoding, due to decoding to unicode beforehand.
 """
 
 import os
-
+import sys
 
 def listdir(path):
 
+    try:
+        path = path.decode('utf-8')
+    except UnicodeError:
+        # Try to emulate the behavior of os.listdir(u'...') if the path isn't
+        # valid for the FS encoding. There's nothing we can do on Windows as
+        # os.listdir uses non-wchar APIs for strs.
+        if sys.platform == 'win32':
+            raise
+
+        fsenc = sys.getfilesystemencoding().lower()
+        paths = []
+        for p in os.listdir(path):
+            try:
+                paths.append(p.decode(fsenc).encode('utf-8'))
+            except UnicodeError:
+                paths.append(p)
+        return paths
+
     paths = []
-    for p in os.listdir(path.decode('utf-8')):
+    for p in os.listdir(path):
         # Don't encode paths that aren't Unicode. os.listdir will return str
         # objects for any paths it couldn't decode to unicode objects (see
         # http://bugs.python.org/issue683592).
