@@ -1,21 +1,10 @@
 #!/usr/bin/env python
 
-try:
-    from setuptools import setup, Command
-    from setuptools.command.build_py import build_py
-    from setuptools.command.install import install
-    extra_options = dict(
-        entry_points={'console_scripts': ['dnuos = dnuos:main']},
-        zip_safe=True,
-    )
-except ImportError:
-    from distutils.core import setup, Command
-    from distutils.command.build_py import build_py
-    from distutils.command.install import install
-    extra_options = dict(
-        scripts=['scripts/dnuos'],
-    )
+from distutils.core import setup, Command
+from distutils.command.build_py import build_py as old_build_py
+from distutils.command.install import install as old_install
 
+extra_options = {}
 package_data = {'dnuos': ['locale/*/LC_MESSAGES/*.mo']}
 
 try:
@@ -33,11 +22,10 @@ except ImportError:
     pass
 
 
-class LocaleBuildPy(build_py):
+class build_py(old_build_py):
     """Build locale data automatically"""
 
     def run(self):
-
         from glob import glob
         from msgfmt import compile_catalog
         for path in glob('./dnuos/locale/*/LC_MESSAGES/*.po'):
@@ -57,7 +45,6 @@ def testpkg(path):
     for module in modules:
         if module.endswith('__init__.py'):
             continue
-            module = module[:-len(os.path.sep + '__init__.py')]
         module = os.path.splitext(module)[0]
         module = module.replace(os.path.sep, '.')
         justmodule = module.split('.', 1)[1]
@@ -73,7 +60,7 @@ def testpkg(path):
     print ''
 
 
-class RunTests(Command):
+class test(Command):
     """Runs test suite"""
 
     description = 'Runs test suite'
@@ -90,12 +77,11 @@ class RunTests(Command):
         os.environ['DATA_DIR'] = self.data_dir
 
     def run(self):
-
         testpkg('dnuos')
         testpkg('dnuostests')
 
 
-class InstallLocal(install):
+class install(old_install):
     """Installs Dnuos locally"""
 
     def finalize_options(self):
@@ -122,8 +108,7 @@ setup(
         'Topic :: Communications :: File Sharing',
         'Topic :: Multimedia :: Sound/Audio',
     ],
-    cmdclass={'build_py': LocaleBuildPy, 'install': InstallLocal,
-              'test': RunTests},
+    cmdclass={'build_py': build_py, 'install': install, 'test': test},
     description='A tool for creating lists of music collections',
     download_url='http://dnuos.tweek.us/files/dnuos-1.0.8.tar.gz',
     keywords='music collection list metadata mp3 audiolist oidua',
@@ -167,6 +152,7 @@ older, has fewer features, and is no longer maintained.
     name='dnuos',
     packages=['dnuos', 'dnuos.id3', 'dnuos.output'],
     package_data=package_data,
+    scripts=['scripts/dnuos'],
     url='http://dnuos.tweek.us/',
     version='1.0.8',
     **extra_options
