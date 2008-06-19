@@ -30,7 +30,7 @@ class build_py(old_build_py):
         from msgfmt import compile_catalog
         for path in glob('./dnuos/locale/*/LC_MESSAGES/*.po'):
             compile_catalog(path)
-        return build_py.run(self)
+        return old_build_py.run(self)
 
 
 def testpkg(path):
@@ -91,7 +91,7 @@ class install(old_install):
             self.prefix = '/usr/local'
         if not self.exec_prefix and exec_prefix == '/usr':
             self.exec_prefix = '/usr/local'
-        return install.finalize_options(self)
+        return old_install.finalize_options(self)
 
 
 setup(
