@@ -1,8 +1,5 @@
-Dnuos
-=====
-
-A Propos
---------
+Dnuos : Faire une liste !
+=========================
 
 Dnuos est un programme de terminal qui fait des listes des collections
 de la musique, par la structure des dossiers.
