@@ -23,14 +23,14 @@ except ImportError:
 
 
 class build_py(old_build_py):
-    """Build locale data automatically"""
+    """Builds locale data automatically"""
 
     def run(self):
         from glob import glob
         from msgfmt import compile_catalog
         for path in glob('./dnuos/locale/*/LC_MESSAGES/*.po'):
             compile_catalog(path)
-        return old_build_py.run(self)
+        old_build_py.run(self)
 
 
 def testpkg(path):
@@ -91,7 +91,7 @@ class install(old_install):
             self.prefix = '/usr/local'
         if not self.exec_prefix and exec_prefix == '/usr':
             self.exec_prefix = '/usr/local'
-        return old_install.finalize_options(self)
+        old_install.finalize_options(self)
 
 
 setup(
