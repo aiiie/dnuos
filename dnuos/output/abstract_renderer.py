@@ -21,26 +21,27 @@ class Column(object):
     def __init__(self, tag, width, suffix, options):
 
         attr_table = {
-            "a": (_('Bitrate(s)'), lambda adir: adir.audiolist_format),
+            "a": (_('Bitrate(s)'), lambda adir, **kw: adir.audiolist_format),
             "A": (_('Artist'), self._get_artist),
-            "b": (_('Bitrate'), lambda adir: adir.bitrate),
-            "B": (_('Bitrate'), lambda adir: adir.bitrate),
+            "b": (_('Bitrate'), lambda adir, **kw: adir.bitrate),
+            "B": (_('Bitrate'), lambda adir, **kw: adir.bitrate),
             "C": (_('Album'), self._get_album),
-            "f": (_('Files'), lambda adir: adir.num_files),
-            "l": (_('Length'), lambda adir: adir.length),
-            "L": (_('Length'), lambda adir: adir.length),
-            "m": (_('Modified'), lambda adir: adir.modified),
-            "M": (_('Modified'), lambda adir: adir.modified),
-            "n": (_('Album/Artist'), lambda adir: adir.name),
-            "N": (_('Album/Artist'), lambda adir: adir.name),
+            "D": (_('Depth'), lambda adir, **kw: kw['depth']),
+            "f": (_('Files'), lambda adir, **kw: adir.num_files),
+            "l": (_('Length'), lambda adir, **kw: adir.length),
+            "L": (_('Length'), lambda adir, **kw: adir.length),
+            "m": (_('Modified'), lambda adir, **kw: adir.modified),
+            "M": (_('Modified'), lambda adir, **kw: adir.modified),
+            "n": (_('Album/Artist'), lambda adir, **kw: adir.name),
+            "N": (_('Album/Artist'), lambda adir, **kw: adir.name),
             "p": (_('Profile'), self._get_profile),
-            "P": (_('Path'), lambda adir: adir.path),
-            "q": (_('Quality'), lambda adir: adir.quality),
-            "s": (_('Size'), lambda adir: adir.size),
-            "S": (_('Size'), lambda adir: adir.size),
-            "t": (_('Type'), lambda adir: adir.mediatype),
-            "T": (_('BR Type'), lambda adir: adir.brtype),
-            "V": (_('Encoder'), lambda adir: adir.vendor),
+            "P": (_('Path'), lambda adir, **kw: adir.path),
+            "q": (_('Quality'), lambda adir, **kw: adir.quality),
+            "s": (_('Size'), lambda adir, **kw: adir.size),
+            "S": (_('Size'), lambda adir, **kw: adir.size),
+            "t": (_('Type'), lambda adir, **kw: adir.mediatype),
+            "T": (_('BR Type'), lambda adir, **kw: adir.brtype),
+            "V": (_('Encoder'), lambda adir, **kw: adir.vendor),
         }
 
         formatter_table = {
@@ -100,7 +101,7 @@ class Column(object):
                 pass
         return None
 
-    def _get_artist(self, adir):
+    def _get_artist(self, adir, **kw):
         data = adir.artists
         if data is not None:
             keys, encoder = self._get_tag_keys(data)
@@ -109,7 +110,7 @@ class Column(object):
                 return encoder(value)
         return None
 
-    def _get_album(self, adir):
+    def _get_album(self, adir, **kw):
         data = adir.albums
         if data is not None:
             keys, encoder = self._get_tag_keys(data)
@@ -118,7 +119,7 @@ class Column(object):
                 return encoder(value)
         return None
 
-    def _get_profile(self, adir):
+    def _get_profile(self, adir, **kw):
         return adir.profile
 
     def _format(self, data, suffixes):
@@ -145,11 +146,12 @@ class Column(object):
 
     def get_formatted(self, adir, root, suffixes=True):
 
-        data = self.get(adir)
+        depth = adir.depth_from(root)
+        data = self.get(adir, depth=depth)
         if data is None:
             data = ''
         else:
-            data = str(self.formatter(data, adir.depth_from(root)))
+            data = str(self.formatter(data, depth))
         return self._format(data, suffixes)
 
 
