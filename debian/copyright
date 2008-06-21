@@ -1,7 +1,7 @@
 This package was debianized by Brodie Rao <me+dnuos@dackz.net> on
 Sun, 24 Feb 2008 20:32:58 -0500.
 
-It was downloaded from http://dnuos.tweek.us/files/
+It was downloaded from http://bitheap.org/dnuos/
 
 Upstream Authors: Mattias Päivärinta, Brodie Rao
 
@@ -14,12 +14,12 @@ License:
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License with
    the Debian GNU/Linux distribution in file /usr/share/common-licenses/GPL;
    if not, write to the Free Software Foundation, Inc., 51 Franklin St,

@@ -110,7 +110,7 @@ setup(
     ],
     cmdclass={'build_py': build_py, 'install': install, 'test': test},
     description='A tool for creating lists of music collections',
-    download_url='http://dnuos.tweek.us/files/dnuos-1.0.8.tar.gz',
+    download_url='http://bitheap.org/dnuos/files/dnuos-1.0.8.tar.gz',
     keywords='music collection list metadata mp3 audiolist oidua',
     license='GNU GPL',
     long_description="""
@@ -153,7 +153,7 @@ older, has fewer features, and is no longer maintained.
     packages=['dnuos', 'dnuos.id3', 'dnuos.output'],
     package_data=package_data,
     scripts=['scripts/dnuos'],
-    url='http://dnuos.tweek.us/',
+    url='http://bitheap.org/dnuos/',
     version='1.0.8',
     **extra_options
 )

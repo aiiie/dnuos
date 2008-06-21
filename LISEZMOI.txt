@@ -1,18 +1,13 @@
-=======
- Dnuos
-=======
-
-.. contents::
+Dnuos
+=====
 
 A Propos
-========
+--------
 
 Dnuos est un programme de terminal qui fait des listes des collections
 de la musique, par la structure des dossiers.
 
 Par exemple, une liste pourrait ressembler à ceci :
-
-::
 
     Album/Artiste                      | Taill | Type | Qualité
     ===========================================================
@@ -32,329 +27,179 @@ brut ou HTML.
 
 Dnuos s'appuie MP3, AAC, Musepack, Ogg Vorbis, et FLAC. Détection du profil
 de qualité est appuyé aussi, y compris l'information du
-`LAME quality preset`_.
+[LAME quality preset][].
 
 Informations sur les fichiers audio sont enregistrées sur le disque après
 une liste est initialement faite, ce qui accélère faire de prochaines listes.
 Seulement les fichiers audio et les dossiers qui ont étés modifiés depuis
 la dernière liste a été faite.
 
-Dnuos est basé sur le code d'`Oidua`_. Oidua peut faire des listes
+Dnuos est basé sur le code d'[Oidua][]. Oidua peut faire des listes
 similaires, mais c'est trop vieux et n'est plus maintenu.
 
-.. _LAME quality preset: http://wiki.hydrogenaudio.org/index.php?title=Lame#Recommended_encoder_settings
-.. _Oidua: http://oidua.suxbad.com/
+[LAME quality preset]: http://wiki.hydrogenaudio.org/index.php?title=Lame#Recommended_encoder_settings
+[Oidua]: http://oidua.suxbad.com/
 
 
 Télécharger
-===========
+-----------
 
-Les versions peuvent être trouvées à http://dnuos.tweek.us/files/.
+Les versions peuvent être trouvées à <http://bitheap.org/dnuos/files/>.
 
 
 Installation/Usage
-==================
+------------------
 
-Exécutez ``dnuos --help`` pour information détaillée sur toutes les options.
+Exécutez `dnuos --help` pour information détaillée sur toutes les options.
 
+### Linux, Mac OS X, Unix
 
-Linux, Mac OS X, Unix
----------------------
-
-Extrayez l'archive et exécutez ``setup.py`` pour l'installer::
+Extrayez l'archive et exécutez `setup.py` pour l'installer::
 
     tar zxvf dnuos-*.tar.gz
     cd dnuos-*
     sudo python setup.py install
 
-Cela installera un script de terminal nommé ``dnuos`` dans
-``/usr/local/bin``. (Sous Mac OS X 10.4 et les anciennes versions, il peut
-être mis dans ``/Library/Frameworks/Python.framework/Versions/Current/bin``.)
+Cela installera un script de terminal nommé `dnuos` dans
+`/usr/local/bin`. (Sous Mac OS X 10.4 et les anciennes versions, il peut
+être mis dans `/Library/Frameworks/Python.framework/Versions/Current/bin`.)
 
-Après installation, ouvrez votre terminal préféré et exécutez ``dnuos``.
+Après installation, ouvrez votre terminal préféré et exécutez `dnuos`.
 Sur Mac OS X, *Terminal* serait un bon choix (situé dans
-``/Applications//Utilities``).
+`/Applications//Utilities`).
 
 
-Windows
--------
+### Windows
 
 Il n'y a pas d'installation. Simplement extrayez le fichier zip où vous
 souhaitez l'installer. Vous pouvez exécuter l'application à la ligne de
-commande avec ``dnuos.exe``.
+commande avec `dnuos.exe`.
 
 Après vous avez extrait Dnuos, appuyez simultanément sur les touches Windows
 et R pour ouvrir le dialogue *Run*. Tapez *cmd* et appuyez enter pour
 lancer la ligne de commande. Ensuite tapez la lettre de disque où
-l'exécutable est placé et ``cd`` au dossier avec l'exécutable. Ici,
-simplement exécutez ``dnuos.exe``.
+l'exécutable est placé et `cd` au dossier avec l'exécutable. Ici,
+simplement exécutez `dnuos.exe`.
 
 
-Front-ends Graphiques
----------------------
+### Front-ends Graphiques
 
 Si vous détestez la ligne de commande, vous pouvez utiliser l'un des
 front-ends graphiques suivants plutôt :
 
-dnuOSX_
-    Un front-end natif pour Mac OS X.
-Guidua_
-    Un front-end graphique pour Windows.
-QtOIDUA_
-    Un front-end graphique pour Linux et Mac OS X. (Note : Les versions 0.08
-    et les anciennes versions ont un bogue qui empêche l'opération QtOIDUA
-    avec Dnuos 1.0.)
+* [dnuOSX][] - Un front-end natif pour Mac OS X.
+* [Guidua][] - Un front-end graphique pour Windows.
+* [QtOIDUA][] - Un front-end graphique pour Linux et Mac OS X.
+  (Note : Les versions 0.08 et les anciennes versions ont un bogue qui
+  empêche l'opération QtOIDUA avec Dnuos 1.0.)
 
-
-.. _dnuOSX: http://www.facepwn.com/MacRequest/dnuOSX.html
-.. _Guidua: http://oidua.suxbad.com/setup_guidua_0.16.exe
-.. _QtOIDUA: http://www.spoonfedmonkey.com/software/qtoidua/
+[dnuOSX]: http://www.facepwn.com/MacRequest/dnuOSX.html
+[Guidua]: http://oidua.suxbad.com/setup_guidua_0.16.exe
+[QtOIDUA]: http://www.spoonfedmonkey.com/software/qtoidua/
 
 
 Quoi de Neuf
-============
-
-Version 1.0.8 (16 jui. 2008)
-    Corrigé des plantages sous les environnements Unix avec les noms de
-    dossiers qui ont des caractères qui ne sont pas compatibles avec
-    l'encodage du système de fichiers.
-
-Version 1.0.7 (3 jui. 2008)
-    Ajouté les améliorations de portabilité du Makefile à ``setup.py``.
-    ``make`` n'est pas toujours disponible, donc ``setup.py`` est maintenant
-    recommandé.
-
-Version 1.0.6 (31 mai 2008)
-    Changé le lieu du cache sous Linux de ``~/.dnuos`` à ``~/.cache/dnuos``
-    (``$XDG_CACHE_HOME/dnuos``).
-
-    Amélioré la portabilité du Makefile. C'est maintenant le moyen
-    recommandé pour installer Dnuos.
-
-    Corrigé l'information d'album et d'artiste pas étant rempli avec
-    les fichiers FLAC.
-
-    Corrigé des plantages possibles d'UTF-8 avec des noms de fichiers qui
-    ne sont pas encodés avec l'encodage du système de fichiers.
-
-Version 1.0.5 (5 mai 2008)
-    Corrigé des plantages possibles du passage à l'UTF-8 du format du cache.
-
-Version 1.0.4 (4 mai 2008)
-    Fortement amélioré l'appui pour les noms de fichiers et dossiers avec
-    des caractères Unicode sous Windows. Dnuos devrait maintenant être
-    capable de scanner des dossiers et ouvrir des fichiers avec des
-    caractères Unicode dans leurs noms, et des caractères Unicode
-    peuvent maintenant être utilisés dans des arguments de ligne de
-    commande.
-
-    Amélioré l'appui du format du cache entre les versions de Python.
-
-Version 1.0.3 (27 avr. 2008)
-    Corrigé un plantage avec des variables locales mal formés
-    d'environnement (par ex. ``LANG``, ``LC_ALL``, etc.)
-
-    Corrigé la sortie incorrecte lorsque scanner des dossiers racines sous
-    Windows (par ex. ``C:\``).
-
-Version 1.0.2 (29 mar. 2008)
-    Corrigé ``-V``/``--version`` ne fonctionne pas avec la sortie normale.
-
-Version 1.0.1 (24 mar. 2008)
-    Amélioré la sortie des tags ID3 avec des caractères null.
-
-    Corrigé la compatilibité Python 2.3.
-
-    Corrigé un plantage possible avec le cache sous certains
-    environnements Mac OS X.
-
-Version 1.0 (20 mar. 2008)
-    Ajouté ``--delete-cache`` pour supprimer le dossier du cache et
-    ``--cull-cache`` pour supprimer des dossiers non-existants cachés.
-
-    Mis à jour la traduction française.
-
-Version 1.0b7 (10 mar. 2008)
-    Mis à jour la traduction française avec des corrections.
-
-    Corrigé un plantage avec l'affichage des tailles en téraoctects ou plus
-    grand.
-
-    Corrigé des plantages avec encodage Unicode. L'UTF-8 est maintenant
-    utilisé inconditionnellement.
-
-Version 1.0b6 (24 fév. 2008)
-    Corrigé un plantage de la création du cache sous Windows.
-
-Version 1.0b5 (23 fév. 2008)
-    Ajouté l'option ``-L``/``--list-files`` pour lister les fichiers
-    individuels dans des dossiers. Néanmoins, l'information des fichiers
-    individuels n'est pas caché.
-
-    Ajouté l'option ``-u``/``--unknown-types`` pour lister les dossiers avec
-    les fichiers non soutenus.
-
-    Corrigé un plantage de la création du cache.
-
-Version 1.0b4 (22 fév. 2008)
-    Ajouté l'appui pour le formatage des dombres par les paramètres régionaux.
-
-    Corrigé un plantage avec le basile Audiolist et les MP3 VBR.
-
-    Corrigé un plantage avec les dossiers inaccessibles (ils sont ignorés
-    maintenant).
-
-    Ajouté l'appui pour traduction avec gettext.
-
-    Ajouté une traduction française.
-
-    Corrigé une erreur théorique de la division par zéro avec
-    ``-t``/``--time``.
-
-    Corrigé des problèmes du cache ne cache pas correctement (et les dossiers
-    inexistantes sont maintenant cueillis).
-
-    Amélioré l'implémentation de cache alors qu'il est chargé
-    incrémentalement au lieu de tous ensemble avant la sortie d'une liste.
-
-    Corrigé l'option ``-e`` (exclure des dossiers) ne pas fonctionner avec des
-    chemins relatifs.
-
-    Corrigé un plantage avec ``-w``/``--wildcards``.
-
-    Corrigé ``-m``/``--merge`` ne pas fonctionner correctement sur Windows.
-
-    Amélioré la couverture de code des tests unitaires et corrigé des
-    problèmes avec la portabilité de Windows.
-
-Version 1.0b3 (26 déc. 2007)
-    Ajouté l'appui pour l'enregistrement du cache, même lorsque Dnuos
-    est interrompu.
-
-    Renommé ``-p``/``--parallel`` à ``-m``/``--merge``. Il a la même
-    fonction.
-
-    Corrigé ``-i``/``--ignore-case`` ne pas fonctionner.
-
-    Des améliorations marginales de vitesse avec le code de ``audiotype``
-    et de ``id3``.
-
-    Supprimé une grande quantité de code inutilisé dans le paquet ``id3``.
-
-    Corrigé un plantage possible avec la nouvelle balise de vendeur.
-
-    Corrigé des erreurs d'analyse avec les fichiers Ogg Vorbis et ajouté
-    l'appui pour la balise de vendeur.
-
-    Réduit la taille du paquet win32.
-
-Version 1.0b2 (7 déc. 2007)
-    Mis à jour et simplifié la documentation.
-
-    Corrigé ``setup.py sdist`` ne pas inclure tous les fichiers.
-
-    Corrigé le traitement des MP3 avec l'en-tête VBRI (par ex. fait par
-    Fraunhofer).
-
-    Corrigé des problèmes sérieux avec le code ID3 qui probablement le
-    rendent brisé.
-
-    Corrigé l'importation de ``set()`` (qui devrait améliorer la
-    compatibilité avec Python 2.3).
-
-    Échangé d'usage de ``pickle`` avec ``cPickle`` (quand il existe) et
-    opté pour le format le plus efficace de ``pickle`` (qui devrait
-    accélérer Dnuos grandement).
-
-    Fait la recherche du dossier de cache plus robuste.
-
-    Ajouté l'appui pour enregistrer le cache durant exécution, donc si
-    vous terminez de faire d'une liste, il cache ce qui a déjà été
-    listé.
-
-    Ajouté un message simple d'erreur pour des chaînes de sortie avec
-    des champs invalides.
-
-    Créé un Makefile qui exécute ``setup.py``.
-
-Version 1.0b1 (2 déc. 2007)
-    Beaucoup d'améliorations du code.
-
-    Ajouté le cachage des métadonnées audio.
-
-    Ajouté la capacité pour filtrer les dossiers avec des fichiers
-    mélangés.
-
-    Ajouté le bon appui pour ``distutils``/``setuptools``.
-
-    Ajouté l'appui pour calculer les bitrates des fichiers AAC.
-
-    Ajouté une balise de sortie ``V`` qui affiche l'information du
-    encodeur (actuellement seulement pour MP3).
-
-    Nettoyé le message d'aide (il utilise ``optparse`` maintenant).
-
-    Supprimé l'option ``-m``/``--merge``.
-
-    Supprimé l'appui pour Python 2.2.
-
-Version 0.94 (16 jan. 2006)
-    Corrigé les problèmes avec endianness sur les machines utilisées
-    big-endian.
-
-Version 0.93 (13 jan. 2006)
-    Corrigé une régression avec détection de l'en-tête MP3.
-
-    Ajouté l'appui expérimental de l'en-tête VBRI.
-
-Version 0.92 (13 jan. 2006)
-    Les options ``-l`` (les MP3 LAME seulement) et ``-v`` (les MP3 VBR
-    seulement) maintenant fonctionnent dans la sortie normale.
-
-    Ajouté l'option ``-b`` qui permet filtrer des MP3 avec les bitrates
-    moins que ce qui est spécifié par ``-b``.
-
-Version 0.91 (12 jan. 2006)
-    Fait la recherche de l'en-tête MP3 plus robuste. Les MP3 encodés
-    à ``-V 9`` avec LAME 3.97b1 ne peuvent plus se confondre.
-
-Version 0.9 (11 jan. 2006)
-    Finalement branché Oidua ! Ceci est maintenant DNUOS !
+------------
+
+### Version 1.0.8 (16 jui. 2008
+
+* Corrigé des plantages sous les environnements Unix avec les noms de
+  dossiers qui ont des caractères qui ne sont pas compatibles avec
+  l'encodage du système de fichiers.
+
+### Version 1.0.7 (3 jui. 2008)
+
+* Ajouté les améliorations de portabilité du Makefile à `setup.py`.
+  `make` n'est pas toujours disponible, donc `setup.py` est maintenant
+  recommandé.
+
+### Version 1.0.6 (31 mai 2008)
+
+* Changé le lieu du cache sous Linux de `~/.dnuos` à `~/.cache/dnuos`
+  (`$XDG_CACHE_HOME/dnuos`).
+* Amélioré la portabilité du Makefile. C'est maintenant le moyen
+  recommandé pour installer Dnuos.
+* Corrigé l'information d'album et d'artiste pas étant rempli avec
+  les fichiers FLAC.
+* Corrigé des plantages possibles d'UTF-8 avec des noms de fichiers qui
+  ne sont pas encodés avec l'encodage du système de fichiers.
+
+### Version 1.0.5 (5 mai 2008)
+
+* Corrigé des plantages possibles du passage à l'UTF-8 du format du cache.
+
+### Version 1.0.4 (4 mai 2008)
+
+* Fortement amélioré l'appui pour les noms de fichiers et dossiers avec
+  des caractères Unicode sous Windows. Dnuos devrait maintenant être
+  capable de scanner des dossiers et ouvrir des fichiers avec des
+  caractères Unicode dans leurs noms, et des caractères Unicode
+  peuvent maintenant être utilisés dans des arguments de ligne de
+  commande.
+* Amélioré l'appui du format du cache entre les versions de Python.
+
+### Version 1.0.3 (27 avr. 2008)
+
+* Corrigé un plantage avec des variables locales mal formés
+  d'environnement (par ex. `LANG`, `LC_ALL`, etc.)
+* Corrigé la sortie incorrecte lorsque scanner des dossiers racines sous
+  Windows (par ex. `C:\`).
+
+### Version 1.0.2 (29 mar. 2008)
+
+* Corrigé `-V`/`--version` ne fonctionne pas avec la sortie normale.
+
+### Version 1.0.1 (24 mar. 2008)
+
+* Amélioré la sortie des tags ID3 avec des caractères null.
+* Corrigé la compatilibité Python 2.3.
+* Corrigé un plantage possible avec le cache sous certains
+  environnements Mac OS X.
+
+### Version 1.0 (20 mar. 2008)
+
+* Ajouté le cachage des métadonnées audio.
+* Ajouté une traduction française et l'appui pour le formatage des nombres par
+  les paramètres régionaux.
+* Ajouté `-L`/`--list-files` pour lister les fichiers individuels dans des
+  dossiers. Néanmoins, l'information des fichiers individuels n'est pas caché.
+* Ajouté `-u`/`--unknown-types` pour lister les dossiers avec les fichiers
+  non soutenus.
+* Ajouté l'appui pour calculer les bitrates des fichiers AAC.
+* Ajouté une balise de sortie `[V]` qui affiche l'information du encodeur
+  (actuellement seulement pour MP3).
+* Corrigé le traitement des MP3 avec l'en-tête VBRI (par ex. fait par
+  Fraunhofer).
+* Nettoyé les messages d'aide.
+* Supprimé l'appui pour Python 2.2.
 
 
 Développement
-=============
+-------------
 
 Le stockage officiel de développement peut être trouvé à
-http://dnuos.tweek.us/hg/. Avec Mercurial_, exécutez :
+<http://bitheap.org/hg/dnuos>. Avec [Mercurial][], exécutez :
 
-::
+    hg clone http://bitheap.org/hg/dnuos/
 
-    hg clone http://dnuos.tweek.us/hg/
-
-Exécuter l'ensemble des tests unitaires exige les `données de test`_ (dans
-le même dossier que ``setup.py``). Après que vous l'avez, vous pouvez
+Exécuter l'ensemble des tests unitaires exige les [données de test][] (dans
+le même dossier que `setup.py`). Après que vous l'avez, vous pouvez
 exécuter les tests avec la commande suivante :
-
-::
 
     python setup.py test
 
-Si vous trouvez aucun de problèmes, soumettez une fiche sur le `site Trac`_.
+Si vous trouvez aucun de problèmes, soumettez une fiche sur le [site Trac][].
 Ce site est pour le développement et non pas d'assistance, donc ne soumettez
 pas de fiches d'assistance.
 
-
-.. _Mercurial: http://www.selenic.com/mercurial/
-.. _nose: http://somethingaboutorange.com/mrl/projects/nose/
-.. _données de test: http://dnuos.tweek.us/files/testdata.zip
-.. _site Trac: http://dnuos.tweek.us/trac/
+[Mercurial]: http://www.selenic.com/mercurial/
+[données de test]: http://bitheap.org/dnuos/files/testdata.zip
+[site Trac]: http://bitheap.org/dnuos/trac/
 
 
 Contacter
-=========
+---------
 
-`Mattias Päivärinta <pejve at vasteras2 dot net>`_
-    Programmeur principal.
-`Brodie Rao <me+dnuos at dackz dot net>`_
-    Mainteneur du projet.
+* [Mattias Päivärinta](mailto:pejve à vasteras2 point net) - Programmeur
+  principal
+* [Brodie Rao](mailto:me+dnuos à dackz point net) - Mainteneur du projet
