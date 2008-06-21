@@ -1,8 +1,5 @@
-Dnuos
-=====
-
-About
------
+Dnuos: Make a list!
+===================
 
 Dnuos is a console program that creates lists of music collections, based on
 directory structure.
