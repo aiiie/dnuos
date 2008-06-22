@@ -33,7 +33,7 @@ def print_help(option, opt_str, value, parser):
 def exit_with_output_help(option, opt_str, value, parser):
     """Prints output help and exits program"""
 
-    print _("""
+    print _(r"""
 Anything enclosed by brackets is considered a field. A field must have the
 following syntax:
   [TAG]
@@ -47,7 +47,7 @@ TAG is any of the following characters:
   b  bitrate with suffix (e.g. 192k)
   B  bitrate in bps
   C  album name as found in ID3 tags
-  d  depth; distance from respective basedir
+  D  depth; distance from respective basedir
   f  number of audio files (including spacers)
   l  length in minutes and seconds
   L  length in seconds
@@ -75,10 +75,10 @@ always done on the right.
 SUFFIX lets you specify a unit to be concatenated to all non-empty data.
 
 Other interpreted sequences are:
-  \\[  [
-  \\]  ]
-  \\n  new line
-  \\t  tab character
+  \[  [
+  \]  ]
+  \n  new line
+  \t  tab character
 
 Unescaped brackets are forbidden unless they define a field.
 
