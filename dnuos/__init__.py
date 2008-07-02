@@ -149,8 +149,8 @@ def _win32_utf8_argv():
         pass
 
 
-def _main(argv=None, locale=None):
-    """Real main entry point"""
+def main(argv=None, locale=None):
+    """Main entry point"""
 
     import locale as locale_
     try:
@@ -247,17 +247,6 @@ def _main(argv=None, locale=None):
                 print >> sys.stderr, _('Use the --disable-cache switch to '
                                        'disable caching')
                 return 2
-
-
-def main(argv=None, locale=None):
-    """main() wrapper that catches KeyboardInterrupt and SystemExit"""
-
-    try:
-        sys.exit(_main(argv, locale))
-    except SystemExit:
-        pass
-    except KeyboardInterrupt:
-        print ''
 
 
 def indicate_progress(dir_pairs, sizes, outs=sys.stderr):
