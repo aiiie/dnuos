@@ -188,5 +188,9 @@ requests there.
 Contact
 -------
 
-* [Mattias Päivärinta](mailto:pejve at vasteras2 dot net) - Senior programmer
 * [aiiie](mailto:aiiie at aiiie dot co) - Project maintainer
+
+### Past Contributors
+
+* [Mattias Päivärinta](mailto:pejve at vasteras2 dot net)
+* frunksock
