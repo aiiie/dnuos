@@ -188,5 +188,9 @@ requests there.
 Contact
 -------
 
-* [Mattias Päivärinta](mailto:pejve at vasteras2 dot net) - Senior programmer
 * [Brodie Rao](mailto:me+dnuos at dackz dot net) - Project maintainer
+
+### Past Contributors
+
+* [Mattias Päivärinta](mailto:pejve at vasteras2 dot net)
+* frunksock

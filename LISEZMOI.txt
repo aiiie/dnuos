@@ -197,6 +197,9 @@ pas de fiches d'assistance.
 Contacter
 ---------
 
-* [Mattias Päivärinta](mailto:pejve à vasteras2 point net) - Programmeur
-  principal
 * [Brodie Rao](mailto:me+dnuos à dackz point net) - Mainteneur du projet
+
+### Contributeurs Passés
+
+* [Mattias Päivärinta](mailto:pejve à vasteras2 point net)
+* frunksock
