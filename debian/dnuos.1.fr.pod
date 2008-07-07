@@ -265,6 +265,10 @@ Le bitrate en ops.
 
 Le nom d'album spécifié dans les balises ID3.
 
+=item C<D>
+
+Profondeur ; la distance du basedir respectif.
+
 =item C<f>
 
 Le nombre de fichiers audio (incluant des spaceurs).

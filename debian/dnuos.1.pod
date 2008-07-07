@@ -262,6 +262,10 @@ Bitrate in bps.
 
 Album name as found in ID3 tags.
 
+=item C<D>
+
+Depth; distance from respective basedir.
+
 =item C<f>
 
 Number of audio files (including spacers).
