@@ -3,7 +3,5 @@ import sys
 import dnuos
 try:
     sys.exit(dnuos.main())
-except SystemExit:
-    pass
-except KeyboardInterrupt:
+except (KeyboardInterrupt, SystemExit):
     pass
