@@ -19,9 +19,12 @@ class Dir(object):
 
     valid_types = ['mp3', 'mpc', 'mp+', 'm4a', 'ogg', 'flac', 'fla', 'flc']
 
+    # Note: The order of these values is significant as only a list of
+    # attribute values is pickled to the database.
     __slots__ = ('albums', 'artists', '_audio_files', '_bad_files',
                  '_bitrates', '_lengths', '_types', 'modified', 'path',
                  '_profiles', 'sizes', '_vendors')
+
     __version__ = '1.0.6'
 
     def __init__(self, path):
