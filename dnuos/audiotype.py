@@ -464,9 +464,10 @@ class MP3(AudioType):
         res = {}
         if self.mp3header[6][:4] == "LAME":
             try:
-                version = float(self.mp3header[6][4:8])
+                major, minor = self.mp3header[6][4:8].split('.')
+                version = (int(major), int(minor))
             except ValueError:
-                version = -1
+                version = (-1, 0)
             vbrmethod = self.mp3header[7] & 15
             lowpass = self.mp3header[8]
             ath = self.mp3header[9] & 15
@@ -498,12 +499,12 @@ class MP3(AudioType):
                     res["lame"] = "-apm"
                 elif preset == 1007:
                     res["lame"] = "-apfm"
-            elif version < 3.90 and version > 0: # lame version
+            elif version < (3, 90) and version > (0, 0):
                 if vbrmethod == 8:  # unknown
                     if lowpass in (97, 98):
                         if ath == 0:
                             res["lame"] = "-r3mix"
-            elif version >= 3.90 and version < 3.97: # lame version
+            elif version >= (3, 90) and version < (3, 97):
                 if vbrmethod == 3:  # vbr-old / vbr-rh
                     if lowpass in (195, 196):
                         if ath in (2, 4):
