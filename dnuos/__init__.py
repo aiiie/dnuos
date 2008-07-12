@@ -6,8 +6,7 @@ import os
 import sys
 import time
 import warnings
-from itertools import chain
-from itertools import ifilter
+from itertools import chain, ifilter
 
 import dnuos.output.db
 import dnuos.path
