@@ -95,33 +95,12 @@ class Lookahead(object):
             self.empty = True
         return result
 
-    def __le__(self, other):
-        """Compare iterator heads for (<=) inequality - as opposed to the
-        entire iterators.
-        """
+    def __cmp__(self, other):
+        """Compare iterator heads (as opposed to the entire iterators)"""
 
         # This is a bit sloppy as it never considers the type of the
         # other element
-        return self.lookahead <= other.lookahead
-
-    # heapq in Python 2.6 uses LT instead of LTE for comparisons.
-    def __lt__(self, other):
-        """Compare iterator heads for (<) inequality - as opposed to the
-        entire iterators.
-        """
-
-        # This is a bit sloppy as it never considers the type of the
-        # other element
-        return self.lookahead < other.lookahead
-
-    def __eq__(self, other):
-        """Compare iterator heads for equality - as opposed to the entire
-        iterators.
-        """
-
-        # This is a bit sloppy as it never considers the type of the
-        # other element
-        return self.lookahead == other.lookahead
+        return cmp(self.lookahead, other.lookahead)
 
 
 def deprecation(message):
