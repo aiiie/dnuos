@@ -71,7 +71,10 @@ def write_dnuos_diff(args, expected, no_glob=False):
         output = StringIO()
         sys.argv = ['dnuos', '--disable-cache'] + process_args(args, no_glob)
         sys.stderr = sys.stdout = output
-        dnuos.main(locale='C')
+        try:
+            dnuos.main(locale='C')
+        except SystemExit:
+            pass
         output = output.getvalue()
         try:
             assert output == expected
