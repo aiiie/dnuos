@@ -151,6 +151,21 @@ def _win32_utf8_argv():
 def main(argv=None, locale=None):
     """Main entry point"""
 
+    # Wrap stdout with a codec that goes from UTF-8 to the preferred encoding
+    if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
+        from codecs import getwriter
+        try:
+            cls = getwriter(sys.stdout.encoding)
+        except LookupError:
+            pass
+        else:
+            class StdoutWrapper(cls):
+                def write(self, obj):
+                    if isinstance(obj, str):
+                        obj = obj.decode('utf-8')
+                    cls.write(self, obj)
+            sys.stdout = StdoutWrapper(sys.stdout, 'replace')
+
     import locale as locale_
     try:
         locale_.setlocale(locale_.LC_ALL, locale)
