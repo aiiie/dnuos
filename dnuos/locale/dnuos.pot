@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2008-06-22 05:17-0400\n"
+"POT-Creation-Date: 2008-07-13 22:57-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,56 +17,56 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev-r361\n"
 
-#: dnuos/__init__.py:172 dnuos/conf.py:161
+#: dnuos/__init__.py:186 dnuos/conf.py:161
 #, python-format
 msgid "No such directory %s"
 msgstr ""
 
-#: dnuos/__init__.py:179 dnuos/__init__.py:187
+#: dnuos/__init__.py:193 dnuos/__init__.py:201
 #, python-format
 msgid "Failed to remove cache file: %s"
 msgstr ""
 
-#: dnuos/__init__.py:182
+#: dnuos/__init__.py:196
 msgid "Cache directory not empty"
 msgstr ""
 
-#: dnuos/__init__.py:189
+#: dnuos/__init__.py:203
 #, python-format
 msgid "Removed cache directory %s"
 msgstr ""
 
-#: dnuos/__init__.py:199
+#: dnuos/__init__.py:213
 #, python-format
 msgid "Culled %d non-existent directories"
 msgstr ""
 
-#: dnuos/__init__.py:203
+#: dnuos/__init__.py:217
 msgid "Failed to create cache directory:"
 msgstr ""
 
-#: dnuos/__init__.py:207 dnuos/__init__.py:247
+#: dnuos/__init__.py:221 dnuos/__init__.py:261
 msgid "Use the --disable-cache switch to disable caching"
 msgstr ""
 
-#: dnuos/__init__.py:218
+#: dnuos/__init__.py:232
 msgid "Format string can only contain valid fields"
 msgstr ""
 
-#: dnuos/__init__.py:219
+#: dnuos/__init__.py:233
 msgid "Use the --help-output-string switch for more information"
 msgstr ""
 
-#: dnuos/__init__.py:243
+#: dnuos/__init__.py:257
 msgid "Failed to save cache data:"
 msgstr ""
 
-#: dnuos/__init__.py:272
+#: dnuos/__init__.py:275
 #, python-format
 msgid "%sB processed\r"
 msgstr ""
 
-#: dnuos/__init__.py:288
+#: dnuos/__init__.py:291
 msgid "Audiotype failed for:"
 msgstr ""
 
