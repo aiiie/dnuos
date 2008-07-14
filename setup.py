@@ -1,8 +1,15 @@
 #!/usr/bin/env python
 
 from distutils.core import setup, Command
-from distutils.command.build_py import build_py as old_build_py
-from distutils.command.install import install as old_install
+
+# This is absolutely ridiculous.
+from distutils.dist import Distribution
+if Distribution.__module__.startswith('setuptools.'):
+    from setuptools.command.build_py import build_py as old_build_py
+    from setuptools.command.install import install as old_install
+else:
+    from distutils.command.build_py import build_py as old_build_py
+    from distutils.command.install import install as old_install
 
 extra_options = {}
 package_data = {'dnuos': ['locale/*/LC_MESSAGES/*.mo']}
