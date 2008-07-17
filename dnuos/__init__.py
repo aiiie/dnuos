@@ -152,7 +152,8 @@ def main(argv=None, locale=None):
     """Main entry point"""
 
     # Wrap stdout with a codec that goes from UTF-8 to the preferred encoding
-    if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
+    encoding = getattr(sys.stdout, 'encoding', None)
+    if encoding and encoding.lower() != 'utf-8':
         from codecs import getwriter
         try:
             cls = getwriter(sys.stdout.encoding)
