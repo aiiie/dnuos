@@ -17,18 +17,17 @@ import dnuos.path
 def test():
     """Verify caching functionality"""
 
-    old = sys.argv, sys.stderr, sys.stdout
+    old =  sys.stderr, sys.stdout
     old_cwd = os.getcwd()
-    cache_file = dnuos.appdata.user_data_file('dirs', '.')
     os.chdir(os.environ['DATA_DIR'])
+    cache_file = dnuos.appdata.user_data_file('dirs', '.')
     try:
         output = StringIO()
-        sys.argv = ['dnuos', '-q', '--cache-dir=.', '.']
         sys.stderr = sys.stdout = output
         try:
-            dnuos.main(locale='C')
+            dnuos.main(argv=['dnuos', '-q', '--cache-dir=.', '.'], locale='C')
         finally:
-            sys.argv, sys.stderr, sys.stdout = old
+            sys.stderr, sys.stdout = old
         cache = dnuos.setup_cache(cache_file)
         assert cache.version == dnuos.audiodir.Dir.__version__
         for path, adir in cache.iteritems():
