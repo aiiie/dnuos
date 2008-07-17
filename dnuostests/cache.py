@@ -4,7 +4,10 @@
 
 import os
 import sys
-from cStringIO import StringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
 
 import dnuos
 import dnuos.appdata
