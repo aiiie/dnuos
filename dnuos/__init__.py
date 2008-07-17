@@ -178,7 +178,10 @@ def main(argv=None, locale=None):
 
     os.stat_float_times(False)
     warnings.formatwarning = formatwarning
-    options = parse_args(argv)
+    try:
+        options = parse_args(argv)
+    except SystemExit, e:
+        return e.code
     data = Data(options.unknown_types)
     audiodir.Dir.valid_types.extend(options.unknown_types or ())
 
