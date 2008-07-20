@@ -42,14 +42,14 @@ class Data(object):
         }
 
 
-def make_raw_listing(basedirs, exclude_paths, sort_key, use_merge,
+def make_raw_listing(basedirs, exclude_paths, sort_cmp, use_merge,
                      adir_class):
     """Make an iterator over all subdirectories of the base directories,
     including the base directories themselves. The directory trees are
     sorted either separately or together according to the merge setting.
     """
 
-    trees = [walk2(basedir, sort_key, exclude_paths)
+    trees = [walk2(basedir, sort_cmp, exclude_paths)
              for basedir in basedirs]
 
     if use_merge:
@@ -242,7 +242,7 @@ def main(argv=None, locale=None):
     # basedirs again.
     adirs = make_raw_listing(options.basedirs,
                              options.exclude_paths + options.basedirs,
-                             options.sort_key, options.merge, adir_class)
+                             options.sort_cmp, options.merge, adir_class)
     adirs = prepare_listing(adirs, options, data)
     result = renderer.render(adirs, options, data)
 
@@ -442,7 +442,7 @@ def add_files(dir_pairs):
             yield audiodir.Dir(path), root
 
 
-def walk2(basedir, sort_key=(lambda x: x), excluded=()):
+def walk2(basedir, sort_cmp, excluded):
     """Traverse a directory tree in pre-order
 
     Walk2 is a thin wrapper around walk. It splits each path into a
@@ -451,14 +451,14 @@ def walk2(basedir, sort_key=(lambda x: x), excluded=()):
     """
 
     root = os.path.dirname(basedir)
-    for sub in walk(basedir, sort_key, excluded):
+    for sub in walk(basedir, sort_cmp, excluded):
         yield sub[len(root):], root
 
 
-def walk(dir_, sort_key=(lambda x: x), excluded=()):
+def walk(dir_, sort_cmp, excluded):
     """Traverse a directory tree in pre-order.
 
-    Directories are sorted by sort_key and branches specified in
+    Directories are sorted by sort_cmp and branches specified in
     exclude are ignored. Symbolic links are followed.
     """
 
@@ -471,11 +471,11 @@ def walk(dir_, sort_key=(lambda x: x), excluded=()):
     subs = [sub for sub in subs
             if dnuos.path.isdir(sub)
                and sub not in excluded]
-    subs.sort(sort_key)
+    subs.sort(sort_cmp)
 
     yield dir_
     for sub in subs:
-        for res in walk(sub, sort_key, excluded):
+        for res in walk(sub, sort_cmp, excluded):
             yield res
 
 
