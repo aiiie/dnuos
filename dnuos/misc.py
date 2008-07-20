@@ -39,43 +39,45 @@ except ImportError:
 
 
 class Lookahead(object):
-    """Wrapper class for adding one element of lookahead to an iterator
+    """Wrapper class for adding one element of lookahead to an iterator.
+    Requires iterables of strings or sequences of strings.
 
     Example behavior:
 
-    >>> x = Lookahead(iter((0, 1, 2)))
+    >>> x = Lookahead(iter(('0', '1', '2')))
     >>> x.lookahead
-    0
+    '0'
     >>> x.next()
-    0
+    '0'
     >>> x.lookahead
-    1
+    '1'
     >>> x.next()
-    1
+    '1'
     >>> x.lookahead
-    2
-    >>> y = Lookahead(iter((1, 2, 3)))
+    '2'
+    >>> y = Lookahead(iter(('1', '2', '3')))
     >>> y.next()
-    1
+    '1'
     >>> x == y
     True
     >>> y.next()
-    2
+    '2'
     >>> x <= y
     True
     >>> x.empty
     False
     >>> x.next()
-    2
+    '2'
     >>> x.empty
     True
     """
 
-    __slots__ = ['iterator', 'lookahead', 'empty']
+    __slots__ = ['iterator', 'sort_cmp', 'lookahead', 'empty']
 
-    def __init__(self, iterator):
+    def __init__(self, iterator, sort_cmp=cmp):
 
         self.iterator = iterator
+        self.sort_cmp = sort_cmp
         self.lookahead = None
         self.empty = False
         self.next()
@@ -98,9 +100,8 @@ class Lookahead(object):
     def __cmp__(self, other):
         """Compare iterator heads (as opposed to the entire iterators)"""
 
-        # This is a bit sloppy as it never considers the type of the
-        # other element
-        return cmp(self.lookahead, other.lookahead)
+        return self.sort_cmp(''.join(self.lookahead),
+                             ''.join(other.lookahead))
 
 
 def deprecation(message):
@@ -173,13 +174,13 @@ def is_subdir(path1, path2):
     return path2 == path1[:len(path2)]
 
 
-def merge(*iterators):
+def merge(iterators, sort_cmp=cmp):
     """Merge n ordered iterators into one ordered iterator.
 
     Merge two ordered iterators
     >>> xs = iter(['a1', 'b1', 'c1'])
     >>> ys = iter(['a2', 'b2', 'c2'])
-    >>> list(merge(xs, ys))
+    >>> list(merge([xs, ys]))
     ['a1', 'a2', 'b1', 'b2', 'c1', 'c2']
     """
 
@@ -192,7 +193,7 @@ def merge(*iterators):
     # the inequality as per the respective head elements.
     heap = []
     for index in range(0, len(iterators)):
-        iterator = Lookahead(iterators[index])
+        iterator = Lookahead(iterators[index], sort_cmp)
         if not iterator.empty:
             heappush(heap, (iterator, index))
 
