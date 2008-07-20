@@ -67,15 +67,15 @@ def get_unified_diff(data1, data2):
 def write_dnuos_diff(args, expected, no_glob=False):
     """Compares an expected result with dnuos output on given parameters"""
 
-    old = sys.argv, sys.stderr, sys.stdout
+    old = sys.stderr, sys.stdout
     old_cwd = os.getcwd()
     os.chdir(os.environ['DATA_DIR'])
     try:
         output = StringIO()
-        sys.argv = ['dnuos', '--disable-cache'] + process_args(args, no_glob)
+        argv = ['dnuos', '--disable-cache'] + process_args(args, no_glob)
         sys.stderr = sys.stdout = output
         try:
-            dnuos.main(locale='C')
+            dnuos.main(argv, locale='C')
         except SystemExit:
             pass
         output = output.getvalue()
@@ -84,5 +84,5 @@ def write_dnuos_diff(args, expected, no_glob=False):
         except AssertionError:
             sys.stdout.write(get_unified_diff(expected, output))
     finally:
-        sys.argv, sys.stderr, sys.stdout = old
+        sys.stderr, sys.stdout = old
         os.chdir(old_cwd)
