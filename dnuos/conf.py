@@ -236,7 +236,7 @@ def parse_args(argv=sys.argv):
                         output_module=dnuos.output.plaintext,
                         prefer_tag=2,
                         show_progress=True,
-                        sort_key=None,
+                        sort_cmp=locale.strcoll,
                         stripped=False,
                         text_color="black",
                         use_cache=True,
@@ -291,7 +291,7 @@ def parse_args(argv=sys.argv):
                      callback=add_exclude_dir, type="string",
                      help=_('Exclude DIR from search'), metavar=_('DIR'))
     group.add_option("-i", "--ignore-case",
-                     dest="sort_key", action="store_const",
+                     dest="sort_cmp", action="store_const",
                      const=lambda a, b: locale.strcoll(a.lower(), b.lower()),
                      help=_('Case-insensitive directory sorting'))
     group.add_option('-L', '--list-files',
@@ -425,7 +425,7 @@ def expand(options, dir_):
 
     if options.wildcards and re.search("[*?]|(?:\[.*\])", dir_):
         dirs = glob.glob(dir_)
-        dirs.sort(options.sort_key)
+        dirs.sort(options.sort_cmp)
         return [os.path.abspath(d) for d in dirs]
     else:
         return [os.path.abspath(dir_)]
