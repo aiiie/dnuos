@@ -136,7 +136,7 @@ class Ogg(AudioType):
 
         self.comment = self.getcomment()
         for i in self.comment:
-            (field, value) = i.split('=')
+            field, value = i.split('=', 1)
             field = field.lower()
             if field == "artist":
                 self._artist = value
@@ -464,7 +464,7 @@ class MP3(AudioType):
         res = {}
         if self.mp3header[6][:4] == "LAME":
             try:
-                major, minor = self.mp3header[6][4:8].split('.')
+                major, minor = self.mp3header[6][4:8].split('.', 1)
                 version = (int(major), int(minor))
             except ValueError:
                 version = (-1, 0)
@@ -701,7 +701,7 @@ class FLAC(AudioType):
         self.brtype = "L"
 
         for pair in self.comments:
-            field, value = pair.split('=')
+            field, value = pair.split('=', 1)
             field = field.lower()
             if field == 'artist':
                 self._artist = value
