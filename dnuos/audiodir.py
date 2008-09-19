@@ -23,9 +23,9 @@ class Dir(object):
     # attribute values is pickled to the database.
     __slots__ = ('albums', 'artists', '_audio_files', '_bad_files',
                  '_bitrates', '_lengths', '_types', 'modified', 'path',
-                 '_profiles', 'sizes', '_vendors')
+                 '_profiles', 'sizes', '_vendors', 'years')
 
-    __version__ = '1.0.6'
+    __version__ = '1.0.9'
 
     def __init__(self, path):
         """Makes an empty Dir for path"""
@@ -43,6 +43,7 @@ class Dir(object):
         streams, self._bad_files = self.get_streams()
         self.artists = self._parse_artist(streams)
         self.albums = self._parse_album(streams)
+        self.years = self._parse_year(streams)
         self.sizes = self._parse_size(streams)
         self._lengths = self._parse_length(streams)
         self._types = self._parse_types(streams)
@@ -138,6 +139,15 @@ class Dir(object):
         for stream in streams:
             for tag, album in stream.album().items():
                 res.setdefault(tag, set()).add(album)
+        return dict([(k, tuple(v)) for (k, v) in res.iteritems()])
+
+    def _parse_year(self, streams):
+        """Gets the year for the audio files"""
+
+        res = {}
+        for stream in streams:
+            for tag, year in stream.year().items():
+                res.setdefault(tag, set()).add(year)
         return dict([(k, tuple(v)) for (k, v) in res.iteritems()])
 
     def _parse_size(self, streams):

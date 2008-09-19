@@ -67,6 +67,7 @@ TAG is any of the following characters:
        L lossless compression
        V variable bitrate
   V  encoder
+  Y  year as found in ID3 tags
 
 WIDTH defines the exact width of the field. The output is cropped to this
 width if needed. Negative values will give left aligned output. Cropping is

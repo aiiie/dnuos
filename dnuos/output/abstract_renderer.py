@@ -42,6 +42,7 @@ class Column(object):
             "t": (_('Type'), lambda adir, **kw: adir.mediatype),
             "T": (_('BR Type'), lambda adir, **kw: adir.brtype),
             "V": (_('Encoder'), lambda adir, **kw: adir.vendor),
+            "Y": (_('Year'), self._get_year),
         }
 
         formatter_table = {
@@ -112,6 +113,15 @@ class Column(object):
 
     def _get_album(self, adir, **kw):
         data = adir.albums
+        if data is not None:
+            keys, encoder = self._get_tag_keys(data)
+            value = self._get_tag_value(data, keys)
+            if value is not None:
+                return encoder(value)
+        return None
+
+    def _get_year(self, adir, **kw):
+        data = adir.years
         if data is not None:
             keys, encoder = self._get_tag_keys(data)
             value = self._get_tag_value(data, keys)
