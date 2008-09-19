@@ -75,14 +75,16 @@ def write_dnuos_diff(args, expected, no_glob=False):
         argv = ['dnuos', '--disable-cache'] + process_args(args, no_glob)
         sys.stderr = sys.stdout = output
         try:
-            dnuos.main(argv, locale='C')
-        except SystemExit:
-            pass
+            try:
+                dnuos.main(argv, locale='C')
+            except SystemExit:
+                pass
+        finally:
+            sys.stderr, sys.stdout = old
         output = output.getvalue()
         try:
             assert output == expected
         except AssertionError:
             sys.stdout.write(get_unified_diff(expected, output))
     finally:
-        sys.stderr, sys.stdout = old
         os.chdir(old_cwd)
