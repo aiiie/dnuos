@@ -37,6 +37,10 @@ class UnknownType(object):
 
         return {'': None}
 
+    def year(self):
+
+        return {'': None}
+
     def profile(self):
 
         return {}
@@ -133,6 +137,7 @@ class Ogg(AudioType):
         self.minbitrate = self.header[6]
         self._artist = None
         self._album = None
+        self._year = None
 
         self.comment = self.getcomment()
         for i in self.comment:
@@ -142,6 +147,8 @@ class Ogg(AudioType):
                 self._artist = value
             elif field == "album":
                 self._album = value
+            elif field == "date":
+                self._year = value
 
         self.audiosamples = self.lastgranule()[-1]
         self.time = float(self.audiosamples) / self.freq
@@ -154,6 +161,10 @@ class Ogg(AudioType):
     def album(self):
 
         return {'vorbis': self._album}
+
+    def year(self):
+
+        return {'vorbis': self._year}
 
     def getheader(self):
 
@@ -372,6 +383,17 @@ class MP3(AudioType):
         if self.id3v2:
             for frame in self.id3v2.frames:
                 if frame.id == 'TALB':
+                    res['id3v2'] = frame.value
+        return res
+
+    def album(self):
+
+        res = {'id3v1': None, 'id3v2': None}
+        if self.id3v1 and self.id3v1.year:
+            res['id3v1'] = self.id3v1.year
+        if self.id3v2:
+            for frame in self.id3v2.frames:
+                if frame.id in ('TYER', 'TDRC'):
                     res['id3v2'] = frame.value
         return res
 
@@ -676,6 +698,7 @@ class FLAC(AudioType):
         self.comments = []
         self._artist = None
         self._album = None
+        self._year = None
         self.streaminfo = None
         # 0 minimum blocksize
         # 1 maximum blocksize
@@ -707,6 +730,8 @@ class FLAC(AudioType):
                 self._artist = value
             elif field == 'album':
                 self._album = value
+            elif field == 'date':
+                self._year = value
 
     def artist(self):
 
@@ -715,6 +740,10 @@ class FLAC(AudioType):
     def album(self):
 
         return {'FLAC': self._album}
+
+    def year(self):
+
+        return {'FLAC': self._year}
 
     def profile(self):
 
@@ -790,10 +819,11 @@ class AAC(AudioType):
         self.header = self.getheader()
         self._artist    = self.header[0]
         self._album = self.header[1]
-        self.time   = self.header[2]
-        self.freq = self.header[3]
-        self.channels  = self.header[4]
-        self._bitrate   = self.header[5]
+        self._year = self.header[2]
+        self.time   = self.header[3]
+        self.freq = self.header[4]
+        self.channels  = self.header[5]
+        self._bitrate   = self.header[6]
         self.brtype = "C"
 
     def artist(self):
@@ -803,6 +833,10 @@ class AAC(AudioType):
     def album(self):
 
         return {'AAC': self._album}
+
+    def year(self):
+
+        return {'AAC': self._year}
 
     def profile(self):
 
@@ -820,14 +854,16 @@ class AAC(AudioType):
         stsd_found = False
         artist_found = False
         album_found = False
+        year_found = False
         bitrate_found = False
 
         cfl_fmt = ">I"
         cfl_fmt_size = struct.calcsize(cfl_fmt)
 
-        # this stops things from blowing up if neither are found
+        # this stops things from blowing up if none are found
         artist = None
         album = None
+        year = None
         bitrate = 0.0
 
         while len(chunk) > overlap:
@@ -887,6 +923,20 @@ class AAC(AudioType):
                     format = "<%ds" % (length[0] - 24)
                     album = struct.unpack(format, self._f.read(
                         struct.calcsize(format)))[0]
+             # Get year info from (c)day atom
+            if not year_found:
+                sync = chunk.find('\xa9day')
+                if sync != -1:
+                    year_found = True
+                    # Go back and read size of day atom
+                    self._f.seek(start + sync - 4)
+                    length = struct.unpack(cfl_fmt, self._f.read(
+                        cfl_fmt_size))
+                    # get year info, but skip over junk bytes
+                    self._f.seek( start + sync + 20 )
+                    format = "<%ds" % (length[0] - 24)
+                    year = struct.unpack(format, self._f.read(
+                        struct.calcsize(format)))[0]
             if not bitrate_found:
                 sync = chunk.find("esds")
                 if sync != -1:
@@ -910,14 +960,14 @@ class AAC(AudioType):
                         bitrate = float(bitrate)
                         bitrate_found = True
             if (length_found and stsd_found and artist_found and album_found
-                and bitrate_found):
+                and year_found and bitrate_found):
                 break
 
             start += 1024
             self._f.seek(start + overlap)
             chunk = chunk[-overlap:] + self._f.read(1024)
 
-        return (artist, album, time, frequency, channels, bitrate)
+        return (artist, album, year, time, frequency, channels, bitrate)
 
     def bitrate(self):
 
