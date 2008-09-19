@@ -53,7 +53,7 @@ def make_raw_listing(basedirs, exclude_paths, sort_cmp, use_merge,
              for basedir in basedirs]
 
     if use_merge:
-        tree = merge(trees, sort_cmp)
+        tree = merge(trees, lambda a, b: sort_cmp(a[0], b[0]))
     else:
         tree = chain(*trees)
 
