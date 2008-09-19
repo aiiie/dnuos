@@ -100,8 +100,7 @@ class Lookahead(object):
     def __cmp__(self, other):
         """Compare iterator heads (as opposed to the entire iterators)"""
 
-        return self.sort_cmp(''.join(self.lookahead),
-                             ''.join(other.lookahead))
+        return self.sort_cmp(self.lookahead, other.lookahead)
 
 
 def deprecation(message):
