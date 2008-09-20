@@ -16,9 +16,9 @@ class PersistentDict(shelve.Shelf, object):
         filename = filename.decode('utf-8')
         filename = filename.encode(sys.getfilesystemencoding())
 
-        import anydbm
+        import dumbdbm
         super(PersistentDict, self).__init__(
-            anydbm.open(filename, 'c'),
+            dumbdbm.open(filename, 'c'),
             protocol=2)
 
         self.version = version
