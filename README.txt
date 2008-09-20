@@ -52,8 +52,8 @@ Run `dnuos --help` for a full rundown of the available options.
 
 Extract the archive and run `setup.py` to install it:
 
-    tar zxvf dnuos-*.tar.gz
-    cd dnuos-*
+    tar zxvf dnuos-1.0.9.tar.gz
+    cd dnuos-1.0.9
     sudo python setup.py install
 
 This will install a console script named `dnuos` into `/usr/local/bin`.
@@ -94,6 +94,23 @@ the following graphical front-ends instead:
 
 News
 ----
+
+### Version 1.0.9 (Sep. 20, 2008)
+
+* Fixed a crash when using HTML output.
+* Fixed a crash with FLAC/Ogg Vorbis tags containing equal signs.
+* Fixed `--delete-cache` not always deleting the cache directory.
+* Fixed directories with both LAME and non-LAME MP3s being listed with only
+  the LAME preset quality, instead of being listed as mixed.
+* Added shorthand switch `-C` for `--disable-cache`.
+* Added the `[Y]` year output tag.
+* Added the `[D]` depth output tag back.
+* Improved Python 2.6 compatibility.
+* Added support for using the preferred encoding when outputting to the
+  terminal. (Characters that can't be encoded are replaced with question
+  marks.)
+* Updated French translation with corrections.
+* Fixed French translation not being installed when using `easy_install`.
 
 ### Version 1.0.8 (Jun. 16, 2008)
 
