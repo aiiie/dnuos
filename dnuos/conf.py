@@ -280,7 +280,7 @@ def parse_args(argv=sys.argv):
     group.add_option('--delete-cache',
                      dest='delete_cache', action='store_true',
                      help=_('Delete the cache directory and exit'))
-    group.add_option("--disable-cache",
+    group.add_option('-C', '--disable-cache',
                      dest="use_cache", action="store_false",
                      help=_('Disable caching'))
     parser.add_option_group(group)
