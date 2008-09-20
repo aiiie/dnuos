@@ -393,7 +393,7 @@ class MP3(AudioType):
             res['id3v1'] = self.id3v1.year
         if self.id3v2:
             for frame in self.id3v2.frames:
-                if frame.id in ('TYER', 'TDRC'):
+                if frame.id in ('TYER', 'TDRC') and hasattr(frame, 'value'):
                     res['id3v2'] = frame.value
         return res
 
