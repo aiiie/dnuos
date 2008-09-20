@@ -386,7 +386,7 @@ class MP3(AudioType):
                     res['id3v2'] = frame.value
         return res
 
-    def album(self):
+    def year(self):
 
         res = {'id3v1': None, 'id3v2': None}
         if self.id3v1 and self.id3v1.year:
