@@ -189,20 +189,11 @@ def main(argv=None, locale=None):
         if not dnuos.path.isdir(options.cache_dir):
             print >> sys.stderr, _('No such directory %s') % options.cache_dir
             return 2
-        cache_file = appdata.user_data_file('dirs', options.cache_dir)
-        if dnuos.path.exists(cache_file):
-            try:
-                dnuos.path.remove(cache_file)
-            except OSError, err:
-                print >> sys.stderr, _('Failed to remove cache file: %s') % err
-                return 2
-        if dnuos.path.listdir(options.cache_dir):
-            print >> sys.stderr, _('Cache directory not empty')
-            return 2
+        import shutil
         try:
-            dnuos.path.rmdir(options.cache_dir)
+            shutil.rmtree(options.cache_dir)
         except OSError, err:
-            print >> sys.stderr, _('Failed to remove cache file: %s') % err
+            print >> sys.stderr, _('Failed to delete cache: %s') % err
             return 2
         print _('Removed cache directory %s') % options.cache_dir
         return 0
