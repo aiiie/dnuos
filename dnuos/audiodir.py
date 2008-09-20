@@ -128,7 +128,7 @@ class Dir(object):
 
         res = {}
         for stream in streams:
-            for tag, artist in stream.artist().items():
+            for tag, artist in stream.artist().iteritems():
                 res.setdefault(tag, set()).add(artist)
         return dict([(k, tuple(v)) for (k, v) in res.iteritems()])
 
@@ -137,7 +137,7 @@ class Dir(object):
 
         res = {}
         for stream in streams:
-            for tag, album in stream.album().items():
+            for tag, album in stream.album().iteritems():
                 res.setdefault(tag, set()).add(album)
         return dict([(k, tuple(v)) for (k, v) in res.iteritems()])
 
@@ -146,7 +146,7 @@ class Dir(object):
 
         res = {}
         for stream in streams:
-            for tag, year in stream.year().items():
+            for tag, year in stream.year().iteritems():
                 res.setdefault(tag, set()).add(year)
         return dict([(k, tuple(v)) for (k, v) in res.iteritems()])
 
@@ -233,10 +233,13 @@ class Dir(object):
 
         res = {}
         for stream in streams:
-            for key, profile in stream.profile().items():
-                res.setdefault(key, set()).add(profile)
+            profiles = stream.profile()
+            if not profiles:
+                res.setdefault(None, set())
+            else:
+                for key, profile in profiles.iteritems():
+                    res.setdefault(key, set()).add(profile)
         return dict([(k, tuple(v)) for (k, v) in res.iteritems()])
-
 
     def _get_profile(self):
         """Return encoding profile name.
