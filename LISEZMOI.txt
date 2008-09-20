@@ -53,8 +53,8 @@ Exécutez `dnuos --help` pour information détaillée sur toutes les options.
 
 Extrayez l'archive et exécutez `setup.py` pour l'installer::
 
-    tar zxvf dnuos-*.tar.gz
-    cd dnuos-*
+    tar zxvf dnuos-1.0.9.tar.gz
+    cd dnuos-1.0.9
     sudo python setup.py install
 
 Cela installera un script de terminal nommé `dnuos` dans
@@ -98,7 +98,11 @@ front-ends graphiques suivants plutôt :
 Quoi de Neuf
 ------------
 
-### Version 1.0.8 (16 jui. 2008
+### Version 1.0.9 (20 sep. 2008)
+
+Voyez le README anglais.
+
+### Version 1.0.8 (16 jui. 2008)
 
 * Corrigé des plantages sous les environnements Unix avec les noms de
   dossiers qui ont des caractères qui ne sont pas compatibles avec
