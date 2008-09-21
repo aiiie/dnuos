@@ -92,12 +92,19 @@ class install(old_install):
     """Installs Dnuos locally"""
 
     def finalize_options(self):
-        from distutils.sysconfig import get_config_vars
-        prefix, exec_prefix = get_config_vars('prefix', 'exec_prefix')
-        if not self.prefix and prefix == '/usr':
-            self.prefix = '/usr/local'
-        if not self.exec_prefix and exec_prefix == '/usr':
-            self.exec_prefix = '/usr/local'
+        import sys
+        has_local = False
+        for path in sys.path:
+            if path.startswith('/usr/local'):
+                has_local = True
+                break
+        if has_local:
+            from distutils.sysconfig import get_config_vars
+            prefix, exec_prefix = get_config_vars('prefix', 'exec_prefix')
+            if not self.prefix and prefix == '/usr':
+                self.prefix = '/usr/local'
+            if not self.exec_prefix and exec_prefix == '/usr':
+                self.exec_prefix = '/usr/local'
         old_install.finalize_options(self)
 
 
