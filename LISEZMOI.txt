@@ -32,7 +32,7 @@ Seulement les fichiers audio et les dossiers qui ont étés modifiés depuis
 la dernière liste a été faite.
 
 Dnuos est basé sur le code d'[Oidua][]. Oidua peut faire des listes
-similaires, mais c'est trop vieux et n'est plus maintenu.
+similaires, mais c'est très vieux et n'est plus maintenu.
 
 [LAME quality preset]: http://wiki.hydrogenaudio.org/index.php?title=Lame#Recommended_encoder_settings
 [Oidua]: http://oidua.suxbad.com/
