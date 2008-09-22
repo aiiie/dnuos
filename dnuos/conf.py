@@ -23,6 +23,30 @@ from dnuos.misc import deprecation, _
 
 optparse._ = _
 
+def _ioctl_width(fd):
+
+    from fcntl import ioctl
+    from struct import pack, unpack
+    from termios import TIOCGWINSZ
+    return unpack('HHHH', ioctl(fd, TIOCGWINSZ, pack('HHHH', 0, 0, 0, 0)))[1]
+
+
+def get_terminal_width():
+    """Returns terminal width"""
+
+    width = 0
+    try:
+        width = _ioctl_width(sys.stdout.fileno())
+    except (ImportError, IOError):
+        pass
+    if not width:
+        try:
+            width = int(os.environ.get('COLUMNS', 0))
+        except ValueError:
+            pass
+    return width
+
+
 def print_help(option, opt_str, value, parser):
     """Prints help and exits program"""
 
@@ -209,7 +233,10 @@ def parse_format_string2(data):
 
 def parse_args(argv=sys.argv):
 
-    default_format_string = "[n,-52]| [s,5] | [t,-4] | [q]"
+    # This resizes the default format string based on the terminal's width.
+    # A minimum width 76 characters is imposed, and a maximum 140 characters.
+    name_width = min(max(get_terminal_width() - 28, 52), 116)
+    default_format_string = '[n,-%d]| [s,5] | [t,-4] | [q]' % name_width
     format_string, fields = parse_format_string2(default_format_string)
     usage = _('%prog [options] basedir ...')
     parser = OptionParser(usage, add_help_option=False)
