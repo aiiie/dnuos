@@ -37,7 +37,7 @@ def get_terminal_width():
     width = 0
     try:
         width = _ioctl_width(sys.stdout.fileno())
-    except (ImportError, IOError):
+    except (AttributeError, ImportError, IOError):
         pass
     if not width:
         try:
