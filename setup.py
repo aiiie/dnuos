@@ -1,22 +1,24 @@
 #!/usr/bin/env python
 
-from distutils.core import setup, Command
-
-# This is absolutely ridiculous.
-from distutils.dist import Distribution
-if Distribution.__module__.startswith('setuptools.'):
-    from setuptools.command.build_py import build_py as old_build_py
-    from setuptools.command.install import install as old_install
-else:
-    from distutils.command.build_py import build_py as old_build_py
-    from distutils.command.install import install as old_install
+import os
+import sys
 
 extra_options = {}
 package_data = {'dnuos': ['locale/*/LC_MESSAGES/*.mo']}
 
+from distutils.core import setup, Command
+from distutils.command.build import build
+
+# This is absolutely ridiculous.
+from distutils.dist import Distribution
+if Distribution.__module__.startswith('setuptools.'):
+    from setuptools.command.install import install as old_install
+    extra_options['zip_safe'] = False
+else:
+    from distutils.command.install import install as old_install
+
 try:
     import py2exe
-    import sys
     if len(sys.argv) > 1 and sys.argv[1] == 'py2exe':
         sys.argv.extend(('-O2 -c -b 1 -e _ssl,calendar,doctest,email,ftplib,'
                          'getpass,gettext,gopherlib,httplib,mimetypes,'
@@ -29,22 +31,20 @@ except ImportError:
     pass
 
 
-class build_py(old_build_py):
-    """Builds locale data automatically"""
+class build_mo(build):
+    description = "build translations (.mo files)"
 
     def run(self):
         from glob import glob
         from msgfmt import compile_catalog
         for path in glob('./dnuos/locale/*/LC_MESSAGES/*.po'):
             compile_catalog(path)
-        old_build_py.run(self)
 
+build.sub_commands.append(('build_mo', None))
 
 def testpkg(path):
     """Runs doctest on an entire package"""
-
     import doctest
-    import os
     from glob import glob
     modules = glob(os.path.join(path, '*.py'))
     modules += glob(os.path.join(path, '**/*.py'))
@@ -68,19 +68,14 @@ def testpkg(path):
 
 
 class test(Command):
-    """Runs test suite"""
-
-    description = 'Runs test suite'
-    user_options = [
-        ('data-dir=', 'd', 'path to test data [default: ./testdata]'),
-    ]
+    description = 'run test suite'
+    user_options = [('data-dir=', 'd',
+                     'path to test data [default: ./testdata]')]
 
     def initialize_options(self):
-        import os
         self.data_dir = os.path.abspath('./testdata')
 
     def finalize_options(self):
-        import os
         os.environ['DATA_DIR'] = self.data_dir
 
     def run(self):
@@ -89,10 +84,9 @@ class test(Command):
 
 
 class install(old_install):
-    """Installs Dnuos locally"""
+    description = 'install everything from build directory (locally)'
 
     def finalize_options(self):
-        import sys
         has_local = False
         for path in sys.path:
             if path.startswith('/usr/local'):
@@ -122,7 +116,7 @@ setup(
         'Topic :: Communications :: File Sharing',
         'Topic :: Multimedia :: Sound/Audio',
     ],
-    cmdclass={'build_py': build_py, 'install': install, 'test': test},
+    cmdclass={'build_mo': build_mo, 'install': install, 'test': test},
     description='A tool for creating lists of music collections',
     download_url='http://bitheap.org/dnuos/files/dnuos-1.0.9.tar.gz',
     keywords='music collection list metadata mp3 audiolist oidua',
