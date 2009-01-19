@@ -1,8 +1,8 @@
 Dnuos : Faire une liste !
 =========================
 
-Dnuos est un programme de terminal qui fait des listes des collections
-de la musique, par la structure des dossiers.
+Dnuos est un programme shell qui génère une liste de votre bibliothèque
+musicale, en se basant sur la structure des dossiers.
 
 Par exemple, une liste pourrait ressembler à ceci :
 
@@ -19,20 +19,21 @@ Par exemple, une liste pourrait ressembler à ceci :
             2005 - Insen               | 99,1M | MP3  | 320 C
             2006 - Revep               | 27,9M | MP3  | -V2n
 
-Le format de la liste est complètement personnalisable et peut être texte
-brut ou HTML.
+Le format de la liste est complètement personnalisable. On peut générer du
+texte brut ou du code HTML.
 
-Dnuos s'appuie MP3, AAC, Musepack, Ogg Vorbis, et FLAC. Détection du profil
-de qualité est appuyé aussi, y compris l'information du
-[LAME quality preset][].
+Dnuos supporte les formats MP3, AAC, Musepack, Ogg Vorbis, et FLAC. Une
+détection des profils de qualité est effectuée, notamment par les informations
+du [LAME quality preset][].
 
-Informations sur les fichiers audio sont enregistrées sur le disque après
-une liste est initialement faite, ce qui accélère faire de prochaines listes.
-Seulement les fichiers audio et les dossiers qui ont étés modifiés depuis
-la dernière liste a été faite.
+Les informations sur les fichiers audio sont enregistrées sur le disque dur
+lorsque la liste est générée pour la première fois, ce qui permet d'accélèrer
+la création des listes ultérieures. En effet, seuls les fichiers audio et les
+dossiers qui ont été modifiés depuis lors seront analysés.
 
-Dnuos est basé sur le code d'[Oidua][]. Oidua peut faire des listes
-similaires, mais c'est très vieux et n'est plus maintenu.
+Dnuos est basé sur le code d'[Oidua][]. Oidua peut générer des listes
+similaires, mais c'est un très vieux programme moins puissant, qui n'est plus
+maintenu.
 
 [LAME quality preset]: http://wiki.hydrogenaudio.org/index.php?title=Lame#Recommended_encoder_settings
 [Oidua]: http://oidua.suxbad.com/
@@ -41,61 +42,62 @@ similaires, mais c'est très vieux et n'est plus maintenu.
 Télécharger
 -----------
 
-Les versions peuvent être trouvées à <https://github.com/aiiie/dnuos>.
+Les différentes versions peuvent être téléchargées sur
+<https://github.com/aiiie/dnuos>.
 
 
-Installation/Usage
-------------------
+Installation / Utilisation
+--------------------------
 
-Exécutez `dnuos --help` pour information détaillée sur toutes les options.
+Lancez `dnuos --help` pour des informations détaillées sur toutes les options.
 
 ### Linux, Mac OS X, Unix
 
-Extrayez l'archive et exécutez `setup.py` pour l'installer::
+Extrayez l'archive et exécutez `setup.py` pour l'installer :
 
     tar zxvf dnuos-1.0.9.tar.gz
     cd dnuos-1.0.9
     sudo python setup.py install
 
-Cela installera un script de terminal nommé `dnuos` dans
-`/usr/local/bin`. (Sous Mac OS X 10.4 et les anciennes versions, il peut
-être mis dans `/Library/Frameworks/Python.framework/Versions/Current/bin`.)
+Cela installera un script nommé `dnuos` dans `/usr/local/bin`.
+(Sous Mac OS X 10.4 et les anciennes versions, il peut être placé dans
+`/Library/Frameworks/Python.framework/Versions/Current/bin`.)
 
-Après installation, ouvrez votre terminal préféré et exécutez `dnuos`.
+Après l'installation, ouvrez votre terminal préféré et exécutez `dnuos`.
 Sur Mac OS X, *Terminal* serait un bon choix (situé dans
 `/Applications//Utilities`).
 
 
 ### Windows
 
-Il n'y a pas d'installation. Simplement extrayez le fichier zip où vous
-souhaitez l'installer. Vous pouvez exécuter l'application à la ligne de
-commande avec `dnuos.exe`.
+Il n'y a pas d'installation à proprement parler. Extrayez simplement le
+fichier zip à l'endroit où vous souhaitez l'installer. Vous pouvez exécuter
+l'application avec la commande `dnuos.exe`.
 
-Après vous avez extrait Dnuos, appuyez simultanément sur les touches Windows
-et R pour ouvrir le dialogue *Run*. Tapez *cmd* et appuyez enter pour
-lancer la ligne de commande. Ensuite tapez la lettre de disque où
-l'exécutable est placé et `cd` au dossier avec l'exécutable. Ici,
-simplement exécutez `dnuos.exe`.
+Pour ce faire, après avoir extrait Dnuos, appuyez simultanément sur les
+touches Windows et R pour ouvrir la fenêtre *Commande*. Tapez *cmd* et
+appuyez sur enter pour lancer la ligne de commande. Ensuite, tapez la lettre
+du disque dur où l'exécutable est placé et `cd [le dossier]` pour aller au bon
+emplacement. Une fois rendu dans le bon dossier, exécutez `dnuos.exe`.
 
 
-### Front-ends Graphiques
+### Interfaces graphiques
 
-Si vous détestez la ligne de commande, vous pouvez utiliser l'un des
-front-ends graphiques suivants plutôt :
+Si vous êtes alergique à la ligne de commande, vous pouvez utiliser l'une des
+interfaces graphiques suivantes :
 
 * [dnuOSX][] - Un front-end natif pour Mac OS X.
 * [Guidua][] - Un front-end graphique pour Windows.
 * [QtOIDUA][] - Un front-end graphique pour Linux et Mac OS X.
   (Note : Les versions 0.08 et les anciennes versions ont un bogue qui
-  empêche l'opération QtOIDUA avec Dnuos 1.0.)
+  empêche l'exécution de QtOIDUA avec Dnuos 1.0.)
 
 [dnuOSX]: http://www.facepwn.com/MacRequest/dnuOSX.html
 [Guidua]: http://oidua.suxbad.com/setup_guidua_0.16.exe
 [QtOIDUA]: http://www.spoonfedmonkey.com/software/qtoidua/
 
 
-Quoi de Neuf
+Quoi de neuf
 ------------
 
 ### Version 1.0.9 (20 sep. 2008)
@@ -178,20 +180,20 @@ Voyez le README anglais.
 Développement
 -------------
 
-Le stockage officiel de développement peut être trouvé à
+Le dépôt officiel de développement est situé à
 <https://github.com/aiiie/dnuos>. Avec [Git][], exécutez :
 
     git clone https://github.com/aiiie/dnuos.git
 
-Exécuter l'ensemble des tests unitaires exige les [données de test][] (dans
-le même dossier que `setup.py`). Après que vous l'avez, vous pouvez
-exécuter les tests avec la commande suivante :
+Exécuter les tests unitaires nécessite d'avoir les [données de test][] (dans
+le même dossier que `setup.py`). Une fois que vous les avez récupérée, vous
+pouvez exécuter les tests avec la commande suivante :
 
     python setup.py test
 
-Si vous trouvez aucun de problèmes, soumettez une fiche sur le [site Trac][].
-Ce site est pour le développement et non pas d'assistance, donc ne soumettez
-pas de fiches d'assistance.
+Si vous recontrez un problème, faites un rapport de bogue sur le [site Trac][].
+Ce site est destiné au développement et non pas à l'assistance, donc n'y
+soumettez pas de demande d'aide.
 
 [Git]: https://git-scm.com
 [données de test]: https://github.com/aiiie/dnuos
@@ -203,7 +205,7 @@ Contacter
 
 * [aiiie](mailto:aiiie à aiiie point co) - Mainteneur du projet
 
-### Contributeurs Passés
+### Contributeurs retirés
 
 * [Mattias Päivärinta](mailto:pejve à vasteras2 point net)
 * frunksock
