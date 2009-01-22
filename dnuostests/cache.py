@@ -3,7 +3,9 @@
 """
 
 import os
+import shutil
 import sys
+import tempfile
 from datetime import datetime
 try:
     from cStringIO import StringIO
@@ -19,14 +21,14 @@ def test():
     """Verify caching functionality"""
 
     old =  sys.stderr, sys.stdout
-    old_cwd = os.getcwd()
-    os.chdir(os.environ['DATA_DIR'])
-    cache_file = dnuos.appdata.user_data_file('dirs', '.')
+    tmpdir = tempfile.mkdtemp()
+    cache_file = dnuos.appdata.user_data_file('dirs', tmpdir)
+    argv = ['dnuos', '-q', '--cache-dir=' + tmpdir, os.environ['DATA_DIR']]
     try:
         output = StringIO()
         sys.stderr = sys.stdout = output
         try:
-            dnuos.main(argv=['dnuos', '-q', '--cache-dir=.', '.'], locale='C')
+            dnuos.main(argv=argv, locale='C')
         finally:
             sys.stderr, sys.stdout = old
         cache = dnuos.setup_cache(cache_file)
@@ -49,8 +51,4 @@ def test():
             assert adir.sizes == adir2.sizes
             assert adir._vendors == adir2._vendors
     finally:
-        try:
-            os.remove(cache_file)
-        except OSError:
-            pass
-        os.chdir(old_cwd)
+        shutil.rmtree(tmpdir, True)
