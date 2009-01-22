@@ -49,8 +49,13 @@ def make_raw_listing(basedirs, exclude_paths, sort_cmp, use_merge,
     sorted either separately or together according to the merge setting.
     """
 
-    trees = [walk2(basedir, sort_cmp, exclude_paths)
-             for basedir in basedirs]
+    trees = []
+    for basedir in basedirs:
+        if dnuos.path.isdir(basedir):
+            trees.append(walk2(basedir, sort_cmp, exclude_paths))
+        else:
+            root = os.path.dirname(basedir)
+            trees.append([(basedir[len(root):], root)])
 
     if use_merge:
         tree = merge(trees, lambda a, b: sort_cmp(a[0], b[0]))
@@ -427,6 +432,8 @@ def add_files(dir_pairs):
 
     for adir, root in dir_pairs:
         yield adir, root
+        if not dnuos.path.isdir(adir.path):
+            continue
         if adir.num_files < 1:
             continue
         for path in adir.audio_files:

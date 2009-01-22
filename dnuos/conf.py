@@ -426,8 +426,7 @@ def parse_args(argv=sys.argv):
     options.basedirs = []
     for glob_dir in args:
         options.basedirs += [p for p in expand(options, glob_dir)
-                             if p not in options.exclude_paths
-                                and dnuos.path.isdir(p)]
+                             if p not in options.exclude_paths]
     if not options.basedirs and not (options.cull_cache or
         options.delete_cache):
         if options.disp_version:
