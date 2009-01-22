@@ -4,6 +4,7 @@
 
 import os
 import sys
+from datetime import datetime
 try:
     from cStringIO import StringIO
 except ImportError:
@@ -40,7 +41,9 @@ def test():
             assert adir._bitrates == adir2._bitrates
             assert adir._lengths == adir2._lengths
             assert adir._types == adir2._types
-            assert adir.modified == adir2.modified
+            m1 = datetime.fromtimestamp(adir.modified).strftime('%x')
+            m2 = datetime.fromtimestamp(adir2.modified).strftime('%x')
+            assert m1 == m2
             assert adir.path == adir2.path
             assert adir._profiles == adir2._profiles
             assert adir.sizes == adir2.sizes
