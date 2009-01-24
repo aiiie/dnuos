@@ -153,7 +153,7 @@ def _win32_utf8_argv():
         pass
 
 
-def main(argv=None, locale=None):
+def main(argv=None, locale=''):
     """Main entry point"""
 
     # Wrap stdout with a codec that goes from UTF-8 to the preferred encoding
