@@ -94,7 +94,7 @@ def prepare_listing(dir_pairs, options, data):
         options.output_module in [dnuos.output.plaintext, dnuos.output.html]):
         dir_pairs = add_empty(dir_pairs)
     if options.list_files:
-        dir_pairs = add_files(dir_pairs)
+        dir_pairs = add_files(dir_pairs, options.sort_cmp)
     return dir_pairs
 
 
@@ -427,7 +427,7 @@ def add_empty(dir_pairs):
         yield adir, root
 
 
-def add_files(dir_pairs):
+def add_files(dir_pairs, sort_cmp):
     """Makes individual audiodirs for each audio file"""
 
     for adir, root in dir_pairs:
@@ -436,7 +436,9 @@ def add_files(dir_pairs):
             continue
         if adir.num_files < 1:
             continue
-        for path in adir.audio_files:
+        files = adir.audio_files
+        files.sort(cmp=sort_cmp)
+        for path in files:
             yield audiodir.Dir(path), root
 
 
