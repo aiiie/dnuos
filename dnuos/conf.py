@@ -1,7 +1,6 @@
 """Configuration module for Dnuos"""
 
 import glob
-import locale
 import os
 import re
 import sys
@@ -19,7 +18,7 @@ import dnuos.output.db
 import dnuos.output.html
 import dnuos.output.plaintext
 from dnuos import appdata
-from dnuos.misc import deprecation, _
+from dnuos.misc import deprecation, natcmp, _
 
 optparse._ = _
 
@@ -264,7 +263,7 @@ def parse_args(argv=sys.argv):
                         output_module=dnuos.output.plaintext,
                         prefer_tag=2,
                         show_progress=True,
-                        sort_cmp=locale.strcoll,
+                        sort_cmp=natcmp,
                         stripped=False,
                         text_color="black",
                         use_cache=True,
@@ -320,7 +319,7 @@ def parse_args(argv=sys.argv):
                      help=_('Exclude DIR from search'), metavar=_('DIR'))
     group.add_option("-i", "--ignore-case",
                      dest="sort_cmp", action="store_const",
-                     const=lambda a, b: locale.strcoll(a.lower(), b.lower()),
+                     const=lambda a, b: natcmp(a.lower(), b.lower()),
                      help=_('Case-insensitive directory sorting'))
     group.add_option('-L', '--list-files',
                      dest='list_files', action='store_true',
