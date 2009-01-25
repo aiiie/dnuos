@@ -10,6 +10,7 @@ Feel free to organize this in a better way if you know how. I don't.
 
 import locale
 import os
+import re
 from heapq import heappop, heappush
 from itertools import count
 from warnings import warn
@@ -37,6 +38,16 @@ try:
 except ImportError:
     _ = lambda s: s
 
+
+_natsub = re.compile(r'\d+').sub
+def _natkey(s):
+
+    return _natsub(lambda i: str(len(i.group())) + i.group(), s)
+
+def natcmp(a, b):
+    """Compare two strings for natural sorting"""
+
+    return locale.strcoll(_natkey(a), _natkey(b))
 
 class Lookahead(object):
     """Wrapper class for adding one element of lookahead to an iterator.
