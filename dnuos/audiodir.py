@@ -304,7 +304,7 @@ class Dir(object):
     def _parse_modified(self):
         """Returns newest audio file's mtime"""
 
-        files = self.audio_files[:]
+        files = self.audio_files
         files.append(self.path)
         dates = [dnuos.path.getmtime(f) for f in files]
         return max(dates)
