@@ -32,11 +32,19 @@ def _find_locale_dir():
             return locale_dir
     return None
 
-try:
-    import gettext
-    _ = gettext.translation('dnuos', _find_locale_dir(), fallback=True).gettext
-except ImportError:
-    _ = lambda s: s
+def _gettext():
+
+    locale_dir = _find_locale_dir()
+    if locale_dir:
+        try:
+            from gettext import translation
+            return translation('dnuos', _find_locale_dir(),
+                               fallback=True).gettext
+        except ImportError:
+            pass
+    return lambda s: s
+
+_ = _gettext()
 
 
 _natsub = re.compile(r'\d+').sub
