@@ -13,5 +13,5 @@ Album/Artist                                        |  Size | Type | Quality
 lame                                                |       |      | 
     3903-api                                        |  237k | MP3  | -api
     3961-api                                        |  237k | MP3  | -b 320
-    397b1-b320                                      |  237k | MP3  | -b 320
+    3970b1-b320                                     |  237k | MP3  | -b 320
 """)
