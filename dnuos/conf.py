@@ -166,7 +166,11 @@ def set_preferred_tag(option, opt_str, value, parser):
 
 def set_cache_dir(option, opt_str, value, parser):
 
-    parser.values.cache_dir = os.path.expanduser(value)
+    value = os.path.normpath(os.path.expanduser(value))
+    if dnuos.path.isdir(value):
+        parser.values.cache_dir = value
+    else:
+        raise OptionValueError(_("No such directory: %s") % value)
 
 
 def set_unknown_types(option, opt_str, value, parser):
@@ -177,12 +181,11 @@ def set_unknown_types(option, opt_str, value, parser):
 
 def add_exclude_dir(option, opt_str, value, parser):
 
-    value.rstrip(os.path.sep)
+    value = os.path.abspath(value)
     if dnuos.path.isdir(value):
-        value = os.path.abspath(value)
         parser.values.exclude_paths.append(value)
     else:
-        raise OptionValueError(_("No such directory %s") % value)
+        raise OptionValueError(_("No such directory: %s") % value)
 
 
 def parse_format_string(data):
@@ -436,6 +439,11 @@ def parse_args(argv=sys.argv):
                                 "for help.") % os.path.basename(argv[0]))
         sys.exit(2)
 
+    for basedir in options.basedirs:
+        if not dnuos.path.exists(basedir):
+            print >> sys.stderr, _('No such file or directory: %s') % basedir
+            sys.exit(2)
+
     # options overriding eachother
     if options.debug or (not options.outfile and
                          isinstance(sys.stdout, file) and
@@ -445,6 +453,7 @@ def parse_args(argv=sys.argv):
         options.list_bad = False
 
     return options
+
 
 def expand(options, dir_):
     """translate a basedir to a list of absolute paths"""
