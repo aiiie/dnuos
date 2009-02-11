@@ -52,8 +52,8 @@ Run `dnuos --help` for a full rundown of the available options.
 
 Extract the archive and run `setup.py` to install it:
 
-    tar zxvf dnuos-1.0.9.tar.gz
-    cd dnuos-1.0.9
+    tar zxvf dnuos-1.0.10.tar.gz
+    cd dnuos-1.0.10
     sudo python setup.py install
 
 This will install a console script named `dnuos` into `/usr/local/bin`.
@@ -106,10 +106,10 @@ News
 * Added support for specifying individual files as arguments.
 * Added default format string resizing based on the terminal width. The name
   column will be resized so the output better fits the width of the terminal.
-  (Unix only)
+  *(Unix only)*
 * Added SQLite-based caching, available with Python 2.5. When used, loading
   the cache is much faster, and culling the cache reduces its total size.
-* French translation corrects (contributed by Jean-Denis Vauguet).
+* French translation corrections (contributed by Jean-Denis Vauguet).
 
 ### Version 1.0.9 (Sep. 20, 2008)
 
