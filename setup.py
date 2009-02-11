@@ -6,15 +6,14 @@ import sys
 extra_options = {}
 package_data = {'dnuos': ['locale/*/LC_MESSAGES/*.mo']}
 
-from distutils.core import setup, Command
 from distutils.command.build import build
 
-# This is absolutely ridiculous.
-from distutils.dist import Distribution
-if Distribution.__module__.startswith('setuptools.'):
+try:
+    from setuptools import setup, Command
     from setuptools.command.install import install as old_install
     extra_options['zip_safe'] = False
-else:
+except ImportError:
+    from distutils.core import setup, Command
     from distutils.command.install import install as old_install
 
 try:
@@ -29,18 +28,6 @@ try:
     ))
 except ImportError:
     pass
-
-
-class build_mo(build):
-    description = "build translations (.mo files)"
-
-    def run(self):
-        from glob import glob
-        from msgfmt import compile_catalog
-        for path in glob('./dnuos/locale/*/LC_MESSAGES/*.po'):
-            compile_catalog(path)
-
-build.sub_commands.append(('build_mo', None))
 
 def testpkg(path):
     """Runs doctest on an entire package"""
@@ -81,6 +68,18 @@ class test(Command):
     def run(self):
         testpkg('dnuos')
         testpkg('dnuostests')
+
+
+class build_mo(build):
+    description = "build translations (.mo files)"
+
+    def run(self):
+        from glob import glob
+        from msgfmt import compile_catalog
+        for path in glob('./dnuos/locale/*/LC_MESSAGES/*.po'):
+            compile_catalog(path)
+
+build.sub_commands.append(('build_mo', None))
 
 
 class install(old_install):
