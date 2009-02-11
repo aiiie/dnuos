@@ -95,6 +95,22 @@ the following graphical front-ends instead:
 News
 ----
 
+### Version 1.0.10 (Feb. 10, 2009)
+
+* Fixed installation not working when a previous egg-based installation is
+  present.
+* Fixed individual files not being sorted in output.
+* Fixed unfriendly traceback being presented for non-existent files and
+  directories.
+* Added natural sorting (i.e. `9.mp3` comes before `10.mp3`).
+* Added support for specifying individual files as arguments.
+* Added default format string resizing based on the terminal width. The name
+  column will be resized so the output better fits the width of the terminal.
+  (Unix only)
+* Added SQLite-based caching, available with Python 2.5. When used, loading
+  the cache is much faster, and culling the cache reduces its total size.
+* French translation corrects (contributed by Jean-Denis Vauguet).
+
 ### Version 1.0.9 (Sep. 20, 2008)
 
 * Fixed a crash when using HTML output.

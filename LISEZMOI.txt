@@ -65,7 +65,7 @@ Cela installera un script nommé `dnuos` dans `/usr/local/bin`.
 
 Après l'installation, ouvrez votre terminal préféré et exécutez `dnuos`.
 Sur Mac OS X, *Terminal* serait un bon choix (situé dans
-`/Applications//Utilities`).
+`/Applications/Utilities`).
 
 
 ### Windows
@@ -99,6 +99,10 @@ interfaces graphiques suivantes :
 
 Quoi de neuf
 ------------
+
+### Version 1.0.10 (10 fév. 2009)
+
+Voyez le README anglais.
 
 ### Version 1.0.9 (20 sep. 2008)
 

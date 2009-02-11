@@ -161,6 +161,6 @@ older, has fewer features, and is no longer maintained.
     package_data=package_data,
     scripts=['scripts/dnuos'],
     url='https://github.com/aiiie/dnuos',
-    version='1.0.10b1',
+    version='1.0.10',
     **extra_options
 )
