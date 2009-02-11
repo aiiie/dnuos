@@ -117,7 +117,7 @@ setup(
     ],
     cmdclass={'build_mo': build_mo, 'install': install, 'test': test},
     description='A tool for creating lists of music collections',
-    download_url='https://github.com/aiiie/dnuos/archive/refs/tags/1.0.9.tar.gz',
+    download_url='https://github.com/aiiie/dnuos/archive/refs/tags/1.0.10.tar.gz',
     keywords='music collection list metadata mp3 audiolist oidua',
     license='GNU GPL',
     long_description="""
