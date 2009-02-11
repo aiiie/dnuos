@@ -11,7 +11,7 @@ from itertools import chain, ifilter
 import dnuos.output.db
 import dnuos.path
 from dnuos import appdata, audiodir
-from dnuos.cache import PersistentDict, memoized
+from dnuos.cache import Cache, memoized
 from dnuos.conf import parse_args
 from dnuos.misc import dir_depth, equal_elements, formatwarning
 from dnuos.misc import merge, to_human, _
@@ -101,9 +101,8 @@ def prepare_listing(dir_pairs, options, data):
 def setup_cache(cache_filename):
     """Creates and readies cache"""
 
-    cache = PersistentDict(filename=cache_filename,
-                           version=audiodir.Dir.__version__)
-    return cache
+    return Cache(filename=cache_filename,
+                 version=audiodir.Dir.__version__)
 
 
 def setup_renderer(output_module, format_string, fields, options):
@@ -203,6 +202,7 @@ def main(argv=None, locale=''):
         print _('Removed cache directory %s') % options.cache_dir
         return 0
 
+    adir_class = audiodir.Dir
     if options.use_cache:
         try:
             appdata.create_user_data_dir(options.cache_dir)
@@ -213,16 +213,13 @@ def main(argv=None, locale=''):
                 print _('Culled %d non-existent directories') % culled
                 return 0
             adir_class = memoized(audiodir.Dir, cache)
-        except IOError, err:
+        except (ImportError, IOError), err:
             print >> sys.stderr, _('Failed to create cache directory:')
             if options.debug:
                 raise
             print >> sys.stderr, err
             print >> sys.stderr, _('Use the --disable-cache switch to '
                                    'disable caching')
-            adir_class = audiodir.Dir
-    else:
-        adir_class = audiodir.Dir
 
     try:
         renderer = setup_renderer(options.output_module,
