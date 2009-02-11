@@ -158,7 +158,7 @@ older, has fewer features, and is no longer maintained.
 .. _Oidua: http://oidua.suxbad.com/
 """,
     name='dnuos',
-    packages=['dnuos', 'dnuos.id3', 'dnuos.output'],
+    packages=['dnuos', 'dnuos.cache', 'dnuos.id3', 'dnuos.output'],
     package_data=package_data,
     scripts=['scripts/dnuos'],
     url='http://bitheap.org/dnuos/',
