@@ -190,9 +190,6 @@ def main(argv=None, locale=''):
     audiodir.Dir.valid_types.extend(options.unknown_types or ())
 
     if options.delete_cache:
-        if not dnuos.path.isdir(options.cache_dir):
-            print >> sys.stderr, _('No such directory %s') % options.cache_dir
-            return 2
         import shutil
         try:
             shutil.rmtree(options.cache_dir)
