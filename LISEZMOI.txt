@@ -100,7 +100,7 @@ interfaces graphiques suivantes :
 Quoi de neuf
 ------------
 
-### Version 1.0.10 (10 fév. 2009)
+### Version 1.0.10 (13 fév. 2009)
 
 Voyez le README anglais.
 

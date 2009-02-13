@@ -95,7 +95,7 @@ the following graphical front-ends instead:
 News
 ----
 
-### Version 1.0.10 (Feb. 10, 2009)
+### Version 1.0.10 (Feb. 13, 2009)
 
 * Fixed installation not working when a previous egg-based installation is
   present.
@@ -109,6 +109,7 @@ News
   *(Unix only)*
 * Added SQLite-based caching, available with Python 2.5. When used, loading
   the cache is much faster, and culling the cache reduces its total size.
+* More Python 2.6 compatibility improvements.
 * French translation corrections (contributed by Jean-Denis Vauguet).
 
 ### Version 1.0.9 (Sep. 20, 2008)
