@@ -1,5 +1,6 @@
 """sqlite3-based cache"""
 
+import sqlite3
 import sys
 from UserDict import DictMixin
 
@@ -19,7 +20,6 @@ class Cache(object, DictMixin):
         filename = filename.encode(sys.getfilesystemencoding())
         filename = '.'.join([filename, version, 'sqlite'])
 
-        import sqlite3
         self._conn = sqlite3.connect(filename)
         c = self._conn.cursor()
         try:
