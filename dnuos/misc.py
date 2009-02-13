@@ -167,7 +167,7 @@ def equal_elements(seq1, seq2):
             return index
 
 
-def formatwarning(message, category, filename, lineno):
+def formatwarning(message, category, filename, lineno, *args, **kwargs):
     """Custom warning formatting."""
 
     return "%s: %s\n" % (category.__name__, message)
