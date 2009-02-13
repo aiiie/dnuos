@@ -21,7 +21,7 @@ try:
     if len(sys.argv) > 1 and sys.argv[1] == 'py2exe':
         sys.argv.extend(('-O2 -c -b 1 -e _ssl,calendar,doctest,email,ftplib,'
                          'getpass,gettext,gopherlib,httplib,mimetypes,'
-                         'quopri,unittest').split(' '))
+                         'quopri,unittest,shelve,dumbdbm').split(' '))
         package_data = {}
     extra_options.update(dict(
         console=['scripts/dnuos'],
