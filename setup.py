@@ -42,8 +42,12 @@ def testpkg(path):
         module = os.path.splitext(module)[0]
         module = module.replace(os.path.sep, '.')
         justmodule = module.split('.', 1)[1]
-        failures, tests = doctest.testmod(__import__(module, {}, {},
-                                                     [justmodule]))
+        try:
+            failures, tests = doctest.testmod(__import__(module, {}, {},
+                                                         [justmodule]))
+        except Exception, e:
+            print >> sys.stderr, 'Unable to import %r' % module
+            continue
         if tests > 0:
             print '%s: %s/%s passed' % (module, tests + (0 - failures), tests)
         total_failures += failures
