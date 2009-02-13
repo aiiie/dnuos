@@ -33,6 +33,7 @@ class Cache(object, DictMixin):
 
     def __getitem__(self, key):
 
+        key = key.decode('utf-8')
         c = self._conn.cursor()
         try:
             c.execute('select dir from dirs where path = ? limit 1', (key,))
@@ -46,6 +47,7 @@ class Cache(object, DictMixin):
 
     def __setitem__(self, key, value):
 
+        key = key.decode('utf-8')
         c = self._conn.cursor()
         try:
             c.execute('replace into dirs values (?, ?)',
@@ -56,6 +58,7 @@ class Cache(object, DictMixin):
 
     def __delitem__(self, key):
 
+        key = key.decode('utf-8')
         c = self._conn.cursor()
         try:
             c.execute('delete from dirs where path = ?', (key,))
