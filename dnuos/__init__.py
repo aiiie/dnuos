@@ -432,7 +432,7 @@ def add_files(dir_pairs, sort_cmp):
         if adir.num_files < 1:
             continue
         files = adir.audio_files
-        files.sort(cmp=sort_cmp)
+        files.sort(sort_cmp)
         for path in files:
             yield audiodir.Dir(path), root
 
