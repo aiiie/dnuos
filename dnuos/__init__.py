@@ -211,6 +211,7 @@ def main(argv=None, locale=''):
                 return 0
             adir_class = memoized(audiodir.Dir, cache)
         except (ImportError, IOError), err:
+            options.use_cache = False
             print >> sys.stderr, _('Failed to create cache directory:')
             if options.debug:
                 raise
