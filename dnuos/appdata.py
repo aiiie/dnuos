@@ -25,19 +25,6 @@ def user_data_dir(appname, vendor, version=None):
         Windows:    C:\Documents and Settings\USER\Application Data\<owner>\<appname>
         Mac OS X:   ~/Library/Application Support/<appname>
         Unix:       ~/.cache/<lowercased-appname>
-
-    >>> import os
-    >>> dir_ = user_data_dir('Dnuos', 'Dnuos')
-    >>> if dir_.endswith(os.path.sep):
-    ...     dir_ = os.path.dirname(dir_)
-    ...
-    >>> dir_ = os.path.dirname(dir_)
-    >>> if sys.platform.startswith('win'):
-    ...     os.path.isdir(os.path.dirname(dir_))
-    ... else:
-    ...     os.path.isdir(dir_)
-    ...
-    True
     """
 
     path = None
