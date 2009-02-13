@@ -477,7 +477,7 @@ class AttachedPicture(ID3v2Frame):
         mimetype_end = self.data.find('\x00', 1)
         self.mimetype = self.data[1:mimetype_end].decode('iso-8859-1')
         self.picturetype = self.data[mimetype_end+1]
-        if self.picturetypes.has_key(self.picturetype):
+        if self.picturetype in self.picturetypes:
             self.picturetype_name = self.picturetypes[self.picturetype]
         (description, self._image,) = self.split_encoded(self.data[mimetype_end+2:])
         self._description = self.decode(description)

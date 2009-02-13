@@ -205,7 +205,7 @@ class ID3v2(object):
         # 11 == frame header + 1 byte frame, smallest legal frame
         while sizeleft >= 11:
             frameid = fh.read(4)
-            if _match_frame(frameid) or ID3v2Frames.frameTypes[self.version[1]].has_key(frameid):
+            if _match_frame(frameid) or frameid in ID3v2Frames.frameTypes[self.version[1]]:
                 rawframesize = fh.read(4)
                 if self.version[1] >= 4 and frameid != 'COM ':
                     framesize = binfuncs.synchsafe2dec(rawframesize)
