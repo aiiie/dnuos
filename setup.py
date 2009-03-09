@@ -74,8 +74,12 @@ class test(Command):
         testpkg('dnuostests')
 
 
-class build_mo(build):
+class build_mo(Command):
     description = "build translations (.mo files)"
+    user_options = []
+
+    def initialize_options(self): pass
+    def finalize_options(self): pass
 
     def run(self):
         from glob import glob
