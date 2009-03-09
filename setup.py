@@ -6,8 +6,6 @@ import sys
 extra_options = {}
 package_data = {'dnuos': ['locale/*/LC_MESSAGES/*.mo']}
 
-from distutils.command.build import build
-
 try:
     from setuptools import setup, Command
     from setuptools.command.install import install as old_install
@@ -87,7 +85,19 @@ class build_mo(Command):
         for path in glob('./dnuos/locale/*/LC_MESSAGES/*.po'):
             compile_catalog(path)
 
-build.sub_commands.append(('build_mo', None))
+try:
+    # Workaround for setuptools not running build subcommands
+    from setuptools.command.build_py import build_py
+    old_run = build_py.run
+    def build_py_run(self):
+        for cmd in self.get_sub_commands():
+            self.run_command(cmd)
+        old_run(self)
+    build_py.run = build_py_run
+    build_py.sub_commands.append(('build_mo', None))
+except ImportError:
+    from distutils.command.build import build
+    build.sub_commands.append(('build_mo', None))
 
 
 class install(old_install):
