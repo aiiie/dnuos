@@ -493,7 +493,7 @@ class MP3(AudioType):
             vbrmethod = self.mp3header[7] & 15
             lowpass = self.mp3header[8]
             ath = self.mp3header[9] & 15
-            preset = self.mp3header[11] & 2047
+            preset = self.mp3header[11] & 0x1ff
 
             if preset > 0:
                 if preset == 320:
