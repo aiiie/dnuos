@@ -83,8 +83,8 @@ emplacement. Une fois rendu dans le bon dossier, exécutez `dnuos.exe`.
 
 ### Interfaces graphiques
 
-Si vous êtes alergique à la ligne de commande, vous pouvez utiliser l'une des
-interfaces graphiques suivantes :
+Si vous êtes allergique à la ligne de commande, vous pouvez utiliser l'une
+des interfaces graphiques suivantes :
 
 * [dnuOSX][] - Un front-end natif pour Mac OS X.
 * [Guidua][] - Un front-end graphique pour Windows.
@@ -102,11 +102,39 @@ Quoi de neuf
 
 ### Version 1.0.10 (13 fév. 2009)
 
-Voyez le README anglais.
+* Corrigé l'installation par dessus une installation egg.
+* Corrigé l'ordre des fichiers individuels dans la sortie.
+* Corrigé la trace apparaissant pour des fichiers ou répertoires
+  non-existants.
+* Ajouté le tri pour les entiers (`9.mp3` affiché avant `10.mp3`).
+* Les fichiers individuels peuvent maintenant être passés comme arguments.
+* Les chaînes sont reformattées en se basant sur la taille du terminal. La
+  colonne de nom sera retaillée pour que la sortie s'adapte mieux à la sortie
+  du terminal. *(Unix seulement)*
+* Ajouté une mise en cache se basant sur SQLite, disponible sous Python 2.5.
+  Le chargement du cache est bien plus rapide, et lors de la suppression
+  d'entrées, la taille du cache est effectivement réduite.
+* Meilleure compatibilité avec Python 2.6.
+* Corrections de la localisation française (par Jean-Denis Vauguet).
 
 ### Version 1.0.9 (20 sep. 2008)
 
-Voyez le README anglais.
+* Corrigé un plantage lors de l'utilisation du format de sortie HTML.
+* Corrigé un plantage arrivant lors d'usage de symboles `=` dans les tags
+  FLAC/Ogg Vorbis.
+* `--delete-cache` supprime maintenant correctement le répertoire de cache.
+* Les répertoires avec à la fois des MP3S LAME et non-LAME sont désormais
+  détectés comme tels, au lieu d'être listés avec le quality preset LAME.
+* Ajouté un raccourci `-C` pour `--disable-cache`.
+* Ajouté un nouveau tag de sortie, `[Y]` (year) pour l'année.
+* Rétabli le tag de profondeur `[D]` (depth).
+* Meilleure compatibilité avec Python 2.6.
+* L'encodage préferé est maintenant utilisé pour la sortie sur le terminal.
+  (Les caractères qui ne peuvent pas être encodés sont remplacés par des
+  points d'interrogation.)
+* Corrigé la localisation française.
+* Corrigé le fait que la localisation française ne soit pas installée avec
+  `easy_install`.
 
 ### Version 1.0.8 (16 jui. 2008)
 
