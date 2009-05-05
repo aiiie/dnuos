@@ -87,7 +87,7 @@ the following graphical front-ends instead:
   0.08 and older have a bug which prevents QtOIDUA from working with
   Dnuos 1.0.)
 
-[dnuOSX]: http://www.facepwn.com/MacRequest/dnuOSX.html
+[dnuOSX]: http://metaclam.facepwn.com/software/dnuOSX/dnuosx.html
 [Guidua]: http://oidua.suxbad.com/setup_guidua_0.16.exe
 [QtOIDUA]: http://www.spoonfedmonkey.com/software/qtoidua/
 

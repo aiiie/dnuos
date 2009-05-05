@@ -92,7 +92,7 @@ interfaces graphiques suivantes :
   (Note : Les versions 0.08 et les anciennes versions ont un bogue qui
   empêche l'exécution de QtOIDUA avec Dnuos 1.0.)
 
-[dnuOSX]: http://www.facepwn.com/MacRequest/dnuOSX.html
+[dnuOSX]: http://metaclam.facepwn.com/software/dnuOSX/dnuosx.html
 [Guidua]: http://oidua.suxbad.com/setup_guidua_0.16.exe
 [QtOIDUA]: http://www.spoonfedmonkey.com/software/qtoidua/
 
