@@ -16,6 +16,9 @@ except ImportError:
 
 try:
     import py2exe
+except ImportError:
+    pass
+else:
     if len(sys.argv) > 1 and sys.argv[1] == 'py2exe':
         sys.argv.extend(('-O2 -c -b 1 -e _ssl,calendar,doctest,email,ftplib,'
                          'getpass,gettext,gopherlib,httplib,mimetypes,'
@@ -24,8 +27,6 @@ try:
     extra_options.update(dict(
         console=['scripts/dnuos'],
     ))
-except ImportError:
-    pass
 
 def testpkg(path):
     """Runs doctest on an entire package"""
