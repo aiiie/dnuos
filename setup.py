@@ -8,11 +8,9 @@ package_data = {'dnuos': ['locale/*/LC_MESSAGES/*.mo']}
 
 try:
     from setuptools import setup, Command
-    from setuptools.command.install import install as old_install
     extra_options['zip_safe'] = False
 except ImportError:
     from distutils.core import setup, Command
-    from distutils.command.install import install as old_install
 
 try:
     import py2exe
@@ -100,26 +98,6 @@ except ImportError:
     from distutils.command.build import build
     build.sub_commands.append(('build_mo', None))
 
-
-class install(old_install):
-    description = 'install everything from build directory (locally)'
-
-    def finalize_options(self):
-        has_local = False
-        for path in sys.path:
-            if path.startswith('/usr/local'):
-                has_local = True
-                break
-        if has_local:
-            from distutils.sysconfig import get_config_vars
-            prefix, exec_prefix = get_config_vars('prefix', 'exec_prefix')
-            if not self.prefix and prefix == '/usr':
-                self.prefix = '/usr/local'
-            if not self.exec_prefix and exec_prefix == '/usr':
-                self.exec_prefix = '/usr/local'
-        old_install.finalize_options(self)
-
-
 setup(
     author='Mattias P\xc3\xa4iv\xc3\xa4rinta, Brodie Rao',
     author_email='pejve@vasteras2.net; me+dnuos@dackz.net',
@@ -134,7 +112,7 @@ setup(
         'Topic :: Communications :: File Sharing',
         'Topic :: Multimedia :: Sound/Audio',
     ],
-    cmdclass={'build_mo': build_mo, 'install': install, 'test': test},
+    cmdclass={'build_mo': build_mo, 'test': test},
     description='A tool for creating lists of music collections',
     download_url='http://bitheap.org/dnuos/files/dnuos-1.0.10.tar.gz',
     keywords='music collection list metadata mp3 audiolist oidua',
