@@ -6,10 +6,7 @@ compared to an expected result.
 import difflib
 import os
 import sys
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from cStringIO import StringIO
 from glob import glob
 
 import dnuos
