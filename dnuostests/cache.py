@@ -7,10 +7,7 @@ import shutil
 import sys
 import tempfile
 from datetime import datetime
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from cStringIO import StringIO
 
 import dnuos
 import dnuos.appdata

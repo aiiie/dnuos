@@ -2,10 +2,7 @@
 __revision__ = "$Revision: 1.5 $"
 
 import re, struct
-try:
-    import cStringIO as StringIO
-except ImportError:
-    import StringIO
+import cStringIO as StringIO
 import string
 
 from dnuos.id3 import ID3v2Frames
