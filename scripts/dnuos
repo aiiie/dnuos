@@ -1,7 +1,10 @@
-#!python
+#!/usr/bin/env python
 import sys
 import dnuos
 try:
     sys.exit(dnuos.main())
-except (KeyboardInterrupt, SystemExit):
+except KeyboardInterrupt:
+    if '--debug' in sys.argv:
+        raise
+except SystemExit:
     pass
