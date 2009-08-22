@@ -628,6 +628,17 @@ class MPC(AudioType):
                     res['id3v2'] = frame.value
         return res
 
+    def year(self):
+
+        res = {}
+        if self.id3v1 and self.id3v1.year:
+            res['id3v1'] = self.id3v1.year
+        if self.id3v2:
+            for frame in self.id3v2.frames:
+                if frame.id in ('TYER', 'TDRC') and hasattr(frame, 'value'):
+                    res['id3v2'] = frame.value
+        return res
+
     _search_header = re.compile('MP+').search
 
     def headerstart(self):
