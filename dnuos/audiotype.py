@@ -309,6 +309,8 @@ class MP3(AudioType):
                (22050, 24000, 16000), # MPEG 2  
                (44100, 48000, 32000)) # MPEG 1  
 
+    id3v2_frames = ['TPE1', 'TALB', 'TYER', 'TDRC']
+
     def __init__(self, file_):
 
         AudioType.__init__(self, file_)
@@ -360,7 +362,8 @@ class MP3(AudioType):
             self.id3v1 = None
 
         try:
-            self.id3v2 = dnuos.id3.ID3v2(self._f)
+            self.id3v2 = dnuos.id3.ID3v2(self._f,
+                                         limit_frames=self.id3v2_frames)
         except dnuos.id3.Error:
             self.id3v2 = None
 
@@ -564,6 +567,8 @@ class MPC(AudioType):
 
     filetype = "MPC"
 
+    id3v2_frames = ['TPE1', 'TALB', 'TYER', 'TDRC']
+
     def __init__(self, file_):
 
         AudioType.__init__(self, file_)
@@ -602,7 +607,8 @@ class MPC(AudioType):
             self.id3v1 = None
 
         try:
-            self.id3v2 = dnuos.id3.ID3v2(self._f)
+            self.id3v2 = dnuos.id3.ID3v2(self._f,
+                                         limit_frames=self.id3v2_frames)
         except dnuos.id3.Error:
             self.id3v2 = None
 

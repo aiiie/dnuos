@@ -34,7 +34,8 @@ class ID3v2(object):
     """
     ID3v2 parsing/writing class
     """
-    def __init__(self, fh=None, broken_frames='error', internal_checks = False):
+    def __init__(self, fh=None, broken_frames='error', internal_checks=False,
+                 limit_frames=None):
         self.fh = None
         self.internal_checks = internal_checks
         self.version = (2,3,0,)
@@ -53,7 +54,7 @@ class ID3v2(object):
         self.frames = []
 
         if fh:
-            self.load(fh)
+            self.load(fh, limit_frames)
 
     def set_unsync(self, value):
         # need to do this so that silly tags that are read in can
@@ -153,7 +154,7 @@ class ID3v2(object):
 
     _match_frame = re.compile(r'[A-Z0-9]{4}').match
 
-    def load(self, fh):
+    def load(self, fh, limit_frames=None):
         """
         Load a file and extract ID3v2 data
         """
@@ -237,7 +238,8 @@ class ID3v2(object):
                 raise Error("Found garbage where I expected a Frame Id %r. Last frame was %r" % (frameid, lastframeid,))
 
             try:
-                self.new_frame(frameid, data)
+                if limit_frames and frameid in limit_frames:
+                    self.new_frame(frameid, data)
             except BrokenFrameError, err:
                 if self.broken_frames == 'drop':
 #                   warnings.warn("Broken frame in %r. Dropping frame." % self.filename)
