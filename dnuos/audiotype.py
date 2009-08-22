@@ -614,7 +614,7 @@ class MPC(AudioType):
 
     def artist(self):
 
-        res = {}
+        res = {'id3v1': None, 'id3v2': None}
         if self.id3v1 and self.id3v1.artist:
             res['id3v1'] = self.id3v1.artist
         if self.id3v2:
@@ -625,7 +625,7 @@ class MPC(AudioType):
 
     def album(self):
 
-        res = {}
+        res = {'id3v1': None, 'id3v2': None}
         if self.id3v1 and self.id3v1.album:
             res['id3v1'] = self.id3v1.album
         if self.id3v2:
@@ -636,7 +636,7 @@ class MPC(AudioType):
 
     def year(self):
 
-        res = {}
+        res = {'id3v1': None, 'id3v2': None}
         if self.id3v1 and self.id3v1.year:
             res['id3v1'] = self.id3v1.year
         if self.id3v2:
