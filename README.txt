@@ -205,8 +205,7 @@ News
 Development
 -----------
 
-The official development repository can be found at
-<https://github.com/aiiie/dnuos>. Download using [Git][]:
+Download the official development repository using [Git][]:
 
     git clone https://github.com/aiiie/dnuos.git
 
@@ -216,19 +215,18 @@ command:
 
     python setup.py test
 
-If you find any problems, please submit a ticket on the [Trac site][]. The
-Trac site is for development, not support, so please don't submit help
-requests there.
+Visit [GitHub][] if you'd like to fork the project, watch for new changes,
+or report issues.
 
 [Git]: https://git-scm.com
 [test data]: https://github.com/aiiie/dnuos
-[Trac site]: https://github.com/aiiie/dnuos
+[GitHub]: https://github.com/aiiie/dnuos
 
 
 Contact
 -------
 
-* [aiiie](mailto:aiiie at aiiie dot co) - Project maintainer
+* [aiiie](https://github.com/aiiie) - Project maintainer
 
 ### Past Contributors
 
