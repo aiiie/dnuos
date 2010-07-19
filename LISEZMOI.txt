@@ -55,8 +55,8 @@ Lancez `dnuos --help` pour des informations détaillées sur toutes les options.
 
 Extrayez l'archive et exécutez `setup.py` pour l'installer :
 
-    tar zxvf dnuos-1.0.10.tar.gz
-    cd dnuos-1.0.10
+    tar zxvf dnuos-1.0.11.tar.gz
+    cd dnuos-1.0.11
     sudo python setup.py install
 
 Cela installera un script nommé `dnuos` dans `/usr/local/bin`.
@@ -99,6 +99,10 @@ des interfaces graphiques suivantes :
 
 Quoi de neuf
 ------------
+
+### Version 1.0.11 (18 jui. 2010)
+
+* Voyez le README anglais.
 
 ### Version 1.0.10 (13 fév. 2009)
 
