@@ -205,10 +205,9 @@ News
 Development
 -----------
 
-The official development repository can be found at
-<http://bitheap.org/hg/dnuos/>. Download using [Mercurial][]:
+Download the official development repository using [Mercurial][]:
 
-    hg clone http://bitheap.org/hg/dnuos/
+    hg clone http://bitbucket.org/brodie/dnuos
 
 Running the test suite requires the [test data][] (in the same directory as
 `setup.py`). Once you have it, you can run the tests with the following
@@ -216,19 +215,18 @@ command:
 
     python setup.py test
 
-If you find any problems, please submit a ticket on the [Trac site][]. The
-Trac site is for development, not support, so please don't submit help
-requests there.
+Visit [Bitbucket][] if you'd like to fork the project, watch for new changes,
+or report issues.
 
 [Mercurial]: http://www.selenic.com/mercurial/
 [test data]: http://bitheap.org/files/testdata.zip
-[Trac site]: http://bitheap.org/dnuos/trac/
+[Bitbucket]: http://bitbucket.org/brodie/dnuos
 
 
 Contact
 -------
 
-* [Brodie Rao](mailto:me+dnuos at dackz dot net) - Project maintainer
+* [Brodie Rao](http://brodierao.com/) - Project maintainer
 
 ### Past Contributors
 
