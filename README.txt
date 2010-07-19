@@ -52,8 +52,8 @@ Run `dnuos --help` for a full rundown of the available options.
 
 Extract the archive and run `setup.py` to install it:
 
-    tar zxvf dnuos-1.0.10.tar.gz
-    cd dnuos-1.0.10
+    tar zxvf dnuos-1.0.11.tar.gz
+    cd dnuos-1.0.11
     sudo python setup.py install
 
 This will install a console script named `dnuos` into `/usr/local/bin`.
@@ -94,6 +94,12 @@ the following graphical front-ends instead:
 
 News
 ----
+
+### Version 1.0.11 (Jul. 18, 2010)
+
+* Fixed Unicode error crashes caused by non-Unicode file system paths.
+* Fixed MPC files not storing year tag data.
+* Improved ID3v2 tag handling performance.
 
 ### Version 1.0.10 (Feb. 13, 2009)
 

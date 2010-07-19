@@ -100,7 +100,7 @@ except ImportError:
 
 setup(
     author='Mattias P\xc3\xa4iv\xc3\xa4rinta, Brodie Rao',
-    author_email='pejve@vasteras2.net; me+dnuos@dackz.net',
+    author_email='pejve@vasteras2.net; brodie@bitheap.org',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
@@ -114,7 +114,7 @@ setup(
     ],
     cmdclass={'build_mo': build_mo, 'test': test},
     description='A tool for creating lists of music collections',
-    download_url='http://bitheap.org/dnuos/files/dnuos-1.0.10.tar.gz',
+    download_url='http://bitheap.org/dnuos/files/dnuos-1.0.11.tar.gz',
     keywords='music collection list metadata mp3 audiolist oidua',
     license='GNU GPL',
     long_description="""
@@ -158,6 +158,6 @@ older, has fewer features, and is no longer maintained.
     package_data=package_data,
     scripts=['scripts/dnuos'],
     url='http://bitheap.org/dnuos/',
-    version='1.0.10',
+    version='1.0.11',
     **extra_options
 )
