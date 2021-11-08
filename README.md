@@ -33,14 +33,14 @@ analyzed.
 Dnuos is based on code from [Oidua][]. Oidua makes similar lists, but is much
 older, has fewer features, and is no longer maintained.
 
-[LAME quality preset]: http://wiki.hydrogenaudio.org/index.php?title=Lame#Recommended_encoder_settings
-[Oidua]: http://oidua.suxbad.com/
+[LAME quality preset]: https://wiki.hydrogenaud.io/index.php?title=Lame#Recommended_encoder_settings
+[Oidua]: https://oidua.suxbad.com
 
 
 Download
 --------
 
-Releases can be found in <http://bitheap.org/dnuos/files/>.
+Releases can be found at <https://github.com/brodie/dnuos>.
 
 
 Installation/Usage
@@ -54,7 +54,7 @@ Extract the archive and run `setup.py` to install it:
 
     tar zxvf dnuos-1.0.11.tar.gz
     cd dnuos-1.0.11
-    sudo python setup.py install
+    sudo python2 setup.py install
 
 This will install a console script named `dnuos` into `/usr/local/bin`.
 (On Mac OS X 10.4 and earlier, it may get installed into
@@ -81,15 +81,9 @@ file. From here, simply run `dnuos.exe`.
 If terminals and command prompts aren't to your liking, you can try one of
 the following graphical front-ends instead:
 
-* [dnuOSX][] - A native front-end for Mac OS X.
 * [Guidua][] - A graphical front-end for Windows.
-* [QtOIDUA][] - A graphical front-end for Linux and Mac OS X. (Note: Versions
-  0.08 and older have a bug which prevents QtOIDUA from working with
-  Dnuos 1.0.)
 
-[dnuOSX]: http://metaclam.facepwn.com/software/dnuOSX/dnuosx.html
-[Guidua]: http://oidua.suxbad.com/setup_guidua_0.16.exe
-[QtOIDUA]: http://www.spoonfedmonkey.com/software/qtoidua/
+[Guidua]: https://oidua.suxbad.com/setup_guidua_0.16.exe
 
 
 News
@@ -205,30 +199,29 @@ News
 Development
 -----------
 
-Download the official development repository using [Mercurial][]:
+Download the official development repository using [Git][]:
 
-    hg clone http://bitbucket.org/brodie/dnuos
+    git clone https://github.com/brodie/dnuos.git
 
 Running the test suite requires the [test data][] (in the same directory as
 `setup.py`). Once you have it, you can run the tests with the following
 command:
 
-    python setup.py test
+    python2 setup.py test
 
-Visit [Bitbucket][] if you'd like to fork the project, watch for new changes,
+Visit [GitHub][] if you'd like to fork the project, watch for new changes,
 or report issues.
 
-[Mercurial]: http://www.selenic.com/mercurial/
-[test data]: http://bitheap.org/files/testdata.zip
-[Bitbucket]: http://bitbucket.org/brodie/dnuos
+[Git]: https://git-scm.com
+[test data]: https://bitheap.org/dnuos/files/testdata.zip
+[GitHub]: https://github.com/brodie/dnuos
 
 
 Contact
 -------
 
-* [Brodie Rao](http://brodierao.com/) - Project maintainer
-
 ### Past Contributors
 
-* [Mattias Päivärinta](mailto:pejve at vasteras2 dot net)
+* [brodie](https://github.com/brodie)
+* [Mattias Päivärinta](https://github.com/mattias-p)
 * frunksock

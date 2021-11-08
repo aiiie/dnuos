@@ -35,15 +35,14 @@ Dnuos est basé sur le code d'[Oidua][]. Oidua peut générer des listes
 similaires, mais c'est un très vieux programme moins puissant, qui n'est plus
 maintenu.
 
-[LAME quality preset]: http://wiki.hydrogenaudio.org/index.php?title=Lame#Recommended_encoder_settings
-[Oidua]: http://oidua.suxbad.com/
+[LAME quality preset]: https://wiki.hydrogenaud.io/index.php?title=Lame#Recommended_encoder_settings
+[Oidua]: https://oidua.suxbad.com
 
 
 Télécharger
 -----------
 
-Les différentes versions peuvent être téléchargées sur
-<http://bitheap.org/dnuos/files/>.
+Voici <https://github.com/brodie/dnuos>.
 
 
 Installation / Utilisation
@@ -57,7 +56,7 @@ Extrayez l'archive et exécutez `setup.py` pour l'installer :
 
     tar zxvf dnuos-1.0.11.tar.gz
     cd dnuos-1.0.11
-    sudo python setup.py install
+    sudo python2 setup.py install
 
 Cela installera un script nommé `dnuos` dans `/usr/local/bin`.
 (Sous Mac OS X 10.4 et les anciennes versions, il peut être placé dans
@@ -86,15 +85,9 @@ emplacement. Une fois rendu dans le bon dossier, exécutez `dnuos.exe`.
 Si vous êtes allergique à la ligne de commande, vous pouvez utiliser l'une
 des interfaces graphiques suivantes :
 
-* [dnuOSX][] - Un front-end natif pour Mac OS X.
 * [Guidua][] - Un front-end graphique pour Windows.
-* [QtOIDUA][] - Un front-end graphique pour Linux et Mac OS X.
-  (Note : Les versions 0.08 et les anciennes versions ont un bogue qui
-  empêche l'exécution de QtOIDUA avec Dnuos 1.0.)
 
-[dnuOSX]: http://metaclam.facepwn.com/software/dnuOSX/dnuosx.html
-[Guidua]: http://oidua.suxbad.com/setup_guidua_0.16.exe
-[QtOIDUA]: http://www.spoonfedmonkey.com/software/qtoidua/
+[Guidua]: https://oidua.suxbad.com/setup_guidua_0.16.exe
 
 
 Quoi de neuf
@@ -217,31 +210,29 @@ Développement
 -------------
 
 Le dépôt officiel de développement est situé à
-<http://bitheap.org/hg/dnuos>. Avec [Mercurial][], exécutez :
+<https://github.com/brodie/dnuos>. Avec [Git][], exécutez :
 
-    hg clone http://bitheap.org/hg/dnuos/
+    git clone https://github.com/brodie/dnuos.git
 
 Exécuter les tests unitaires nécessite d'avoir les [données de test][] (dans
 le même dossier que `setup.py`). Une fois que vous les avez récupérée, vous
 pouvez exécuter les tests avec la commande suivante :
 
-    python setup.py test
+    python2 setup.py test
 
-Si vous recontrez un problème, faites un rapport de bogue sur le [site Trac][].
-Ce site est destiné au développement et non pas à l'assistance, donc n'y
-soumettez pas de demande d'aide.
+Voici [GitHub][] pour forker le projet, surveillez de nouveaux changements,
+ou pour faites un rapport de bogue.
 
-[Mercurial]: http://www.selenic.com/mercurial/
-[données de test]: http://bitheap.org/dnuos/files/testdata.zip
-[site Trac]: http://bitheap.org/dnuos/trac/
+[Git]: https://git-scm.com
+[test data]: https://bitheap.org/dnuos/files/testdata.zip
+[GitHub]: https://github.com/brodie/dnuos
 
 
 Contacter
 ---------
 
-* [Brodie Rao](mailto:me+dnuos à dackz point net) - Mainteneur du projet
-
 ### Contributeurs retirés
 
-* [Mattias Päivärinta](mailto:pejve à vasteras2 point net)
+* [brodie](https://github.com/brodie)
+* [Mattias Päivärinta](https://github.com/mattias-p)
 * frunksock
